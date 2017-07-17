@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GrainManage.Web.Util
+namespace GrainManage.Web.Common
 {
     public class CookieUtil
     {

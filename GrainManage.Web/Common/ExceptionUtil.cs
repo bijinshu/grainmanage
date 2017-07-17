@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace GrainManage.Web.Util
+namespace GrainManage.Web.Common
 {
     public class ExceptionUtil
     {

@@ -1,6 +1,6 @@
 ﻿using DataBase.GrainManage.Models;
 using GrainManage.Web;
-using GrainManage.Web.Util;
+using GrainManage.Web.Common;
 using System;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;

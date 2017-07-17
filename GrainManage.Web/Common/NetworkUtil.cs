@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GrainManage.Web.Util
+namespace GrainManage.Web.Common
 {
     public class NetworkUtil
     {

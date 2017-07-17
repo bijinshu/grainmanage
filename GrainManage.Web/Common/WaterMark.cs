@@ -20,15 +20,15 @@ namespace GrainManage.Web.Common
         /// <param name="watermarkTransparency">水印的透明度 1--10 10为不透明</param>
         public static void AddImageSignPic(string imgPath, string filename, string watermarkFilename, int watermarkStatus, int quality, int watermarkTransparency)
         {
-            if(!File.Exists(Utils.GetMapPath(imgPath)))
+            if(!File.Exists(GetMapPath(imgPath)))
                 return;
-            byte[] _ImageBytes = File.ReadAllBytes(Utils.GetMapPath(imgPath));
+            byte[] _ImageBytes = File.ReadAllBytes(GetMapPath(imgPath));
             Image img = Image.FromStream(new System.IO.MemoryStream(_ImageBytes));
-            filename = Utils.GetMapPath(filename);
+            filename = GetMapPath(filename);
 
             if (watermarkFilename.StartsWith("/") == false)
                 watermarkFilename = "/" + watermarkFilename;
-            watermarkFilename = Utils.GetMapPath(watermarkFilename);
+            watermarkFilename = GetMapPath(watermarkFilename);
             if (!File.Exists(watermarkFilename))
                 return;
             Graphics g = Graphics.FromImage(img);
@@ -152,9 +152,9 @@ namespace GrainManage.Web.Common
         /// <param name="fontsize">字体大小</param>
         public static void AddImageSignText(string imgPath, string filename, string watermarkText, int watermarkStatus, int quality, string fontname, int fontsize)
         {
-            byte[] _ImageBytes = File.ReadAllBytes(Utils.GetMapPath(imgPath));
+            byte[] _ImageBytes = File.ReadAllBytes(GetMapPath(imgPath));
             Image img = Image.FromStream(new System.IO.MemoryStream(_ImageBytes));
-            filename = Utils.GetMapPath(filename);
+            filename = GetMapPath(filename);
 
             Graphics g = Graphics.FromImage(img);
             Font drawFont = new Font(fontname, fontsize, FontStyle.Regular, GraphicsUnit.Pixel);
@@ -232,5 +232,33 @@ namespace GrainManage.Web.Common
             g.Dispose();
             img.Dispose();
         }
+
+        #region 获得当前绝对路径
+        /// <summary>
+        /// 获得当前绝对路径
+        /// </summary>
+        /// <param name="strPath">指定的路径</param>
+        /// <returns>绝对路径</returns>
+        public static string GetMapPath(string strPath)
+        {
+            if (strPath.ToLower().StartsWith("http://"))
+            {
+                return strPath;
+            }
+            if (HttpContext.Current != null)
+            {
+                return HttpContext.Current.Server.MapPath(strPath);
+            }
+            else //非web程序引用
+            {
+                strPath = strPath.Replace("/", "\\");
+                if (strPath.StartsWith("\\"))
+                {
+                    strPath = strPath.Substring(strPath.IndexOf('\\', 1)).TrimStart('\\');
+                }
+                return System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, strPath);
+            }
+        }
+        #endregion
     }
 }

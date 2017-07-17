@@ -11,9 +11,9 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace GrainManage.Web.Mapper
+namespace GrainManage.Web
 {
-    public class GlobalMapper
+    public class MapperConfig
     {
         public static void Initialize()
         {

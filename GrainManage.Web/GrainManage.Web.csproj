@@ -149,8 +149,6 @@
     <Compile Include="Attribute\LogExceptionAttribute.cs" />
     <Compile Include="Cache\CacheKey.cs" />
     <Compile Include="Cache\RedisCache.cs" />
-    <Compile Include="Common\PinyinConvertor.cs" />
-    <Compile Include="Common\Utils.cs" />
     <Compile Include="Common\ValidateCode.cs" />
     <Compile Include="Common\WaterMark.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -161,16 +159,11 @@
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\MetaDataController.cs" />
-    <Compile Include="Extension\ImageHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Handler\VerificationCode.ashx.cs">
-      <DependentUpon>VerificationCode.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="Ioc\IocConfig.cs" />
-    <Compile Include="Ioc\WebResolver.cs" />
-    <Compile Include="Mapper\GlobalMapper.cs" />
+    <Compile Include="Config\IocConfig.cs" />
+    <Compile Include="Config\MapperConfig.cs" />
     <Compile Include="Models\Account\InputChangePassword.cs" />
     <Compile Include="Models\Account\InputRegister.cs" />
     <Compile Include="Models\Account\InputResetPassword.cs" />
@@ -231,18 +224,14 @@
     <Compile Include="Resources\ImageResx.Designer.cs" />
     <Compile Include="Resources\PriceResx.Designer.cs" />
     <Compile Include="Resources\TradeResx.Designer.cs" />
-    <Compile Include="Util\CookieUtil.cs" />
-    <Compile Include="Util\EmailUtil.cs" />
-    <Compile Include="Util\ExceptionUtil.cs" />
-    <Compile Include="Util\HttpUtil.cs" />
-    <Compile Include="Util\NetworkUtil.cs" />
-    <Compile Include="Util\Thumbnail.cs" />
-    <Compile Include="Validation\ValidateVerificationCodeAttribute.cs" />
+    <Compile Include="Common\CookieUtil.cs" />
+    <Compile Include="Common\EmailUtil.cs" />
+    <Compile Include="Common\ExceptionUtil.cs" />
+    <Compile Include="Common\HttpUtil.cs" />
+    <Compile Include="Common\NetworkUtil.cs" />
+    <Compile Include="Common\Thumbnail.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\DebugLog.sql" />
-    <Content Include="Config\DetailLog.sql" />
-    <Content Include="Config\GrainManageLog.sql" />
     <Content Include="Content\Account\signin.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -349,9 +338,6 @@
     <Content Include="App_Code\ControlHelper.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\log4net.sqlite.config" />
-    <Content Include="Config\log4net.sqlite.detail.config" />
-    <Content Include="Handler\VerificationCode.ashx" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ManageAccount.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />

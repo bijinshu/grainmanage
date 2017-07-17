@@ -9,7 +9,6 @@ using Autofac.Integration.Mvc;
 using System.Reflection;
 using GrainManage.Common;
 using GrainManage.Web;
-using GrainManage.Web.Mapper;
 
 namespace GrainManage.Web
 {
@@ -25,7 +24,7 @@ namespace GrainManage.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             IocConfig.Register();
-            GlobalMapper.Initialize();
+            MapperConfig.Initialize();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace GrainManage.Web.Util
+namespace GrainManage.Web.Common
 {
     public class EmailUtil
     {
