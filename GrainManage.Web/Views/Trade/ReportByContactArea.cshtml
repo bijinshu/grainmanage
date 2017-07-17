@@ -1,0 +1,40 @@
+﻿@using GrainManage.Web.Resources
+@model GrainManage.Web.Models.Trade.OutputGetTotalByContact
+@{
+    if (Model.TotalDetail != null)
+    {
+    <table data-total="@Model.Total">
+        <tr>
+            <th>@ContactResx.ContactID</th>
+            <th>@ContactResx.ContactName</th>
+            <th>@ContactResx.Cellphone</th>
+            <th>@ContactResx.Area</th>
+            <th>@PriceResx.Grain</th>
+            <th>@TradeResx.TotalWeight</th>
+            <th>@TradeResx.TotalMoney</th>
+            <th>@TradeResx.ActualTotalMoney</th>
+            <th>@TradeResx.Frequency</th>
+            <th>@TradeResx.TradeType</th>
+        </tr>
+        @foreach (var item in Model.TotalDetail)
+        {
+            <tr>
+                <td>@item.ContactID</td>
+                <td>@item.ContactName</td>
+                <td>@item.Cellphone</td>
+                <td>@item.Area</td>
+                <td>@item.Grain</td>
+                <td>@item.TotalAmount</td>
+                <td>@item.TotalMoney</td>
+                <td>@item.ActualTotalMoney</td>
+                <td>@item.Frequency</td>
+                <td>@item.TradeType</td>
+            </tr>
+        }
+    </table>
+    }
+    else
+    {
+    @Html.Partial(GrainManage.Web.Constant.RestStatusView, Model);
+    }
+}

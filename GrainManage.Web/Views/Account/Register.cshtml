@@ -1,0 +1,66 @@
+﻿@using GrainManage.Web.Resources
+@model GrainManage.Web.Models.Account.RegisterModel
+@*@ScriptHelper.RSA()*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        bindFormEvent("#formRegister");
+    });
+
+</script>
+<style type="text/css">
+    #body {
+        margin: 12px;
+    }
+</style>
+<div id="body">
+    <div id="result" style="color: red">
+        @AccountHelper.ShowStatus(ViewBag.Result)
+    </div>
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "formRegister" }))
+    {
+        @Html.AntiForgeryToken()
+        <table>
+            <tr>
+                <td>@Html.LabelFor(m => m.UserName)</td>
+                <td>@Html.TextBoxFor(m => m.UserName)</td>
+                <td>@Html.ValidationMessageFor(m => m.UserName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Password)</td>
+                <td>@Html.PasswordFor(m => m.Password)</td>
+                <td>@Html.ValidationMessageFor(m => m.Password)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.ConfirmPassword)</td>
+                <td>@Html.PasswordFor(m => m.ConfirmPassword)</td>
+                <td>@Html.ValidationMessageFor(m => m.ConfirmPassword)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.RealName)</td>
+                <td>@Html.EditorFor(m => m.RealName)</td>
+                <td>@Html.ValidationMessageFor(m => m.RealName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CellPhone)</td>
+                <td>@Html.EditorFor(m => m.CellPhone)</td>
+                <td>@Html.ValidationMessageFor(m => m.CellPhone)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.EmailAddress)</td>
+                <td>@Html.EditorFor(m => m.EmailAddress)</td>
+                <td>@Html.ValidationMessageFor(m => m.EmailAddress)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.Remarks)</td>
+                <td>@Html.EditorFor(m => m.Remarks)</td>
+                <td>@Html.ValidationMessageFor(m => m.Remarks)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(m => m.CheckLoginIP)</td>
+                <td>@Html.CheckBoxFor(m => m.CheckLoginIP)</td>
+            </tr>
+        </table>
+        <input type="submit" value="@AccountResx.Register"/>
+    }
+    @AccountHelper.HidenRsaParameter()
+</div>

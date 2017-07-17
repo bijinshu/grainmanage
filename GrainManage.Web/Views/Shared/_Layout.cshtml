@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>粮食管理系统</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/components/pager.js"></script>
+    @RenderSection("HeaderSection", false)
+</head>
+<body>
+    <div id="header">
+        @Html.Partial("_Menu")
+    </div>
+    <div class="container" id="body">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#home" data-toggle="tab">
+                            @ViewBag.Title
+                        </a>
+                    </li>
+                    @*<li><a href="#ios" data-toggle="tab">iOS</a></li>*@
+                </ul>
+                <div id="myTabContent" class="tab-content" style="margin-top:16px;">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    @RenderSection("FooterSection", false)
+</body>
+</html>

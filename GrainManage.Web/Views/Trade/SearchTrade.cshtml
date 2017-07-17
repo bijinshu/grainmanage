@@ -1,0 +1,53 @@
+﻿@using GrainManage.Web.Resources
+@using GrainManage.Web
+@ScriptHelper.Search()
+@ScriptHelper.Autocomplete()
+@ScriptHelper.DateRange()
+<script type="text/javascript">
+    $(document).ready(function () {
+        var data = { pageIndex: 0, pageSize: 100 };
+        BindAutoComplete("/Contact/GetContactName", "#ContactName", data, true);
+        BindAutoComplete("/Contact/GetContactArea", "#ContactArea", data, true);
+        BindAutoComplete("/Type/GetGrainType", "#GrainType", data, true);
+        BindAutoComplete("/Type/GetTradeType", "#TradeType", data, true);
+
+        $("#search").click(function (event) {
+            var ContactName = $("#ContactName").val();
+            var ContactArea = $("#ContactArea").val();
+            var GrainType = $("#GrainType").val();
+            var TradeType = $("#TradeType").val();
+            var StartTime = $("#StartTime").val();
+            var EndTime = $("#EndTime").val();
+            var pageSize = GetPageSize();
+            var parameter = {
+                ContactName: ContactName, Area: ContactArea, Grain: GrainType, TradeType: TradeType, StartTime: StartTime, EndTime: EndTime,
+                pageIndex: 0, pageSize: pageSize
+            };
+            BindMyPaginationClick("#result", "/Trade/GetDetail", parameter);
+        });
+      
+        $("#search").triggerHandler("click");
+    });
+</script>
+<div id="searchTradeDetail" class="searchCondition">
+    <label>@ContactResx.Name</label>
+    <input id="ContactName" type="text" />
+
+    <label>@ContactResx.Area</label>
+    <input id="ContactArea" type="text" />
+
+    <label>@PriceResx.Grain</label>
+    <input id="GrainType" type="text" />
+
+    <label>@TradeResx.TradeType</label>
+    <input id="TradeType" type="text" />
+
+    @ControlHelper.DateRange()
+    @ControlHelper.PageSize()
+
+    <button id="search">@GlobalResx.Search</button>
+</div>
+<div id="result"></div>
+<div id="pagination">
+    @Html.Partial(GrainManage.Web.Constant.PaginationView)
+</div>

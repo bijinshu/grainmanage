@@ -1,0 +1,37 @@
+﻿@using GrainManage.Web.Resources
+@model GrainManage.Web.Models.BaseOutput
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <div>
+        @if (Model == null)
+        {
+            <h2>无法访问Rest服务</h2>
+        }
+        else
+        {
+            if (Model.Code == 0)
+            {
+            <h2>Rest服务内部错误</h2>
+            }
+            else if (Model.Code == 1)
+            {
+            <h2>Rest调用成功</h2>
+            }
+            else
+            {
+            <h2>@Model.Msg</h2>
+            }
+        }
+    </div>
+</body>
+</html>
+

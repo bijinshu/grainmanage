@@ -1,0 +1,88 @@
+﻿@model GrainManage.Web.Models.Contact.UpdateContactModel
+@{
+    var labelStyle=new { @class = "col-lg-2 control-label" };
+    var inputStyle= new { @class = "form-control" };
+    var selectItems=new List<SelectListItem>();
+    selectItems.Add(new SelectListItem{Text="男",Value="男"});
+    selectItems.Add(new SelectListItem{Text="女",Value="女"});
+    var birthDate = Model.BirthDate.HasValue ? Model.BirthDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form-horizontal" role="form" action="/Contact/Update" method="post">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContactID, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.ContactID, new {@class="form-control", disabled="disabled" })</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContactName, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.ContactName, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Gender, labelStyle)
+                <div class="col-lg-10">@Html.DropDownListFor(model => model.Gender, selectItems, inputStyle)</div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.BirthDate, labelStyle) 
+                <div class="col-lg-10">
+                    <input class="form-control" id="BirthDate" name="BirthDate" value="@birthDate" type="date"/>
+                @*@Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", inputStyle)*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cellphone, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.Cellphone, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Telephone, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.Telephone, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.QQ, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.QQ, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.Email, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Area, labelStyle)
+                <div class="col-lg-10">@Html.TextBoxFor(model => model.Area, inputStyle)</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, labelStyle)
+                <div class="col-lg-10">@Html.TextAreaFor(model => model.Address, new { @class = "form-control", rows = 2 })</div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Remarks, labelStyle)
+                <div class="col-lg-10">@Html.TextAreaFor(model => model.Remarks, new { @class = "form-control", rows = 3 })</div>
+            </div>
+            <div class="form-group">
+
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-danger">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+        $("form.form-horizontal button[type=\"submit\"]").click(function (e) {
+            e.preventDefault();
+            var formData = $("form.form-horizontal").getFormData();
+            $.post("/Contact/Update", formData).always(function (data) {
+                alert(data.Status.Message);
+            });
+        });
+</script>

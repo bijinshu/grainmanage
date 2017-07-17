@@ -1,0 +1,45 @@
+﻿@using GrainManage.Web.Resources
+@model GrainManage.Web.Models.Trade.OutputSearchDetail
+@{
+    if (Model.TradeDetail != null)
+    {
+    <table data-total="@Model.Total">
+        <tr>
+            <th>@TradeResx.TradeID</th>
+            <th>@ContactResx.ContactName</th>
+            <th>@ContactResx.Area</th>
+            <th>@ContactResx.Cellphone</th>
+            <th>@PriceResx.Grain</th>
+            <th>@TradeResx.Price</th>
+            <th>@TradeResx.Weight</th>
+            <th>@TradeResx.ActualMoney</th>
+            <th>@TradeResx.TradeType</th>
+            <th>@TradeResx.Remarks</th>
+            <th>@TradeResx.TradeTime</th>
+        </tr>
+        @foreach (var trade in Model.TradeDetail)
+        {
+            <tr>
+                <td>@trade.TradeID</td>
+                <td>@trade.ContactName</td>
+                <td>@trade.Area</td>
+                <td>@trade.Cellphone</td>
+                <td>@trade.Grain</td>
+                <td>@trade.Price</td>
+                <td>@trade.Weight</td>
+                <td>@trade.ActualMoney</td>
+                <td>@trade.TradeType</td>
+                <td>@trade.Remarks</td>
+                @{
+            string date = trade.TradeTime.HasValue ? trade.TradeTime.Value.ToString(GlobalResx.DateTimeFormat) : string.Empty;
+                }
+                <td>@date</td>
+            </tr>
+        }
+    </table>
+    }
+    else
+    {
+    @Html.Partial(GrainManage.Web.Constant.RestStatusView, Model);
+    }
+}

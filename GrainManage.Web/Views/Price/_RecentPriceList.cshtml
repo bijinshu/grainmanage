@@ -1,0 +1,37 @@
+﻿@using GrainManage.Web.Resources
+@model GrainManage.Web.Models.Price.OutputSearchRecentPrice
+@{
+    if (Model.Prices != null)
+    {
+    <table data-total="@Model.Total">
+        <tr>
+            <th><a>@PriceResx.PriceID</a></th>
+            <th><a>@PriceResx.Grain</a></th>
+            <th><a>@PriceResx.PriceType</a></th>
+            <th><a>@PriceResx.UnitPrice</a></th>
+            <th><a>@PriceResx.Remarks</a></th>
+            <th><a>@PriceResx.Created</a></th>
+        </tr>
+        @foreach (var price in Model.Prices)
+        {
+            <tr>
+                <td>@price.PriceID.ToString()</td>
+                <td>@price.Grain</td>
+                <td>@price.PriceType</td>
+                <td>@price.UnitPrice</td>
+                <td>@price.Remarks</td>
+                @{
+            string date = price.Created.HasValue ? price.Created.Value.ToString(GlobalResx.DateTimeFormat) : string.Empty;
+                }
+                <td>@date</td>
+                <td><a href="/Price/EditPrice?priceID=@price.PriceID" data-value="@price.PriceID">@GlobalResx.Edit</a></td>
+                @*     <td><a href="/Price/Delete?priceID=@price.PriceID" data-value="@price.PriceID">@GlobalResx.Delete</a></td>*@
+            </tr>
+        }
+    </table>
+    }
+    else
+    {
+    @Html.Partial(GrainManage.Web.Constant.RestStatusView, Model);
+    }
+}

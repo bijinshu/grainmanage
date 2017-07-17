@@ -1,0 +1,85 @@
+﻿@model GrainManage.Web.Models.Contact.AddContactModel
+<script type="text/javascript">
+    $(document).ready(function () {
+        var data = { pageIndex: 0, pageSize: 100 };
+
+    });
+</script>
+
+<div>
+    @using (Html.BeginForm("Insert", "Contact", FormMethod.Post))
+    {
+        <table class="create">
+            <tr>
+                <td>@Html.LabelFor(model => model.ContactName)</td>
+                <td>@Html.EditorFor(model => model.ContactName)</td>
+                <td>@Html.ValidationMessageFor(model => model.ContactName)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Gender)</td>
+                <td>@Html.EditorFor(model => model.Gender)</td>
+                <td>@Html.ValidationMessageFor(model => model.Gender)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.BirthDate)</td>
+                <td>@Html.EditorFor(model => model.BirthDate)</td>
+                <td>@Html.ValidationMessageFor(model => model.BirthDate)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Cellphone)</td>
+                <td>@Html.EditorFor(model => model.Cellphone)</td>
+                <td>@Html.ValidationMessageFor(model => model.Cellphone)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Telephone)</td>
+                <td>@Html.EditorFor(model => model.Telephone)</td>
+                <td>@Html.ValidationMessageFor(model => model.Telephone)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.QQ)</td>
+                <td>@Html.EditorFor(model => model.QQ)</td>
+                <td>@Html.ValidationMessageFor(model => model.QQ)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Email)</td>
+                <td>@Html.EditorFor(model => model.Email)</td>
+                <td>@Html.ValidationMessageFor(model => model.Email)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Area)</td>
+                <td>@Html.EditorFor(model => model.Area)</td>
+                <td>@Html.ValidationMessageFor(model => model.Area)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Address)</td>
+                <td>@Html.EditorFor(model => model.Address)</td>
+                <td>@Html.ValidationMessageFor(model => model.Address)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.Remarks)</td>
+                <td>@Html.EditorFor(model => model.Remarks)</td>
+                <td>@Html.ValidationMessageFor(model => model.Remarks)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ImageID)</td>
+                <td>@Html.EditorFor(model => model.ImageID)</td>
+                <td>@Html.ValidationMessageFor(model => model.ImageID)</td>
+            </tr>
+            <tr class="submit">
+                <td></td>
+                <td>
+                    <input type="submit" value="@GrainManage.Web.Resources.GlobalResx.Create" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

@@ -1,0 +1,111 @@
+﻿@using GrainManage.Web
+@{
+    ViewBag.Title = "联系人列表";
+}
+<div class="tab-pane fade in active" id="contactInfo">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-inline" role="form">
+                <div class="form-group" style="margin-right:6px;">
+                    <label class="control-label">姓名：</label>
+                    <input type="text" class="form-control" v-model="search.Name" placeholder="请输入姓名" />
+                </div>
+                <div class="form-group" style="margin-right:6px;">
+                    <label class="control-label">区域：</label>
+                    <input type="text" class="form-control" v-model="search.Area" placeholder="请输入区域" />
+                </div>
+                <div class="form-group" style="margin-right:6px;">
+                    <label class="control-label">详细地址：</label>
+                    <input type="text" class="form-control" v-model="search.Address" placeholder="请输入详细地址" />
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-info" v-on:click="getData">查询</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12" style="margin-top:16px;">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>出生日期</th>
+                            <th>手机</th>
+                            <th>电话</th>
+                            <th>QQ</th>
+                            <th>邮箱</th>
+                            <th>区域</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in list">
+                            <td>{{item.Id}}</td>
+                            <td>{{item.ContactName}}</td>
+                            <td>{{item.Gender}}</td>
+                            <td>{{item.BirthDate|format}}</td>
+                            <td>{{item.CellPhone}}</td>
+                            <td>{{item.Telephone}}</td>
+                            <td>{{item.QQ}}</td>
+                            <td>{{item.Email}}</td>
+                            <td>{{item.Area}}</td>
+                            <td>
+                                <a class="edit" v-on:click="edit(item)">编辑</a>
+                                <span>&nbsp;&nbsp;</span>
+                                <a class="trade" v-on:click="trade(item)">交易</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+    </div>
+</div>
+@section FooterSection{
+    <script src="~/Scripts/Shared/dateformat.js"></script>
+    <script>
+        new Vue({
+            el: "#contactInfo",
+            data: {
+                total: 0,
+                list: [],
+                search: { Name: '', Area: '', Address: '', PageIndex: 0, PageSize: 10 }
+            },
+            created: function () {
+                this.getData();
+            },
+            methods: {
+                getData: function () {
+                    $.post('@HttpUtil.GetUrl("Contact/Index")', this.$data.search).done(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1) {
+
+                        }
+                    }.bind(this));
+                },
+                edit: function (item) {
+                    alert(item.Id);
+                },
+                trade: function (item) {
+                    alert(item.Id);
+                }
+            },
+            computed: {
+
+            },
+            filters: {
+                format: function (date) {
+                    return date ? new Date(date).Format("yyyy-MM-dd") : '';
+                }
+            }
+        })
+    </script>
+}

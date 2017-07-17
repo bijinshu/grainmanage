@@ -1,0 +1,87 @@
+﻿@using GrainManage.Web.Resources
+@{
+    string imagePath = "/Plugin/vimeo_navigation";
+}
+@ScriptHelper.CssLink(imagePath, "vimeo.css")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#imgSearch").click(function (event) {
+            //var isName = $("#isName").is(":checked");
+            //var isArea = $("#isArea").is(":checked");
+            //var isAddress = $("#isAddress").is(":checked");
+            //var query = $("#searchField").val();
+            //    var pageSize = GetPageSize();
+            //    BindMyPaginationClick("#searchResult", "/Contact/Search", { query: query, isName: isName, isArea: isArea, isAddress: isAddress, pageIndex: 0, pageSize: 10 });
+            alert('You cliked me!');
+        });
+    });
+</script>
+<div class="vimeo" style="margin-left: 50px;">
+    <ul id="menu">
+        <li class="logo">
+            <img style="float: left;" alt="" src="@PathHelper.Combine(imagePath, "menu_left.png")" />
+            <ul id="main">
+                <li class="first">@GlobalResx.WelcomeTo<b> @GlobalResx.GrainManage </b>@GlobalResx.QuerySystem</li>
+                <li class="last">
+                    <img class="corner_left" alt="" src="@PathHelper.Combine(imagePath, "corner_blue_left.png")" />
+                    <img class="middle" alt="" src="@PathHelper.Combine(imagePath, "dot_blue.png")" />
+                    <img class="corner_right" alt="" src="@PathHelper.Combine(imagePath, "corner_blue_right.png")" />
+                </li>
+            </ul>
+        </li>
+        <li>&nbsp;</li>
+        <li><a href="/Price/SearchRecentPrice">@PriceResx.Price</a>
+            <ul id="price">
+                <li class="first">
+                    <img class="corner_inset_left" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_left.png")" />
+                    <a href="/Price/SearchRecentPrice">@PriceResx.RecentPrice</a>
+                    <img class="corner_inset_right" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_right.png")" />
+                </li>
+                <li><a href="/Price/SearchPrice">@PriceResx.SearchPrice</a></li>
+                <li><a href="/Price/NewPrice">@PriceResx.NewPrice</a></li>
+            </ul>
+        </li>
+        <li><a href="/Contact/SearchContacts">@ContactResx.Contact</a>
+            <ul id="contact">
+                <li class="first">
+                    <img class="corner_inset_left" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_left.png")" />
+                    <a href="/Contact/SearchContacts">@ContactResx.SearchContact</a>
+                    <img class="corner_inset_right" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_right.png")" />
+                </li>
+                <li><a href="/Contact/NewContact">@ContactResx.NewContact</a></li>
+                <li class="last">
+                    <img class="corner_left" alt="" src="@PathHelper.Combine(imagePath, "corner_left.png")" />
+                    <img class="middle" alt="" src="@PathHelper.Combine(imagePath, "dot.gif")" />
+                    <img class="corner_right" alt="" src="@PathHelper.Combine(imagePath, "corner_right.png")" />
+                </li>
+            </ul>
+        </li>
+
+        <li class="searchContainer">
+            <div>
+                <input id="searchField" type="text" style="height: auto; width: auto; padding: 0px; font-size: initial; margin: 0px;" />
+                <img id="imgSearch" src="@PathHelper.Combine(imagePath, "magnifier.png")" alt="Search"  />
+            </div>
+            <ul id="search">
+                <li class="first">
+                    <img class="corner_inset_left" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_left.png")" />
+                    <input id="isName" type="checkbox" checked="checked" />@ContactResx.Name
+                    <img class="corner_inset_right" alt="" src="@PathHelper.Combine(imagePath, "corner_inset_right.png")" />
+                </li>
+                <li>
+                    <input id="isArea" type="checkbox" checked="checked" />@ContactResx.Area</li>
+                <li>
+                    <input id="isAddress" type="checkbox" checked="checked" />@ContactResx.Address</li>
+                <li>
+                    <input id="isCellphone" type="checkbox" checked="checked" />@ContactResx.Cellphone</li>
+                <li class="last">
+                    <img class="corner_left" alt="" src="@PathHelper.Combine(imagePath, "corner_left.png")" />
+                    <img class="middle" alt="" src="@PathHelper.Combine(imagePath, "dot.gif")" />
+                    <img class="corner_right" alt="" src="@PathHelper.Combine(imagePath, "corner_right.png")" />
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <img style="float: left;" alt="" src="@PathHelper.Combine(imagePath, "menu_right.png")" />
+</div>
+<div id="searchResult" style="float: none; clear: both;"></div>

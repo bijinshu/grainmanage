@@ -1,0 +1,192 @@
+﻿%m(message):输出的日志消息，如ILog.Debug(…)输出的一条消息 
+
+%n(new line):换行 
+
+%d(datetime):输出当前语句运行的时刻 
+
+%r(run time):输出程序从运行到执行到当前语句时消耗的毫秒数 
+
+%t(thread id):当前语句所在的线程ID 
+
+%p(priority): 日志的当前优先级别，即DEBUG、INFO、WARN…等 
+
+%c(class):当前日志对象的名称
+
+%L：输出语句所在的行号 
+
+%F：输出语句所在的文件名 
+
+%-数字：表示该项的最小长度，如果不够，则用空格填充 
+
+例如，转换模式为%r [%t]%-5p %c - %m%n 的 PatternLayout 将生成类似于以下内容的输出： 
+
+176 [main] INFO org.foo.Bar - Located nearest gas station. 
+
+级别从高到低依次是：OFF,FATAL,ERROR,WARN,INFO,DEBUG,ALL
+
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" />
+  </configSections>
+  <log4net>
+    <root>
+      <!--FATAL,ERROR,WARN,INFO,DEBUG,ALL-->
+      <level value="ALL" />
+      <appender-ref ref="AllAppender" />
+    </root>
+
+    <logger name="FatalLog">
+      <level value="FATAL"/>
+      <appender-ref ref="FatalAppender" />
+    </logger>
+
+    <logger name="ErrorLog">
+      <level value="ERROR"/>
+      <appender-ref ref="ErrorAppender" />
+    </logger>
+
+    <logger name="WarnLog">
+      <level value="WARN"/>
+      <appender-ref ref="WarnAppender" />
+    </logger>
+
+    <logger name="InfoLog">
+      <level value="INFO"/>
+      <appender-ref ref="InfoAppender" />
+    </logger>
+
+    <logger name="DebugLog">
+      <level value="DEBUG"/>
+      <appender-ref ref="DebugAppender" />
+    </logger>
+
+    <logger name="ConsoleLog">
+      <level value="ALL"/>
+      <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <appender name="AllAppender" type="log4net.Appender.RollingFileAppender" >
+
+      <file value="grainmanage@all.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+
+      <!--异步控制-->
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+
+      <!--可以为:Once|Size|Date|Composite-->
+      <rollingStyle value="Composite" />
+
+      <!--最大文件大小,可用单位:KB|MB|GB-->
+      <maximumFileSize value="2MB" />
+
+      <!--日志最大个数-->
+      <maxSizeRollBackups value="10" />
+
+      <!--当备份文件时,为文件名加的后缀-->
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+
+
+      <!--置为true,当前最新日志文件名永远为file节中的名字-->
+      <staticLogFileName value="true" />
+
+      <layout type="log4net.Layout.PatternLayout">
+        <!--<param name="Header" value="[Header]"/>
+        <param name="Footer" value="[Footer]"/>
+        <param name="ConversionPattern" value="[Time]:%d%n[RunTime]:%r%n[Priority]:%-5p%n[Message]:%m%n" />-->
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+
+      <!--输出级别在DEBUG和ERROR之间的日志-->
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <param name="LevelMin" value="DEBUG" />
+        <param name="LevelMax" value="FATAL" />
+      </filter>
+    </appender>
+
+    <appender name="FatalAppender" type="log4net.Appender.RollingFileAppender" >
+      <file value="grainmanage@fatal.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <rollingStyle value="Composite" />
+      <maximumFileSize value="2MB" />
+      <maxSizeRollBackups value="10" />
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+    </appender>
+
+    <appender name="ErrorAppender" type="log4net.Appender.RollingFileAppender" >
+      <file value="grainmanage@error.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <rollingStyle value="Composite" />
+      <maximumFileSize value="2MB" />
+      <maxSizeRollBackups value="10" />
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+    </appender>
+
+    <appender name="WarnAppender" type="log4net.Appender.RollingFileAppender" >
+      <file value="grainmanage@warn.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <rollingStyle value="Composite" />
+      <maximumFileSize value="2MB" />
+      <maxSizeRollBackups value="10" />
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+    </appender>
+
+    <appender name="InfoAppender" type="log4net.Appender.RollingFileAppender" >
+      <file value="grainmanage@info.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <rollingStyle value="Composite" />
+      <maximumFileSize value="2MB" />
+      <maxSizeRollBackups value="10" />
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+    </appender>
+
+    <appender name="DebugAppender" type="log4net.Appender.RollingFileAppender" >
+      <file value="grainmanage@debug.log" type="log4net.Util.PatternString"/>
+      <appendToFile value="true" />
+      <encoding value="utf-8" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <rollingStyle value="Composite" />
+      <maximumFileSize value="2MB" />
+      <maxSizeRollBackups value="10" />
+      <datePattern value="&quot;@&quot;yyyy-MM-dd&quot;.log&quot;" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="********************Time : %d********************%nPriority: %-5p%nThread ID: %t%n%m" />
+      </layout>
+    </appender>
+    
+    <appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender" >
+      <layout type="log4net.Layout.PatternLayout">
+        <param name="ConversionPattern" value="%d [%t] %-5p %c [%x] - %m%n" />
+      </layout>
+
+    </appender>
+
+  </log4net>
+
+</configuration>

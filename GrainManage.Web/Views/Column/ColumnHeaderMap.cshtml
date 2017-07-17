@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+@model Dictionary<string, string>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ColumnHeaderMap</title>
+</head>
+<body>
+    <div>
+        @if (Model != null)
+        {
+            foreach (var key in Model.Keys)
+            {
+            <span>@key</span>
+            <span>@Model[key]</span>
+            <br />
+            }
+        }
+    </div>
+</body>
+</html>

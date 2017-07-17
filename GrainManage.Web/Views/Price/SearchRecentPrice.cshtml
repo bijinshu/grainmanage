@@ -1,0 +1,33 @@
+﻿@using GrainManage.Web.Resources
+@ScriptHelper.Search()
+@ScriptHelper.Autocomplete()
+<script type="text/javascript">
+    $(document).ready(function () {
+        var data = { pageIndex: 0, pageSize: 100 };
+        BindAutoComplete("/Type/GetGrainType", "#GetGrainType", data, true);
+        BindAutoComplete("/Type/GetPriceType", "#GetPriceType", data, true);
+
+        $("#search").click(function (event) {
+            var grain = $("#GetGrainType").val();
+            var priceType = $("#GetPriceType").val();
+            var pageSize = GetPageSize();
+            var parameter = { grain: grain, priceType: priceType, pageIndex: 0, pageSize: pageSize };
+            BindMyPaginationClick("#result", "/Price/GetRecentPrice", parameter);
+        });
+
+        $("#search").triggerHandler("click");
+    });
+</script>
+<div id="searchRecentPrice" class="searchCondition">
+    <label>@PriceResx.Grain</label>
+    <input type="text" id="GetGrainType" />
+
+    <label>@PriceResx.PriceType</label>
+    <input type="text" id="GetPriceType" />
+    @ControlHelper.PageSize()
+    <button id="search">@PriceResx.SearchRecentPrice</button>
+</div>
+<div id="result"></div>
+<div id="pagination">
+    @Html.Partial(GrainManage.Web.Constant.PaginationView)
+</div>

@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+@using GrainManage.Web.Common
+@using GrainManage.Web
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>粮食管理系统</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Account/signin.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/Crypto/base64.js"></script>
+</head>
+<body>
+    <div class="container" id="app">
+        <form class="form-signin" role="form">
+            <h2 class="form-signin-heading">粮食管理系统</h2>
+            <input v-model="UserName" type="text" class="form-control" placeholder="用户名" required autofocus>
+            <input v-model="Password" type="password" class="form-control" placeholder="密码" required>
+            <div class="checkbox">
+                <label>
+                    <input v-on:click="changeRemember" v-model="RememberMe" type="checkbox">
+                  <span>记住选择</span>  
+                </label>
+            </div>
+            <button v-on:click.stop.prevent="loginOn" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">登录</button>
+        </form>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                UserName:'',
+                Password:'',
+                RememberMe: localStorage.RememberMe,
+                IsDisabled:false
+            },
+            methods: {
+                loginOn: function (event) {
+                    this.IsDisabled=true;
+                    $.post('@HttpUtil.GetUrl("Account/SignIn")', this.$data).done(function (result, status) {
+                        this.IsDisabled = false;
+                        if (result.code == 1) {
+                            window.location = result.data.url;
+                        }
+                        else {
+                            alert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                changeRemember: function () {
+                    if (this.RememberMe) {
+                        var base = new base64();
+                        localStorage.UserName = base.encode(this.UserName);
+                        localStorage.Password = base.encode(this.Password);
+                        localStorage.RememberMe = this.RememberMe;
+                    }
+                    else {
+                        localStorage.removeItem("UserName");
+                        localStorage.removeItem("Password");
+                        localStorage.removeItem("RememberMe");
+                    }
+                }
+            },
+            created: function () {
+                var base = new base64();
+                this.UserName = localStorage.UserName ? base.decode(localStorage.UserName) : '';
+                this.Password = localStorage.Password ? base.decode(localStorage.Password) : '';
+            }
+        })
+    </script>
+</body>
+</html>
