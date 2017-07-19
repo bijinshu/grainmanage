@@ -20,7 +20,6 @@ namespace GrainManage.Web.Controllers
         [AllowAnonymous]
         public ActionResult SignIn(InputSignIn input)
         {
-            var length = Guid.NewGuid().ToString("N");
             if (IsGetRequest)
             {
                 CookieUtil.DeleteCookie(GlobalVar.CookieName);
@@ -89,23 +88,6 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult SignOut()
-        {
-            CookieUtil.DeleteCookie(GlobalVar.CookieName);
-            var repo = GetRepo<User>();
-            var account = repo.GetFiltered(f => f.Guid == UserId, true).First();
-            account.LastActive = DateTime.Now;
-            repo.UnitOfWork.SaveChanges();
-            Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId));
-            if (IsGetRequest)
-            {
-                return RedirectToAction("SignIn");
-            }
-            var result = new BaseOutput();
-            SetResponse(s => s.Success, null, result);
-            return JsonNet(result);
-        }
-
         [AllowAnonymous]
         public ActionResult Register(InputRegister input)
         {
@@ -132,6 +114,7 @@ namespace GrainManage.Web.Controllers
                 if (string.IsNullOrEmpty(input.Email) || IsEmailMatch(input.Email))
                 {
                     var model = DynamicMap<User>(input);
+                    model.Guid = Guid.NewGuid().ToString("N");
                     model.Pwd = SHAEncrypt.SHA1(input.Pwd);
                     model.Created = DateTime.Now;
                     model.LastActive = DateTime.Now;
@@ -202,6 +185,23 @@ namespace GrainManage.Web.Controllers
                     SetResponse(s => s.NameNotExist, input, result);
                 }
             }
+            return JsonNet(result);
+        }
+
+        public ActionResult SignOut()
+        {
+            CookieUtil.DeleteCookie(GlobalVar.CookieName);
+            var repo = GetRepo<User>();
+            var account = repo.GetFiltered(f => f.Guid == UserId, true).First();
+            account.LastActive = DateTime.Now;
+            repo.UnitOfWork.SaveChanges();
+            Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId));
+            if (IsGetRequest)
+            {
+                return RedirectToAction("SignIn");
+            }
+            var result = new BaseOutput();
+            SetResponse(s => s.Success, null, result);
             return JsonNet(result);
         }
 

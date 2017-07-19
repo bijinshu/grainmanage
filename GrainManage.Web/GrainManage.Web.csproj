@@ -265,8 +265,6 @@
     <Content Include="Scripts\Shared\common-tool.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
-    <Content Include="Scripts\Shared\dateformat.js" />
-    <Content Include="Scripts\Shared\pagination.js" />
     <Content Include="Scripts\vue.js" />
     <Content Include="Scripts\vue.min.js" />
     <Content Include="Scripts\_references.js" />

@@ -11,6 +11,7 @@ namespace DataBase.GrainManage.Models
         public string Guid { get; set; }
         public string UserName { get; set; }
         public string Pwd { get; set; }
+        public string Gender { get; set; }
         public int Status { get; set; } //0:未激活 1:启用 2:禁用
         public string NickName { get; set; }
         public string CellPhone { get; set; }

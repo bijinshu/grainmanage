@@ -34,10 +34,14 @@ namespace GrainManage.Web
                     CreateTime = DateTime.Now
                 };
                 db.Execute("insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,CreateTime) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@CreateTime)", model);
+                if (filterContext.HttpContext.Request.HttpMethod == "POST")
+                {
+                    filterContext.Result = new NewtonsoftJsonResult() { Data = new BaseOutput { msg = msg } };
+                }
             }
             catch (Exception e)
             {
-                logger.Fatal(e.Message);
+                logger.Fatal(ExceptionUtil.GetStackMessage(e));
             }
         }
         private string GetJson(object obj)
