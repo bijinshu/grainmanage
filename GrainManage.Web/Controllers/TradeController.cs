@@ -24,7 +24,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            input.Trade.Creator = UserName;
+            input.Trade.Creator = UserId;
             var repo = GetRepo<Trade>();
             var model = repo.Add(MapTo<Trade>(input.Trade));
             result.data = model.Id;
@@ -46,7 +46,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            input.Trade.Creator = UserName;
+            input.Trade.Creator = UserId;
             var now = DateTime.Now;
             var model = MapTo<Trade>(input.Trade);
             model.Modified = now;
@@ -68,7 +68,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var repo = GetRepo<Trade>();
-            var trade = repo.GetFiltered(f => f.Id == tradeId && f.Creator == UserName).FirstOrDefault();
+            var trade = repo.GetFiltered(f => f.Id == tradeId && f.Creator == UserId).FirstOrDefault();
             if (trade == null)
             {
                 SetResponse(s => s.NoData, null, result);
@@ -85,7 +85,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult SearchDetail(InputSearchDetail input)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
@@ -131,7 +131,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult GetTotal(InputGetTotal input)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
@@ -179,7 +179,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult GetTotalByArea(InputGetTotalByArea input)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
@@ -232,7 +232,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult GetTotalByContactArea(InputGetTotalByContact input)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
@@ -289,7 +289,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult Delete(int tradeId)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             var repo = GetRepo<Trade>();
             var model = repo.GetFiltered(f => f.Id == tradeId && f.Creator == creator).FirstOrDefault();
             if (model != null)

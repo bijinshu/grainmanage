@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GrainManage.Web.Models.Account;
-using GrainManage.Web.Resources;
 using GrainManage.Web.Common;
 using System.Web.Security;
 using DataBase.GrainManage.Models;
@@ -12,6 +11,7 @@ using GrainManage.Web;
 using GrainManage.Encrypt;
 using GrainManage.Common;
 using GrainManage.Web.Models;
+using System.Text.RegularExpressions;
 
 namespace GrainManage.Web.Controllers
 {
@@ -20,16 +20,18 @@ namespace GrainManage.Web.Controllers
         [AllowAnonymous]
         public ActionResult SignIn(InputSignIn input)
         {
+            var length = Guid.NewGuid().ToString("N");
             if (IsGetRequest)
             {
+                CookieUtil.DeleteCookie(GlobalVar.CookieName);
                 return View();
             }
             var result = new BaseOutput();
-            if (string.IsNullOrWhiteSpace(input.UserName))
+            if (string.IsNullOrEmpty(input.UserName))
             {
                 SetResponse(s => s.NameEmpty, input, result);
             }
-            else if (string.IsNullOrEmpty(input.Password))
+            else if (string.IsNullOrEmpty(input.Pwd))
             {
                 SetResponse(s => s.PwdEmpty, input, result);
             }
@@ -41,32 +43,28 @@ namespace GrainManage.Web.Controllers
                 {
                     if (account.Status == UserStatus.Enabled)
                     {
-                        var encryptedPwd = SHAEncrypt.SHA1(input.Password);
+                        var encryptedPwd = SHAEncrypt.SHA1(input.Pwd);
                         if (account.Pwd != encryptedPwd)
                         {
-                            SetResponse(s => s.PwdNotMatch, input, result);
+                            SetResponse(s => s.NamePwdNotMatch, input, result);
                         }
                         else
                         {
-                            var now = DateTime.Now;
-                            account.LastActive = now;
-                            result.data = new
-                            {
-                                token = RandomGenerator.Next(20),
-                                url = HttpUtil.GetUrl("Contact/Index/")
-                            };
+                            account.LastActive = DateTime.Now;
+                            result.data = new { token = RandomGenerator.Next(20), url = HttpUtil.GetUrl("Contact/Index/") };
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
-                            var safeInfo = new SafeInfo
+                            var userInfo = new UserInfo
                             {
+                                UserId = account.Guid,
                                 UserName = input.UserName,
                                 Token = result.data.token,
-                                ExpiredAt = expireAt,
+                                ExpiredAt = expireAt.ToString("yyyy-MM-dd HH:mm:ss"),
                                 LoginIP = HttpUtil.RequestHostAddress
                             };
-                            var cache = Resolve<ICache>();
-                            cache.Set(CacheKey.GetSafeInfoKey(input.UserName), safeInfo, expireAt);
-                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserName, input.UserName);
-                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.AuthToken, result.data.token);
+                            Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId), userInfo, expireAt);
+                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserId, userInfo.UserId);
+                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserName, userInfo.UserName);
+                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.AuthToken, userInfo.Token);
                             SetResponse(s => s.Success, input, result);
                         }
                     }
@@ -79,34 +77,29 @@ namespace GrainManage.Web.Controllers
                 {
                     SetResponse(s => s.NameNotExist, input, result);
                 }
+                var loginRepository = GetRepo<LoginLog>();
+                loginRepository.Add(new LoginLog
+                {
+                    UserName = input.UserName,
+                    LoginIP = HttpUtil.RequestHostAddress,
+                    Created = DateTime.Now,
+                    Status = result.msg,
+                });
             }
-            var loginRepository = GetRepo<LoginLog>();
-            loginRepository.Add(new LoginLog
-            {
-                UserName = input.UserName,
-                LoginIP = HttpUtil.RequestHostAddress,
-                Created = DateTime.Now,
-                Status = result.msg,
-            });
             return JsonNet(result);
         }
 
         public ActionResult SignOut()
         {
             CookieUtil.DeleteCookie(GlobalVar.CookieName);
-            var userName = CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.UserName);
-            var authToken = CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.AuthToken);
             var repo = GetRepo<User>();
-            var account = repo.GetFiltered(f => f.UserName == userName, true).First();
+            var account = repo.GetFiltered(f => f.Guid == UserId, true).First();
             account.LastActive = DateTime.Now;
-            account.Guid = Guid.NewGuid().ToString();
             repo.UnitOfWork.SaveChanges();
-            var safeInfoKey = CacheKey.GetSafeInfoKey(userName);
-            var cache = Resolve<ICache>();
-            cache.Remove(safeInfoKey);
+            Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId));
             if (IsGetRequest)
             {
-                return View("SignIn");
+                return RedirectToAction("SignIn");
             }
             var result = new BaseOutput();
             SetResponse(s => s.Success, null, result);
@@ -122,9 +115,9 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var repo = GetRepo<User>();
-            if (string.IsNullOrEmpty(input.UserName))
+            if (!(IsUserNameMatch(input.UserName) || IsPhoneMatch(input.CellPhone)))
             {
-                SetResponse(s => s.NameEmpty, input, result);
+                SetResponse(s => s.NameNotValid, input, result);
             }
             else if (string.IsNullOrEmpty(input.Pwd))
             {
@@ -139,7 +132,7 @@ namespace GrainManage.Web.Controllers
                 if (string.IsNullOrEmpty(input.Email) || IsEmailMatch(input.Email))
                 {
                     var model = DynamicMap<User>(input);
-                    model.Pwd = SHAEncrypt.SHA256(input.Pwd);
+                    model.Pwd = SHAEncrypt.SHA1(input.Pwd);
                     model.Created = DateTime.Now;
                     model.LastActive = DateTime.Now;
                     repo.Add(model);
@@ -161,7 +154,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            if (string.IsNullOrWhiteSpace(input.UserName))
+            if (string.IsNullOrEmpty(input.UserName))
             {
                 SetResponse(s => s.NameEmpty, input, result);
             }
@@ -188,7 +181,7 @@ namespace GrainManage.Web.Controllers
                         else
                         {
                             var newPwd = RandomGenerator.Next(8);
-                            account.Pwd = SHAEncrypt.SHA256(newPwd);
+                            account.Pwd = SHAEncrypt.SHA1(newPwd);
                             account.LastActive = DateTime.Now;
                             var title = "您的密码已经设置更改";
                             var body = string.Format("{0},您的新密码为:{1},请注意保存");
@@ -219,24 +212,19 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            if (string.IsNullOrWhiteSpace(UserName))
-            {
-                SetResponse(s => s.NameEmpty, input, result);
-            }
-            else if (string.IsNullOrEmpty(input.OldPassword) || string.IsNullOrEmpty(input.NewPassword))
+            if (string.IsNullOrEmpty(input.OldPwd) || string.IsNullOrEmpty(input.NewPwd))
             {
                 SetResponse(s => s.PwdEmpty, input, result);
             }
             else
             {
                 var repo = GetRepo<User>();
-                var userName = UserName;
-                var account = repo.GetFiltered(f => f.UserName == userName, true).FirstOrDefault();
+                var account = repo.GetFiltered(f => f.Guid == UserId, true).FirstOrDefault();
                 if (account != null && account.Status == UserStatus.Enabled)
                 {
-                    if (account.Pwd == SHAEncrypt.SHA256(input.OldPassword))
+                    if (account.Pwd == SHAEncrypt.SHA1(input.OldPwd))
                     {
-                        var newStoredPwd = SHAEncrypt.SHA256(input.NewPassword);
+                        var newStoredPwd = SHAEncrypt.SHA1(input.NewPwd);
                         account.Pwd = newStoredPwd;
                         account.LastActive = DateTime.Now;
                         repo.UnitOfWork.SaveChanges();
@@ -244,7 +232,7 @@ namespace GrainManage.Web.Controllers
                     }
                     else
                     {
-                        SetResponse(s => s.PwdNotMatch, input, result);
+                        SetResponse(s => s.OldPwdNotMatch, input, result);
                     }
                 }
                 else
@@ -257,7 +245,15 @@ namespace GrainManage.Web.Controllers
 
         private bool IsEmailMatch(string email)
         {
-            return System.Text.RegularExpressions.Regex.IsMatch(email, @"^[a-zA-Z0-9_+.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,4}");
+            return Regex.IsMatch(email, @"^[a-zA-Z0-9_+.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{1,4}$");
+        }
+        private bool IsUserNameMatch(string userName)
+        {
+            return !string.IsNullOrEmpty(userName) && Regex.IsMatch(userName, @"^[a-zA-Z0-9-_]{2,20}$");
+        }
+        private bool IsPhoneMatch(string phone)
+        {
+            return !string.IsNullOrEmpty(phone) && Regex.IsMatch(phone, @"^1[34578]\d{9}$");
         }
     }
 }

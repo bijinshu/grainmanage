@@ -11,7 +11,7 @@ namespace DataBase.GrainManage.Models.Mapping
     {
         public RoleResourceMapper()
         {
-            ToTable("rm_role_resources");
+            ToTable("rm_role_resource");
             HasKey(m => m.Id);
             Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             HasRequired(m => m.Role).WithMany().HasForeignKey(c => c.RoleId).WillCascadeOnDelete(false);

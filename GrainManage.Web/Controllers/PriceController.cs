@@ -19,7 +19,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Price, bool>> myFilter = p => p.Creator == creator;
             if (!string.IsNullOrEmpty(input.Grain))
             {
@@ -66,7 +66,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             Expression<Func<Price, bool>> myFilter = p => p.Creator == creator;
             if (!string.IsNullOrEmpty(input.Grain))
             {
@@ -106,7 +106,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            input.Price.Creator = UserName;
+            input.Price.Creator = UserId;
             var model = MapTo<Price>(input.Price);
             var repo = GetRepo<Price>();
             model = repo.Add(model);
@@ -130,7 +130,7 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var price = input.Price;
-            price.Creator = UserName;
+            price.Creator = UserId;
             var repo = GetRepo<Price>();
             var model = repo.GetFiltered(f => f.Id == price.PriceId, true).First();
             model.Grain = price.Grain;
@@ -148,7 +148,7 @@ namespace GrainManage.Web.Controllers
         public ActionResult Delete(int priceId)
         {
             var result = new BaseOutput();
-            var creator = UserName;
+            var creator = UserId;
             var repo = GetRepo<Price>();
             var model = repo.GetFiltered(f => f.Id == priceId && f.Creator == creator).FirstOrDefault();
             if (model != null)

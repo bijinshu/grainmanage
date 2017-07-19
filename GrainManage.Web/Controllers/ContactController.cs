@@ -20,42 +20,18 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            var creator = UserName;
-            Expression<Func<Contact, bool>> myFilter = f => f.Creator == creator;
-            if (input.IsOr)
+            Expression<Func<Contact, bool>> myFilter = f => f.Creator == UserId;
+            if (!string.IsNullOrEmpty(input.Name))
             {
-                Expression<Func<Contact, bool>> subFilter = null;
-                if (!string.IsNullOrEmpty(input.Name))
-                {
-                    subFilter = (Contact f) => f.ContactName.Contains(input.Name);
-                }
-                if (!string.IsNullOrEmpty(input.Area))
-                {
-                    subFilter = subFilter == null ? (Contact f) => f.Area.Contains(input.Area) : subFilter.Or(f => f.Area.Contains(input.Area));
-                }
-                if (!string.IsNullOrEmpty(input.Address))
-                {
-                    subFilter = subFilter == null ? (Contact f) => f.Address.Contains(input.Address) : subFilter.Or(f => f.Address.Contains(input.Address));
-                }
-                if (subFilter != null)
-                {
-                    myFilter = myFilter.And(subFilter);
-                }
+                myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
             }
-            else
+            if (!string.IsNullOrEmpty(input.Area))
             {
-                if (!string.IsNullOrEmpty(input.Name))
-                {
-                    myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
-                }
-                if (!string.IsNullOrEmpty(input.Area))
-                {
-                    myFilter = myFilter.And(f => f.Area.Contains(input.Area));
-                }
-                if (!string.IsNullOrEmpty(input.Address))
-                {
-                    myFilter = myFilter.And(f => f.Address.Contains(input.Address));
-                }
+                myFilter = myFilter.And(f => f.Area.Contains(input.Area));
+            }
+            if (!string.IsNullOrEmpty(input.Address))
+            {
+                myFilter = myFilter.And(f => f.Address.Contains(input.Address));
             }
             if (input.StartTime.HasValue)
             {
@@ -88,7 +64,7 @@ namespace GrainManage.Web.Controllers
                 return View();
             }
             var result = new BaseOutput();
-            input.Creator = UserName;
+            input.Creator = UserId;
             var model = MapTo<Contact>(input);
             var repo = GetRepo<Contact>();
             model = repo.Add(model);
@@ -112,7 +88,7 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var contact = input;
-            contact.Creator = UserName;
+            contact.Creator = UserId;
             var repo = GetRepo<Contact>();
             var model = repo.GetFiltered(f => f.Id == contact.Id && f.Creator == contact.Creator, true).First();
             model.Address = contact.Address;
@@ -126,19 +102,16 @@ namespace GrainManage.Web.Controllers
             model.Modified = DateTime.Now;
             model.QQ = contact.QQ;
             model.Remark = contact.Remark;
-            model.Telephone = contact.Telephone;
             repo.UnitOfWork.SaveChanges();
             SetResponse(s => s.Success, input, result);
             return JsonNet(model);
         }
 
-        [HttpPost]
         public ActionResult Delete(int contactId)
         {
             var result = new BaseOutput();
-            var creator = UserName;
             var repo = GetRepo<Contact>();
-            var model = repo.GetFiltered(f => f.Id == contactId && f.Creator == creator).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == contactId && f.Creator == UserId).FirstOrDefault();
             if (model != null)
             {
                 repo.Delete(model);

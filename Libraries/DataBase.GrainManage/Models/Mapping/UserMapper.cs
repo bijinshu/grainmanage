@@ -11,16 +11,15 @@ namespace DataBase.GrainManage.Models.Mapping
     {
         public UserMapper()
         {
-            ToTable("rm_users");
-            HasKey(m => m.UserName);
+            ToTable("rm_user");
+            HasKey(m => m.Guid);
             Property(m => m.UserName).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None).HasMaxLength(20).IsRequired();
             Property(m => m.Pwd).HasMaxLength(64);
-            Property(m => m.RealName).HasMaxLength(40);
+            Property(m => m.NickName).HasMaxLength(40);
             Property(m => m.CellPhone).HasMaxLength(11);
             Property(m => m.Email).HasMaxLength(64);
-            Property(m => m.Guid).HasMaxLength(36);
-            Property(m => m.EncryptKey).HasMaxLength(8);
-            Property(m => m.ResetCount);
+            Property(m => m.Weixin).HasMaxLength(60);
+            Property(m => m.QQ).HasMaxLength(20);
             Property(m => m.Remark).HasMaxLength(200);
             Property(m => m.Created);
             Property(m => m.LastActive);

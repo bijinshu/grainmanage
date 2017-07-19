@@ -1,6 +1,6 @@
 ﻿Vue.component('pager', {
     template: ' \
-       <div> \
+       <div style="padding:15px;"> \
        <nav style="float:left">\
             <ul class="pagination ">\
                 <li v-on:click="changePage(-1)"><a href="#">&laquo;</a></li>\
@@ -8,7 +8,7 @@
                 <li v-on:click="changePage(-2)"><a href="#">&raquo;</a></li>\
             </ul>\
         </nav>\
-        <div style="float:right;margin:20px;">\
+        <div style="float:right;margin-top:20px;">\
         共<span style="color:red;font-weight:bold;">{{totalPage}}</span>页 每页<input v-on:keyup.enter="changePageSize" type="textbox" v-model="currentPageSize" style="color:red;font-weight:bold;width:40px;" />条数据 \
         </div>\
       </div> ',

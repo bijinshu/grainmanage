@@ -3,7 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Web;
 using System.Web.Mvc;
-
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 namespace GrainManage.Web
 {
     public class LogExceptionAttribute : FilterAttribute, IExceptionFilter
@@ -25,7 +27,7 @@ namespace GrainManage.Web
                 var model = new
                 {
                     Path = logger.Name,
-                    //InputParameter = GetJson(filterContext.HttpContext.Request.Form.GetValues(0)) ?? string.Empty,
+                    InputParameter = filterContext.HttpContext.Request.HttpMethod == "POST" ? GetJson(GetFormData(filterContext.HttpContext.Request.Form)) : string.Empty,
                     Message = msg,
                     StackTrace = filterContext.Exception.StackTrace,
                     ClientIP = HttpUtil.RequestHostAddress,
@@ -45,6 +47,19 @@ namespace GrainManage.Web
                 return JsonConvert.SerializeObject(obj, Formatting.None, settings);
             }
             return string.Empty;
+        }
+        private Dictionary<string, string> GetFormData(NameValueCollection form)
+        {
+            if (form != null && form.Count > 0)
+            {
+                var dic = new Dictionary<string, string>();
+                foreach (var name in form.AllKeys)
+                {
+                    dic[name] = form[name];
+                }
+                return dic;
+            }
+            return null;
         }
     }
 }

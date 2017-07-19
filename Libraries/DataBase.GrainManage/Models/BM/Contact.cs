@@ -15,8 +15,8 @@ namespace DataBase.GrainManage.Models
         public string Area { get; set; }
         public string Address { get; set; }
         public string CellPhone { get; set; }
-        public string Telephone { get; set; }
         public string QQ { get; set; }
+        public string Weixin { get; set; }
         public string Email { get; set; }
         public string Remark { get; set; }
         public string Creator { get; set; }

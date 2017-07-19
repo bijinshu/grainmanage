@@ -9,7 +9,7 @@ namespace GrainManage.Web.Models.Account
         public bool IsApproved { get; set; }
         public bool IsOnLine { get; set; }
         public bool CheckLoginIP { get; set; }
-        public string RealName { get; set; }
+        public string NickName { get; set; }
         public string CellPhone { get; set; }
         public string Email { get; set; }
         public string Guid { get; set; }

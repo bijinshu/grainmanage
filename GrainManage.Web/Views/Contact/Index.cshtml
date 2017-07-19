@@ -52,7 +52,7 @@
                             <td>{{item.Telephone}}</td>
                             <td>{{item.QQ}}</td>
                             <td>{{item.Email}}</td>
-                            <td>{{item.Area}}</td>
+                            <td v-bind:title="item.Address">{{item.Area}}</td>
                             <td>
                                 <a class="edit" v-on:click="edit(item)">编辑</a>
                                 <span>&nbsp;&nbsp;</span>
@@ -97,9 +97,6 @@
                 trade: function (item) {
                     alert(item.Id);
                 }
-            },
-            computed: {
-
             },
             filters: {
                 format: function (date) {

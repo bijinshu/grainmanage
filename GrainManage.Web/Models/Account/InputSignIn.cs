@@ -9,6 +9,6 @@
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; }
+        public string Pwd { get; set; }
     }
 }

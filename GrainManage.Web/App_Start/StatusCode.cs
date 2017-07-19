@@ -64,17 +64,21 @@ namespace GrainManage.Web
         public readonly int BatchDeleteFailed = 38;
 
         //Account
-        [Message("用户名不能为空!")]
+        [Message("用户名不能为空")]
         public readonly int NameEmpty = 502;
+        [Message("用户名只能为手机号码或由2-20个英文字母、下划线及数字组成")]
+        public readonly int NameNotValid = 502;
 
         [Message("密码不能为空!")]
         public readonly int PwdEmpty = 503;
+        [Message("无效密码")]
+        public readonly int PwdNotValid = 503;
 
         [Message("用户名不存在.")]
         public readonly int NameNotExist = 504;
 
-        [Message("登录失败,密码错误.")]
-        public readonly int PwdNotMatch = 505;
+        [Message("原始密码错误.")]
+        public readonly int OldPwdNotMatch = 505;
 
         [Message("登录失败,用户名或密码错误.")]
         public readonly int NamePwdNotMatch = 506;

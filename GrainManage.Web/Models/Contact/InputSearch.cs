@@ -9,6 +9,5 @@ namespace GrainManage.Web.Models.Contact
         public string Address { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public bool IsOr { get; set; }
     }
 }

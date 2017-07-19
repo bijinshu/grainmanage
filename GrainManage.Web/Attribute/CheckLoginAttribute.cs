@@ -20,25 +20,34 @@ namespace GrainManage.Web
             {
                 if (!string.IsNullOrEmpty(CookieUtil.GetCookie(GlobalVar.CookieName)))
                 {
+                    var userId = CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.UserId);
                     var userName = CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.UserName);
                     var token = CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.AuthToken);
-                    if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
+                    if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
                     {
-                        var safeInfoKey = CacheKey.GetSafeInfoKey(userName);
-                        var cacheClient = DependencyResolver.Current.GetService<GrainManage.Common.ICache>();
-                        var cachedSafeInfo = cacheClient.Get<SafeInfo>(safeInfoKey);
+                        var userKey = CacheKey.GetUserKey(userId);
+                        var cacheClient = DependencyResolver.Current.GetService<ICache>();
+                        var cachedSafeInfo = cacheClient.Get<UserInfo>(userKey);
                         var expiresAt = DateTime.Now.AddMinutes(cacheMinute);
-                        if (cachedSafeInfo != null && cachedSafeInfo.Token == token && cacheClient.ExpireAt(safeInfoKey, expiresAt))
+                        if (cachedSafeInfo != null && cachedSafeInfo.UserName == userName && cachedSafeInfo.Token == token && cacheClient.ExpireAt(userKey, expiresAt))
                         {
                             return;
                         }
                     }
                 }
-                filterContext.Result = new ContentResult()
+                if (filterContext.HttpContext.Request.HttpMethod == "GET")
                 {
-                    Content = string.Format("<script>window.location='{0}';</script>", HttpUtil.GetUrl("Account/SignIn/")),
-                    ContentType = "text/html; charset=utf-8"
-                };
+                    filterContext.Result = new ContentResult()
+                    {
+                        Content = string.Format("<script>window.location='{0}';</script>", HttpUtil.GetUrl("Account/SignIn/")),
+                        ContentType = "text/html; charset=utf-8"
+                    };
+                }
+                else
+                {
+                    var mes = GrainManage.Message.CacheMessage.Get<StatusCode>(s => s.IdentityFailed);
+                    filterContext.Result = new NewtonsoftJsonResult { Data = new BaseOutput { code = mes.Code, msg = mes.Description, data = HttpUtil.GetUrl("Account/SignIn/") } };
+                }
             }
         }
     }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace GrainManage.Web.Models
 {
-    public class SafeInfo
+    public class UserInfo
     {
+        public string UserId { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>
@@ -17,17 +18,9 @@ namespace GrainManage.Web.Models
         /// </summary>
         public string Token { get; set; }
         /// <summary>
-        /// AES密钥
-        /// </summary>
-        public string AESKey { get; set; }
-        /// <summary>
         /// 过期时间
         /// </summary>
-        public DateTime? ExpiredAt { get; set; }
-        /// <summary>
-        /// 是否加密输出结果
-        /// </summary>
-        public bool EncryptOutput { get; set; }
+        public string ExpiredAt { get; set; }
         /// <summary>
         /// 请求IP
         /// </summary>

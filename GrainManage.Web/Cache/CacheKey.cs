@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrainManage.Encrypt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,13 +9,13 @@ namespace GrainManage.Web
 {
     public class CacheKey
     {
-        public static string GetSafeInfoKey(string userName)
+        public static string GetUserKey(string userName)
         {
-            return string.Format("SafeInfo_{0}", userName);
+            return MD5Encrypt.Encrypt(string.Format("user_{0}", userName));
         }
-        public static string GetApiResourceKey(string userName)
+        public static string GetResourceKey(string userName)
         {
-            return string.Format("ApiResource_{1}", userName);
+            return MD5Encrypt.Encrypt(string.Format("resource_{0}", userName));
         }
     }
 }

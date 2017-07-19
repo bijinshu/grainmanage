@@ -155,6 +155,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
@@ -200,7 +201,7 @@
     <Compile Include="Models\Price\InputSearchRecentPrice.cs" />
     <Compile Include="Models\Price\InputUpdate.cs" />
     <Compile Include="Models\Price\PriceDTO.cs" />
-    <Compile Include="Models\SafeInfo.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\TimeRanged.cs" />
     <Compile Include="Models\Trade\InputDelete.cs" />
     <Compile Include="Models\Trade\InputGetByID.cs" />
@@ -218,21 +219,15 @@
     <Compile Include="Models\Trade\View\TradeWithContactView.cs" />
     <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\AccountResx.Designer.cs" />
-    <Compile Include="Resources\ContactResx.Designer.cs" />
-    <Compile Include="Resources\GlobalResx.Designer.cs" />
-    <Compile Include="Resources\ImageResx.Designer.cs" />
-    <Compile Include="Resources\PriceResx.Designer.cs" />
-    <Compile Include="Resources\TradeResx.Designer.cs" />
     <Compile Include="Common\CookieUtil.cs" />
     <Compile Include="Common\EmailUtil.cs" />
     <Compile Include="Common\ExceptionUtil.cs" />
     <Compile Include="Common\HttpUtil.cs" />
     <Compile Include="Common\NetworkUtil.cs" />
     <Compile Include="Common\Thumbnail.cs" />
+    <Compile Include="Resources\GlobalResx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Account\signin.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -265,14 +260,11 @@
     <Content Include="Scripts\components\modal-dialog.js" />
     <Content Include="Scripts\components\pager.js" />
     <Content Include="Scripts\Crypto\base64.js" />
+    <Content Include="Scripts\Crypto\md5.js" />
+    <Content Include="Scripts\Crypto\sha1.js" />
     <Content Include="Scripts\Shared\common-tool.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
-    <Content Include="Scripts\Crypto\barrett.js" />
-    <Content Include="Scripts\Crypto\bigint.js" />
-    <Content Include="Scripts\Crypto\md5.js" />
-    <Content Include="Scripts\Crypto\rsa.js" />
-    <Content Include="Scripts\Crypto\rsacrypto.js" />
     <Content Include="Scripts\Shared\dateformat.js" />
     <Content Include="Scripts\Shared\pagination.js" />
     <Content Include="Scripts\vue.js" />
@@ -289,48 +281,9 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-2.2.1.min.map" />
-    <Content Include="RsaKey.cert" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Demo\AjaxLoad.cshtml" />
-    <Content Include="Views\Demo\AreaSpline.cshtml" />
-    <Content Include="Views\Demo\AreaWithMissingPoints.cshtml" />
-    <Content Include="Views\Demo\AreaWithNegativeValues.cshtml" />
-    <Content Include="Views\Demo\BarWithNegotiveStack.cshtml" />
-    <Content Include="Views\Demo\BasicArea.cshtml" />
-    <Content Include="Views\Demo\BasicBar.cshtml" />
-    <Content Include="Views\Demo\BasicColumn.cshtml" />
-    <Content Include="Views\Demo\BasicLine.cshtml" />
-    <Content Include="Views\Demo\ClickToAddPoint.cshtml" />
-    <Content Include="Views\Demo\ColumnLineAndPie.cshtml" />
-    <Content Include="Views\Demo\ColumnWithDrilldown.cshtml" />
-    <Content Include="Views\Demo\ColumnWithNegativeValues.cshtml" />
-    <Content Include="Views\Demo\ColumnWithRotatedLabels.cshtml" />
-    <Content Include="Views\Demo\DataLabels.cshtml" />
-    <Content Include="Views\Demo\DonutChart.cshtml" />
-    <Content Include="Views\Demo\DualAxesLineAndColumn.cshtml" />
-    <Content Include="Views\Demo\InvertedAxes.cshtml" />
-    <Content Include="Views\Demo\MultipleAxes.cshtml" />
-    <Content Include="Views\Demo\PercentageArea.cshtml" />
-    <Content Include="Views\Demo\PieChart.cshtml" />
-    <Content Include="Views\Demo\PieWithLegend.cshtml" />
-    <Content Include="Views\Demo\ScatterPlot.cshtml" />
-    <Content Include="Views\Demo\ScatterPlotWithRegressionLine.cshtml" />
-    <Content Include="Views\Demo\SplineInvertedAxes.cshtml" />
-    <Content Include="Views\Demo\SplineUpdateEachSecond.cshtml" />
-    <Content Include="Views\Demo\SplineWithPlotBands.cshtml" />
-    <Content Include="Views\Demo\SplineWithSymbols.cshtml" />
-    <Content Include="Views\Demo\StackedAndGroupedColumn.cshtml" />
-    <Content Include="Views\Demo\StackedArea.cshtml" />
-    <Content Include="Views\Demo\StackedBar.cshtml" />
-    <Content Include="Views\Demo\StackedColumn.cshtml" />
-    <Content Include="Views\Demo\StackedPercentageColumn.cshtml" />
-    <Content Include="Views\Demo\TimeDataWithInrregularIntervals.cshtml" />
-    <Content Include="Views\Demo\TimeSeriesZoomable.cshtml" />
-    <Content Include="Views\Shared\_ReportLayout.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Control\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -339,11 +292,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\ChangePassword.cshtml" />
-    <Content Include="Views\Account\ManageAccount.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\SignIn.cshtml" />
-    <Content Include="Views\Column\ColumnHeaderMap.cshtml" />
     <Content Include="Views\Contact\EditContact.cshtml" />
     <Content Include="Views\Contact\NewContact.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
@@ -355,10 +306,7 @@
     <Content Include="Views\Price\SearchRecentPrice.cshtml" />
     <Content Include="Views\Price\_PriceList.cshtml" />
     <Content Include="Views\Price\_RecentPriceList.cshtml" />
-    <Content Include="Views\Shared\_RestStatus.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_Menu.cshtml" />
-    <Content Include="Views\Shared\_SearchMenuBar.cshtml" />
     <Content Include="Views\Trade\EditTrade.cshtml" />
     <Content Include="Views\Trade\NewTrade.cshtml" />
     <Content Include="Views\Trade\Report.cshtml" />
@@ -367,14 +315,6 @@
     <Content Include="Views\Trade\SearchTrade.cshtml" />
     <Content Include="Views\Trade\_TradeList.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\AccountResx.resx" />
-    <EmbeddedResource Include="Resources\ContactResx.resx" />
-    <EmbeddedResource Include="Resources\GlobalResx.resx" />
-    <EmbeddedResource Include="Resources\ImageResx.resx" />
-    <EmbeddedResource Include="Resources\PriceResx.resx" />
-    <EmbeddedResource Include="Resources\TradeResx.resx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\DataBase.ChinaMap\DataBase.ChinaMap.csproj">

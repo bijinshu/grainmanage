@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataBase.GrainManage.Models.Mapping
 {
-    public class ApiResourceMapper : System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<DataBase.GrainManage.Models.Resource>
+    public class ResourceMapper : System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<DataBase.GrainManage.Models.Resource>
     {
-        public ApiResourceMapper()
+        public ResourceMapper()
         {
-            ToTable("rm_resources");
+            ToTable("rm_resource");
             HasKey(m => m.Id);
             Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }

@@ -9,9 +9,11 @@ namespace DataBase.GrainManage.Models
     public class ActionLog
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ActionName { get; set; }
+        public string UserName { get; set; }
+        public string Path { get; set; }
         public string ClientIP { get; set; }
+        public string Method { get; set; }
+        public string Status { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public TimeSpan? TimeSpan { get; set; }

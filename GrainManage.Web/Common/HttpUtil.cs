@@ -35,7 +35,7 @@ namespace GrainManage.Web
                 }
                 if (string.IsNullOrEmpty(result) || !IsIPv4(result))
                 {
-                    result = string.Join(",", GetLocalIP());
+                    result = GetLocalIP().First();
                 }
                 return result;
             }

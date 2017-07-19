@@ -11,7 +11,7 @@ namespace DataBase.GrainManage.Models.Mapping
     {
         public RoleMapper()
         {
-            ToTable("rm_roles");
+            ToTable("rm_role");
             HasKey(m => m.Id);
             Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }

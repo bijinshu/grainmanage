@@ -1,140 +1,17 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
+
 <!DOCTYPE html>
-<html lang="zh-cn">
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <ul id="myTab" class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#home" data-toggle="tab">
-                            首页
-                        </a>
-                    </li>
-                    <li id="tab_ios"><a href="#ios" data-toggle="tab">iOS</a></li>
-                </ul>
-                <div id="myTabContent" class="tab-content" style="margin-top:16px;">
-                    <div class="tab-pane fade in active" id="home">
-
-                    </div>
-                    <div class="tab-pane fade" id="ios">
-
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div> 
     </div>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-2.2.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/highcharts.js"></script>
-    <script src="~/Scripts/themes/dark-green.js"></script>
-    <script>
-        $(function () {
-            $('#home').highcharts({
-                chart: {
-                    type: 'line'
-                },
-                title: {
-                    text: 'Monthly Average Temperature'
-                },
-                subtitle: {
-                    text: 'Source: WorldClimate.com'
-                },
-                xAxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                },
-                yAxis: {
-                    title: {
-                        text: 'Temperature (°C)'
-                    }
-                },
-                tooltip: {
-                    enabled: false,
-                    formatter: function () {
-                        return '<b>' + this.series.name + '</b><br/>' + this.x + ': ' + this.y + '°C';
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        dataLabels: {
-                            enabled: true
-                        },
-                        enableMouseTracking: false
-                    }
-                },
-                series: [{
-                    name: 'Tokyo',
-                    data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-                }, {
-                    name: 'London',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                }]
-            });
-            $('#tab_ios').click(function () {
-                $('#ios').highcharts({
-                    chart: {
-                        type: 'spline',
-                        inverted: true
-                    },
-                    title: {
-                        text: 'Atmosphere Temperature by Altitude'
-                    },
-                    subtitle: {
-                        text: 'According to the Standard Atmosphere Model'
-                    },
-                    xAxis: {
-                        reversed: false,
-                        title: {
-                            enabled: true,
-                            text: 'Altitude'
-                        },
-                        labels: {
-                            formatter: function () {
-                                return this.value + 'km';
-                            }
-                        },
-                        maxPadding: 0.05,
-                        showLastLabel: true
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Temperature'
-                        },
-                        labels: {
-                            formatter: function () {
-                                return this.value + '°';
-                            }
-                        },
-                        lineWidth: 2
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{series.name}</b><br/>',
-                        pointFormat: '{point.x} km: {point.y}°C'
-                    },
-                    plotOptions: {
-                        spline: {
-                            marker: {
-                                enable: false
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Temperature',
-                        data: [[0, 15], [10, -50], [20, -56.5], [30, -46.5], [40, -22.1],
-                            [50, -2.5], [60, -27.7], [70, -55.7], [80, -76.5]]
-                    }]
-                });
-
-            });
-        });
-
-    </script>
 </body>
 </html>

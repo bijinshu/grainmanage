@@ -61,7 +61,7 @@
     <Compile Include="Models\Mapping\RoleMapper.cs" />
     <Compile Include="Models\Mapping\RoleResourceMapper.cs" />
     <Compile Include="Models\Mapping\UserRoleMapper.cs" />
-    <Compile Include="Models\Mapping\ApiResourceMapper.cs" />
+    <Compile Include="Models\Mapping\ResourceMapper.cs" />
     <Compile Include="Models\Mapping\ContactMapper.cs" />
     <Compile Include="Models\Mapping\ImageMapper.cs" />
     <Compile Include="Models\Mapping\PriceMapper.cs" />

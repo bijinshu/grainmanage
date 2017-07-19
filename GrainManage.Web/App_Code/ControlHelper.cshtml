@@ -1,68 +1,28 @@
-﻿@using GrainManage.Web.Resources
-
-@helper DropDownList(List<string> list)
-{
-    <select id="pageSize">
-        @if (list != null)
-        {
-            foreach (var item in list)
-            {
-            <option>
-                @item
-            </option>
-            }
-        }
-    </select>
-}
-
-@helper Button(string text)
-{
-    <button id="search" style="background-color: transparent; padding: 5px 5px 0px; display: inline-block; border-width: 1px;">@text
-        <img src="~/Images/search.png" style="width: 24px; height: 24px; float: left; padding: 0px;" />
-    </button>
-}
-
-@helper PageSize(int defaultSize)
-{
-    List<int> sizes = new List<int>
-    {
-        5,
-        10,
-        15,
-        20,
-        30,
-        50,
-        80,
-        100,
-        200,
-        500
-    };
-    <select class="form-control" v-model="search.PageSize">
-        @foreach (var size in sizes)
-        {
-            if (size==defaultSize)
-            {
-            <option selected>
-                @size
-            </option>
-            }
-            else
-            {
-            <option>
-                @size
-            </option>
-            }
-        }
-    </select>
-}
-
-@helper DateRange()
+﻿@helper DateRange()
 {
     <span class="dateRange">
-        <label>@TradeResx.StartTime</label>
+        <label>开始日期</label>
         <input id="StartTime" type="datetime" class="Wdate" />
-
-        <label>@TradeResx.EndTime</label>
+        <label>结束日期</label>
         <input id="EndTime" type="datetime" class="Wdate" />
     </span>
+}
+@helper Alert(string title)
+{
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-danger text-center" id="myModalLabel" style="font-weight:bold;">@title </h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="text-info ">{{Msg}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
