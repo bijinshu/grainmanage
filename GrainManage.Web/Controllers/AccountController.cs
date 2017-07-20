@@ -50,7 +50,7 @@ namespace GrainManage.Web.Controllers
                         else
                         {
                             account.LastActive = DateTime.Now;
-                            result.data = new { token = RandomGenerator.Next(20), url = HttpUtil.GetUrl("Contact/Index/") };
+                            result.data = new { token = RandomGenerator.Next(20), url = HttpUtil.GetUrl("Home/Index/") };
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                             var userInfo = new UserInfo
                             {

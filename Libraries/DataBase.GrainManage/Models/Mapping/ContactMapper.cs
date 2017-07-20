@@ -21,7 +21,6 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.QQ).HasMaxLength(20);
             Property(m => m.Weixin).HasMaxLength(60);
             Property(m => m.Email).HasMaxLength(11);
-            Property(m => m.Area).HasMaxLength(60);
             Property(m => m.Address).HasMaxLength(255);
             Property(m => m.Remark).HasMaxLength(255);
             Property(m => m.Created);

@@ -99,10 +99,6 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Contact.ContactName.Contains(input.ContactName));
             }
-            if (!string.IsNullOrEmpty(input.Area))
-            {
-                myFilter = myFilter.And(f => f.Contact.Area.Contains(input.Area));
-            }
             if (input.StartTime.HasValue)
             {
                 myFilter = myFilter.And(f => f.Created >= input.StartTime);
@@ -176,60 +172,7 @@ namespace GrainManage.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetTotalByArea(InputGetTotalByArea input)
-        {
-            var result = new BaseOutput();
-            var creator = UserId;
-            Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
-            if (!string.IsNullOrEmpty(input.TradeType))
-            {
-                myFilter = myFilter.And(f => f.TradeType.Contains(input.TradeType));
-            }
-            if (!string.IsNullOrEmpty(input.Grain))
-            {
-                myFilter = myFilter.And(f => f.Grain.Contains(input.Grain));
-            }
-            if (!string.IsNullOrEmpty(input.Area))
-            {
-                myFilter = myFilter.And(f => f.Contact.Area.Contains(input.Area));
-            }
-            if (input.StartTime.HasValue)
-            {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
-            }
-            if (input.EndTime.HasValue)
-            {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
-            }
-            var repo = GetRepo<Trade>();
-            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.Creator, g.Contact.Area, g.Grain, g.TradeType }).Select(g => new
-            {
-                g.Key.Creator,
-                g.Key.Area,
-                g.Key.Grain,
-                g.Key.TradeType,
-                Frequency = g.Count(),
-                TotalAmount = g.Sum(item => item.Weight),
-                TotalMoney = g.Sum(item => item.Weight * item.Price),
-                ActualTotalMoney = g.Sum(item => item.ActualMoney),
-            });
-            result.total = query.Count();
-            query = query.OrderBy(o => o.TradeType).ThenByDescending(o => o.ActualTotalMoney).Skip(input.PageIndex * input.PageSize).Take(input.PageSize);
-            var list = query.ToList();
-            if (!list.Any())
-            {
-                SetResponse(s => s.NoData, input, result);
-            }
-            else
-            {
-                result.data = DynamicMap<List<TradeTotalWithAreaView>>(list);
-                SetResponse(s => s.Success, input, result);
-            }
-            return JsonNet(result);
-        }
-
-        [HttpPost]
-        public ActionResult GetTotalByContactArea(InputGetTotalByContact input)
+        public ActionResult GetTotalByContact(InputGetTotalByContact input)
         {
             var result = new BaseOutput();
             var creator = UserId;
@@ -246,10 +189,6 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Contact.ContactName.Contains(input.ContactName));
             }
-            if (!string.IsNullOrEmpty(input.Area))
-            {
-                myFilter = myFilter.And(f => f.Contact.Area.Contains(input.Area));
-            }
             if (input.StartTime.HasValue)
             {
                 myFilter = myFilter.And(f => f.Created >= input.StartTime);
@@ -259,11 +198,10 @@ namespace GrainManage.Web.Controllers
                 myFilter = myFilter.And(f => f.Created <= input.EndTime);
             }
             var repo = GetRepo<Trade>();
-            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.Creator, ContactID = g.ContactId, g.Contact.Area, g.Grain, g.TradeType }).Select(g => new
+            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.Creator, ContactId = g.ContactId,  g.Grain, g.TradeType }).Select(g => new
             {
                 g.Key.Creator,
-                ContactName = g.First(item => item.ContactId == g.Key.ContactID).Contact.ContactName,
-                g.Key.Area,
+                ContactName = g.First(item => item.ContactId == g.Key.ContactId).Contact.ContactName,
                 g.Key.Grain,
                 TradeType = g.Key.TradeType,
                 Frequency = g.Count(),

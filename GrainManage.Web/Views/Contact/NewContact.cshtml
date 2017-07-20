@@ -1,85 +1,243 @@
-﻿@model GrainManage.Web.Models.Contact.AddContactModel
-<script type="text/javascript">
-    $(document).ready(function () {
-        var data = { pageIndex: 0, pageSize: 100 };
-
-    });
-</script>
-
-<div>
-    @using (Html.BeginForm("Insert", "Contact", FormMethod.Post))
-    {
-        <table class="create">
-            <tr>
-                <td>@Html.LabelFor(model => model.ContactName)</td>
-                <td>@Html.EditorFor(model => model.ContactName)</td>
-                <td>@Html.ValidationMessageFor(model => model.ContactName)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Gender)</td>
-                <td>@Html.EditorFor(model => model.Gender)</td>
-                <td>@Html.ValidationMessageFor(model => model.Gender)</td>
-            </tr>
-            <tr>
-                <td>@Html.LabelFor(model => model.BirthDate)</td>
-                <td>@Html.EditorFor(model => model.BirthDate)</td>
-                <td>@Html.ValidationMessageFor(model => model.BirthDate)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Cellphone)</td>
-                <td>@Html.EditorFor(model => model.Cellphone)</td>
-                <td>@Html.ValidationMessageFor(model => model.Cellphone)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Telephone)</td>
-                <td>@Html.EditorFor(model => model.Telephone)</td>
-                <td>@Html.ValidationMessageFor(model => model.Telephone)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.QQ)</td>
-                <td>@Html.EditorFor(model => model.QQ)</td>
-                <td>@Html.ValidationMessageFor(model => model.QQ)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Email)</td>
-                <td>@Html.EditorFor(model => model.Email)</td>
-                <td>@Html.ValidationMessageFor(model => model.Email)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Area)</td>
-                <td>@Html.EditorFor(model => model.Area)</td>
-                <td>@Html.ValidationMessageFor(model => model.Area)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Address)</td>
-                <td>@Html.EditorFor(model => model.Address)</td>
-                <td>@Html.ValidationMessageFor(model => model.Address)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.Remarks)</td>
-                <td>@Html.EditorFor(model => model.Remarks)</td>
-                <td>@Html.ValidationMessageFor(model => model.Remarks)</td>
-            </tr>
-
-            <tr>
-                <td>@Html.LabelFor(model => model.ImageID)</td>
-                <td>@Html.EditorFor(model => model.ImageID)</td>
-                <td>@Html.ValidationMessageFor(model => model.ImageID)</td>
-            </tr>
-            <tr class="submit">
-                <td></td>
-                <td>
-                    <input type="submit" value="@GrainManage.Web.Resources.GlobalResx.Create" />
-                </td>
-            </tr>
-        </table>
-    }
+﻿@using GrainManage.Web
+<div id="newContact" class="container">
+    <div class="row" style="margin-top:20px;">
+        <form class="form-horizontal" role="form">
+            <div class="form-group" v-bind:class="{'has-error':!isContactNameValid}">
+                <label for="ContactName" class="col-lg-2 control-label hidden-xs hidden-sm">联系人名称</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.ContactName" type="text" class="form-control" id="ContactName" placeholder="请输入联系人名称">
+                </div>
+                <span v-if="!isContactNameValid" class="col-lg-2" style="color:red">联系人名称只能由2-4个汉字组成</span>
+            </div>
+            <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
+                <label for="CellPhone" class="col-lg-2 control-label hidden-xs hidden-sm">手机号码</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.CellPhone" type="text" class="form-control" id="CellPhone" placeholder="请输入手机号码">
+                </div>
+                <span v-if="!isPhoneValid" class="col-lg-2" style="color:red">手机号码格式不正确</span>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label hidden-xs hidden-sm">地址识别</label>
+                <div class="col-lg-6">
+                    <label class="checkbox-inline">
+                        <input v-model="AddressType" type="radio" value="manual"><span>手工填写</span>
+                    </label>
+                    <label class="checkbox-inline">
+                        <input v-model="AddressType" type="radio" value="baidu"> <span>百度地图</span>
+                    </label>
+                    <label class="checkbox-inline">
+                        <input v-model="AddressType" type="radio" value="google"> <span>谷歌地图</span>
+                    </label>
+                </div>
+                <div class="col-lg-4 "><p class="text-info">{{GeoMsg}}</p></div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label hidden-xs hidden-sm">地址</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入联系地址">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BirthDate" class="col-lg-2 control-label hidden-xs hidden-sm">生日</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.BirthDate" type="date" class="form-control" id="BirthDate" placeholder="请选择生日">
+                </div>
+            </div>
+            <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
+                <label for="Weixin" class="col-lg-2 control-label hidden-xs hidden-sm">微信号</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
+                </div>
+                <span v-if="!isWeixinValid" class="col-lg-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
+            </div>
+            <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
+                <label for="QQ" class="col-lg-2 control-label hidden-xs hidden-sm">QQ</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
+                </div>
+                <span v-if="!isQQValid" class="col-lg-2" style="color:red">QQ格式不正确</span>
+            </div>
+            <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
+                <label for="Email" class="col-lg-2 control-label hidden-xs hidden-sm">邮箱地址</label>
+                <div class="col-lg-8">
+                    <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
+                </div>
+                <span v-if="!isEmailValid" class="col-lg-2" style="color:red">邮箱格式不正确</span>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label hidden-xs hidden-sm">性别</label>
+                <div class="col-lg-10">
+                    <label class="checkbox-inline">
+                        <input v-model="frm.Gender" type="radio" value="男"><span>男</span>
+                    </label>
+                    <label class="checkbox-inline">
+                        <input v-model="frm.Gender" type="radio" value="女"> <span>女</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
+                <label for="Remark" class="col-lg-2 control-label hidden-xs hidden-sm">其他信息</label>
+                <div class="col-lg-8">
+                    <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
+                </div>
+                <span v-if="!isRemarkValid" class="col-lg-2" style="color:red">附加信息不能超过200个字符</span>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-lg-offset-2 col-lg-8">
+            <button v-on:click.stop.prevent="newContact" v-bind:disabled="IsDisabled" class="btn btn-primary btn-block">保存</button>
+        </div>
+    </div>
+    @ControlHelper.Alert("添加联系人提示");
 </div>
+<script>
+    $(function () {
+        new Vue({
+            el: '#newContact',
+            data: {
+                frm: {
+                    ContactName: '',
+                    CellPhone: '',
+                    Address: '',
+                    BirthDate: null,
+                    Weinxin: '',
+                    QQ: '',
+                    Email: '',
+                    Gender: '男',
+                    Remark: ''
+                },
+                IsDisabled: false,
+                Msg: '',
+                AddressType: 'manual',
+                GeoMsg: ''
+            },
+            methods: {
+                newContact: function (event) {
+                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
+                        this.IsDisabled = true;
+                        $.post('@HttpUtil.GetUrl("Contact/NewContact")', this.frm).always(function (result, status) {
+                            this.IsDisabled = false;
+                            this.Msg = result.msg;
+                            $("#myModal").modal({ backdrop: 'static' });
+                        }.bind(this));
+                    }
+                    else {
+                        this.Msg = '有信息格式不正确,请重新确认';
+                        $("#myModal").modal({ backdrop: 'static' });
+                    }
+                },
+                setPosition: function (position) {
+                    var self = this;
+                    console.log(position);
+                    var latlon = position.coords.latitude + ',' + position.coords.longitude;
+                    if (self.AddressType == 'baidu') {
+                        var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
+                        $.ajax({
+                            type: "GET",
+                            dataType: "jsonp",
+                            url: baidu_url,
+                            beforeSend: function () {
+                                self.GeoMsg = '正在定位...';
+                            },
+                            success: function (json) {
+                                self.GeoMsg = '';
+                                if (json.status == 0) {
+                                    self.frm.Address = json.result.formatted_address;
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.GeoMsg = "定位失败,无法从baidu获取位置信息";
+                            }
+                        });
+                    } else if (self.AddressType == 'google') {
+                        var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
+                        $.ajax({
+                            type: "GET",
+                            url: google_url,
+                            beforeSend: function () {
+                                self.GeoMsg = '正在定位...';
+                            },
+                            success: function (json) {
+                                if (json.status == 'OK') {
+                                    self.GeoMsg = '';
+                                    var results = json.results;
+                                    $.each(results, function (index, array) {
+                                        if (index == 0) {
+                                            self.frm.Address = array['formatted_address'];
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.GeoMsg = "定位失败,无法从google获取位置信息";
+                            }
+                        });
+                    }
+                },
+                setError: function (error) {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            this.GeoMsg = "定位失败,用户拒绝请求地理定位。" + error.message;
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            this.GeoMsg = "定位失败,位置信息是不可用。" + error.message;
+                            break;
+                        case error.TIMEOUT:
+                            this.GeoMsg = "定位失败,请求获取用户位置超时。" + error.message;
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            this.GeoMsg = "定位失败,定位系统失效。" + error.message;
+                            break;
+                    }
+                },
+                getLocation: function () {
+                    if (this.AddressType == 'baidu' || this.AddressType == 'google') {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, { enableHighAcuracy: true, timeout: 5000, maximumAge: 3000 });
+                        } else {
+                            this.GeoMsg = "浏览器不支持地理定位。";
+                        }
+                    }
+                    else {
+                        this.GeoMsg = '';
+                    }
+                }
+            },
+            computed: {
+                isContactNameValid: function () {
+                    return (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frm.ContactName);
+                },
+                isEmailValid: function () {
+                    return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
+                },
+                isPhoneValid: function () {
+                    return (/^1[34578]\d{9}$/g).test(this.frm.CellPhone);
+                },
+                isQQValid: function () {
+                    return !this.frm.QQ || (/^\d{4,12}$/g).test(this.frm.QQ);
+                },
+                isWeixinValid: function () {
+                    return !this.frm.Weixin || (/^[a-zA-Z\d_]{5,20}$/g).test(this.frm.Weixin);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
+                }
+            },
+            created: function () {
+                this.$watch('frm.ContactName', function (newVal, oldVal) {
+                    if (!this.isContactNameValid) {
+                        $("#ContactName").popover('show');
+                    }
+                    else {
+                        $("#ContactName").popover('hide');
+                    }
+                });
+                this.$watch('AddressType', function (newVal, oldVal) {
+                    this.getLocation();
+                });
+                this.getLocation();
+            }
+        })
+    })
+</script>

@@ -35,10 +35,11 @@
                             <th>操作</th>
                             <th>姓名</th>
                             <th>手机</th>
-                            <th>区域</th>
-                            <th>性别</th>
-                            <th>QQ</th>
-                            <th>邮箱</th>
+                            <th>地址</th>
+                            <th class="hidden-xs hidden-sm">微信</th>
+                            <th class="hidden-xs hidden-sm">QQ</th>
+                            <th class="hidden-xs hidden-sm">邮箱</th>
+                            <th class="hidden-xs hidden-sm">性别</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,10 +51,11 @@
                             </td>
                             <td>{{item.ContactName}}</td>
                             <td>{{item.CellPhone}}</td>
-                            <td v-bind:title="item.Address">{{item.Area}}</td>
-                            <td>{{item.Gender}}</td>
-                            <td>{{item.QQ}}</td>
-                            <td>{{item.Email}}</td>
+                            <td>{{item.Address}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.Weixin}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.Email}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.Gender}}</td>
                         </tr>
                     </tbody>
                 </table>

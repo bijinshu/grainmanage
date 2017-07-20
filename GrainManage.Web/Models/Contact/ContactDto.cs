@@ -8,7 +8,6 @@ namespace GrainManage.Web.Models.Contact
         public string ContactName { get; set; }
         public string Gender { get; set; }
         public DateTime? BirthDate { get; set; }
-        public string Area { get; set; }
         public string Address { get; set; }
         public string CellPhone { get; set; }
         public string QQ { get; set; }

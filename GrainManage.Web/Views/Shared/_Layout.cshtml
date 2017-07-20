@@ -34,8 +34,12 @@
                             <li>
                                 <a href='@HttpUtil.GetUrl("/Price/Index")'>价格</a>
                             </li>
-                            <li>
-                                <a href='@HttpUtil.GetUrl("/Contact/Index")'>联系人</a>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">联系人<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href='@HttpUtil.GetUrl("/Contact/Index")'>查看列表</a></li>
+                                    <li><a href='@HttpUtil.GetUrl("/Contact/NewContact")'>新增联系人</a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a href='@HttpUtil.GetUrl("/Trade/Index")'>收购</a>
