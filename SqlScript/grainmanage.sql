@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2017-07-19 19:41:32
+Date: 2017-07-20 18:47:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +28,6 @@ CREATE TABLE `bm_contact` (
   `QQ` varchar(20) DEFAULT '' COMMENT 'QQ',
   `Weixin` varchar(60) DEFAULT NULL,
   `Email` varchar(64) DEFAULT '' COMMENT '邮箱',
-  `Area` varchar(60) DEFAULT '' COMMENT '区域',
   `Address` varchar(100) DEFAULT '' COMMENT '地址',
   `Remark` varchar(600) DEFAULT '' COMMENT '附加描述',
   `Creator` varchar(32) NOT NULL DEFAULT '' COMMENT '创建者',
@@ -38,40 +37,41 @@ CREATE TABLE `bm_contact` (
   UNIQUE KEY `ContactName` (`ContactName`,`CellPhone`,`Creator`),
   KEY `bm_contact_ibfk_2` (`Creator`),
   CONSTRAINT `bm_contact_ibfk_2` FOREIGN KEY (`Creator`) REFERENCES `rm_user` (`Guid`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_contact
 -- ----------------------------
-INSERT INTO `bm_contact` VALUES ('1', '张海川', '男', '2016-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集', '', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:47:13');
-INSERT INTO `bm_contact` VALUES ('2', '李玉飞', '女', '1989-06-06', '15801992799', '914023961', null, 'bijinshu@163.com', '西王码', '', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:59:26');
-INSERT INTO `bm_contact` VALUES ('3', '王亮亮', '男', '1999-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '李祠堂', '', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:21:16');
-INSERT INTO `bm_contact` VALUES ('4', '张思贤', '男', '1988-02-22', '15801992799', '914023961', null, 'bijinshu@163.com', '六塘', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-05-17 18:01:29');
-INSERT INTO `bm_contact` VALUES ('5', '刘江', '男', '1986-02-09', '15801992799', '914023961', null, 'bijinshu@163.com', '泓北', '', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:26:43');
-INSERT INTO `bm_contact` VALUES ('6', '鲍菲菲', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '大石渡', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('7', '成杰', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '芦东', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('8', '陈千业', '男', '1968-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '董荡', '', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:28:26');
-INSERT INTO `bm_contact` VALUES ('9', '齐昊', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '朱圩', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('10', '任思', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '刘庄', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('11', '贾亮', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '张刘', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('12', '何远', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '育红', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('13', '文一毫', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '河东', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('14', '鲁云', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('15', '毛强国', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥南', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('16', '陈桥锋', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('17', '秦汉', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '葛郑', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('18', '李双江', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '倪荡', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('19', '贝乐石', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '马洼', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('20', '关楚生', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '葛荡', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('21', '楚博雄', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集农科', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('22', '张一凡', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('23', '刘玉生', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('24', '吴雪奇', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥南', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('25', '赵海', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('26', '江涛', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('27', '萧见浪', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('28', '殷了', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('29', '薛子琼', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('1', '张海川', '男', '2016-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:47:13');
+INSERT INTO `bm_contact` VALUES ('2', '李玉飞', '女', '1989-06-06', '15801992799', '914023961', null, 'bijinshu@163.com', '西王码', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:59:26');
+INSERT INTO `bm_contact` VALUES ('3', '王亮亮', '男', '1999-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '李祠堂', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:21:16');
+INSERT INTO `bm_contact` VALUES ('4', '张思贤', '男', '1988-02-22', '15801992799', '914023961', null, 'bijinshu@163.com', '六塘', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-05-17 18:01:29');
+INSERT INTO `bm_contact` VALUES ('5', '刘江', '男', '1986-02-09', '15801992799', '914023961', null, 'bijinshu@163.com', '泓北', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:26:43');
+INSERT INTO `bm_contact` VALUES ('6', '鲍菲菲', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '大石渡', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('7', '成杰', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '芦东', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('8', '陈千业', '男', '1968-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '董荡', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:28:26');
+INSERT INTO `bm_contact` VALUES ('9', '齐昊', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '朱圩', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('10', '任思', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '刘庄', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('11', '贾亮', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '张刘', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('12', '何远', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '育红', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('13', '文一毫', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '河东', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('14', '鲁云', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('15', '毛强国', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥南', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('16', '陈桥锋', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('17', '秦汉', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '葛郑', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('18', '李双江', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '倪荡', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('19', '贝乐石', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '马洼', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('20', '关楚生', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '葛荡', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('21', '楚博雄', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集农科', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('22', '张一凡', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('23', '刘玉生', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('24', '吴雪奇', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥南', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('25', '赵海', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('26', '江涛', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('27', '萧见浪', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('28', '殷了', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('29', '薛子琼', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('30', '圣诞快乐', '男', '2017-07-20', '15825789546', null, null, null, null, null, '16ddd97b6c4611e7bd7764006a11eb35', '2017-07-20 18:40:40', null);
 
 -- ----------------------------
 -- Table structure for `bm_image`
@@ -430,11 +430,11 @@ CREATE TABLE `rm_user` (
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('16ddd97b6c4611e7bd7764006a11eb35', 'bijinshu', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15801992799', '914023961@qq.com', '0', null, 'bijinshu', '2016-01-05 18:44:49', '2017-07-19 19:17:53');
+INSERT INTO `rm_user` VALUES ('16ddd97b6c4611e7bd7764006a11eb35', 'bijinshu', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15801992799', '914023961@qq.com', '0', null, 'bijinshu', '2016-01-05 18:44:49', '2017-07-20 18:40:58');
 INSERT INTO `rm_user` VALUES ('16dddca46c4611e7bd7764006a11eb35', 'testadmin', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testadmin', '2016-01-05 18:44:49', '2016-01-05 18:44:49');
 INSERT INTO `rm_user` VALUES ('16dddcd66c4611e7bd7764006a11eb35', 'testroot', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testroot', '2016-01-05 18:44:49', '2016-01-05 18:44:49');
 INSERT INTO `rm_user` VALUES ('16dddcff6c4611e7bd7764006a11eb35', '毕金书', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15882402032', 'bijinshu@126.com', '0', null, '毕金书', '2016-01-05 18:44:49', '2017-07-18 09:46:06');
-INSERT INTO `rm_user` VALUES ('ceec05c483264d2fba46cd0486b54bfb', 'test', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, null, null, null, null, null, '2017-07-19 18:34:35', '2017-07-19 18:34:35');
+INSERT INTO `rm_user` VALUES ('f7b362daf90347b4835831a820cfecde', 'test', '9adcb29710e807607b683f62e555c22dc5659713', '女', '0', '都是', '15801992799', 'bijs@axon.com.cn', '98455469', null, '谁看', '2017-07-20 15:23:29', '2017-07-20 15:23:29');
 
 -- ----------------------------
 -- Table structure for `rm_user_role`
