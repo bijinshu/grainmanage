@@ -5,114 +5,122 @@
 <div class="tab-pane fade in active" id="indexPage">
     <div class="row">
         <div class="col-lg-push-2 col-lg-8">
-            <h3><span style=""> 纬度：</span><span style="color:red">{{latitude}}</span></h3>
-            <h3><span style=""> 经度：</span><span style="color:red">{{longitude}}</span> </h3>
-            <h3><span style=""> 精确度：</span><span style="color:red">{{accuracy}}</span> </h3>
+            <h3><span style=""> 纬度：</span><span v-text="latitude" style="color:red"></span></h3>
+            <h3><span style=""> 经度：</span><span v-text="longitude" style="color:red"></span> </h3>
+            <h3><span style=""> 精确度：</span><span v-text="accuracy" style="color:red"></span> </h3>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-push-2 col-lg-8">
-            <h3><span style=""> 百度地址：</span><span style="color:red">{{baidu}}</span></h3>
+            <h3 style=""> 百度地址：</h3><h3 v-html="baidu" style="color:red"></h3>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-push-2 col-lg-8">
-            <h3><span style=""> 谷歌地址：</span><span style="color:red">{{google}}</span></h3>
+            <h3 style=""> 谷歌地址：</h3><h3 v-html="google" style="color:red"></h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-push-2 col-lg-8" style="margin-top:16px;">
+        <div class="col-lg-push-2 col-lg-8">
             <h3> {{msg}}</h3>
-            <h3> {{error}}</h3>
         </div>
     </div>
 </div>
 @section FooterSection{
     <script>
-        new Vue({
-            el: "#indexPage",
-            data: {
-                latitude: 0,
-                longitude: 0,
-                accuracy:'',
-                baidu: '',
-                google: '',
-                msg: '',
-                error: ''
-            },
-            methods: {
-                setPosition: function (position) {
-                    this.latitude = position.coords.latitude; //纬度
-                    this.longitude = position.coords.longitude; //经度
-                    this.accuracy = position.coords.accuracy;
-                    var self = this;
-                    var latlon = position.coords.latitude + ',' + position.coords.longitude;
-
-                    var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
-                    $.ajax({
-                        type: "GET",
-                        dataType: "jsonp",
-                        url: baidu_url,
-                        beforeSend: function () {
-                            self.baidu = '正在定位...';
-                        },
-                        success: function (json) {
-                            if (json.status == 0) {
-                                self.baidu = json.result.formatted_address;
-                            }
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            self.baidu = latlon + " 地址位置获取失败";
-                        }
-                    });
-
-                    var google_url = 'http://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
-                    $.ajax({
-                        type: "GET",
-                        url: google_url,
-                        beforeSend: function () {
-                            self.google = '正在定位...';
-                        },
-                        success: function (json) {
-                            if (json.status == 'OK') {
-                                var results = json.results;
-                                $.each(results, function (index, array) {
-                                    if (index == 0) {
-                                        self.google = array['formatted_address'];
-                                    }
-                                });
-                            }
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            self.google = latlon + "地址位置获取失败";
-                        }
-                    });
+        $(function () {
+            new Vue({
+                el: "#indexPage",
+                data: {
+                    latitude: 0,
+                    longitude: 0,
+                    accuracy: '',
+                    baidu: '',
+                    google: '',
+                    msg: ''
                 },
-                setError: function (error) {
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            this.msg = "定位失败,用户拒绝请求地理定位";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            this.msg = "定位失败,位置信息是不可用";
-                            break;
-                        case error.TIMEOUT:
-                            this.msg = "定位失败,请求获取用户位置超时";
-                            break;
-                        case error.UNKNOWN_ERROR:
-                            this.msg = "定位失败,定位系统失效";
-                            break;
+                methods: {
+                    setPosition: function (position) {
+                        var self = this;
+                        console.log(position);
+
+                        self.latitude = position.coords.latitude; //纬度
+                        self.longitude = position.coords.longitude; //经度
+                        self.accuracy = position.coords.accuracy;
+                        var latlon = position.coords.latitude + ',' + position.coords.longitude;
+
+                        var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
+                        $.ajax({
+                            type: "GET",
+                            dataType: "jsonp",
+                            url: baidu_url,
+                            beforeSend: function () {
+                                self.baidu = '正在定位...';
+                            },
+                            success: function (json) {
+                                if (json.status == 0) {
+                                    self.baidu = json.result.formatted_address;
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.baidu = "定位失败,无法从baidu获取位置信息";
+                            }
+                        });
+
+                        var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
+                        $.ajax({
+                            type: "GET",
+                            url: google_url,
+                            beforeSend: function () {
+                                self.google = '正在定位...';
+                            },
+                            success: function (json) {
+                                if (json.status == 'OK') {
+                                    var results = json.results;
+                                    $.each(results, function (index, array) {
+                                        if (index == 0) {
+                                            self.google = array['formatted_address'];
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.google = "定位失败,无法从google获取位置信息";
+                            }
+                        });
+                    },
+                    setError: function (error) {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                this.msg = "定位失败,用户拒绝请求地理定位。" + error.message;
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                this.msg = "定位失败,位置信息是不可用。" + error.message;
+                                break;
+                            case error.TIMEOUT:
+                                this.msg = "定位失败,请求获取用户位置超时。" + error.message;
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                this.msg = "定位失败,定位系统失效。" + error.message;
+                                break;
+                        }
                     }
-                    this.error = error.message;
+                },
+                created: function () {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, {
+                            // 指示浏览器获取高精度的位置，默认为false
+                            enableHighAcuracy: true,
+                            // 指定获取地理位置的超时时间，默认不限时，单位为毫秒
+                            timeout: 5000,
+                            // 最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置。
+                            maximumAge: 3000
+                        });
+                    } else {
+                        this.msg = "浏览器不支持地理定位。";
+                    }
                 }
-            },
-            created: function () {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(this.setPosition, this.setError);
-                } else {
-                    this.msg = "浏览器不支持地理定位。";
-                }
-            }
+            })
         })
     </script>
 }

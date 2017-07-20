@@ -187,8 +187,6 @@
     <Compile Include="Models\Image\InputGetImageFile.cs" />
     <Compile Include="Models\Image\InputGetImages.cs" />
     <Compile Include="Models\Image\InputGetImageUrl.cs" />
-    <Compile Include="Models\Image\InputInsert.cs" />
-    <Compile Include="Models\Image\InputUpdate.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\IPageable.cs" />
     <Compile Include="Models\ITimeRanged.cs" />

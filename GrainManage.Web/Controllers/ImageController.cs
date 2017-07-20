@@ -95,29 +95,28 @@ namespace GrainManage.Web.Controllers
             }
             return File(data, "image/jpeg");
         }
-        public ActionResult Insert(InputInsert input)
+        public ActionResult Insert(ImageDto input)
         {
             if (IsGetRequest)
             {
                 return View();
             }
-            var creator = UserId;
+            input.Creator = UserId;
             var result = new BaseOutput();
-            input.Image.Creator = creator;
             var repo = GetRepo<Image>();
-            int imageID = repo.GetFiltered(f => f.ImageName == input.Image.ImageName && f.Creator == creator).Select(s => s.Id).FirstOrDefault();
+            int imageID = repo.GetFiltered(f => f.ImageName == input.ImageName && f.Creator == input.Creator).Select(s => s.Id).FirstOrDefault();
             if (imageID > 0)
             {
                 SetResponse(s => s.FileHasExist, input, result);
             }
             else
             {
-                var image = repo.Add(MapTo<Image>(input.Image));
+                var image = repo.Add(MapTo<Image>(input));
                 result.data = image.Id;
                 if (image.Id > 0)
                 {
                     var absolutePath = GetAbsolutePath(UserId, image.ImageName);
-                    SaveFile(absolutePath, input.Image.File);
+                    SaveFile(absolutePath, input.File);
                     SetResponse(s => s.Success, input, result);
                 }
                 else
@@ -128,28 +127,27 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult Update(InputUpdate input)
+        public ActionResult Update(ImageDto input)
         {
             if (IsGetRequest)
             {
                 return View(input);
             }
             var result = new BaseOutput();
-            var image = input.Image;
-            image.Creator = UserId;
+            input.Creator = UserId;
             var repo = GetRepo<Image>();
-            var model = repo.GetFiltered(f => f.Id == image.ImageId && f.Creator == image.Creator, true).First();
+            var model = repo.GetFiltered(f => f.Id == input.ImageId && f.Creator == input.Creator, true).First();
             var oldImageName = model.ImageName;
-            model.ImageName = image.ImageName;
-            model.Creator = image.Creator;
-            model.Remark = image.Remark;
+            model.ImageName = input.ImageName;
+            model.Creator = input.Creator;
+            model.Remark = input.Remark;
             model.Modified = DateTime.Now;
             repo.UnitOfWork.SaveChanges();
-            if (image.File != null)
+            if (input.File != null)
             {
-                var absolutePath = GetAbsolutePath(image.Creator, oldImageName);
+                var absolutePath = GetAbsolutePath(input.Creator, oldImageName);
                 DeleteFile(absolutePath);
-                SaveFile(absolutePath, input.Image.File);
+                SaveFile(absolutePath, input.File);
             }
             SetResponse(s => s.Success, input, result);
             return JsonNet(result);

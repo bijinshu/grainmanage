@@ -54,7 +54,7 @@
                                 </ul>
                             </li>
                         </ul>
-                        <ul class="nav navbar-nav pull-right">
+                        <ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
                             <li class="dropdown">
                                 <form class="navbar-form" role="search">
                                     <div class="input-group">
@@ -71,13 +71,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                @RenderBody()
-            </div>
-        </div>
-    </div>
+    @RenderBody()
     @RenderSection("FooterSection", false)
 </body>
 </html>

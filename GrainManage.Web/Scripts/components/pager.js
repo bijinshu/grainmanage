@@ -1,7 +1,7 @@
 ﻿$(function () {
     Vue.component('pager', {
         template: ' \
-       <div style="padding:15px;"> \
+       <div style="margin-top:-20px;"> \
        <nav style="float:left">\
             <ul class="pagination ">\
                 <li v-on:click="changePage(-1)"><a href="#">&laquo;</a></li>\
@@ -10,7 +10,7 @@
             </ul>\
         </nav>\
         <div style="float:right;margin-top:20px;">\
-        共<span style="color:red;font-weight:bold;">{{totalPage}}</span>页 每页<input v-on:keyup.enter="changePageSize" type="textbox" v-model="currentPageSize" style="color:red;font-weight:bold;width:40px;" />条数据 \
+        共<span style="color:red;font-weight:bold;">{{totalPage}}</span>页 每页<input v-on:keyup.enter="changePageSize" type="number" v-model="currentPageSize" style="color:red;font-weight:bold;width:40px;" />条数据 \
         </div>\
       </div> ',
         props: {
