@@ -1,88 +1,106 @@
-﻿@model GrainManage.Web.Models.Contact.UpdateContactModel
-@{
-    var labelStyle=new { @class = "col-lg-2 control-label" };
-    var inputStyle= new { @class = "form-control" };
-    var selectItems=new List<SelectListItem>();
-    selectItems.Add(new SelectListItem{Text="男",Value="男"});
-    selectItems.Add(new SelectListItem{Text="女",Value="女"});
-    var birthDate = Model.BirthDate.HasValue ? Model.BirthDate.Value.ToString("yyyy-MM-dd") : string.Empty;
-}
-<div class="row">
-    <div class="col-lg-12">
-        <form class="form-horizontal" role="form" action="/Contact/Update" method="post">
-            <div class="form-group">
-                @Html.LabelFor(model => model.ContactID, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.ContactID, new {@class="form-control", disabled="disabled" })</div>
+﻿@using GrainManage.Web
+<div class="modal fade" id="editContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">编辑联系人</h4>
             </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ContactName, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.ContactName, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Gender, labelStyle)
-                <div class="col-lg-10">@Html.DropDownListFor(model => model.Gender, selectItems, inputStyle)</div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.BirthDate, labelStyle) 
-                <div class="col-lg-10">
-                    <input class="form-control" id="BirthDate" name="BirthDate" value="@birthDate" type="date"/>
-                @*@Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", inputStyle)*@
+            <div class="modal-body ">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-lg-12">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" v-bind:class="{'has-error':!isContactNameValid}">
+                                <label for="ContactName" class="col-lg-2 control-label hidden-xs hidden-sm">联系人名称</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.ContactName" type="text" class="form-control" id="ContactName" placeholder="请输入联系人名称">
+                                </div>
+                                <span v-if="!isContactNameValid" class="col-lg-2" style="color:red">联系人名称只能由2-4个汉字组成</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
+                                <label for="CellPhone" class="col-lg-2 control-label hidden-xs hidden-sm">手机号码</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.CellPhone" type="text" class="form-control" id="CellPhone" placeholder="请输入手机号码">
+                                </div>
+                                <span v-if="!isPhoneValid" class="col-lg-2" style="color:red">手机号码格式不正确</span>
+                            </div>
+                            <div class="form-group visible-xs visible-sm collapse">
+                                <label class="col-lg-2 control-label hidden-xs hidden-sm">地址识别</label>
+                                <div class="col-lg-6">
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="manual"><span>手工填写</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="baidu"> <span>百度地图</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="google"> <span>谷歌地图</span>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4 "><p class="text-info">{{GeoMsg}}</p></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label hidden-xs hidden-sm">地址</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入联系地址">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="BirthDate" class="col-lg-2 control-label hidden-xs hidden-sm">生日</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.BirthDate" type="date" class="form-control" id="BirthDate" placeholder="请选择生日">
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
+                                <label for="Weixin" class="col-lg-2 control-label hidden-xs hidden-sm">微信号</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
+                                </div>
+                                <span v-if="!isWeixinValid" class="col-lg-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
+                                <label for="QQ" class="col-lg-2 control-label hidden-xs hidden-sm">QQ</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
+                                </div>
+                                <span v-if="!isQQValid" class="col-lg-2" style="color:red">QQ格式不正确</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
+                                <label for="Email" class="col-lg-2 control-label hidden-xs hidden-sm">邮箱地址</label>
+                                <div class="col-lg-8">
+                                    <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
+                                </div>
+                                <span v-if="!isEmailValid" class="col-lg-2" style="color:red">邮箱格式不正确</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label hidden-xs hidden-sm">性别</label>
+                                <div class="col-lg-10">
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Gender" type="radio" value="男"><span>男</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Gender" type="radio" value="女"> <span>女</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
+                                <label for="Remark" class="col-lg-2 control-label hidden-xs hidden-sm">其他信息</label>
+                                <div class="col-lg-8">
+                                    <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
+                                </div>
+                                <span v-if="!isRemarkValid" class="col-lg-2" style="color:red">附加信息不能超过200个字符</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-8 col-lg-offset-2">
+                                    <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+                                    <button class="btn btn-primary pull-right" v-on:click.stop.prevent="editContact" v-bind:disabled="IsDisabled">提交修改</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Cellphone, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.Cellphone, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Telephone, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.Telephone, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.QQ, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.QQ, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Email, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.Email, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Area, labelStyle)
-                <div class="col-lg-10">@Html.TextBoxFor(model => model.Area, inputStyle)</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Address, labelStyle)
-                <div class="col-lg-10">@Html.TextAreaFor(model => model.Address, new { @class = "form-control", rows = 2 })</div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Remarks, labelStyle)
-                <div class="col-lg-10">@Html.TextAreaFor(model => model.Remarks, new { @class = "form-control", rows = 3 })</div>
-            </div>
-            <div class="form-group">
-
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-danger">保存</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-<script>
-        $("form.form-horizontal button[type=\"submit\"]").click(function (e) {
-            e.preventDefault();
-            var formData = $("form.form-horizontal").getFormData();
-            $.post("/Contact/Update", formData).always(function (data) {
-                alert(data.Status.Message);
-            });
-        });
-</script>
+@ControlHelper.Alert("修改联系人提示")
