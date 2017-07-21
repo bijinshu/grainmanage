@@ -2,113 +2,142 @@
 @{
     ViewBag.Title = "首页";
 }
-<div class="tab-pane fade in active" id="indexPage">
+<div id="indexPage" class="container" style="margin-top:20px;">
     <div class="row">
-        <div class="col-lg-push-2 col-lg-8">
-            <h3><span style=""> 纬度：</span><span v-text="latitude" style="color:red"></span></h3>
-            <h3><span style=""> 经度：</span><span v-text="longitude" style="color:red"></span> </h3>
-            <h3><span style=""> 精确度：</span><span v-text="accuracy" style="color:red"></span> </h3>
+        <div class="col-lg-8">
+            <h3>
+                <span style=""> 当前经纬度获取方式：</span>
+                <span v-text="geoType" style="color:red"></span>
+            </h3>
+            <h3>
+                <span style=""> 纬度：</span>
+                <span v-text="latitude" style="color:red"></span>
+            </h3>
+            <h3>
+                <span style=""> 经度：</span>
+                <span v-text="longitude" style="color:red"></span>
+            </h3>
+            <h3>
+                <span style=""> 精确度：</span>
+                <span v-text="accuracy" style="color:red"></span>
+            </h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-push-2 col-lg-8">
-            <h3 style=""> 百度地址：</h3><h3 v-html="baidu" style="color:red"></h3>
+        <div class="col-lg-8">
+            <h3 style=""> 百度地址：</h3>
+            <h3 v-html="baidu" style="color:red"></h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-push-2 col-lg-8">
-            <h3 style=""> 谷歌地址：</h3><h3 v-html="google" style="color:red"></h3>
+        <div class="col-lg-8">
+            <h3 style=""> 谷歌地址：</h3>
+            <h3 v-html="google" style="color:red"></h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-push-2 col-lg-8">
-            <h3> {{msg}}</h3>
+        <div class="col-lg-8">
+            <h3 v-html="msg" style="color:red"> </h3>
         </div>
     </div>
 </div>
-@section FooterSection{
-    <script>
-        $(function () {
-            new Vue({
-                el: "#indexPage",
-                data: {
-                    latitude: 0,
-                    longitude: 0,
-                    accuracy: '',
-                    baidu: '',
-                    google: '',
-                    msg: ''
-                },
-                methods: {
-                    setPosition: function (position) {
-                        var self = this;
-                        console.log(position);
-
-                        self.latitude = position.coords.latitude; //纬度
-                        self.longitude = position.coords.longitude; //经度
-                        self.accuracy = position.coords.accuracy;
-                        var latlon = position.coords.latitude + ',' + position.coords.longitude;
-
-                        var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
-                        $.ajax({
-                            type: "GET",
-                            dataType: "jsonp",
-                            url: baidu_url,
-                            beforeSend: function () {
-                                self.baidu = '正在定位...';
-                            },
-                            success: function (json) {
-                                if (json.status == 0) {
-                                    self.baidu = json.result.formatted_address;
-                                }
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                self.baidu = "定位失败,无法从baidu获取位置信息";
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script>
+    $(function () {
+        new Vue({
+            el: "#indexPage",
+            data: {
+                latitude: 0,
+                longitude: 0,
+                accuracy: '',
+                baidu: '',
+                google: '',
+                msg: '',
+                geoType: ''
+            },
+            methods: {
+                showPosition: function (latitude, longitude, accuracy) {
+                    var self = this;
+                    self.latitude = latitude; //纬度
+                    self.longitude = longitude; //经度
+                    self.accuracy = accuracy;
+                    var latlon = latitude + ',' + longitude;
+                    var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
+                    $.ajax({
+                        type: "GET",
+                        dataType: "jsonp",
+                        url: baidu_url,
+                        beforeSend: function () {
+                            self.baidu = '正在定位...';
+                        },
+                        success: function (json) {
+                            if (json.status == 0) {
+                                self.baidu = json.result.formatted_address;
                             }
-                        });
-
-                        var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
-                        $.ajax({
-                            type: "GET",
-                            url: google_url,
-                            beforeSend: function () {
-                                self.google = '正在定位...';
-                            },
-                            success: function (json) {
-                                if (json.status == 'OK') {
-                                    var results = json.results;
-                                    $.each(results, function (index, array) {
-                                        if (index == 0) {
-                                            self.google = array['formatted_address'];
-                                        }
-                                    });
-                                }
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                self.google = "定位失败,无法从google获取位置信息";
-                            }
-                        });
-                    },
-                    setError: function (error) {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                this.msg = "定位失败,用户拒绝请求地理定位。" + error.message;
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                this.msg = "定位失败,位置信息是不可用。" + error.message;
-                                break;
-                            case error.TIMEOUT:
-                                this.msg = "定位失败,请求获取用户位置超时。" + error.message;
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                this.msg = "定位失败,定位系统失效。" + error.message;
-                                break;
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            self.baidu = "定位失败,无法从baidu获取位置信息";
                         }
+                    });
+
+                    var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
+                    $.ajax({
+                        type: "GET",
+                        url: google_url,
+                        beforeSend: function () {
+                            self.google = '正在定位...';
+                        },
+                        success: function (json) {
+                            if (json.status == 'OK') {
+                                var results = json.results;
+                                $.each(results, function (index, array) {
+                                    if (index == 0) {
+                                        self.google = array['formatted_address'];
+                                    }
+                                });
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            self.google = "定位失败,无法从google获取位置信息";
+                        }
+                    });
+                },
+                setHtml5Position: function (position) {
+                    self.showPosition(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+                },
+                setHtml5Error: function (error) {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            this.msg = "定位失败,用户拒绝请求地理定位。" + error.message;
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            this.msg = "定位失败,位置信息是不可用。" + error.message;
+                            break;
+                        case error.TIMEOUT:
+                            this.msg = "定位失败,请求获取用户位置超时。" + error.message;
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            this.msg = "定位失败,定位系统失效。" + error.message;
+                            break;
                     }
                 },
-                created: function () {
+                setTencentPosition: function (result) {
+                    this.showPosition(result.lat, result.lng, result.accuracy);
+                },
+                setTencentError: function (err) {
+                    if (err) {
+                        this.msg = err;
+                    }
+                    else {
+                        this.msg = '腾讯定位接口出错。';
+                    }
+                }
+            },
+            created: function () {
+                if (window.location.protocol == 'https:' || navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {
+                    this.geoType = '浏览器接口';
                     if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, {
+                        navigator.geolocation.getCurrentPosition(this.setHtml5Position, this.setHtml5Error, {
                             // 指示浏览器获取高精度的位置，默认为false
                             enableHighAcuracy: true,
                             // 指定获取地理位置的超时时间，默认不限时，单位为毫秒
@@ -120,7 +149,12 @@
                         this.msg = "浏览器不支持地理定位。";
                     }
                 }
-            })
+                else {
+                    this.geoType = '腾讯接口';
+                    var geolocation = new qq.maps.Geolocation("OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77", "myapp");
+                    geolocation.getLocation(this.setTencentPosition, this.setTencentError);
+                }
+            }
         })
-    </script>
-}
+    })
+</script>
