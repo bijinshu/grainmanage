@@ -67,6 +67,11 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            @Html.Partial("EditContact")
+        </div>
+    </div>
 </div>
 <script>
     $(function () {
@@ -75,11 +80,25 @@
             data: {
                 total: 0,
                 list: [],
-                search: { Name: '', Area: '', Address: '', PageIndex: 0, PageSize: 10 }
+                search: { Name: '', Area: '', Address: '', PageIndex: 0, PageSize: 10 },
+                frm: {
+                    Id: 0,
+                    ContactName: '',
+                    CellPhone: '',
+                    Address: '',
+                    BirthDate: null,
+                    Weixin: '',
+                    QQ: '',
+                    Email: '',
+                    Gender: '男',
+                    Remark: ''
+                },
+                IsDisabled: false,
+                AddressType: 'manual',
+                GeoMsg: '',
+                Msg: ''
             },
-            created: function () {
-                this.getData();
-            },
+
             methods: {
                 getData: function () {
                     $.post('@HttpUtil.GetUrl("Contact/Index")', this.$data.search).done(function (result, status) {
@@ -91,16 +110,134 @@
                     }.bind(this));
                 },
                 edit: function (item) {
-                    alert(item.Id);
+                    this.frm = item;
+                    $("#editContactModal").modal({ backdrop: 'static' });
                 },
-                trade: function (item) {
-                    alert(item.Id);
+                editContact: function (event) {
+                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
+                        this.IsDisabled = true;
+                        $.post('@HttpUtil.GetUrl("Contact/EditContact")', this.frm).always(function (result, status) {
+                            this.IsDisabled = false;
+                            this.Msg = result.msg;
+                            $("#myModal").modal({ backdrop: 'static' });
+                        }.bind(this));
+                    }
+                    else {
+                        this.Msg = '有信息格式不正确,请重新确认';
+                        $("#myModal").modal({ backdrop: 'static' });
+                    }
+                },
+                setPosition: function (position) {
+                    var self = this;
+                    console.log(position);
+                    var latlon = position.coords.latitude + ',' + position.coords.longitude;
+                    if (self.AddressType == 'baidu') {
+                        var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
+                        $.ajax({
+                            type: "GET",
+                            dataType: "jsonp",
+                            url: baidu_url,
+                            beforeSend: function () {
+                                self.GeoMsg = '正在定位...';
+                            },
+                            success: function (json) {
+                                self.GeoMsg = '';
+                                if (json.status == 0) {
+                                    self.frm.Address = json.result.formatted_address;
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.GeoMsg = "定位失败,无法从baidu获取位置信息";
+                            }
+                        });
+                    } else if (self.AddressType == 'google') {
+                        var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
+                        $.ajax({
+                            type: "GET",
+                            url: google_url,
+                            beforeSend: function () {
+                                self.GeoMsg = '正在定位...';
+                            },
+                            success: function (json) {
+                                if (json.status == 'OK') {
+                                    self.GeoMsg = '';
+                                    var results = json.results;
+                                    $.each(results, function (index, array) {
+                                        if (index == 0) {
+                                            self.frm.Address = array['formatted_address'];
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                self.GeoMsg = "定位失败,无法从google获取位置信息";
+                            }
+                        });
+                    }
+                },
+                setError: function (error) {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            this.GeoMsg = "定位失败,用户拒绝请求地理定位。" + error.message;
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            this.GeoMsg = "定位失败,位置信息不可用。" + error.message;
+                            break;
+                        case error.TIMEOUT:
+                            this.GeoMsg = "定位失败,请求获取用户位置超时。" + error.message;
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            this.GeoMsg = "定位失败,定位系统失效。" + error.message;
+                            break;
+                    }
+                },
+                getLocation: function () {
+                    if (this.AddressType == 'baidu' || this.AddressType == 'google') {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, { enableHighAcuracy: true, timeout: 5000, maximumAge: 3000 });
+                        } else {
+                            this.GeoMsg = "浏览器不支持地理定位。";
+                        }
+                    }
+                    else {
+                        this.GeoMsg = '';
+                        this.frm.Address = '';
+                    }
                 }
             },
-            filters: {
-                format: function (date) {
-                    return date ? new Date(date).Format("yyyy-MM-dd") : '';
+            computed: {
+                isContactNameValid: function () {
+                    return (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frm.ContactName);
+                },
+                isEmailValid: function () {
+                    return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
+                },
+                isPhoneValid: function () {
+                    return (/^1[34578]\d{9}$/g).test(this.frm.CellPhone);
+                },
+                isQQValid: function () {
+                    return !this.frm.QQ || (/^\d{4,12}$/g).test(this.frm.QQ);
+                },
+                isWeixinValid: function () {
+                    return !this.frm.Weixin || (/^[a-zA-Z\d_]{5,20}$/g).test(this.frm.Weixin);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
                 }
+            },
+            created: function () {
+                this.getData();
+                this.$watch('frm.ContactName', function (newVal, oldVal) {
+                    if (!this.isContactNameValid) {
+                        $("#ContactName").popover('show');
+                    }
+                    else {
+                        $("#ContactName").popover('hide');
+                    }
+                });
+                this.$watch('AddressType', function (newVal, oldVal) {
+                    this.getLocation();
+                });
             }
         })
     })
