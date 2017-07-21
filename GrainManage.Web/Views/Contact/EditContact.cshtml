@@ -24,20 +24,20 @@
                                 </div>
                                 <span v-if="!isPhoneValid" class="col-lg-2" style="color:red">手机号码格式不正确</span>
                             </div>
-                            <div class="form-group visible-xs visible-sm collapse">
+                            <div class="form-group">
                                 <label class="col-lg-2 control-label hidden-xs hidden-sm">地址识别</label>
-                                <div class="col-lg-6">
+                                <div class="col-lg-8">
                                     <label class="checkbox-inline">
                                         <input v-model="AddressType" type="radio" value="manual"><span>手工填写</span>
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input v-model="AddressType" type="radio" value="baidu"> <span>百度地图</span>
+                                        <input v-model="AddressType" type="radio" value="baidu"> <span>百度</span>
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input v-model="AddressType" type="radio" value="google"> <span>谷歌地图</span>
+                                        <input v-model="AddressType" type="radio" value="google"> <span>谷歌</span>
                                     </label>
                                 </div>
-                                <div class="col-lg-4 "><p class="text-info">{{GeoMsg}}</p></div>
+                                <div class="col-lg-2 "><p class="text-info">{{GeoMsg}}</p></div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label hidden-xs hidden-sm">地址</label>

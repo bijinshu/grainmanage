@@ -67,12 +67,9 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            @Html.Partial("EditContact")
-        </div>
-    </div>
+    @Html.Partial("EditContact")
 </div>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
     $(function () {
         new Vue({
@@ -105,12 +102,22 @@
                         this.list = result.data;
                         this.total = result.total;
                         if (result.code != 1) {
-
+                            this.Msg = result.msg;
+                            $("#myModal").modal({ backdrop: 'static' });
                         }
                     }.bind(this));
                 },
                 edit: function (item) {
-                    this.frm = item;
+                    this.frm.Id = item.Id;
+                    this.frm.ContactName = item.ContactName;
+                    this.frm.CellPhone = item.CellPhone;
+                    this.frm.Address = item.Address;
+                    this.frm.BirthDate = item.BirthDate;
+                    this.frm.Weixin = item.Weixin;
+                    this.frm.QQ = item.QQ;
+                    this.frm.Email = item.Email;
+                    this.frm.Gender = item.Gender;
+                    this.frm.Remark = item.Remark;
                     $("#editContactModal").modal({ backdrop: 'static' });
                 },
                 editContact: function (event) {
@@ -119,7 +126,9 @@
                         $.post('@HttpUtil.GetUrl("Contact/EditContact")', this.frm).always(function (result, status) {
                             this.IsDisabled = false;
                             this.Msg = result.msg;
-                            $("#myModal").modal({ backdrop: 'static' });
+                            if (result.code == 1) {
+                                this.getData();
+                            }
                         }.bind(this));
                     }
                     else {
@@ -127,11 +136,10 @@
                         $("#myModal").modal({ backdrop: 'static' });
                     }
                 },
-                setPosition: function (position) {
+                showPosition: function (latitude, longitude, accuracy) {
+                    var latlon = latitude + ',' + longitude;
                     var self = this;
-                    console.log(position);
-                    var latlon = position.coords.latitude + ',' + position.coords.longitude;
-                    if (self.AddressType == 'baidu') {
+                    if (this.AddressType == 'baidu') {
                         var baidu_url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location=" + latlon + "&output=json&pois=0";
                         $.ajax({
                             type: "GET",
@@ -150,7 +158,7 @@
                                 self.GeoMsg = "定位失败,无法从baidu获取位置信息";
                             }
                         });
-                    } else if (self.AddressType == 'google') {
+                    } else if (this.AddressType == 'google') {
                         var google_url = 'https://maps.google.cn/maps/api/geocode/json?latlng=' + latlon + '&language=CN';
                         $.ajax({
                             type: "GET",
@@ -175,6 +183,9 @@
                         });
                     }
                 },
+                setPosition: function (position) {
+                    this.showPosition(position.coords.latitude, position.coords.longitude);
+                },
                 setError: function (error) {
                     switch (error.code) {
                         case error.PERMISSION_DENIED:
@@ -191,12 +202,29 @@
                             break;
                     }
                 },
+                setTencentPosition: function (result) {
+                    this.showPosition(result.lat, result.lng, result.accuracy);
+                },
+                setTencentError: function (err) {
+                    if (err) {
+                        this.GeoMsg = err;
+                    }
+                    else {
+                        this.GeoMsg = '腾讯定位接口出错。';
+                    }
+                },
                 getLocation: function () {
                     if (this.AddressType == 'baidu' || this.AddressType == 'google') {
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, { enableHighAcuracy: true, timeout: 5000, maximumAge: 3000 });
-                        } else {
-                            this.GeoMsg = "浏览器不支持地理定位。";
+                        if (window.location.protocol == 'https:' || navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, { enableHighAcuracy: true, timeout: 5000, maximumAge: 3000 });
+                            } else {
+                                this.GeoMsg = "浏览器不支持地理定位。";
+                            }
+                        }
+                        else {
+                            var geolocation = new qq.maps.Geolocation("OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77", "myapp");
+                            geolocation.getLocation(this.setTencentPosition, this.setTencentError);
                         }
                     }
                     else {

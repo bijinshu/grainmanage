@@ -107,20 +107,8 @@ namespace GrainManage.Web
         [Message("邮箱格式不正确")]
         public readonly int EmailFormatNotMatch = 515;
 
-        [Message("加密密钥只能由英文字母及阿拉伯数字组成，且字符总长度只能为8位.")]
-        public readonly int KeyFormatNotMatch = 516;
 
-        [Message("待解密字符串格式不正确.")]
-        public readonly int ToDecryptStringFormatNotMatch = 517;
-
-        [Message("重设密钥次数超过限制，请24小时之后再试.")]
-        public readonly int ResetCountLimit = 518;
-
-        //Encrypt
-        [Message("不存在此种加密方式.")]
-        public readonly int EncryptModelNotFound = 1001;
-
-        [Message("无效的加密或解密方式.")]
-        public readonly int InvalidDecryptModel = 1002;
+        [Message("该联系人已存在")]
+        public readonly int ContactExisted = 201;
     }
 }

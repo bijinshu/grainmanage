@@ -81,19 +81,26 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             input.Creator = UserId;
             var repo = GetRepo<Contact>();
-            var model = repo.GetFiltered(f => f.Id == input.Id && f.Creator == input.Creator, true).First();
-            model.ContactName = input.ContactName;
-            model.Address = input.Address;
-            model.BirthDate = input.BirthDate;
-            model.CellPhone = input.CellPhone;
-            model.Creator = input.Creator;
-            model.Email = input.Email;
-            model.Gender = input.Gender;
-            model.Modified = DateTime.Now;
-            model.QQ = input.QQ;
-            model.Remark = input.Remark;
-            repo.UnitOfWork.SaveChanges();
-            SetResponse(s => s.Success, input, result);
+            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Creator == input.Creator).Any())
+            {
+                var model = repo.GetFiltered(f => f.Id == input.Id && f.Creator == input.Creator, true).First();
+                model.ContactName = input.ContactName;
+                model.Address = input.Address;
+                model.BirthDate = input.BirthDate;
+                model.CellPhone = input.CellPhone;
+                model.Creator = input.Creator;
+                model.Email = input.Email;
+                model.Gender = input.Gender;
+                model.Modified = DateTime.Now;
+                model.QQ = input.QQ;
+                model.Remark = input.Remark;
+                repo.UnitOfWork.SaveChanges();
+                SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.ContactExisted, input, result);
+            }
             return JsonNet(result);
         }
 
