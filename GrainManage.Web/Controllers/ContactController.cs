@@ -78,28 +78,23 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult EditContact(ContactDto input)
         {
-            if (IsGetRequest)
-            {
-                return View();
-            }
             var result = new BaseOutput();
-            var contact = input;
-            contact.Creator = UserId;
+            input.Creator = UserId;
             var repo = GetRepo<Contact>();
-            var model = repo.GetFiltered(f => f.Id == contact.Id && f.Creator == contact.Creator, true).First();
-            model.Address = contact.Address;
-            model.BirthDate = contact.BirthDate;
-            model.CellPhone = contact.CellPhone;
-            model.ContactName = contact.ContactName;
-            model.Creator = contact.Creator;
-            model.Email = contact.Email;
-            model.Gender = contact.Gender;
+            var model = repo.GetFiltered(f => f.Id == input.Id && f.Creator == input.Creator, true).First();
+            model.ContactName = input.ContactName;
+            model.Address = input.Address;
+            model.BirthDate = input.BirthDate;
+            model.CellPhone = input.CellPhone;
+            model.Creator = input.Creator;
+            model.Email = input.Email;
+            model.Gender = input.Gender;
             model.Modified = DateTime.Now;
-            model.QQ = contact.QQ;
-            model.Remark = contact.Remark;
+            model.QQ = input.QQ;
+            model.Remark = input.Remark;
             repo.UnitOfWork.SaveChanges();
             SetResponse(s => s.Success, input, result);
-            return JsonNet(model);
+            return JsonNet(result);
         }
 
         public ActionResult Delete(int contactId)
