@@ -64,3 +64,4 @@
 /GrainManage.Web/bin
 /GrainManage.Web/obj
 /GrainManage.Web/logs
+/GrainManage.Web/*.user
