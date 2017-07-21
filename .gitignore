@@ -64,3 +64,5 @@
 /GrainManage.Web/bin
 /GrainManage.Web/obj
 /GrainManage.Web/logs
+/.vs/GrainManage.All.MVC/v14/*.suo
+/.vs/config/applicationhost.config
