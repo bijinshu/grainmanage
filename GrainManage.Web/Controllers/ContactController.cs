@@ -81,7 +81,7 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             input.Creator = UserId;
             var repo = GetRepo<Contact>();
-            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Creator == input.Creator).Any())
+            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Id != input.Id && f.Creator == input.Creator).Any())
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id && f.Creator == input.Creator, true).First();
                 model.ContactName = input.ContactName;

@@ -127,7 +127,11 @@
                             this.IsDisabled = false;
                             this.Msg = result.msg;
                             if (result.code == 1) {
+                                $("#editContactModal").modal('hide');
                                 this.getData();
+                            }
+                            else {
+                                $("#myModal").modal({ backdrop: 'static' });
                             }
                         }.bind(this));
                     }

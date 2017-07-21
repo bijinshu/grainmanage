@@ -1,4 +1,5 @@
 ﻿@using GrainManage.Web
+@using GrainManage.Web.Common
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -28,6 +29,7 @@
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="@HttpUtil.GetUrl("/Home/Index")">首页</a>
+
                     </div>
                     <div class="collapse navbar-collapse " id="example-navbar-collapse">
                         <ul class="nav navbar-nav">
@@ -65,10 +67,7 @@
                             <li class="dropdown">
                                 <form class="navbar-form" role="search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="关键字" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="button">搜索</button>
-                                        </span>
+                                        <span class="badge btn" style="margin-top:8px;">@CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.UserName)</span>
                                     </div>
                                 </form>
                             </li>

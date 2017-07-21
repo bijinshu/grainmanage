@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-8">
             <h3>
-                <span style=""> 当前经纬度获取方式：</span>
+                <span style=""> 当前定位方式：</span>
                 <span v-text="geoType" style="color:red"></span>
             </h3>
             <h3>
@@ -102,10 +102,10 @@
                         }
                     });
                 },
-                setHtml5Position: function (position) {
-                    self.showPosition(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+                setPosition: function (position) {
+                    this.showPosition(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
                 },
-                setHtml5Error: function (error) {
+                setError: function (error) {
                     switch (error.code) {
                         case error.PERMISSION_DENIED:
                             this.msg = "定位失败,用户拒绝请求地理定位。" + error.message;
@@ -135,9 +135,9 @@
             },
             created: function () {
                 if (window.location.protocol == 'https:' || navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1) {
-                    this.geoType = '浏览器接口';
+                    this.geoType = '直接定位';
                     if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(this.setHtml5Position, this.setHtml5Error, {
+                        navigator.geolocation.getCurrentPosition(this.setPosition, this.setError, {
                             // 指示浏览器获取高精度的位置，默认为false
                             enableHighAcuracy: true,
                             // 指定获取地理位置的超时时间，默认不限时，单位为毫秒
@@ -150,7 +150,7 @@
                     }
                 }
                 else {
-                    this.geoType = '腾讯接口';
+                    this.geoType = '腾讯转发定位';
                     var geolocation = new qq.maps.Geolocation("OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77", "myapp");
                     geolocation.getLocation(this.setTencentPosition, this.setTencentError);
                 }
