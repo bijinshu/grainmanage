@@ -23,6 +23,7 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.Remark).HasMaxLength(200);
             Property(m => m.Created);
             Property(m => m.LastActive);
+            Property(m => m.Roles).IsRequired();
         }
     }
 }

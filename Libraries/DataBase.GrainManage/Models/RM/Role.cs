@@ -11,7 +11,8 @@ namespace DataBase.GrainManage.Models
         public string Name { get; set; }
         public string Remark { get; set; }
         public bool CheckApi { get; set; }
-        public DateTime CreateTime { get; set; }
+        public string Auths { get; set; }
+        public DateTime Created { get; set; }
     }
 }
 

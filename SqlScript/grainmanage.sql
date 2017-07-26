@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2017-07-20 18:47:55
+Date: 2017-07-26 18:39:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,11 +44,11 @@ CREATE TABLE `bm_contact` (
 -- ----------------------------
 INSERT INTO `bm_contact` VALUES ('1', '张海川', '男', '2016-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '八集', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:47:13');
 INSERT INTO `bm_contact` VALUES ('2', '李玉飞', '女', '1989-06-06', '15801992799', '914023961', null, 'bijinshu@163.com', '西王码', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 16:59:26');
-INSERT INTO `bm_contact` VALUES ('3', '王亮亮', '男', '1999-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '李祠堂', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:21:16');
+INSERT INTO `bm_contact` VALUES ('3', '王亮亮', '男', '2017-07-20', '15801992799', '914023961', null, 'bijinshu@163.com', '李祠堂', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2017-07-21 17:07:42');
 INSERT INTO `bm_contact` VALUES ('4', '张思贤', '男', '1988-02-22', '15801992799', '914023961', null, 'bijinshu@163.com', '六塘', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-05-17 18:01:29');
-INSERT INTO `bm_contact` VALUES ('5', '刘江', '男', '1986-02-09', '15801992799', '914023961', null, 'bijinshu@163.com', '泓北', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:26:43');
+INSERT INTO `bm_contact` VALUES ('5', '刘江', '男', '1986-02-09', '15801992799', '914023961', null, 'bijinshu@163.com', '泓北', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2017-07-21 16:36:18');
 INSERT INTO `bm_contact` VALUES ('6', '鲍菲菲', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '大石渡', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('7', '成杰', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '芦东', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('7', '成杰', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '芦东', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2017-07-21 16:59:38');
 INSERT INTO `bm_contact` VALUES ('8', '陈千业', '男', '1968-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '董荡', null, '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', '2016-04-05 17:28:26');
 INSERT INTO `bm_contact` VALUES ('9', '齐昊', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '朱圩', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('10', '任思', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '刘庄', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
@@ -71,7 +71,7 @@ INSERT INTO `bm_contact` VALUES ('26', '江涛', '女', '1980-02-02', '158019927
 INSERT INTO `bm_contact` VALUES ('27', '萧见浪', '男', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('28', '殷了', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '合兴', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('29', '薛子琼', '女', '1980-02-02', '15801992799', '914023961', null, 'bijinshu@163.com', '桥西', '', '16ddd97b6c4611e7bd7764006a11eb35', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('30', '圣诞快乐', '男', '2017-07-20', '15825789546', null, null, null, null, null, '16ddd97b6c4611e7bd7764006a11eb35', '2017-07-20 18:40:40', null);
+INSERT INTO `bm_contact` VALUES ('30', '圣诞快乐', '女', '2017-07-21', '15825789546', null, null, null, 'sddfs', null, '16ddd97b6c4611e7bd7764006a11eb35', '2017-07-20 18:40:40', '2017-07-21 18:46:14');
 
 -- ----------------------------
 -- Table structure for `bm_image`
@@ -264,7 +264,7 @@ CREATE TABLE `log_exception` (
   `Message` varchar(600) NOT NULL COMMENT '描述',
   `StackTrace` text COMMENT '堆栈信息',
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
-  `CreateTime` datetime NOT NULL COMMENT '创建时间',
+  `Created` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -290,120 +290,25 @@ CREATE TABLE `log_login` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `rm_resource`
+-- Table structure for `rm_role`
 -- ----------------------------
-DROP TABLE IF EXISTS `rm_resource`;
-CREATE TABLE `rm_resource` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Url` varchar(600) DEFAULT NULL,
-  `Summary` varchar(160) DEFAULT NULL,
-  `Method` varchar(8) DEFAULT NULL,
-  `Action` varchar(64) DEFAULT NULL,
-  `Controller` varchar(255) DEFAULT NULL COMMENT '资源类型',
-  `Remark` text,
-  `Message` varchar(80) DEFAULT NULL,
-  `Disabled` bit(1) NOT NULL COMMENT '是否禁用',
-  `IsCommon` bit(1) NOT NULL COMMENT '是否公用',
-  `IsAnonymous` bit(1) NOT NULL COMMENT '是否允许匿名访问',
-  `CreateTime` datetime DEFAULT NULL,
-  `UpdateTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='所有API资源';
-
--- ----------------------------
--- Records of rm_resource
--- ----------------------------
-INSERT INTO `rm_resource` VALUES ('1', 'api/Contact/SearchName', '搜寻联系人', 'POST', 'SearchName', 'GrainManage.Server.Controllers.ContactController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('2', 'api/Contact/SearchArea', '搜寻区域', 'POST', 'SearchArea', 'GrainManage.Server.Controllers.ContactController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('3', 'api/Contact/SearchAddress', '搜寻地址', 'POST', 'SearchAddress', 'GrainManage.Server.Controllers.ContactController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('4', 'api/Contact/GetByID', '根据Id获取联系人', 'POST', 'GetByID', 'GrainManage.Server.Controllers.ContactController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('5', 'api/Contact/Search', '搜索联系人', 'POST', 'Search', 'GrainManage.Server.Controllers.ContactController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('6', 'api/Contact/Insert', '添加联系人', 'POST', 'Insert', 'GrainManage.Server.Controllers.ContactController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('7', 'api/Contact/Update', '更新联系人', 'POST', 'Update', 'GrainManage.Server.Controllers.ContactController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('8', 'api/Contact/Delete', '删除联系人', 'POST', 'Delete', 'GrainManage.Server.Controllers.ContactController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('9', 'api/Account/SignIn', '用户登录', 'POST', 'SignIn', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('10', 'api/Account/ResetPassword', '重设密码', 'POST', 'ResetPassword', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('11', 'api/Account/ManageAccount', '管理账号', 'POST', 'ManageAccount', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('12', 'api/Account/Register', '注册', 'POST', 'Register', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('13', 'api/Account/SignOut', '注销', 'POST', 'SignOut', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('14', 'api/Account/GetEncryptKey', '获取加密密钥', 'POST', 'GetEncryptKey', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('15', 'api/Account/ChangePassword', '更改密码', 'POST', 'ChangePassword', 'GrainManage.Server.Controllers.AccountController', null, '新增', '', '', '', '2016-03-15 20:27:34', null);
-INSERT INTO `rm_resource` VALUES ('16', 'api/Column/GetHeader', '获取中文列名', 'POST', 'GetHeader', 'GrainManage.Server.Controllers.ColumnController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('17', 'api/Column/GetColumnHeader', '获取英文到中文映射字典', 'POST', 'GetColumnHeader', 'GrainManage.Server.Controllers.ColumnController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('18', 'api/District/GetByID', '根据Id获取地址信息', 'POST', 'GetByID', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('19', 'api/District/Search', '根据名称搜索', 'POST', 'Search', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('20', 'api/District/GetFatherName', '根据Id获取父级地址', 'POST', 'GetFatherName', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('21', 'api/District/GetChildName', '根据Id获取子地址', 'POST', 'GetChildName', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('22', 'api/District/GetUpwardDistrict', '获取父级所有地址，并限制最大搜索级数', 'POST', 'GetUpwardDistrict', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('23', 'api/District/GetChildDistrict', '获取子级所有地址，并限制最大搜索级数', 'POST', 'GetChildDistrict', 'GrainManage.Server.Controllers.DistrictController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:39:06');
-INSERT INTO `rm_resource` VALUES ('24', 'api/Common/PublicKey', '以文件方式返回公钥', 'GET', 'PublicKey', 'GrainManage.Server.Controllers.CommonController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('25', 'api/Common/PublicKey', '以文件方式返回公钥', 'POST', 'PublicKey', 'GrainManage.Server.Controllers.CommonController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('26', 'api/Image/GetImages', '获取图片元数据', 'POST', 'GetImages', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('27', 'api/Image/GetImageFile', '获取图片内容', 'POST', 'GetImageFile', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('28', 'api/Image/GetImageUrl', '获取图片Url', 'POST', 'GetImageUrl', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('29', 'api/Image/DownLoad', '下载图片', 'POST', 'DownLoad', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('30', 'api/Image/Insert', '添加图片', 'POST', 'Insert', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('31', 'api/Image/Update', '更新图片信息', 'POST', 'Update', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('32', 'api/Image/Delete', '删除图片', 'POST', 'Delete', 'GrainManage.Server.Controllers.ImageController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('33', 'api/Price/GetByID', '获取单条价格信息', 'POST', 'GetByID', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('34', 'api/Price/GetRecentPriceByGrain', '获取单条最新价格信息', 'POST', 'GetRecentPriceByGrain', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('35', 'api/Price/SearchRecentPrice', '搜索最新价格信息', 'POST', 'SearchRecentPrice', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('36', 'api/Price/SearchPrice', '搜索价格历史信息', 'POST', 'SearchPrice', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('37', 'api/Price/Insert', '添加新价格', 'POST', 'Insert', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('38', 'api/Price/Update', '更改价格', 'POST', 'Update', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('39', 'api/Price/Delete', '删除价格', 'POST', 'Delete', 'GrainManage.Server.Controllers.PriceController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('40', 'api/MetaData/GetNameByCategory', '按类别获取元数据信息', 'POST', 'GetNameByCategory', 'GrainManage.Server.Controllers.MetaDataController', null, '过时', '', '', '', '2016-03-15 20:27:34', '2017-07-13 17:47:56');
-INSERT INTO `rm_resource` VALUES ('41', 'api/Trade/GetByID', '获取单条交易信息', 'POST', 'GetByID', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('42', 'api/Trade/GetDetailByContactID', '根据联系人获取交易明细', 'POST', 'GetDetailByContactID', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('43', 'api/Trade/SearchDetail', '搜索交易历史', 'POST', 'SearchDetail', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('44', 'api/Trade/GetTotal', '统计交易情况', 'POST', 'GetTotal', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('45', 'api/Trade/GetTotalByArea', '按地区统计交易情况', 'POST', 'GetTotalByArea', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('46', 'api/Trade/GetTotalByContactArea', '按联系人和地区统计交易情况', 'POST', 'GetTotalByContactArea', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('47', 'api/Trade/Insert', '添加交易记录', 'POST', 'Insert', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('48', 'api/Trade/Update', '更改交易记录', 'POST', 'Update', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('49', 'api/Trade/Delete', '删除交易记录', 'POST', 'Delete', 'GrainManage.Server.Controllers.TradeController', null, '方法描述变更', '', '', '', '2016-03-15 20:27:34', '2016-03-15 20:55:12');
-INSERT INTO `rm_resource` VALUES ('50', 'api/Image/GetImageUrl?imageID={imageID}&userName={userName}', null, 'GET', 'GetImageUrl', 'GrainManage.Server.Controllers.ImageController', null, '新增', '', '', '', '2017-07-13 17:47:56', null);
-INSERT INTO `rm_resource` VALUES ('51', 'api/MetaData/GetNameByType', '按类别获取元数据信息', 'POST', 'GetNameByType', 'GrainManage.Server.Controllers.MetaDataController', null, '新增', '', '', '', '2017-07-13 17:47:56', null);
-
--- ----------------------------
--- Table structure for `rm_roles`
--- ----------------------------
-DROP TABLE IF EXISTS `rm_roles`;
-CREATE TABLE `rm_roles` (
+DROP TABLE IF EXISTS `rm_role`;
+CREATE TABLE `rm_role` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(20) NOT NULL,
   `Remark` varchar(600) DEFAULT NULL,
+  `Auths` varchar(600) NOT NULL DEFAULT '',
   `CheckApi` bit(1) NOT NULL COMMENT '是否需要平台加强安全性限制',
-  `CreateTime` datetime NOT NULL,
+  `Created` datetime NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='系统角色，每个子系统都应该建立一个对应角色';
 
 -- ----------------------------
--- Records of rm_roles
+-- Records of rm_role
 -- ----------------------------
-INSERT INTO `rm_roles` VALUES ('1', '超级管理员', null, '', '2016-03-05 18:09:24');
-INSERT INTO `rm_roles` VALUES ('2', '普通用户', null, '', '2016-03-05 18:09:47');
-INSERT INTO `rm_roles` VALUES ('3', '粮食商贩', null, '', '2017-07-19 18:27:34');
-
--- ----------------------------
--- Table structure for `rm_role_resource`
--- ----------------------------
-DROP TABLE IF EXISTS `rm_role_resource`;
-CREATE TABLE `rm_role_resource` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `RoleId` int(11) NOT NULL,
-  `ResourceId` int(11) NOT NULL,
-  `CreateTime` datetime NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `uq_roleid_apprightid` (`RoleId`,`ResourceId`),
-  KEY `fk_role_api_resource_id` (`ResourceId`),
-  CONSTRAINT `fk_role_api_resource_id` FOREIGN KEY (`ResourceId`) REFERENCES `rm_resource` (`Id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_role_id` FOREIGN KEY (`RoleId`) REFERENCES `rm_roles` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='每个角色拥有的权限';
-
--- ----------------------------
--- Records of rm_role_resource
--- ----------------------------
+INSERT INTO `rm_role` VALUES ('1', '超级管理员', null, '', '', '2016-03-05 18:09:24');
+INSERT INTO `rm_role` VALUES ('2', '普通用户', null, '', '', '2016-03-05 18:09:47');
+INSERT INTO `rm_role` VALUES ('3', '粮食商贩', null, '', '', '2017-07-19 18:27:34');
 
 -- ----------------------------
 -- Table structure for `rm_user`
@@ -423,6 +328,7 @@ CREATE TABLE `rm_user` (
   `Remark` varchar(200) DEFAULT NULL COMMENT '附加描述',
   `Created` datetime DEFAULT NULL COMMENT '创建时间',
   `LastActive` datetime DEFAULT NULL COMMENT '上次活动时间',
+  `Roles` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`Guid`),
   KEY `uq_user_name` (`UserName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
@@ -430,31 +336,11 @@ CREATE TABLE `rm_user` (
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('16ddd97b6c4611e7bd7764006a11eb35', 'bijinshu', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15801992799', '914023961@qq.com', '0', null, 'bijinshu', '2016-01-05 18:44:49', '2017-07-20 18:40:58');
-INSERT INTO `rm_user` VALUES ('16dddca46c4611e7bd7764006a11eb35', 'testadmin', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testadmin', '2016-01-05 18:44:49', '2016-01-05 18:44:49');
-INSERT INTO `rm_user` VALUES ('16dddcd66c4611e7bd7764006a11eb35', 'testroot', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testroot', '2016-01-05 18:44:49', '2016-01-05 18:44:49');
-INSERT INTO `rm_user` VALUES ('16dddcff6c4611e7bd7764006a11eb35', '毕金书', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15882402032', 'bijinshu@126.com', '0', null, '毕金书', '2016-01-05 18:44:49', '2017-07-18 09:46:06');
-INSERT INTO `rm_user` VALUES ('f7b362daf90347b4835831a820cfecde', 'test', '9adcb29710e807607b683f62e555c22dc5659713', '女', '0', '都是', '15801992799', 'bijs@axon.com.cn', '98455469', null, '谁看', '2017-07-20 15:23:29', '2017-07-20 15:23:29');
-
--- ----------------------------
--- Table structure for `rm_user_role`
--- ----------------------------
-DROP TABLE IF EXISTS `rm_user_role`;
-CREATE TABLE `rm_user_role` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `UserName` varchar(32) DEFAULT NULL,
-  `RoleId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `uq_user_role` (`UserName`,`RoleId`),
-  KEY `fk_role_id_3` (`RoleId`),
-  CONSTRAINT `fk_role_id_3` FOREIGN KEY (`RoleId`) REFERENCES `rm_roles` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_name` FOREIGN KEY (`UserName`) REFERENCES `rm_user` (`Guid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户-角色表';
-
--- ----------------------------
--- Records of rm_user_role
--- ----------------------------
-INSERT INTO `rm_user_role` VALUES ('1', '16ddd97b6c4611e7bd7764006a11eb35', '1');
+INSERT INTO `rm_user` VALUES ('16ddd97b6c4611e7bd7764006a11eb35', 'bijinshu', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15801992799', '914023961@qq.com', '0', null, 'bijinshu', '2016-01-05 18:44:49', '2017-07-25 16:11:56', '');
+INSERT INTO `rm_user` VALUES ('16dddca46c4611e7bd7764006a11eb35', 'testadmin', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testadmin', '2016-01-05 18:44:49', '2016-01-05 18:44:49', '');
+INSERT INTO `rm_user` VALUES ('16dddcd66c4611e7bd7764006a11eb35', 'testroot', '9adcb29710e807607b683f62e555c22dc5659713', '男', '0', null, '15801992799', 'bijinshu@163.com', '0', null, 'testroot', '2016-01-05 18:44:49', '2016-01-05 18:44:49', '');
+INSERT INTO `rm_user` VALUES ('16dddcff6c4611e7bd7764006a11eb35', '毕金书', '9adcb29710e807607b683f62e555c22dc5659713', '男', '1', null, '15882402032', 'bijinshu@126.com', '0', null, '毕金书', '2016-01-05 18:44:49', '2017-07-18 09:46:06', '');
+INSERT INTO `rm_user` VALUES ('f7b362daf90347b4835831a820cfecde', 'test', '9adcb29710e807607b683f62e555c22dc5659713', '女', '0', '都是', '15801992799', 'bijs@axon.com.cn', '98455469', null, '谁看', '2017-07-20 15:23:29', '2017-07-20 15:23:29', '');
 
 -- ----------------------------
 -- Table structure for `sys_metadata`

@@ -19,6 +19,7 @@ namespace DataBase.GrainManage.Models
         public string QQ { get; set; }
         public string Weixin { get; set; }
         public string Remark { get; set; }
+        public string Roles { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? LastActive { get; set; }
     }

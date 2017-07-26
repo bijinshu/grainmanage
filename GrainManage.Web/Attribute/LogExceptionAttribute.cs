@@ -31,9 +31,9 @@ namespace GrainManage.Web
                     Message = msg,
                     StackTrace = filterContext.Exception.StackTrace,
                     ClientIP = HttpUtil.RequestHostAddress,
-                    CreateTime = DateTime.Now
+                    Created = DateTime.Now
                 };
-                db.Execute("insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,CreateTime) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@CreateTime)", model);
+                db.Execute("insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,Created) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@Created)", model);
                 if (filterContext.HttpContext.Request.HttpMethod == "POST")
                 {
                     filterContext.Result = new NewtonsoftJsonResult() { Data = new BaseOutput { msg = msg } };

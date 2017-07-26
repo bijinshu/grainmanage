@@ -14,6 +14,8 @@ namespace DataBase.GrainManage.Models.Mapping
             ToTable("rm_role");
             HasKey(m => m.Id);
             Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(m => m.Name).IsRequired();
+            Property(m => m.Auths).IsRequired();
         }
     }
 }
