@@ -257,6 +257,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\components\modal-dialog.js" />
     <Content Include="Scripts\components\pager.js" />
+    <Content Include="Scripts\components\tree.js" />
     <Content Include="Scripts\Crypto\base64.js" />
     <Content Include="Scripts\Crypto\md5.js" />
     <Content Include="Scripts\Crypto\sha1.js" />
