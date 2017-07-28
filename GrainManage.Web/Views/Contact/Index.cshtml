@@ -68,6 +68,7 @@
         </div>
     </div>
     @Html.Partial("EditContact")
+    <modal-dialog title="修改联系人提示" v-bind:msg="msg"></modal-dialog>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
@@ -93,7 +94,7 @@
                 IsDisabled: false,
                 AddressType: 'manual',
                 GeoMsg: '',
-                Msg: ''
+                msg: ''
             },
 
             methods: {
@@ -102,7 +103,7 @@
                         this.list = result.data;
                         this.total = result.total;
                         if (result.code != 1) {
-                            this.Msg = result.msg;
+                            this.msg = result.msg;
                             $("#myModal").modal({ backdrop: 'static' });
                         }
                     }.bind(this));
@@ -125,7 +126,7 @@
                         this.IsDisabled = true;
                         $.post('@HttpUtil.GetUrl("Contact/EditContact")', this.frm).always(function (result, status) {
                             this.IsDisabled = false;
-                            this.Msg = result.msg;
+                            this.msg = result.msg;
                             if (result.code == 1) {
                                 $("#editContactModal").modal('hide');
                                 this.getData();
@@ -136,7 +137,7 @@
                         }.bind(this));
                     }
                     else {
-                        this.Msg = '有信息格式不正确,请重新确认';
+                        this.msg = '有信息格式不正确,请重新确认';
                         $("#myModal").modal({ backdrop: 'static' });
                     }
                 },

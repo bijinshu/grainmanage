@@ -99,7 +99,7 @@
             <button v-on:click.stop.prevent="newContact" v-bind:disabled="IsDisabled" class="btn btn-primary btn-block">保存</button>
         </div>
     </div>
-    @ControlHelper.Alert("添加联系人提示")
+    <modal-dialog title="添加联系人提示" v-bind:msg="msg"></modal-dialog>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
@@ -119,9 +119,9 @@
                     Remark: ''
                 },
                 IsDisabled: false,
-                Msg: '',
                 AddressType: 'manual',
-                GeoMsg: ''
+                GeoMsg: '',
+                msg: ''
             },
             methods: {
                 newContact: function (event) {
@@ -129,12 +129,12 @@
                         this.IsDisabled = true;
                         $.post('@HttpUtil.GetUrl("Contact/NewContact")', this.frm).always(function (result, status) {
                             this.IsDisabled = false;
-                            this.Msg = result.msg;
+                            this.msg = result.msg;
                             $("#myModal").modal({ backdrop: 'static' });
                         }.bind(this));
                     }
                     else {
-                        this.Msg = '有信息格式不正确,请重新确认';
+                        this.msg = '有信息格式不正确,请重新确认';
                         $("#myModal").modal({ backdrop: 'static' });
                     }
                 },

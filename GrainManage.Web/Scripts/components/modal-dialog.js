@@ -1,28 +1,21 @@
-﻿Vue.component('modal-dialog', {
-    template: ' <div class="dialogs">\
-                <div class="dialog" v-bind:class="{"dialog-active":show,"dialog-info":true}">\
-                <div class="dialog-content">\
-                    <div class="close rotate">\
-                        <span class="iconfont icon-close" v-on:click="close"></span>\
-                    </div>\
-                    <slot name="header">\
-                    <header class="dialog-header">\
-                    <h1 class="dialog-title">提示信息</h1>\
-                    </header>\
-                    </slot>\
-                    <slot name="body"></slot>\
-                    <slot name="footer">\
-                    <footer class="dialog-footer">\
-                    <button class="btn" v-on:click="close">关闭</button>\
-                    </footer>\
-                    </slot>\
-              </div>\
-              </div>\
-              </div>',
-    props: ['show'],
-    methods: {
-        close: function () {
-            this.show = false;
-        }
-    }
+﻿$(function () {
+    Vue.component('modal-dialog', {
+        template: ' <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+        <div class="modal-dialog">\
+            <div class="modal-content">\
+                <div class="modal-header bg-info">\
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+                    <h4 class="modal-title text-danger text-center" id="myModalLabel" style="font-weight:bold;">{{title}} </h4>\
+                </div>\
+                <div class="modal-body text-center">\
+                    <p class="text-info ">{{msg}}</p>\
+                </div>\
+                <div class="modal-footer">\
+                    <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>',
+        props: ['title', 'msg']
+    })
 })
