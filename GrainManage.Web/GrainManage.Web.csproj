@@ -191,6 +191,7 @@
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Models\IPageable.cs" />
     <Compile Include="Models\ITimeRanged.cs" />
+    <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\MetaData\MetaDataDTO.cs" />
     <Compile Include="Models\Pageable.cs" />
     <Compile Include="Models\Price\InputGetByID.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Common\NetworkUtil.cs" />
     <Compile Include="Common\Thumbnail.cs" />
     <Compile Include="Resources\GlobalResx.cs" />
+    <Compile Include="Services\CommonService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -249,6 +251,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="menu.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -293,8 +296,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\SignIn.cshtml" />
-    <Content Include="Views\Contact\EditContact.cshtml" />
-    <Content Include="Views\Contact\NewContact.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\Contact\_ContactDetail.cshtml" />
     <Content Include="Views\Contact\_SearchContacts.cshtml" />

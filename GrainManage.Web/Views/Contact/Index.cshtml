@@ -4,7 +4,7 @@
 }
 <div class="container" id="contactInfo">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-11">
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
@@ -25,9 +25,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+        </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover" style="margin-top:20px;">
                     <thead>
@@ -63,12 +66,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @Html.Partial("EditContact")
-    <modal-dialog title="修改联系人提示" v-bind:msg="msg"></modal-dialog>
+    @Html.Partial("_ContactDetail")
+    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
@@ -94,12 +97,14 @@
                 IsDisabled: false,
                 AddressType: 'manual',
                 GeoMsg: '',
+                AlertTitle: '',
+                PanelTitle: '',
                 msg: ''
             },
 
             methods: {
                 getData: function () {
-                    $.post('@HttpUtil.GetUrl("Contact/Index")', this.$data.search).done(function (result, status) {
+                    $.post('@HttpUtil.GetUrl("Contact/Index")', this.search).done(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
                         if (result.code != 1) {
@@ -108,7 +113,24 @@
                         }
                     }.bind(this));
                 },
+                add: function () {
+                    this.PanelTitle = '添加联系人';
+                    this.AlertTitle = '添加提示';
+                    this.frm.Id = 0;
+                    this.frm.ContactName = '';
+                    this.frm.CellPhone = '';
+                    this.frm.Address = '';
+                    this.frm.BirthDate = '';
+                    this.frm.Weixin = '';
+                    this.frm.QQ = '';
+                    this.frm.Email = '';
+                    this.frm.Gender = '男';
+                    this.frm.Remark = '';
+                    $("#saveContactModal").modal({ backdrop: 'static' });
+                },
                 edit: function (item) {
+                    this.PanelTitle = '编辑联系人';
+                    this.AlertTitle = '编辑提示';
                     this.frm.Id = item.Id;
                     this.frm.ContactName = item.ContactName;
                     this.frm.CellPhone = item.CellPhone;
@@ -119,16 +141,17 @@
                     this.frm.Email = item.Email;
                     this.frm.Gender = item.Gender;
                     this.frm.Remark = item.Remark;
-                    $("#editContactModal").modal({ backdrop: 'static' });
+                    $("#saveContactModal").modal({ backdrop: 'static' });
                 },
-                editContact: function (event) {
+                saveContact: function (event) {
                     if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
                         this.IsDisabled = true;
-                        $.post('@HttpUtil.GetUrl("Contact/EditContact")', this.frm).always(function (result, status) {
+                        var url = this.frm.Id > 0 ? '@HttpUtil.GetUrl("Contact/EditContact")' : '@HttpUtil.GetUrl("/Contact/NewContact")';
+                        $.post(url, this.frm).always(function (result, status) {
                             this.IsDisabled = false;
                             this.msg = result.msg;
                             if (result.code == 1) {
-                                $("#editContactModal").modal('hide');
+                                $("#saveContactModal").modal('hide');
                                 this.getData();
                             }
                             else {

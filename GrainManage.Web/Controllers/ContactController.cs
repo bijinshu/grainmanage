@@ -55,10 +55,6 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult NewContact(ContactDto input)
         {
-            if (IsGetRequest)
-            {
-                return View();
-            }
             var result = new BaseOutput();
             input.Creator = UserId;
             var model = MapTo<Contact>(input);

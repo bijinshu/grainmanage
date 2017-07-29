@@ -56,6 +56,7 @@ namespace GrainManage.Web.Controllers
                             {
                                 UserId = account.Guid,
                                 UserName = input.UserName,
+                                Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = result.data.token,
                                 ExpiredAt = expireAt.ToString("yyyy-MM-dd HH:mm:ss"),
                                 LoginIP = HttpUtil.RequestHostAddress

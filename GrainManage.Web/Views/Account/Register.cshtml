@@ -19,7 +19,7 @@
 <body>
     <div id="app" class="container">
         <div class="row" style="margin-top:20px;">
-            <div class="col-lg-offset-2 col-lg-8">
+            <div class="col-md-offset-2 col-md-8">
                 <ol class="breadcrumb" style="font-size:20px;">
                     <li><a href="@HttpUtil.GetUrl("Account/SignIn")">返回登录页</a></li>
                     <li><a href="#" class="active">注册</a></li>
@@ -28,21 +28,21 @@
         </div>
         <form class="form-horizontal" role="form">
             <div class="form-group" v-bind:class="{'has-error':!isUserNameValid}">
-                <label for="UserName" class="col-lg-2 control-label hidden-xs hidden-sm">用户名</label>
-                <div class="col-lg-10">
+                <label for="UserName" class="col-md-2 control-label hidden-xs hidden-sm">用户名</label>
+                <div class="col-md-10">
                     <input v-model="frm.UserName" type="text" class="form-control" id="UserName" placeholder="请输入用户名"
                            data-toggle="popover" data-placement="bottom" data-content="用户名只能为手机号码或由2-20个英文字母、下划线及数字组成">
                 </div>
             </div>
             <div class="form-group" v-bind:class="{'has-error':!isPwdValid}">
-                <label for="Pwd" class="col-lg-2 control-label hidden-xs hidden-sm">密码</label>
-                <div class="col-lg-10">
+                <label for="Pwd" class="col-md-2 control-label hidden-xs hidden-sm">密码</label>
+                <div class="col-md-10">
                     <input v-model="Pwd" type="password" class="form-control" id="Pwd" placeholder="请输入密码"
                            data-toggle="popover" data-placement="top" data-content="密码由2-20个字符组成">
                 </div>
             </div>
             <div class="form-group">
-                <div class="panel-group col-lg-10 col-lg-offset-2">
+                <div class="panel-group col-md-10 col-md-offset-2">
                     <div class="panel panel-info">
                         <div class="panel-heading ">
                             <h4 class="panel-title">
@@ -54,43 +54,43 @@
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
-                                    <label for="CellPhone" class="col-lg-2 control-label hidden-xs hidden-sm">手机号码</label>
-                                    <div class="col-lg-8">
+                                    <label for="CellPhone" class="col-md-2 control-label hidden-xs hidden-sm">手机号码</label>
+                                    <div class="col-md-8">
                                         <input v-model="frm.CellPhone" type="text" class="form-control" id="CellPhone" placeholder="请输入手机号码">
                                     </div>
-                                    <span v-if="!isPhoneValid" class="col-lg-2" style="color:red">手机号码格式不正确</span>
+                                    <span v-if="!isPhoneValid" class="col-md-2" style="color:red">手机号码格式不正确</span>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isNickNameValid}">
-                                    <label for="NickName" class="col-lg-2 control-label hidden-xs hidden-sm">昵称</label>
-                                    <div class="col-lg-8">
+                                    <label for="NickName" class="col-md-2 control-label hidden-xs hidden-sm">昵称</label>
+                                    <div class="col-md-8">
                                         <input v-model="frm.NickName" type="text" class="form-control" id="NickName" placeholder="请输入昵称">
                                     </div>
-                                    <span v-if="!isNickNameValid" class="col-lg-2" style="color:red">昵称只能由1-20个普通字符组成</span>
+                                    <span v-if="!isNickNameValid" class="col-md-2" style="color:red">昵称只能由1-20个普通字符组成</span>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
-                                    <label for="Weixin" class="col-lg-2 control-label hidden-xs hidden-sm">微信号</label>
-                                    <div class="col-lg-8">
+                                    <label for="Weixin" class="col-md-2 control-label hidden-xs hidden-sm">微信号</label>
+                                    <div class="col-md-8">
                                         <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
                                     </div>
-                                    <span v-if="!isWeixinValid" class="col-lg-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
+                                    <span v-if="!isWeixinValid" class="col-md-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
-                                    <label for="QQ" class="col-lg-2 control-label hidden-xs hidden-sm">QQ</label>
-                                    <div class="col-lg-8">
+                                    <label for="QQ" class="col-md-2 control-label hidden-xs hidden-sm">QQ</label>
+                                    <div class="col-md-8">
                                         <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
                                     </div>
-                                    <span v-if="!isQQValid" class="col-lg-2" style="color:red">QQ格式不正确</span>
+                                    <span v-if="!isQQValid" class="col-md-2" style="color:red">QQ格式不正确</span>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
-                                    <label for="Email" class="col-lg-2 control-label hidden-xs hidden-sm">邮箱地址</label>
-                                    <div class="col-lg-8">
+                                    <label for="Email" class="col-md-2 control-label hidden-xs hidden-sm">邮箱地址</label>
+                                    <div class="col-md-8">
                                         <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
                                     </div>
-                                    <span v-if="!isEmailValid" class="col-lg-2" style="color:red">邮箱格式不正确</span>
+                                    <span v-if="!isEmailValid" class="col-md-2" style="color:red">邮箱格式不正确</span>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 control-label hidden-xs hidden-sm">性别</label>
-                                    <div class="col-lg-10">
+                                    <label class="col-md-2 control-label hidden-xs hidden-sm">性别</label>
+                                    <div class="col-md-10">
                                         <label class="checkbox-inline">
                                             <input v-model="frm.Gender" type="radio" value="男"><span>男</span>
                                         </label>
@@ -100,11 +100,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
-                                    <label for="Remark" class="col-lg-2 control-label hidden-xs hidden-sm">其他信息</label>
-                                    <div class="col-lg-8">
+                                    <label for="Remark" class="col-md-2 control-label hidden-xs hidden-sm">其他信息</label>
+                                    <div class="col-md-8">
                                         <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
                                     </div>
-                                    <span v-if="!isRemarkValid" class="col-lg-2" style="color:red">附加信息不能超过200个字符</span>
+                                    <span v-if="!isRemarkValid" class="col-md-2" style="color:red">附加信息不能超过200个字符</span>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                 </div>
             </div>
             <div class="row" style="margin-top:-20px;">
-                <div class="col-lg-offset-2 col-lg-8">
+                <div class="col-md-offset-2 col-md-8">
                     <button v-on:click.stop.prevent="register" v-bind:disabled="IsDisabled" class="btn btn-primary btn-block">注册</button>
                 </div>
             </div>

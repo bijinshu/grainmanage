@@ -1,0 +1,48 @@
+﻿[
+    {
+        "id": "price",
+        "text": "价格",
+        "url": "/Price/Index"
+    },
+    {
+        "id": "contact",
+        "text": "联系人",
+        "url": "/Contact/Index"
+    },
+    {
+        "id": "customer",
+        "text": "我要卖粮",
+        "url": "/Order/Index"
+    },
+    {
+        "id": "purchase",
+        "text": "收购",
+        "url": "/Contact/Index"
+    },
+    {
+        "id": "sale",
+        "text": "销售",
+        "url": "/Contact/Index"
+    },
+    {
+        "id": "retail",
+        "text": "零售",
+        "url": "/Contact/Index"
+    },
+    {
+        "id": "user",
+        "text": "个人空间",
+        "children": [
+            {
+                "id": "user.change_pwd",
+                "text": "更改密码",
+                "url": "/Account/ChangePassword"
+            },
+            {
+                "id": "user.sign_out",
+                "text": "注销",
+                "url": "/Account/SignOut"
+            }
+        ]
+    }
+]

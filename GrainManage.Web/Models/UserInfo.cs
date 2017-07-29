@@ -25,5 +25,6 @@ namespace GrainManage.Web.Models
         /// 请求IP
         /// </summary>
         public string LoginIP { get; set; }
+        public int[] Roles { get; set; }
     }
 }

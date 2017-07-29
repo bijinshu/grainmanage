@@ -86,6 +86,23 @@ namespace GrainManage.Web.Common
             var cookies = HttpContext.Current.Request.Cookies;
             return cookies != null && cookies[strName] != null && cookies[strName][strKey] != null ? UrlDecode(cookies[strName][strKey]) : string.Empty;
         }
+        public static T GetCookie<T>(string strName, string strKey)
+        {
+            T result = default(T);
+            try
+            {
+                var cookies = HttpContext.Current.Request.Cookies;
+                var strValue = cookies != null && cookies[strName] != null && cookies[strName][strKey] != null ? UrlDecode(cookies[strName][strKey]) : string.Empty;
+                if (!string.IsNullOrWhiteSpace(strValue))
+                {
+                    result = (T)Convert.ChangeType(strValue, typeof(T));
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return result;
+        }
 
         private static string UrlEncode(string str)
         {
