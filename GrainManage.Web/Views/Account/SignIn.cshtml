@@ -22,7 +22,11 @@
 <body style="padding-top: 40px; padding-bottom: 40px;background-color:#eee">
     <div class="container" id="app">
         <form style="max-width: 330px; padding: 15px; margin: auto auto;" role="form">
-            <h2 style="text-align:center;font-weight:bold;margin-bottom:10px;">@GlobalResx.SysName</h2>
+            <h2 style="text-align:center;font-weight:bold;margin-bottom:10px;">
+                <span class="glyphicon glyphicon-grain"></span>
+                <span>@GlobalResx.SysName</span>
+                <span class="glyphicon glyphicon-grain"></span>
+            </h2>
             <input id="UserName" v-model="UserName" type="text" class="form-control input-lg" placeholder="用户名" style="margin-top:20px;" autofocus
                    data-toggle="popover" data-placement="bottom" data-content="用户名不能为空,且只能为手机号码或由2-20个英文字母、下划线及数字组成">
             <input id="Pwd" v-model="Pwd" type="password" class="form-control input-lg" placeholder="密码" style="margin-top:20px;"

@@ -48,9 +48,9 @@
                     <tbody>
                         <tr v-for="item in list">
                             <td>
-                                <a class="edit" v-on:click="edit(item)">编辑</a>
-                                <span>&nbsp;&nbsp;</span>
-                                <a class="trade" v-on:click="trade(item)">交易</a>
+                                <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
+                                <a>&nbsp;</a>
+                                <a style="cursor:pointer;" v-on:click.stop="trade(item)">交易</a>
                             </td>
                             <td>{{item.ContactName}}</td>
                             <td>{{item.CellPhone}}</td>
