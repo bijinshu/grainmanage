@@ -67,3 +67,4 @@
 /.vs/GrainManage.All.MVC/v14/*.suo
 /.vs/config/applicationhost.config
 /GrainManage.Web/*.user
+/.vs

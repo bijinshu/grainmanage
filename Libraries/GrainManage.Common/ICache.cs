@@ -10,11 +10,17 @@ namespace GrainManage.Common
     {
         T Get<T>(string key);
         void Set<T>(string key, T value, DateTime? expiresAt = null);
-        List<string> GetAllKeys();
-        bool ExpireAt(string key, DateTime expiresAt);
+        void Enqueue<T>(string listId, T value);
+        T Dequeue<T>(string listId);
+        void AddToList<T>(string listId, params T[] values);
+        List<T> GetAllItemsFromList<T>(string listId);
+        int GetListCount(string listId);
+        void AddToSet<T>(string setId, T value);
+        List<T> GetAllItemsFromSet<T>(string setId);
+        int GetSetCount(string setId);
         void Remove(params string[] keys);
-        void RemoveAll();
+        bool ExpireAt(string key, DateTime expiresAt);
         void SaveAsync();
-        TimeSpan? GetTimeToLive(string key);
+        void Increment(string key);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GrainManage.Common;
 using ServiceStack.Redis;
+using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,11 +50,73 @@ namespace GrainManage.Web.Cache
                 }
             }
         }
-        public List<string> GetAllKeys()
+        public void Enqueue<T>(string listId, T value)
         {
             using (var client = Redis)
             {
-                return client.GetAllKeys();
+                client.EnqueueItemOnList(listId, JsonSerializer.SerializeToString<T>(value));
+            }
+        }
+        public T Dequeue<T>(string listId)
+        {
+            using (var client = Redis)
+            {
+                var value = client.DequeueItemFromList(listId);
+                return string.IsNullOrEmpty(value) ? default(T) : JsonSerializer.DeserializeFromString<T>(value);
+            }
+        }
+        public void AddToList<T>(string listId, params T[] values)
+        {
+            using (var client = Redis)
+            {
+                client.AddRangeToList(listId, values.Select(s => JsonSerializer.SerializeToString<T>(s)).ToList());
+            }
+        }
+        public List<T> GetAllItemsFromList<T>(string listId)
+        {
+            var result = new List<T>();
+            using (var client = Redis)
+            {
+                var list = client.GetAllItemsFromList(listId);
+                if (list != null && list.Any())
+                {
+                    result.AddRange(list.Select(s => JsonSerializer.DeserializeFromString<T>(s)));
+                }
+            }
+            return result;
+        }
+        public int GetListCount(string listId)
+        {
+            using (var client = Redis)
+            {
+                return client.GetListCount(listId);
+            }
+        }
+        public void AddToSet<T>(string setId, T value)
+        {
+            using (var client = Redis)
+            {
+                client.AddItemToSet(setId, JsonSerializer.SerializeToString<T>(value));
+            }
+        }
+        public List<T> GetAllItemsFromSet<T>(string setId)
+        {
+            var result = new List<T>();
+            using (var client = Redis)
+            {
+                var set = client.GetAllItemsFromSet(setId);
+                if (set != null && set.Any())
+                {
+                    result.AddRange(set.Select(s => JsonSerializer.DeserializeFromString<T>(s)));
+                }
+            }
+            return result;
+        }
+        public int GetSetCount(string setId)
+        {
+            using (var client = Redis)
+            {
+                return client.GetSetCount(setId);
             }
         }
         public void Remove(params string[] keys)
@@ -77,18 +140,11 @@ namespace GrainManage.Web.Cache
                 client.SaveAsync();
             }
         }
-        public void RemoveAll()
+        public void Increment(string key)
         {
             using (var client = Redis)
             {
-                client.FlushDb();
-            }
-        }
-        public TimeSpan? GetTimeToLive(string key)
-        {
-            using (var client = Redis)
-            {
-                return client.GetTimeToLive(key);
+                client.IncrementValue(key);
             }
         }
     }
