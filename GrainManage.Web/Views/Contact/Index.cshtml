@@ -32,11 +32,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover" style="margin-top:20px;">
+                <table class="table table-bordered table-hover">
                     <caption style="color:red;font-weight:bolder;">联系人管理</caption>
                     <thead>
                         <tr>
-                            <th>操作</th>
                             <th>姓名</th>
                             <th>手机</th>
                             <th>地址</th>
@@ -44,15 +43,11 @@
                             <th class="hidden-xs hidden-sm">QQ</th>
                             <th class="hidden-xs hidden-sm">邮箱</th>
                             <th class="hidden-xs hidden-sm">性别</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in list">
-                            <td>
-                                <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
-                                <a>&nbsp;</a>
-                                <a style="cursor:pointer;" v-on:click.stop="trade(item)">交易</a>
-                            </td>
                             <td>{{item.ContactName}}</td>
                             <td>{{item.Mobile}}</td>
                             <td>{{item.Address}}</td>
@@ -60,6 +55,11 @@
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Email}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Gender}}</td>
+                            <td>
+                                <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
+                                <a>&nbsp;</a>
+                                <a style="cursor:pointer;" v-on:click.stop="trade(item)">交易</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
