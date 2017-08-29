@@ -82,11 +82,61 @@
             "id": "system.user.delete",
             "text": "删除",
             "url": "/User/Delete"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "log",
+    "text": "日志管理",
+    "children": [
+      {
+        "id": "log.exception",
+        "text": "异常日志",
+        "url": "/Log/ExceptionList",
+        "children": [
+          {
+            "id": "log.exception.view",
+            "text": "查看"
           },
           {
-            "id": "system.user.append",
-            "text": "追加流量",
-            "url": "/User/AddFlowSize"
+            "id": "log.exception.delete",
+            "text": "删除",
+            "url": "/Log/DeleteException"
+          }
+        ]
+      },
+      {
+        "id": "log.action",
+        "text": "访问日志",
+        "url": "/Log/ActionList",
+        "children": [
+          {
+            "id": "log.action.view",
+            "text": "查看"
+          }
+        ]
+      },
+      {
+        "id": "log.job",
+        "text": "任务日志",
+        "url": "/Log/JobList",
+        "children": [
+          {
+            "id": "log.job.view",
+            "text": "查看"
+          }
+        ]
+      },
+      {
+        "id": "log.login",
+        "text": "登录日志",
+        "url": "/Log/LoginList",
+        "children": [
+          {
+            "id": "log.login.view",
+            "text": "查看"
           }
         ]
       }

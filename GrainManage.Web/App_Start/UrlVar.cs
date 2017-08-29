@@ -40,7 +40,12 @@ namespace GrainManage.Web
 
         //Trade
 
-
+        //Log
+        public const string Log_ExceptionList = "/Log/ExceptionList";
+        public const string Log_ActionList = "/Log/ActionList";
+        public const string Log_JobList = "/Log/JobList";
+        public const string Log_LoginList = "/Log/LoginList";
+        public const string Log_DeleteException = "/Log/DeleteException";
 
         #region 工具方法
         public static bool Has(string url, IEnumerable<string> urlList)

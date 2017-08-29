@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using GrainManage.Web.Services;
 using System.Text;
+using DataBase.GrainManage.Models.Log;
 
 namespace GrainManage.Web
 {

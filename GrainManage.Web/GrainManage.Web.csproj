@@ -155,6 +155,7 @@
     <Compile Include="Common\TreeUtil.cs" />
     <Compile Include="Common\ValidateCode.cs" />
     <Compile Include="Common\WaterMark.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -192,6 +193,10 @@
     <Compile Include="Models\Image\InputGetImages.cs" />
     <Compile Include="Models\Image\InputGetImageUrl.cs" />
     <Compile Include="Models\BaseInput.cs" />
+    <Compile Include="Models\Log\InputActionList.cs" />
+    <Compile Include="Models\Log\InputExceptionList.cs" />
+    <Compile Include="Models\Log\InputJobList.cs" />
+    <Compile Include="Models\Log\InputLoginList.cs" />
     <Compile Include="Models\MetaData\MetaDataDTO.cs" />
     <Compile Include="Models\Pageable.cs" />
     <Compile Include="Models\Price\InputGetByID.cs" />
@@ -296,6 +301,10 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Role\_RoleDetail.cshtml" />
+    <Content Include="Views\Log\ActionList.cshtml" />
+    <Content Include="Views\Log\ExceptionList.cshtml" />
+    <Content Include="Views\Log\JobList.cshtml" />
+    <Content Include="Views\Log\LoginList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Price\" />

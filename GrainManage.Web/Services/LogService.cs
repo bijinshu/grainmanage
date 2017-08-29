@@ -1,4 +1,5 @@
 ﻿using DataBase.GrainManage.Models;
+using DataBase.GrainManage.Models.Log;
 using GrainManage.Dal;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace GrainManage.Web.Services
 {
     public class LogService
     {
-        public static int AddActionLog(dynamic model)
+        public static int AddActionLog(ActionLog model)
         {
             var db = new GrainManageDB();
             var sql = "insert into log_action(UserName,Path,ClientIP,Method,Para,Level,StartTime) values(@UserName,@Path,@ClientIP,@Method,@Para,@Level,@StartTime);select last_insert_id()";
@@ -20,7 +21,7 @@ namespace GrainManage.Web.Services
             var db = new GrainManageDB();
             return db.Execute("update log_action set Status=@Status,EndTime=@EndTime,TimeSpan=@TimeSpan where Id=@Id ", model);
         }
-        public static void AddExceptionLog(dynamic model)
+        public static void AddExceptionLog(ExceptionLog model)
         {
             var db = new GrainManageDB();
             var sql = "insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,CreatedAt) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@CreatedAt)";

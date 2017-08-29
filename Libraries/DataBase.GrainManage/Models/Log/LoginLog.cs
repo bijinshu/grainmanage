@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataBase.GrainManage.Models
+namespace DataBase.GrainManage.Models.Log
 {
     public class LoginLog
     {

@@ -13,6 +13,7 @@ using GrainManage.Common;
 using GrainManage.Web.Models;
 using System.Text.RegularExpressions;
 using GrainManage.Web.Services;
+using DataBase.GrainManage.Models.Log;
 
 namespace GrainManage.Web.Controllers
 {

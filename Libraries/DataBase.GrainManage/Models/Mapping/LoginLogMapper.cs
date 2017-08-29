@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataBase.GrainManage.Models.Mapping
 {
-    public class LoginLogMapper : System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<DataBase.GrainManage.Models.LoginLog>
+    public class LoginLogMapper : System.Data.Entity.ModelConfiguration.EntityTypeConfiguration<DataBase.GrainManage.Models.Log.LoginLog>
     {
         public LoginLogMapper()
         {

@@ -51,7 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GrainManageContext.cs" />
+    <Compile Include="Models\Log\ExceptionLog.cs" />
+    <Compile Include="Models\Log\JobLog.cs" />
     <Compile Include="Models\Log\LoginLog.cs" />
+    <Compile Include="Models\Mapping\ActionLogMapper.cs" />
+    <Compile Include="Models\Mapping\ExceptionLogMapper.cs" />
+    <Compile Include="Models\Mapping\JobLogMapper.cs" />
     <Compile Include="Models\RM\User.cs" />
     <Compile Include="Models\Log\ActionLog.cs" />
     <Compile Include="Models\BM\Contact.cs" />

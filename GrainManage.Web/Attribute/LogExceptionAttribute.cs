@@ -6,64 +6,41 @@ using System.Web.Mvc;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using GrainManage.Web.Services;
+using System.Text;
+using DataBase.GrainManage.Models.Log;
+
 namespace GrainManage.Web
 {
     public class LogExceptionAttribute : FilterAttribute, IExceptionFilter
     {
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            NullValueHandling = NullValueHandling.Ignore
-        };
         public void OnException(ExceptionContext filterContext)
         {
-            var logger = NLog.LogManager.GetLogger(filterContext.HttpContext.Request.Url.PathAndQuery);
+            var logger = NLog.LogManager.GetLogger(HttpUtility.UrlDecode(filterContext.HttpContext.Request.Url.PathAndQuery, Encoding.UTF8));
             try
             {
-                var msg = ExceptionUtil.GetStackMessage(filterContext.Exception);
-                logger.Error(msg);
-                var db = new GrainManage.Dal.GrainManageDB();
-                var model = new
+                var errorMsg = ExceptionUtil.GetStackMessage(filterContext.Exception);
+                logger.Error(errorMsg);
+                var model = new ExceptionLog
                 {
-                    Path = logger.Name,
-                    InputParameter = filterContext.HttpContext.Request.HttpMethod == "POST" ? GetJson(GetFormData(filterContext.HttpContext.Request.Form)) : string.Empty,
-                    Message = msg,
+                    Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Url.AbsolutePath, Encoding.UTF8),
+                    InputParameter = HttpUtil.GetInputPara(),
+                    Message = errorMsg,
                     StackTrace = filterContext.Exception.StackTrace,
                     ClientIP = HttpUtil.RequestHostAddress,
                     CreatedAt = DateTime.Now
                 };
-                db.Execute("insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,CreatedAt) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@CreatedAt)", model);
+                LogService.AddExceptionLog(model);
                 if (filterContext.HttpContext.Request.HttpMethod == "POST")
                 {
-                    filterContext.Result = new NewtonsoftJsonResult() { Data = new BaseOutput { msg = msg } };
+                    filterContext.ExceptionHandled = true;
+                    filterContext.Result = new NewtonsoftJsonResult() { Data = new BaseOutput { msg = errorMsg }, IncludeNotValid = true };
                 }
             }
             catch (Exception e)
             {
                 logger.Fatal(ExceptionUtil.GetStackMessage(e));
             }
-        }
-        private string GetJson(object obj)
-        {
-            if (obj != null)
-            {
-                return JsonConvert.SerializeObject(obj, Formatting.None, settings);
-            }
-            return string.Empty;
-        }
-        private Dictionary<string, string> GetFormData(NameValueCollection form)
-        {
-            if (form != null && form.Count > 0)
-            {
-                var dic = new Dictionary<string, string>();
-                foreach (var name in form.AllKeys)
-                {
-                    dic[name] = form[name];
-                }
-                return dic;
-            }
-            return null;
         }
     }
 }
