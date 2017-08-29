@@ -21,7 +21,7 @@
         <div class="row" style="margin-top:20px;">
             <div class="col-md-offset-2 col-md-8">
                 <ol class="breadcrumb" style="font-size:20px;">
-                    <li><a href="@UrlVar.User_>返回登录页</a></li>
+                    <li><a href="@UrlVar.User_Register">返回登录页</a></li>
                     <li><a href="#" class="active">注册</a></li>
                 </ol>
             </div>
@@ -54,18 +54,18 @@
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
-                                    <label for="CellPhone" class="col-md-2 control-label hidden-xs hidden-sm">手机号码</label>
+                                    <label for="Mobile" class="col-md-2 control-label hidden-xs hidden-sm">手机号码</label>
                                     <div class="col-md-8">
-                                        <input v-model="frm.CellPhone" type="text" class="form-control" id="CellPhone" placeholder="请输入手机号码">
+                                        <input v-model="frm.Mobile" type="text" class="form-control" id="Mobile" placeholder="请输入手机号码">
                                     </div>
                                     <span v-if="!isPhoneValid" class="col-md-2" style="color:red">手机号码格式不正确</span>
                                 </div>
-                                <div class="form-group" v-bind:class="{'has-error':!isNickNameValid}">
-                                    <label for="NickName" class="col-md-2 control-label hidden-xs hidden-sm">昵称</label>
+                                <div class="form-group" v-bind:class="{'has-error':!isRealNameValid}">
+                                    <label for="RealName" class="col-md-2 control-label hidden-xs hidden-sm">真实姓名</label>
                                     <div class="col-md-8">
-                                        <input v-model="frm.NickName" type="text" class="form-control" id="NickName" placeholder="请输入昵称">
+                                        <input v-model="frm.RealName" type="text" class="form-control" id="RealName" placeholder="请输入真实姓名">
                                     </div>
-                                    <span v-if="!isNickNameValid" class="col-md-2" style="color:red">昵称只能由1-20个普通字符组成</span>
+                                    <span v-if="!isRealNameValid" class="col-md-2" style="color:red">真实姓名只能由2-4个汉字组成</span>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
                                     <label for="Weixin" class="col-md-2 control-label hidden-xs hidden-sm">微信号</label>
@@ -127,9 +127,9 @@
                     frm: {
                         UserName: '',
                         Pwd: '',
-                        NickName: '',
+                        RealName: '',
                         Gender: '男',
-                        CellPhone: '',
+                        Mobile: '',
                         Email: '',
                         QQ: '',
                         Weinxin: '',
@@ -141,7 +141,7 @@
                 },
                 methods: {
                     register: function (event) {
-                        if (this.isUserNameValid && this.isPwdValid && this.isEmailValid && this.isPhoneValid && this.isNickNameValid && this.isQQValid && this.isWeixinValid) {
+                        if (this.isUserNameValid && this.isPwdValid && this.isEmailValid && this.isPhoneValid && this.isRealNameValid && this.isQQValid && this.isWeixinValid) {
                             this.IsDisabled = true;
                             this.frm.Pwd = new sha1().encrypt(this.Pwd);
                             $.post('@UrlVar.User_Register', this.frm).always(function (result, status) {
@@ -175,10 +175,10 @@
                         return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
                     },
                     isPhoneValid: function () {
-                        return !this.frm.CellPhone || (/^1[34578]\d{9}$/g).test(this.frm.CellPhone);
+                        return !this.frm.Mobile || (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
                     },
-                    isNickNameValid: function () {
-                        return !this.frm.NickName || (/^.{1,20}$/g).test(this.frm.NickName);
+                    isRealNameValid: function () {
+                        return !this.frm.RealName || (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frm.RealName);
                     },
                     isQQValid: function () {
                         return !this.frm.QQ || (/^\d{4,12}$/g).test(this.frm.QQ);
@@ -193,7 +193,7 @@
                 created: function () {
                     this.$watch('frm.UserName', function (newVal, oldVal) {
                         if ((/^1[34578]\d{9}$/g).test(newVal)) {
-                            this.frm.CellPhone = newVal;
+                            this.frm.Mobile = newVal;
                         }
                         if (!this.isUserNameValid) {
                             $("#UserName").popover('show');

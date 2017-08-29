@@ -23,21 +23,6 @@
             },
             hidePanel: function (selector) {
                 $(selector).modal('hide');
-            },
-            toFlow: function (value) {
-                if (value < 1024) {
-                    return value + 'M';
-                } else if (value < 1024 * 1024) {
-                    var result = value / 1024;
-                    return result ? (this.isNumber(result) ? result : result.toFixed(2)) + 'G' : 0;
-                }
-                else {
-                    var result = value / (1024 * 1024);
-                    return result ? (this.isNumber(result) ? result : result.toFixed(2)) + 'T' : 0;
-                }
-            },
-            isNumber: function (obj) {
-                return typeof obj === 'number' && obj % 1 === 0
             }
         },
         filters: {

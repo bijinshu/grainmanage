@@ -33,6 +33,7 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover" style="margin-top:20px;">
+                    <caption style="color:red;font-weight:bolder;">联系人管理</caption>
                     <thead>
                         <tr>
                             <th>操作</th>
@@ -53,7 +54,7 @@
                                 <a style="cursor:pointer;" v-on:click.stop="trade(item)">交易</a>
                             </td>
                             <td>{{item.ContactName}}</td>
-                            <td>{{item.CellPhone}}</td>
+                            <td>{{item.Mobile}}</td>
                             <td>{{item.Address}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Weixin}}</td>
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
@@ -85,7 +86,7 @@
                 frm: {
                     Id: 0,
                     ContactName: '',
-                    CellPhone: '',
+                    Mobile: '',
                     Address: '',
                     BirthDate: null,
                     Weixin: '',
@@ -118,7 +119,7 @@
                     this.AlertTitle = '添加提示';
                     this.frm.Id = 0;
                     this.frm.ContactName = '';
-                    this.frm.CellPhone = '';
+                    this.frm.Mobile = '';
                     this.frm.Address = '';
                     this.frm.BirthDate = '';
                     this.frm.Weixin = '';
@@ -133,7 +134,7 @@
                     this.AlertTitle = '编辑提示';
                     this.frm.Id = item.Id;
                     this.frm.ContactName = item.ContactName;
-                    this.frm.CellPhone = item.CellPhone;
+                    this.frm.Mobile = item.Mobile;
                     this.frm.Address = item.Address;
                     this.frm.BirthDate = item.BirthDate;
                     this.frm.Weixin = item.Weixin;
@@ -269,7 +270,7 @@
                     return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
                 },
                 isPhoneValid: function () {
-                    return (/^1[34578]\d{9}$/g).test(this.frm.CellPhone);
+                    return (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
                 },
                 isQQValid: function () {
                     return !this.frm.QQ || (/^\d{4,12}$/g).test(this.frm.QQ);

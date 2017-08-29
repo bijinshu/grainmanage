@@ -1,4 +1,4 @@
-﻿namespace GrainManage.Web.Models.Account
+﻿namespace GrainManage.Web.Models.User
 {
     public class InputSignIn
     {

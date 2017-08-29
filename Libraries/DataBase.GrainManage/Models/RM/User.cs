@@ -13,8 +13,8 @@ namespace DataBase.GrainManage.Models
         public string Pwd { get; set; }
         public string Gender { get; set; }
         public int Status { get; set; } //0:未激活 1:启用 2:禁用
-        public string NickName { get; set; }
-        public string CellPhone { get; set; }
+        public string RealName { get; set; }
+        public string Mobile { get; set; }
         public string Email { get; set; }
         public string QQ { get; set; }
         public string Weixin { get; set; }

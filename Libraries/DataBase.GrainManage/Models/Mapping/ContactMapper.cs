@@ -17,7 +17,7 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.ContactName).HasMaxLength(40);
             Property(m => m.Gender).HasMaxLength(1);
             Property(m => m.BirthDate);
-            Property(m => m.CellPhone).HasMaxLength(11);
+            Property(m => m.Mobile).HasMaxLength(11);
             Property(m => m.QQ).HasMaxLength(20);
             Property(m => m.Weixin).HasMaxLength(60);
             Property(m => m.Email).HasMaxLength(11);

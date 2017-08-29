@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GrainManage.Web.Models.Account;
+using GrainManage.Web.Models.User;
 using GrainManage.Web.Common;
 using System.Web.Security;
 using DataBase.GrainManage.Models;
@@ -14,6 +14,8 @@ using GrainManage.Web.Models;
 using System.Text.RegularExpressions;
 using GrainManage.Web.Services;
 using DataBase.GrainManage.Models.Log;
+using System.Linq.Expressions;
+using GrainManage.Core;
 
 namespace GrainManage.Web.Controllers
 {
@@ -98,7 +100,7 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var repo = GetRepo<User>();
-            if (!(IsUserNameMatch(input.UserName) || IsPhoneMatch(input.CellPhone)))
+            if (!(IsUserNameMatch(input.UserName) || IsPhoneMatch(input.Mobile)))
             {
                 SetResponse(s => s.NameNotValid, input, result);
             }
@@ -130,7 +132,7 @@ namespace GrainManage.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPassword(InputResetPassword input)
+        public ActionResult ResetPwd(InputResetPassword input)
         {
             if (IsGetRequest)
             {
@@ -205,7 +207,7 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult ChangePassword(InputChangePassword input)
+        public ActionResult ChangePwd(InputChangePassword input)
         {
             if (IsGetRequest)
             {
@@ -240,6 +242,152 @@ namespace GrainManage.Web.Controllers
                     SetResponse(s => s.UserForbidden, input, result);
                 }
             }
+            return JsonNet(result);
+        }
+        public ActionResult Index(InputSearch input)
+        {
+            if (IsGetRequest)
+            {
+                return View(CurrentUser);
+            }
+            var result = new BaseOutput();
+            var userRepo = GetRepo<User>();
+            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.Id != UserId);
+            if (!string.IsNullOrEmpty(input.UserName))
+            {
+                myFilter = myFilter.And(f => f.UserName.Contains(input.UserName));
+            }
+            if (!string.IsNullOrEmpty(input.RealName))
+            {
+                myFilter = myFilter.And(f => f.RealName.Contains(input.RealName));
+            }
+            if (!string.IsNullOrEmpty(input.Mobile))
+            {
+                myFilter = myFilter.And(f => f.Mobile.Contains(input.Mobile));
+            }
+            if (input.Status.HasValue)
+            {
+                myFilter = myFilter.And(f => f.Status == input.Status);
+            }
+            int total = 0;
+            var now = DateTime.Now;
+            var list = userRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter).ToList();
+            result.total = total;
+            var dtoList = MapTo<List<UserDto>>(list);
+            if (dtoList.Any())
+            {
+                var roleRepo = GetRepo<Role>();
+                var roleIdList = dtoList.SelectMany(s => s.Roles).Distinct().ToList();
+                var roleList = roleRepo.GetFiltered(f => roleIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
+                foreach (var item in dtoList)
+                {
+                    item.Pwd = null;
+                    var roleNames = string.Join(",", roleList.Where(f => item.Roles.Contains(f.Id)).Select(s => s.Name));
+                    item.RoleNames = roleNames;
+                }
+                result.data = dtoList;
+                SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.NoData, input, result);
+            }
+            return JsonNet(result, true);
+        }
+        public ActionResult New(UserDto input)
+        {
+            var result = new BaseOutput();
+            SetEmptyIfNull(input);
+            var repo = GetRepo<User>();
+            if (string.IsNullOrEmpty(input.UserName))
+            {
+                SetResponse(s => s.NameEmpty, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.Pwd))
+            {
+                SetResponse(s => s.PwdEmpty, input, result);
+            }
+            else if (repo.GetFiltered(f => f.UserName == input.UserName).Any())
+            {
+                SetResponse(s => s.NameExist, input, result);
+            }
+            else
+            {
+                var now = DateTime.Now;
+                var model = MapTo<User>(input);
+                model.Pwd = SHAEncrypt.SHA1(input.Pwd);
+                model = repo.Add(model);
+                result.data = model.Id;
+                if (model.Id > 0)
+                {
+                    SetResponse(s => s.Success, input, result);
+                }
+                else
+                {
+                    SetResponse(s => s.InsertFailed, input, result);
+                }
+            }
+            return JsonNet(result);
+        }
+        public ActionResult Edit(UserDto input)
+        {
+            var result = new BaseOutput();
+            SetEmptyIfNull(input);
+            var repo = GetRepo<User>();
+            if (repo.GetFiltered(f => f.UserName == input.UserName && f.Id != input.Id).Any())
+            {
+                SetResponse(s => s.NameExist, input, result);
+            }
+            else
+            {
+                var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
+                model.UserName = input.UserName;
+                model.RealName = input.RealName;
+                model.Mobile = input.Mobile;
+                model.QQ = input.QQ;
+                model.Email = input.Email;
+                model.Weixin = input.Weixin;
+                model.Gender = input.Gender;
+                model.Status = input.Status;
+                model.Roles = input.Roles != null && input.Roles.Any() ? string.Join(",", input.Roles) : string.Empty;
+                model.Remark = input.Remark;
+                model.ModifiedAt = DateTime.Now;
+                repo.UnitOfWork.SaveChanges();
+                SetResponse(s => s.Success, input, result);
+            }
+            return JsonNet(result);
+        }
+        public ActionResult Delete(int userId)
+        {
+            var result = new BaseOutput();
+            var repo = GetRepo<User>();
+            var model = repo.GetFiltered(f => f.Id == userId).FirstOrDefault();
+            if (model != null)
+            {
+                repo.Delete(model);
+                SetResponse(s => s.Success, result);
+            }
+            else
+            {
+                SetResponse(s => s.UserNotExist, result);
+            }
+            return JsonNet(result);
+        }
+        public ActionResult Info()
+        {
+            var result = new BaseOutput();
+            var userRepo = GetRepo<User>();
+            var user = userRepo.GetFiltered(f => f.Id == UserId).First();
+            var dto = MapTo<UserDto>(user);
+            dto.Pwd = null;
+            if (!string.IsNullOrEmpty(user.Roles))
+            {
+                var roleRepo = GetRepo<Role>();
+                var roles = roleRepo.GetFiltered(f => dto.Roles.Contains(f.Id)).Select(s => s.Name).ToList();
+                dto.RoleNames = string.Join(",", roles);
+            }
+            result.data = dto;
+            SetResponse(s => s.Success, result);
             return JsonNet(result);
         }
 

@@ -77,13 +77,13 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             input.CreatedBy = UserId;
             var repo = GetRepo<Contact>();
-            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Id != input.Id && f.CreatedBy == input.CreatedBy).Any())
+            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CreatedBy == input.CreatedBy).Any())
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id && f.CreatedBy == input.CreatedBy, true).First();
                 model.ContactName = input.ContactName;
                 model.Address = input.Address;
                 model.BirthDate = input.BirthDate;
-                model.CellPhone = input.CellPhone;
+                model.Mobile = input.Mobile;
                 model.CreatedBy = input.CreatedBy;
                 model.Email = input.Email;
                 model.Gender = input.Gender;

@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using GrainManage.Message;
+using System.Reflection;
 
 namespace GrainManage.Web.Controllers
 {
@@ -58,5 +59,16 @@ namespace GrainManage.Web.Controllers
         protected int UserId { get { return CookieUtil.GetCookie<int>(GlobalVar.CookieName, GlobalVar.UserId); } }
         protected int Level { get { return int.Parse(CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.Level)); } }
         protected string AuthToken { get { return CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.AuthToken); } }
+        protected void SetEmptyIfNull<T>(T obj)
+        {
+            var type = typeof(T);
+            foreach (var item in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public))
+            {
+                if (item.PropertyType == typeof(string) && item.GetValue(obj) == null)
+                {
+                    item.SetValue(obj, string.Empty);
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,242 @@
+﻿@using GrainManage.Web
+@using GrainManage.Web.Services
+@model GrainManage.Web.Models.UserInfo
+@{
+    ViewBag.Title = "用户列表";
+}
+<script src="~/Scripts/Crypto/base64.js"></script>
+<script src="~/Scripts/Crypto/sha1.js"></script>
+<script src="~/Scripts/components/simple-tree.js"></script>
+<div class="container" id="userInfo">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">用户名：</label>
+                        <input type="text" class="form-control" v-model="search.UserName" placeholder="请输入用户名" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">真实姓名：</label>
+                        <input type="text" class="form-control" v-model="search.RealName" placeholder="请输入真实姓名" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">手机号：</label>
+                        <input type="text" class="form-control" v-model="search.Mobile" placeholder="请输入手机号" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.Status" class="form-control">
+                            <option value="null">请选择状态</option>
+                            <option value="0">禁用</option>
+                            <option value="1">启用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (UrlVar.Has(UrlVar.User_New, Model.Urls))
+            {
+            <div class="col-md-1">
+                <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" style="margin-top:20px;">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>真实姓名</th>
+                            <th>性别</th>
+                            <th>手机</th>
+                            <th>QQ</th>
+                            <th>微信</th>
+                            <th>邮箱</th>
+                            <th>角色</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list">
+                            <td>{{item.UserName}}</td>
+                            <td>{{item.RealName}}</td>
+                            <td>{{item.Gender}}</td>
+                            <td>{{item.Mobile}}</td>
+                            <td>{{item.QQ}}</td>
+                            <td>{{item.Weixin}}</td>
+                            <td>{{item.Email}}</td>
+                            <td>{{item.RoleNames}}</td>
+                            <td>{{item.Status?'启用':'禁用'}}</td>
+                            <td>
+                                @if (UrlVar.Has(UrlVar.User_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
+                                }
+                                @if (UrlVar.Has(UrlVar.User_New, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    @if (UrlVar.Has(UrlVar.User_New, Model.Urls) || UrlVar.Has(UrlVar.User_Edit, Model.Urls))
+    {
+        @Html.Partial("_UserDetail")
+    }
+    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#userInfo",
+            data: {
+                msg: '',
+                total: 0,
+                tmpPwd: '',
+                list: [],
+                roleList: [],
+                search: { UserName: '', RealName: '', Mobile: '', Status: null, PageIndex: 0, PageSize: 10 },
+                frm: {
+                    Id: 0,
+                    UserName: '',
+                    Pwd:'',
+                    RealName: '',
+                    Gender: '',
+                    Mobile: '',
+                    QQ: '',
+                    Weixin: '',
+                    Email: '',
+                    Roles: [],
+                    Status: 1,
+                    Remark:''
+                },
+                IsDisabled: false,
+                AlertTitle: '',
+                PanelTitle: ''
+            },
+            methods: {
+                getData: function () {
+                    $.post('@UrlVar.User_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1) {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                add: function () {
+                    this.frm.Id = 0;
+                    this.frm.UserName = '';
+                    this.frm.RealName = '';
+                    this.frm.Gender = '男';
+                    this.frm.Mobile = '';
+                    this.frm.QQ = '';
+                    this.frm.Email = '';
+                    this.frm.Weixin = '';
+                    this.frm.Roles = [];
+                    this.frm.Status = 0;
+                    this.frm.Remark = '';
+                    this.showPanel('添加用户', "#saveUserModal");
+                },
+                edit: function (item) {
+                    this.frm.Id = item.Id;
+                    this.frm.UserName = item.UserName;
+                    this.frm.RealName = item.RealName;
+                    this.frm.Gender = item.Gender;
+                    this.frm.Mobile = item.Mobile;
+                    this.frm.QQ = item.QQ;
+                    this.frm.Email = item.Email;
+                    this.frm.Weixin = item.Weixin;
+                    this.frm.Roles = item.Roles;
+                    this.frm.Status = item.Status;
+                    this.frm.Remark = item.Remark;
+                    this.showPanel('编辑用户', "#saveUserModal");
+                },
+                saveUser: function (event) {
+                    if (this.isUserNameValid && this.isRealNameValid && this.isMobileValid && this.isEmailValid &&
+                        this.isQQValid && this.isWeixinValid &&
+                        (this.frm.Id > 0 || (this.frm.Id == 0 && this.isPwdValid))) {
+                        this.IsDisabled = true;
+                        if (this.frm.Id == 0) {
+                            this.frm.Pwd = new sha1().encrypt(this.tmpPwd);
+                        }
+                        var url = this.frm.Id > 0 ? '@UrlVar.User_Edit' : '@UrlVar.User_New';
+                        $.post(url, this.frm).always(function (result, status) {
+                            this.IsDisabled = false;
+                            if (result.code == 1) {
+                                this.hidePanel("#saveUserModal");
+                                this.getData();
+                            }
+                            else {
+                                this.showAlert(this.frm.Id > 0 ? '编辑用户提示' : '添加用户提示', result.msg);
+                            }
+                        }.bind(this));
+                    }
+                    else {
+                        this.showAlert(this.frm.Id > 0 ? '编辑用户提示' : '添加用户提示', '有信息格式不正确,请重新确认');
+                    }
+                },
+                deleteItem: function (item) {
+                    $.post('@UrlVar.User_Delete', { userId: item.Id }).always(function (result, status) {
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert('删除提示', result.msg);
+                        }
+                    }.bind(this));
+                },
+                getRoleList: function () {
+                    $.post('@UrlVar.Role_GetRoleList').always(function (result, status) {
+                        this.roleList = result.data;
+                    }.bind(this));
+                }
+            },
+            computed: {
+                isUserNameValid: function () {
+                    return (/^\w{2,20}$/g).test(this.frm.UserName);
+                },
+                isRealNameValid: function () {
+                    return (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frm.RealName);
+                },
+                isPwdValid: function () {
+                    return (/^.{2,20}$/g).test(this.tmpPwd);
+                },
+                isMobileValid: function () {
+                    return (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
+                },
+                isEmailValid: function () {
+                    return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
+                },
+                isQQValid: function () {
+                    return !this.frm.QQ|| (/^[\d]{4,13}$/g).test(this.frm.QQ);
+                },
+                isWeixinValid: function () {
+                    return !this.frm.Weixin || (/^[\w_]{5,20}$/g).test(this.frm.Weixin);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
+                }
+            },
+            created: function () {
+                this.getData();
+                this.getRoleList();
+            }
+        })
+    })
+</script>

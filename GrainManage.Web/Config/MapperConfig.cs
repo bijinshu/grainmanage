@@ -1,5 +1,5 @@
 ﻿using DataBase.GrainManage.Models;
-using GrainManage.Web.Models.Account;
+using GrainManage.Web.Models.User;
 using GrainManage.Web.Models.Contact;
 using GrainManage.Web.Models.Image;
 using GrainManage.Web.Models.MetaData;
@@ -24,7 +24,9 @@ namespace GrainManage.Web
                 ForMember(d => d.Auths, s => s.MapFrom(p => p.Auths == null || !p.Auths.Any() ? string.Empty : string.Join(",", p.Auths))).ReverseMap().
                 ForMember(d => d.Auths, s => s.MapFrom(p => string.IsNullOrEmpty(p.Auths) ? new string[0] : p.Auths.Split(',')));
 
-                cfg.CreateMap<UserDto, User>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
+                cfg.CreateMap<UserDto, User>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).
+                ForMember(d => d.Roles, s => s.MapFrom(p => p.Roles == null || !p.Roles.Any() ? string.Empty : string.Join(",", p.Roles))).ReverseMap().
+                ForMember(d => d.Roles, s => s.MapFrom(p => string.IsNullOrEmpty(p.Roles) ? new List<int>(0) : p.Roles.Split(',').Select(i => int.Parse(i)).ToList()));
 
                 cfg.CreateMap<ContactDto, Contact>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 

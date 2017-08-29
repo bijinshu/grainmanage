@@ -171,11 +171,12 @@
     </Compile>
     <Compile Include="Config\IocConfig.cs" />
     <Compile Include="Config\MapperConfig.cs" />
-    <Compile Include="Models\Account\InputChangePassword.cs" />
-    <Compile Include="Models\Account\InputRegister.cs" />
-    <Compile Include="Models\Account\InputResetPassword.cs" />
-    <Compile Include="Models\Account\InputSignIn.cs" />
-    <Compile Include="Models\Account\UserDTO.cs" />
+    <Compile Include="Models\User\InputChangePassword.cs" />
+    <Compile Include="Models\User\InputRegister.cs" />
+    <Compile Include="Models\User\InputResetPassword.cs" />
+    <Compile Include="Models\User\InputSearch.cs" />
+    <Compile Include="Models\User\InputSignIn.cs" />
+    <Compile Include="Models\User\UserDTO.cs" />
     <Compile Include="Models\BaseOutput.cs" />
     <Compile Include="Models\Contact\ContactDto.cs" />
     <Compile Include="Models\Contact\InputSearch.cs" />
@@ -305,6 +306,8 @@
     <Content Include="Views\Log\ExceptionList.cshtml" />
     <Content Include="Views\Log\JobList.cshtml" />
     <Content Include="Views\Log\LoginList.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\_UserDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Price\" />

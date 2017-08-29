@@ -68,6 +68,8 @@ namespace GrainManage.Web
         public readonly int EmailNotMatch = 514;
         [Message("邮箱格式不正确")]
         public readonly int EmailFormatNotMatch = 515;
+        [Message("该用户不存在")]
+        public readonly int UserNotExist = 518;
 
         [Message("该联系人已存在")]
         public readonly int ContactExisted = 201;

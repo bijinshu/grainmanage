@@ -21,16 +21,20 @@ namespace GrainManage.Web
         [Common]
         public const string Role_GetRoleList = "/Role/GetRoleList";
         //User
-        [Common]
+        public static string User_Index { get { return GetUrl("/User/Index"); } }
+        public static string User_New { get { return GetUrl("/User/New"); } }
+        public static string User_Edit { get { return GetUrl("/User/Edit"); } }
+        public static string User_Delete { get { return GetUrl("/User/Delete"); } }
         public static string User_SignIn { get { return GetUrl("/User/SignIn"); } }
-        [Common]
         public static string User_Register { get { return GetUrl("/User/Register"); } }
-        [Common]
-        public static string User_ResetPassword { get { return GetUrl("/User/ResetPassword"); } }
+        public static string User_ResetPwd { get { return GetUrl("/User/ResetPwd"); } }
         [Common]
         public static string User_SignOut { get { return GetUrl("/User/SignOut"); } }
         [Common]
-        public static string User_ChangePassword { get { return GetUrl("/User/ChangePassword"); } }
+        public static string User_ChangePwd { get { return GetUrl("/User/ChangePwd"); } }
+        [Common]
+        public static string User_Info { get { return GetUrl("/User/Info"); } }
+
 
         //Contact
         public static string Contact_Index { get { return GetUrl("/Contact/Index"); } }
