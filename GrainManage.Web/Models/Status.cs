@@ -5,9 +5,8 @@ using System.Web;
 
 namespace GrainManage.Web
 {
-    public class UserStatus
+    public class Status
     {
-        public const int NotActivated = 0;
         public const int Enabled = 1;
         public const int Disabled = 2;
     }

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -54,16 +57,6 @@ namespace GrainManage.Web
         }
 
         /// <summary>
-        /// 当应用部署为子网站时，可通过此种方法获取到包含子应用的相对地址
-        /// </summary>
-        /// <param name="relativeUrl"></param>
-        /// <returns></returns>
-        public static string GetUrl(string relativeUrl)
-        {
-            return string.Format("{0}/{1}", HttpContext.Current.Request.ApplicationPath.TrimEnd('/'), relativeUrl.Trim('/'));
-        }
-
-        /// <summary>
         /// 获取本机所有IPv4地址
         /// </summary>
         /// <returns></returns>
@@ -73,5 +66,50 @@ namespace GrainManage.Web
             var ipEntry = Dns.GetHostEntry(hostName); //得到本机IP地址数组  
             return ipEntry.AddressList.Where(f => f.AddressFamily == AddressFamily.InterNetwork).Select(s => s.ToString()).ToList();
         }
+
+        /// <summary>
+        /// 根据请求类型,自动提取请求参数
+        /// </summary>
+        /// <returns></returns>
+        public static string GetInputPara()
+        {
+            var inputPara = string.Empty;
+            if (HttpContext.Current.Request.HttpMethod == "GET")
+            {
+                inputPara = HttpUtility.UrlDecode(HttpContext.Current.Request.Url.Query.TrimStart('?'), Encoding.UTF8);
+            }
+            else if (HttpContext.Current.Request.HttpMethod == "POST")
+            {
+                inputPara = GetJson(GetFormData(HttpContext.Current.Request.Form));
+            }
+            return inputPara ?? string.Empty;
+        }
+        private static string GetJson(object obj)
+        {
+            if (obj != null)
+            {
+                return JsonConvert.SerializeObject(obj, Formatting.None, settings);
+            }
+            return string.Empty;
+        }
+        private static Dictionary<string, string> GetFormData(NameValueCollection form)
+        {
+            if (form != null && form.Count > 0)
+            {
+                var dic = new Dictionary<string, string>();
+                foreach (var name in form.AllKeys)
+                {
+                    dic[name] = form[name];
+                }
+                return dic;
+            }
+            return null;
+        }
+        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore
+        };
     }
 }

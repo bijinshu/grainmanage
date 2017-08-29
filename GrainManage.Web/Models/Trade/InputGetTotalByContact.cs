@@ -2,7 +2,7 @@
 
 namespace GrainManage.Web.Models.Trade
 {
-    public class InputGetTotalByContact : InputModel, ITimeRanged
+    public class InputGetTotalByContact : BaseInput
     {
         public string TradeType { get; set; }
         public string Grain { get; set; }

@@ -2,7 +2,7 @@
 
 namespace GrainManage.Web.Models.Contact
 {
-    public class InputSearch : InputModel, ITimeRanged
+    public class InputSearch : BaseInput
     {
         public string Name { get; set; }
         public string Area { get; set; }

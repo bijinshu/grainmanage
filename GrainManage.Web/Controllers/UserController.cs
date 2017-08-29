@@ -12,17 +12,17 @@ using GrainManage.Encrypt;
 using GrainManage.Common;
 using GrainManage.Web.Models;
 using System.Text.RegularExpressions;
+using GrainManage.Web.Services;
 
 namespace GrainManage.Web.Controllers
 {
-    public class AccountController : BaseController
+    public class UserController : BaseController
     {
         [AllowAnonymous]
         public ActionResult SignIn(InputSignIn input)
         {
             if (IsGetRequest)
             {
-                CookieUtil.DeleteCookie(GlobalVar.CookieName);
                 return View();
             }
             var result = new BaseOutput();
@@ -37,10 +37,11 @@ namespace GrainManage.Web.Controllers
             else
             {
                 var repo = GetRepo<User>();
+                var level = 0;
                 var account = repo.GetFiltered(f => f.UserName == input.UserName, true).FirstOrDefault();
                 if (account != null)
                 {
-                    if (account.Status == UserStatus.Enabled)
+                    if (account.Status == Status.Enabled)
                     {
                         var encryptedPwd = SHAEncrypt.SHA1(input.Pwd);
                         if (account.Pwd != encryptedPwd)
@@ -49,42 +50,40 @@ namespace GrainManage.Web.Controllers
                         }
                         else
                         {
-                            account.LastActive = DateTime.Now;
-                            result.data = new { token = RandomGenerator.Next(20), url = HttpUtil.GetUrl("Home/Index/") };
+                            account.ModifiedAt = DateTime.Now;
+                            result.data = new { token = RandomGenerator.Next(20), url = UrlVar.Home_Index };
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                             var userInfo = new UserInfo
                             {
-                                UserId = account.Guid,
+                                UserId = account.Id,
                                 UserName = input.UserName,
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = result.data.token,
                                 ExpiredAt = expireAt.ToString("yyyy-MM-dd HH:mm:ss"),
                                 LoginIP = HttpUtil.RequestHostAddress
                             };
+                            userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
+                            userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
+                            userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
                             Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId), userInfo, expireAt);
-                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserId, userInfo.UserId);
+                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserId, userInfo.UserId.ToString());
                             CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.UserName, userInfo.UserName);
+                            CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.Level, userInfo.Level.ToString());
                             CookieUtil.WriteCookie(GlobalVar.CookieName, GlobalVar.AuthToken, userInfo.Token);
+                            level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
                         }
                     }
                     else
                     {
-                        SetResponse(s => s.UserNotActivated, input, result);
+                        SetResponse(s => s.UserForbidden, input, result);
                     }
                 }
                 else
                 {
                     SetResponse(s => s.NameNotExist, input, result);
                 }
-                var loginRepository = GetRepo<LoginLog>();
-                loginRepository.Add(new LoginLog
-                {
-                    UserName = input.UserName,
-                    LoginIP = HttpUtil.RequestHostAddress,
-                    Created = DateTime.Now,
-                    Status = result.msg,
-                });
+                LogService.AddLoginLog(new LoginLog { UserName = input.UserName, LoginIP = HttpUtil.RequestHostAddress, Status = result.msg, Level = level });
             }
             return JsonNet(result);
         }
@@ -115,10 +114,9 @@ namespace GrainManage.Web.Controllers
                 if (string.IsNullOrEmpty(input.Email) || IsEmailMatch(input.Email))
                 {
                     var model = DynamicMap<User>(input);
-                    model.Guid = Guid.NewGuid().ToString("N");
                     model.Pwd = SHAEncrypt.SHA1(input.Pwd);
-                    model.Created = DateTime.Now;
-                    model.LastActive = DateTime.Now;
+                    model.CreatedAt = DateTime.Now;
+                    model.ModifiedAt = DateTime.Now;
                     repo.Add(model);
                     SetResponse(s => s.Success, input, result);
                 }
@@ -156,7 +154,7 @@ namespace GrainManage.Web.Controllers
                 var account = repo.GetFiltered(f => f.UserName == input.UserName, true).FirstOrDefault();
                 if (account != null)
                 {
-                    if (account.Status == UserStatus.Enabled)
+                    if (account.Status == Status.Enabled)
                     {
                         if (account.Email != input.Email)
                         {
@@ -166,7 +164,7 @@ namespace GrainManage.Web.Controllers
                         {
                             var newPwd = RandomGenerator.Next(8);
                             account.Pwd = SHAEncrypt.SHA1(newPwd);
-                            account.LastActive = DateTime.Now;
+                            account.ModifiedAt = DateTime.Now;
                             var title = "您的密码已经设置更改";
                             var body = string.Format("{0},您的新密码为:{1},请注意保存");
                             var password = DESEncrypt.Decrypt(AppConfig.GetValue("Password"));
@@ -178,7 +176,7 @@ namespace GrainManage.Web.Controllers
                     }
                     else
                     {
-                        SetResponse(s => s.UserNotActivated, input, result);
+                        SetResponse(s => s.UserForbidden, input, result);
                     }
                 }
                 else
@@ -193,8 +191,8 @@ namespace GrainManage.Web.Controllers
         {
             CookieUtil.DeleteCookie(GlobalVar.CookieName);
             var repo = GetRepo<User>();
-            var account = repo.GetFiltered(f => f.Guid == UserId, true).First();
-            account.LastActive = DateTime.Now;
+            var account = repo.GetFiltered(f => f.Id == UserId, true).First();
+            account.ModifiedAt = DateTime.Now;
             repo.UnitOfWork.SaveChanges();
             Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId));
             if (IsGetRequest)
@@ -220,14 +218,14 @@ namespace GrainManage.Web.Controllers
             else
             {
                 var repo = GetRepo<User>();
-                var account = repo.GetFiltered(f => f.Guid == UserId, true).FirstOrDefault();
-                if (account != null && account.Status == UserStatus.Enabled)
+                var account = repo.GetFiltered(f => f.Id == UserId, true).FirstOrDefault();
+                if (account != null && account.Status == Status.Enabled)
                 {
                     if (account.Pwd == SHAEncrypt.SHA1(input.OldPwd))
                     {
                         var newStoredPwd = SHAEncrypt.SHA1(input.NewPwd);
                         account.Pwd = newStoredPwd;
-                        account.LastActive = DateTime.Now;
+                        account.ModifiedAt = DateTime.Now;
                         repo.UnitOfWork.SaveChanges();
                         SetResponse(s => s.Success, input, result);
                     }
@@ -238,7 +236,7 @@ namespace GrainManage.Web.Controllers
                 }
                 else
                 {
-                    SetResponse(s => s.UserNotActivated, input, result);
+                    SetResponse(s => s.UserForbidden, input, result);
                 }
             }
             return JsonNet(result);

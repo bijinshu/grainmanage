@@ -1,0 +1,191 @@
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+@{
+    ViewBag.Title = "角色列表";
+}
+<script src="~/Scripts/components/menu-tree.js"></script>
+<div class="container" id="roleInfo">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">角色名称：</label>
+                        <input type="text" class="form-control" v-model="search.Name" placeholder="请输入角色名称" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (UrlVar.Has(UrlVar.Role_New, Model.Urls))
+        {
+            <div class="col-md-1">
+                <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" style="margin-top:20px;">
+                    <thead>
+                        <tr>
+                            <th>角色名称</th>
+                            <th>角色级别</th>
+                            <th>角色描述</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list">
+                            <td>{{item.Name}}</td>
+                            <td>{{item.Level}}</td>
+                            <td>{{item.Remark}}</td>
+                            <td v-if="item.Level < Level">
+                                @if (UrlVar.Has(UrlVar.Role_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
+                                }
+                                @if (UrlVar.Has(UrlVar.Role_Delete, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    @if (UrlVar.Has(UrlVar.Role_New, Model.Urls) || UrlVar.Has(UrlVar.Role_Edit, Model.Urls))
+    {
+        @Html.Partial("_RoleDetail")
+    }
+    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#roleInfo",
+            data: {
+                msg: '',
+                total: 0,
+                list: [],
+                menus: [],
+                search: { Name: '', PageIndex: 0, PageSize: 10 },
+                frm: {
+                    Id: 0,
+                    Name: '',
+                    Level: 0,
+                    Remark: '',
+                    Auths: []
+                },
+                IsDisabled: false,
+                AlertTitle: '',
+                PanelTitle: '',
+                Level: parseInt('@Model.Level'),
+            },
+            methods: {
+                indexOf: function (currentItem, array) {
+                    if (array && array.length > 0) {
+                        for (var j = 0; j < array.length; j++) {
+                            if (array[j] == currentItem) {
+                                return j;
+                            }
+                        }
+                    }
+                    return -1;
+                },
+                getData: function () {
+                    $.post('@UrlVar.Role_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1) {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                add: function (item) {
+                    this.frm.Id = 0;
+                    this.frm.Name = '';
+                    this.frm.Level = 30;
+                    this.frm.Remark = '';
+                    this.frm.Auths = [];
+                    this.showPanel('添加角色', "#saveRoleModal");
+                },
+                edit: function (item) {
+                    this.frm.Id = item.Id;
+                    this.frm.Name = item.Name;
+                    this.frm.Level = item.Level;
+                    this.frm.Remark = item.Remark;
+                    this.frm.Auths = item.Auths.slice(0);
+                    this.showPanel('编辑角色', "#saveRoleModal");
+                },
+                deleteItem: function (item) {
+                    $.post('@UrlVar.Role_Delete', { roleId: item.Id }).always(function (result, status) {
+                        this.getData();
+                    }.bind(this));
+                },
+                saveRole: function (event) {
+                    if (this.isRoleNameValid && this.isRemarkValid && this.isLevelValid) {
+                        this.IsDisabled = true;
+                        var url = this.frm.Id > 0 ? '@UrlVar.Role_Edit' : '@UrlVar.Role_New';
+                        $.post(url, this.frm).always(function (result, status) {
+                            this.IsDisabled = false;
+                            if (result.code == 1) {
+                                $("#saveRoleModal").modal('hide');
+                                this.getData();
+                            }
+                            else {
+                                this.showAlert(this.frm.Id > 0 ? '编辑角色提示' : '添加角色提示', result.msg);
+                            }
+                        }.bind(this));
+                    }
+                    else {
+                        this.showAlert(this.frm.Id > 0 ? '编辑角色提示' : '添加角色提示', '有信息格式不正确,请重新确认');
+                    }
+                },
+                getMenu: function (event) {
+                    $.post('@UrlVar.Home_MenuTree').always(function (result, status) {
+                        this.menus = result;
+                    }.bind(this));
+                },
+                changeSelectedItems: function (type, value) {
+                    if (type == 'add') {
+                        if (value && this.indexOf(value, this.frm.Auths) < 0) {
+                            this.frm.Auths.push(value);
+                        }
+                    }
+                    else {
+                        var index = this.indexOf(value, this.frm.Auths);
+                        if (index >= 0) {
+                            this.frm.Auths.splice(index, 1);
+                        }
+                    }
+                }
+            },
+            computed: {
+                isRoleNameValid: function () {
+                    return (/^.{2,20}$/g).test(this.frm.Name);
+                },
+                isRemarkValid: function () {
+                    return (/^[\s\S]{0,600}$/g).test(this.frm.Remark);
+                },
+                isLevelValid: function () {
+                    return this.frm.Level < this.Level;
+                }
+            },
+            created: function () {
+                this.getData();
+                this.getMenu();
+            }
+        })
+    })
+</script>

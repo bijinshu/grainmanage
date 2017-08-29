@@ -11,7 +11,8 @@ namespace DataBase.GrainManage.Models
         public int Id { get; set; }
         public string UserName { get; set; }
         public string LoginIP { get; set; }
-        public string Status { get; set; } 
-        public DateTime? Created { get; set; }
+        public string Status { get; set; }
+        public int Level { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

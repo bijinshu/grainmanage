@@ -9,16 +9,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
+using GrainManage.Message;
 
 namespace GrainManage.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
         public bool IsGetRequest { get { return Request.HttpMethod == "GET"; } }
-
-        protected static NewtonsoftJsonResult JsonNet(object data)
+        public bool IsSuperAdmin { get { return Level >= GlobalVar.MaxLevel; } }
+        protected static NewtonsoftJsonResult JsonNet(object data, bool includeNotValid = false)
         {
-            return new NewtonsoftJsonResult { Data = data };
+            return new NewtonsoftJsonResult { Data = data, IncludeNotValid = includeNotValid };
         }
 
         protected IRepository<T> GetRepo<T>() where T : class, new()
@@ -31,9 +32,13 @@ namespace GrainManage.Web.Controllers
         }
         protected void SetResponse(Expression<Func<StatusCode, int>> selector, object input, BaseOutput output)
         {
-            var messageInfo = GrainManage.Message.CacheMessage.Get(selector);
+            var messageInfo = CacheMessage.Get(selector);
             output.code = messageInfo.Code;
             output.msg = messageInfo.Description;
+        }
+        protected void SetResponse(Expression<Func<StatusCode, int>> selector, BaseOutput output)
+        {
+            SetResponse(selector, null, output);
         }
         protected static T MapTo<T>(Object srcObj)
         {
@@ -50,7 +55,8 @@ namespace GrainManage.Web.Controllers
             return mapper.Map<T>(srcObj);
         }
         protected UserInfo CurrentUser { get { return Resolve<ICache>().Get<UserInfo>(CacheKey.GetUserKey(UserId)); } }
-        protected string UserId { get { return CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.UserId); } }
+        protected int UserId { get { return CookieUtil.GetCookie<int>(GlobalVar.CookieName, GlobalVar.UserId); } }
+        protected int Level { get { return int.Parse(CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.Level)); } }
         protected string AuthToken { get { return CookieUtil.GetCookie(GlobalVar.CookieName, GlobalVar.AuthToken); } }
     }
 }

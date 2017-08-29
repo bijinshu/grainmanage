@@ -2,7 +2,7 @@
 
 namespace GrainManage.Web.Models.Trade
 {
-    public class InputSearchDetail : InputModel, ITimeRanged
+    public class InputSearchDetail : BaseInput
     {
         public string TradeType { get; set; }
         public string Grain { get; set; }

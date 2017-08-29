@@ -1,7 +1,7 @@
 ﻿using System;
 namespace GrainManage.Web.Models.Trade
 {
-    public class InputGetTotalByArea : InputModel, ITimeRanged
+    public class InputGetTotalByArea : BaseInput
     {
         public string TradeType { get; set; }
         public string Grain { get; set; }

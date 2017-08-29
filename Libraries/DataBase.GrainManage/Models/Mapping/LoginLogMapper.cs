@@ -16,7 +16,7 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(m => m.UserName).HasMaxLength(20);
             Property(m => m.LoginIP).HasMaxLength(64);
-            Property(m => m.Created);
+            Property(m => m.CreatedAt);
             Property(m => m.Status);
         }
     }

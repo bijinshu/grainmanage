@@ -8,7 +8,7 @@ namespace DataBase.GrainManage.Models
 {
     public class User
     {
-        public string Guid { get; set; }
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string Pwd { get; set; }
         public string Gender { get; set; }
@@ -20,7 +20,7 @@ namespace DataBase.GrainManage.Models
         public string Weixin { get; set; }
         public string Remark { get; set; }
         public string Roles { get; set; }
-        public DateTime? Created { get; set; }
-        public DateTime? LastActive { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace GrainManage.Web.Models.Trade
 {
-    public class InputGetDetailByContactID : InputModel
+    public class InputGetDetailByContactID : BaseInput
     {
         public int ContactID { get; set; }
     }

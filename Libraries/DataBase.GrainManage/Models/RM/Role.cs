@@ -10,9 +10,9 @@ namespace DataBase.GrainManage.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Remark { get; set; }
-        public bool CheckApi { get; set; }
         public string Auths { get; set; }
-        public DateTime Created { get; set; }
+        public int Level { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
 

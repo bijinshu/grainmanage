@@ -17,10 +17,10 @@ namespace GrainManage.Web.Controllers
         {
             if (IsGetRequest)
             {
-                return View();
+                return View(CurrentUser);
             }
             var result = new BaseOutput();
-            Expression<Func<Contact, bool>> myFilter = f => f.Creator == UserId;
+            Expression<Func<Contact, bool>> myFilter = f => f.CreatedBy == UserId;
             if (!string.IsNullOrEmpty(input.Name))
             {
                 myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
@@ -31,15 +31,15 @@ namespace GrainManage.Web.Controllers
             }
             if (input.StartTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
             }
             if (input.EndTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
             int total = 0;
             var repo = GetRepo<Contact>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Created, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -53,10 +53,10 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult NewContact(ContactDto input)
+        public ActionResult New(ContactDto input)
         {
             var result = new BaseOutput();
-            input.Creator = UserId;
+            input.CreatedBy = UserId;
             var model = MapTo<Contact>(input);
             var repo = GetRepo<Contact>();
             model = repo.Add(model);
@@ -72,22 +72,22 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult EditContact(ContactDto input)
+        public ActionResult Edit(ContactDto input)
         {
             var result = new BaseOutput();
-            input.Creator = UserId;
+            input.CreatedBy = UserId;
             var repo = GetRepo<Contact>();
-            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Id != input.Id && f.Creator == input.Creator).Any())
+            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.CellPhone == input.CellPhone && f.Id != input.Id && f.CreatedBy == input.CreatedBy).Any())
             {
-                var model = repo.GetFiltered(f => f.Id == input.Id && f.Creator == input.Creator, true).First();
+                var model = repo.GetFiltered(f => f.Id == input.Id && f.CreatedBy == input.CreatedBy, true).First();
                 model.ContactName = input.ContactName;
                 model.Address = input.Address;
                 model.BirthDate = input.BirthDate;
                 model.CellPhone = input.CellPhone;
-                model.Creator = input.Creator;
+                model.CreatedBy = input.CreatedBy;
                 model.Email = input.Email;
                 model.Gender = input.Gender;
-                model.Modified = DateTime.Now;
+                model.ModifiedAt = DateTime.Now;
                 model.QQ = input.QQ;
                 model.Remark = input.Remark;
                 repo.UnitOfWork.SaveChanges();
@@ -104,7 +104,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var repo = GetRepo<Contact>();
-            var model = repo.GetFiltered(f => f.Id == contactId && f.Creator == UserId).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == contactId && f.CreatedBy == UserId).FirstOrDefault();
             if (model != null)
             {
                 repo.Delete(model);

@@ -36,9 +36,9 @@
                     <input v-model="RememberMe" type="checkbox">
                     <span>记住选择</span>
                 </label>
-                <a href="@HttpUtil.GetUrl("Account/Register")" style="float:right">注册</a>
+                <a href="@UrlVar.User_Register" style="float:right">注册</a>
                 <span style="float:right;">&nbsp;&nbsp;</span>
-                <a href="@HttpUtil.GetUrl("Account/ResetPassword")" style="float:right">忘记密码</a>
+                <a href="@UrlVar.User_ResetPassword)" style="float:right">忘记密码</a>
             </div>
             <button v-on:click.stop.prevent="loginOn" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">登录</button>
         </form>
@@ -65,7 +65,7 @@
                         }
                         else {
                             this.IsDisabled = true;
-                            $.post('@HttpUtil.GetUrl("Account/SignIn")', { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
+                            $.post('@UrlVar.User_SignIn', { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
                                 this.IsDisabled = false;
                                 if (result.code == 1) {
                                     this.changeRemember();

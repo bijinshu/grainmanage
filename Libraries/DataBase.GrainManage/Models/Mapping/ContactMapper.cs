@@ -23,9 +23,9 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.Email).HasMaxLength(11);
             Property(m => m.Address).HasMaxLength(255);
             Property(m => m.Remark).HasMaxLength(255);
-            Property(m => m.Created);
-            Property(m => m.Modified);
-            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.Creator).WillCascadeOnDelete(false);
+            Property(m => m.CreatedAt);
+            Property(m => m.ModifiedAt);
+            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.CreatedBy).WillCascadeOnDelete(false);
         }
     }
 }

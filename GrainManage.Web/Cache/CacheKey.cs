@@ -9,13 +9,13 @@ namespace GrainManage.Web
 {
     public class CacheKey
     {
-        public static string GetUserKey(string userName)
+        public static string GetUserKey(int userId)
         {
-            return MD5Encrypt.Encrypt(string.Format("user_{0}", userName));
+            return string.Format("user_{0}", userId);
         }
-        public static string GetResourceKey(string userName)
+        public static string GetResourceKey(int userId)
         {
-            return MD5Encrypt.Encrypt(string.Format("resource_{0}", userName));
+            return string.Format("resource_{0}", userId);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace DataBase.GrainManage.Models
         public string ClientIP { get; set; }
         public string Method { get; set; }
         public string Status { get; set; }
+        public string Para { get; set; }
+        public int Level { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public TimeSpan? TimeSpan { get; set; }

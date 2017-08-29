@@ -1,7 +1,6 @@
-﻿
-namespace GrainManage.Web.Models
+﻿namespace GrainManage.Web.Models
 {
-    public class BaseInput
+    public class BaseInput :Pageable
     {
     }
 }

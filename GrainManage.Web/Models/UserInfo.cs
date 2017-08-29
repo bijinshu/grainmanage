@@ -8,7 +8,7 @@ namespace GrainManage.Web.Models
 {
     public class UserInfo
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>
@@ -26,5 +26,8 @@ namespace GrainManage.Web.Models
         /// </summary>
         public string LoginIP { get; set; }
         public int[] Roles { get; set; }
+        public List<string> Auths { get; set; }
+        public List<string> Urls { get; set; }
+        public int Level { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GrainManage.Web.Models.Price
 {
-    public class InputSearchPrice : InputModel, ITimeRanged
+    public class InputSearchPrice : BaseInput
     {
         public DateTime? EndTime { get; set; }
         public string Grain { get; set; }

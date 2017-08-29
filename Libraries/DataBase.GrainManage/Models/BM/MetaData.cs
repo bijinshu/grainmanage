@@ -12,6 +12,6 @@ namespace DataBase.GrainManage.Models
         public string Content { get; set; }
         public string TypeCode { get; set; }
         public string Remark { get; set; }
-        public DateTime? Created { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

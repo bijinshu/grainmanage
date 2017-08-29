@@ -20,9 +20,9 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.Weight);
             Property(m => m.ActualMoney);
             Property(m => m.Remark).HasMaxLength(600);
-            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.Creator).WillCascadeOnDelete(false);
-            Property(m => m.Created);
-            Property(m => m.Modified);
+            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.CreatedBy).WillCascadeOnDelete(false);
+            Property(m => m.CreatedAt);
+            Property(m => m.ModifiedAt);
         }
     }
 }

@@ -18,9 +18,9 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.UnitPrice);
             Property(m => m.PriceType).HasMaxLength(20);
             Property(m => m.Remark).HasMaxLength(200);
-            Property(m => m.Created);
-            Property(m => m.Modified);
-            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.Creator).WillCascadeOnDelete(false);
+            Property(m => m.CreatedAt);
+            Property(m => m.ModifiedAt);
+            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.CreatedBy).WillCascadeOnDelete(false);
         }
     }
 }

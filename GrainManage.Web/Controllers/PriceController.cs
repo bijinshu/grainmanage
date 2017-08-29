@@ -20,7 +20,7 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var creator = UserId;
-            Expression<Func<Price, bool>> myFilter = p => p.Creator == creator;
+            Expression<Func<Price, bool>> myFilter = p => p.CreatedBy == creator;
             if (!string.IsNullOrEmpty(input.Grain))
             {
                 myFilter = myFilter.And(f => f.Grain.Contains(input.Grain));
@@ -34,15 +34,15 @@ namespace GrainManage.Web.Controllers
             var querySet = from p in query
                            join g in
                                (from p1 in query
-                                group p1 by new { p1.Creator, p1.PriceType, p1.Grain } into g1
+                                group p1 by new { p1.CreatedBy, p1.PriceType, p1.Grain } into g1
                                 select new
                                 {
-                                    g1.Key.Creator,
+                                    g1.Key.CreatedBy,
                                     g1.Key.PriceType,
                                     g1.Key.Grain,
-                                    MaxDate = g1.Max(item => item.Created)
+                                    MaxDate = g1.Max(item => item.CreatedAt)
                                 })
-                               on new { p.Creator, p.PriceType, p.Grain, p.Created } equals new { g.Creator, g.PriceType, g.Grain, Created = g.MaxDate }
+                               on new { p.CreatedBy, p.PriceType, p.Grain, p.CreatedAt } equals new { g.CreatedBy, g.PriceType, g.Grain, CreatedAt = g.MaxDate }
                            select p;
             result.total = querySet.Count();
             querySet = querySet.OrderBy(o => o.Grain).Skip(input.PageIndex * input.PageSize).Take(input.PageSize);
@@ -67,7 +67,7 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var creator = UserId;
-            Expression<Func<Price, bool>> myFilter = p => p.Creator == creator;
+            Expression<Func<Price, bool>> myFilter = p => p.CreatedBy == creator;
             if (!string.IsNullOrEmpty(input.Grain))
             {
                 myFilter = myFilter.And(f => f.Grain.Contains(input.Grain));
@@ -78,15 +78,15 @@ namespace GrainManage.Web.Controllers
             }
             if (input.StartTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
             }
             if (input.EndTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
             int total = 0;
             var repo = GetRepo<Price>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Created, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -99,14 +99,14 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult NewPrice(InputInsert input)
+        public ActionResult New(InputInsert input)
         {
             if (IsGetRequest)
             {
                 return View();
             }
             var result = new BaseOutput();
-            input.Price.Creator = UserId;
+            input.Price.CreatedBy = UserId;
             var model = MapTo<Price>(input.Price);
             var repo = GetRepo<Price>();
             model = repo.Add(model);
@@ -122,7 +122,7 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult EditPrice(InputUpdate input)
+        public ActionResult Edit(InputUpdate input)
         {
             if (IsGetRequest)
             {
@@ -130,15 +130,15 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var price = input.Price;
-            price.Creator = UserId;
+            price.CreatedBy = UserId;
             var repo = GetRepo<Price>();
             var model = repo.GetFiltered(f => f.Id == price.PriceId, true).First();
             model.Grain = price.Grain;
-            model.Creator = price.Creator;
+            model.CreatedBy = price.CreatedBy;
             model.PriceType = price.PriceType;
             model.Remark = price.Remarks;
             model.UnitPrice = price.UnitPrice;
-            model.Modified = DateTime.Now;
+            model.ModifiedAt = DateTime.Now;
             repo.UnitOfWork.SaveChanges();
             SetResponse(s => s.Success, input, result);
             return JsonNet(result);
@@ -150,7 +150,7 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var creator = UserId;
             var repo = GetRepo<Price>();
-            var model = repo.GetFiltered(f => f.Id == priceId && f.Creator == creator).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == priceId && f.CreatedBy == creator).FirstOrDefault();
             if (model != null)
             {
                 repo.Delete(model);

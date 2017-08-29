@@ -9,8 +9,8 @@ namespace GrainManage.Web.Models.Price
         public decimal UnitPrice { get; set; }
         public string PriceType { get; set; }
         public string Remarks { get; set; }
-        public string Creator { get; set; }
-        public DateTime? Created { get; set; }
-        public DateTime Modified { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
     }
 }

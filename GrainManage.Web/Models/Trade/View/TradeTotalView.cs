@@ -9,6 +9,6 @@ namespace GrainManage.Web.Models.Trade
         public decimal TotalAmount { get; set; }
         public decimal TotalMoney { get; set; }
         public decimal ActualTotalMoney { get; set; }
-        public string Creator { get; set; }
+        public int CreatedBy { get; set; }
     }
 }

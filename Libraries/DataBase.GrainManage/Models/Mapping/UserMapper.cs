@@ -12,7 +12,7 @@ namespace DataBase.GrainManage.Models.Mapping
         public UserMapper()
         {
             ToTable("rm_user");
-            HasKey(m => m.Guid);
+            HasKey(m => m.Id);
             Property(m => m.UserName).HasMaxLength(20).IsRequired();
             Property(m => m.Pwd).HasMaxLength(64).IsRequired();
             Property(m => m.NickName).HasMaxLength(40).IsRequired();
@@ -21,8 +21,8 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.Weixin).HasMaxLength(60).IsRequired();
             Property(m => m.QQ).HasMaxLength(20).IsRequired();
             Property(m => m.Remark).HasMaxLength(200).IsRequired();
-            Property(m => m.Created);
-            Property(m => m.LastActive);
+            Property(m => m.CreatedAt);
+            Property(m => m.ModifiedAt);
             Property(m => m.Roles).IsRequired();
         }
     }

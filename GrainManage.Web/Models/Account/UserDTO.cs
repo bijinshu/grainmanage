@@ -16,7 +16,7 @@ namespace GrainManage.Web.Models.Account
         public string EncryptKey { get; set; }
         public int ResetCount { get; set; }
         public string Remark { get; set; }
-        public DateTime? Created { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public DateTime? LastActive { get; set; }
     }
 }

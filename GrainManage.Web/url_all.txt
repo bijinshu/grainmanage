@@ -1,0 +1,14 @@
+/Home/Index
+/Role/Index
+/Role/New
+/Role/Edit
+/Role/Delete
+/User/SignIn
+/User/Register
+/User/ResetPassword
+/User/SignOut
+/User/ChangePassword
+/Contact/Index
+/Contact/New
+/Contact/Edit
+/Contact/Delete

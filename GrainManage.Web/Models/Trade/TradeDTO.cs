@@ -12,8 +12,8 @@ namespace GrainManage.Web.Models.Trade
         public decimal ActualMoney { get; set; }
         public string TradeType { get; set; }
         public string Remarks { get; set; }
-        public string Creator { get; set; }
-        public DateTime? Created { get; set; }
-        public DateTime Modified { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
     }
 }

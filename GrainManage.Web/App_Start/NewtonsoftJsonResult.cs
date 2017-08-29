@@ -8,27 +8,16 @@ namespace GrainManage.Web
 {
     public class NewtonsoftJsonResult : ActionResult
     {
-        // Summary:
-        //     Gets or sets the content encoding.
-        //
-        // Returns:
-        //     The content encoding.
+        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore
+        };
         public Encoding ContentEncoding { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the type of the content.
-        //
-        // Returns:
-        //     The type of the content.
         public string ContentType { get; set; }
-        //
-        // Summary:
-        //     Gets or sets the data.
-        //
-        // Returns:
-        //     The data.
         public object Data { get; set; }
-
+        public bool IncludeNotValid { get; set; }
         public override void ExecuteResult(ControllerContext context)
         {
             if (context == null)
@@ -44,7 +33,7 @@ namespace GrainManage.Web
 
             if (Data != null)
             {
-                response.Write(JsonConvert.SerializeObject(this.Data));
+                response.Write(IncludeNotValid ? JsonConvert.SerializeObject(this.Data) : JsonConvert.SerializeObject(this.Data, settings));
             }
         }
     }

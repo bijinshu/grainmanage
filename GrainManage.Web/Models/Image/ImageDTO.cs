@@ -9,9 +9,9 @@ namespace GrainManage.Web.Models.Image
         public string Guid { get; set; }
         public byte[] File { get; set; }
         public string Remark { get; set; }
-        public string Creator { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
 
     }
 }

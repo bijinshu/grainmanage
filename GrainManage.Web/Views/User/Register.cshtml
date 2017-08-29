@@ -21,7 +21,7 @@
         <div class="row" style="margin-top:20px;">
             <div class="col-md-offset-2 col-md-8">
                 <ol class="breadcrumb" style="font-size:20px;">
-                    <li><a href="@HttpUtil.GetUrl("Account/SignIn")">返回登录页</a></li>
+                    <li><a href="@UrlVar.User_>返回登录页</a></li>
                     <li><a href="#" class="active">注册</a></li>
                 </ol>
             </div>
@@ -144,13 +144,13 @@
                         if (this.isUserNameValid && this.isPwdValid && this.isEmailValid && this.isPhoneValid && this.isNickNameValid && this.isQQValid && this.isWeixinValid) {
                             this.IsDisabled = true;
                             this.frm.Pwd = new sha1().encrypt(this.Pwd);
-                            $.post('@HttpUtil.GetUrl("Account/Register")', this.frm).always(function (result, status) {
+                            $.post('@UrlVar.User_Register', this.frm).always(function (result, status) {
                                 this.IsDisabled = false;
                                 if (result.code == 1) {
                                     var base = new base64();
                                     localStorage.UserName = base.encode(this.frm.UserName);
                                     localStorage.Pwd = base.encode(this.Pwd);
-                                    window.location = '@HttpUtil.GetUrl("Account/SignIn")';
+                                    window.location = '@UrlVar.User_SignIn';
                                 }
                                 else {
                                     this.msg = result.msg;

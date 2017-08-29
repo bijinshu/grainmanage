@@ -16,9 +16,9 @@ namespace DataBase.GrainManage.Models
         public decimal ActualMoney { get; set; }
         public string TradeType { get; set; }
         public string Remark { get; set; }
-        public string Creator { get; set; }
-        public DateTime? Created { get; set; }
-        public DateTime Modified { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
         public virtual Contact Contact { get; set; }
         public virtual User Owner { get; set; }
     }

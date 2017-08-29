@@ -17,9 +17,9 @@ namespace DataBase.GrainManage.Models.Mapping
             Property(m => m.ImageName).HasMaxLength(64);
             Property(m => m.Guid).HasMaxLength(36);
             Property(m => m.Remark).HasMaxLength(200);
-            Property(m => m.Created);
-            Property(m => m.Modified);
-            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.Creator).WillCascadeOnDelete();
+            Property(m => m.CreatedAt);
+            Property(m => m.ModifiedAt);
+            HasRequired(m => m.Owner).WithMany().HasForeignKey(c => c.CreatedBy).WillCascadeOnDelete();
 
         }
     }

@@ -23,6 +23,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -145,14 +146,17 @@
     <Compile Include="App_Start\NewtonsoftJsonResult.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StatusCode.cs" />
+    <Compile Include="App_Start\UrlVar.cs" />
     <Compile Include="Attribute\LogActionAttribute.cs" />
     <Compile Include="Attribute\CheckLoginAttribute.cs" />
     <Compile Include="Attribute\LogExceptionAttribute.cs" />
     <Compile Include="Cache\CacheKey.cs" />
     <Compile Include="Cache\RedisCache.cs" />
+    <Compile Include="Common\TreeUtil.cs" />
     <Compile Include="Common\ValidateCode.cs" />
     <Compile Include="Common\WaterMark.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
@@ -171,7 +175,6 @@
     <Compile Include="Models\Account\InputResetPassword.cs" />
     <Compile Include="Models\Account\InputSignIn.cs" />
     <Compile Include="Models\Account\UserDTO.cs" />
-    <Compile Include="Models\BaseInput.cs" />
     <Compile Include="Models\BaseOutput.cs" />
     <Compile Include="Models\Contact\ContactDto.cs" />
     <Compile Include="Models\Contact\InputSearch.cs" />
@@ -188,10 +191,7 @@
     <Compile Include="Models\Image\InputGetImageFile.cs" />
     <Compile Include="Models\Image\InputGetImages.cs" />
     <Compile Include="Models\Image\InputGetImageUrl.cs" />
-    <Compile Include="Models\InputModel.cs" />
-    <Compile Include="Models\IPageable.cs" />
-    <Compile Include="Models\ITimeRanged.cs" />
-    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Models\BaseInput.cs" />
     <Compile Include="Models\MetaData\MetaDataDTO.cs" />
     <Compile Include="Models\Pageable.cs" />
     <Compile Include="Models\Price\InputGetByID.cs" />
@@ -201,8 +201,10 @@
     <Compile Include="Models\Price\InputSearchRecentPrice.cs" />
     <Compile Include="Models\Price\InputUpdate.cs" />
     <Compile Include="Models\Price\PriceDTO.cs" />
+    <Compile Include="Models\Role\InputSearch.cs" />
+    <Compile Include="Models\Role\RoleDto.cs" />
+    <Compile Include="Models\Tree.cs" />
     <Compile Include="Models\UserInfo.cs" />
-    <Compile Include="Models\TimeRanged.cs" />
     <Compile Include="Models\Trade\InputDelete.cs" />
     <Compile Include="Models\Trade\InputGetByID.cs" />
     <Compile Include="Models\Trade\InputGetDetailByContactID.cs" />
@@ -217,7 +219,7 @@
     <Compile Include="Models\Trade\View\TradeTotalView.cs" />
     <Compile Include="Models\Trade\View\TradeTotalWithAreaView.cs" />
     <Compile Include="Models\Trade\View\TradeWithContactView.cs" />
-    <Compile Include="Models\UserStatus.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\CookieUtil.cs" />
     <Compile Include="Common\EmailUtil.cs" />
@@ -227,6 +229,8 @@
     <Compile Include="Common\Thumbnail.cs" />
     <Compile Include="Resources\GlobalResx.cs" />
     <Compile Include="Services\CommonService.cs" />
+    <Compile Include="Services\LogService.cs" />
+    <Compile Include="Services\RoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -258,8 +262,11 @@
     <None Include="Properties\PublishProfiles\HttpWeb.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\components\menu-tree.js" />
+    <Content Include="Scripts\components\mixin.js" />
     <Content Include="Scripts\components\modal-dialog.js" />
     <Content Include="Scripts\components\pager.js" />
+    <Content Include="Scripts\components\simple-tree.js" />
     <Content Include="Scripts\components\tree.js" />
     <Content Include="Scripts\Crypto\base64.js" />
     <Content Include="Scripts\Crypto\md5.js" />
@@ -273,6 +280,7 @@
     <Content Include="Scripts\vue.js" />
     <Content Include="Scripts\vue.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="url.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -286,6 +294,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\_RoleDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Price\" />
@@ -295,10 +305,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\ChangePassword.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\SignIn.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
+    <Content Include="Views\User\ResetPassword.cshtml" />
+    <Content Include="Views\User\SignIn.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\Contact\_ContactDetail.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

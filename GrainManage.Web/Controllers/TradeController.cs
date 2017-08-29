@@ -17,14 +17,14 @@ namespace GrainManage.Web.Controllers
             return View();
         }
 
-        public ActionResult NewTrade(InputInsert input)
+        public ActionResult New(InputInsert input)
         {
             if (IsGetRequest)
             {
                 return View();
             }
             var result = new BaseOutput();
-            input.Trade.Creator = UserId;
+            input.Trade.CreatedBy = UserId;
             var repo = GetRepo<Trade>();
             var model = repo.Add(MapTo<Trade>(input.Trade));
             result.data = model.Id;
@@ -39,21 +39,21 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult EditTrade(InputUpdate input)
+        public ActionResult Edit(InputUpdate input)
         {
             if (IsGetRequest)
             {
                 return View();
             }
             var result = new BaseOutput();
-            input.Trade.Creator = UserId;
+            input.Trade.CreatedBy = UserId;
             var now = DateTime.Now;
             var model = MapTo<Trade>(input.Trade);
-            model.Modified = now;
+            model.ModifiedAt = now;
             var repo = GetRepo<Trade>();
             repo.Update(model);
             model = repo.GetFiltered(f => f.Id == input.Trade.TradeId).First();
-            if (model.Modified == now)
+            if (model.ModifiedAt == now)
             {
                 SetResponse(s => s.Success, input, result);
             }
@@ -68,7 +68,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var repo = GetRepo<Trade>();
-            var trade = repo.GetFiltered(f => f.Id == tradeId && f.Creator == UserId).FirstOrDefault();
+            var trade = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == UserId).FirstOrDefault();
             if (trade == null)
             {
                 SetResponse(s => s.NoData, null, result);
@@ -86,7 +86,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var creator = UserId;
-            Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
+            Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
                 myFilter = myFilter.And(f => f.TradeType.Contains(input.TradeType));
@@ -101,15 +101,15 @@ namespace GrainManage.Web.Controllers
             }
             if (input.StartTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
             }
             if (input.EndTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
             int total = 0;
             var repo = GetRepo<Trade>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Created, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -128,7 +128,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var creator = UserId;
-            Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
+            Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
                 myFilter = myFilter.And(f => f.TradeType.Contains(input.TradeType));
@@ -139,16 +139,16 @@ namespace GrainManage.Web.Controllers
             }
             if (input.StartTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
             }
             if (input.EndTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
             var repo = GetRepo<Trade>();
-            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.Creator, g.Grain, g.TradeType }).Select(g => new
+            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.CreatedBy, g.Grain, g.TradeType }).Select(g => new
             {
-                g.Key.Creator,
+                g.Key.CreatedBy,
                 g.Key.Grain,
                 g.Key.TradeType,
                 Frequency = g.Count(),
@@ -176,7 +176,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var creator = UserId;
-            Expression<Func<Trade, bool>> myFilter = f => f.Creator == creator;
+            Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
             if (!string.IsNullOrEmpty(input.TradeType))
             {
                 myFilter = myFilter.And(f => f.TradeType.Contains(input.TradeType));
@@ -191,16 +191,16 @@ namespace GrainManage.Web.Controllers
             }
             if (input.StartTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created >= input.StartTime);
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
             }
             if (input.EndTime.HasValue)
             {
-                myFilter = myFilter.And(f => f.Created <= input.EndTime);
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
             var repo = GetRepo<Trade>();
-            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.Creator, ContactId = g.ContactId,  g.Grain, g.TradeType }).Select(g => new
+            var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.CreatedBy, ContactId = g.ContactId,  g.Grain, g.TradeType }).Select(g => new
             {
-                g.Key.Creator,
+                g.Key.CreatedBy,
                 ContactName = g.First(item => item.ContactId == g.Key.ContactId).Contact.ContactName,
                 g.Key.Grain,
                 TradeType = g.Key.TradeType,
@@ -229,11 +229,11 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var creator = UserId;
             var repo = GetRepo<Trade>();
-            var model = repo.GetFiltered(f => f.Id == tradeId && f.Creator == creator).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == creator).FirstOrDefault();
             if (model != null)
             {
                 repo.Delete(model);
-                model = repo.GetFiltered(f => f.Id == tradeId && f.Creator == creator).FirstOrDefault();
+                model = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == creator).FirstOrDefault();
             }
             if (model == null)
             {

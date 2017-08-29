@@ -80,7 +80,7 @@
         },
         computed: {
             totalPage: function () {
-                return parseInt((this.total - 1) / this.pageSize) + 1;
+                return this.total ? parseInt((this.total - 1) / this.pageSize) + 1 : 0;
             }
         },
         created: function () {

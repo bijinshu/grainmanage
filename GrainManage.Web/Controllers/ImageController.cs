@@ -20,7 +20,7 @@ namespace GrainManage.Web.Controllers
             int total = 0;
             var creator = UserId;
             var repo = GetRepo<Image>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, f => f.Creator == creator, o => o.Id, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, f => f.CreatedBy == creator, o => o.Id, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -51,19 +51,19 @@ namespace GrainManage.Web.Controllers
         public ActionResult GetImageUrl(int[] imageIds)
         {
             var result = new BaseOutput();
-            var userName = UserId;
+            var userId = UserId;
             var repo = GetRepo<Image>();
-            var images = repo.GetFiltered(f => imageIds.Contains(f.Id) && f.Creator == userName).ToList();
+            var images = repo.GetFiltered(f => imageIds.Contains(f.Id) && f.CreatedBy == userId).ToList();
             var dic = new Dictionary<int, string>();
             foreach (var imageId in imageIds)
             {
                 var image = images.Where(f => f.Id == imageId).FirstOrDefault();
                 if (image != null)
                 {
-                    var absolutePath = GetAbsolutePath(userName, image.ImageName);
+                    var absolutePath = GetAbsolutePath(userId, image.ImageName);
                     if (IsFileExists(absolutePath))
                     {
-                        dic[imageId] = GetImageUrl(imageId, userName);
+                        dic[imageId] = GetImageUrl(imageId, userId);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace GrainManage.Web.Controllers
         {
             var creator = UserId;
             var repo = GetRepo<Image>();
-            var image = repo.GetFiltered(f => f.Creator == creator && f.Id == imageID).First();
+            var image = repo.GetFiltered(f => f.CreatedBy == creator && f.Id == imageID).First();
             var absolutePath = GetAbsolutePath(creator, image.ImageName);
             var data = ReadFile(absolutePath);
             return File(data, "image/jpeg");
@@ -86,7 +86,7 @@ namespace GrainManage.Web.Controllers
         {
             var userName = UserId;
             var repo = GetRepo<Image>();
-            var image = repo.GetFiltered(f => f.Id == imageID && f.Creator == userName).First();
+            var image = repo.GetFiltered(f => f.Id == imageID && f.CreatedBy == userName).First();
             var absolutePath = GetAbsolutePath(userName, image.ImageName);
             var data = ReadFile(absolutePath);
             if (width > 0 && height > 0)
@@ -95,16 +95,16 @@ namespace GrainManage.Web.Controllers
             }
             return File(data, "image/jpeg");
         }
-        public ActionResult Insert(ImageDto input)
+        public ActionResult New(ImageDto input)
         {
             if (IsGetRequest)
             {
                 return View();
             }
-            input.Creator = UserId;
+            input.CreatedBy = UserId;
             var result = new BaseOutput();
             var repo = GetRepo<Image>();
-            int imageID = repo.GetFiltered(f => f.ImageName == input.ImageName && f.Creator == input.Creator).Select(s => s.Id).FirstOrDefault();
+            int imageID = repo.GetFiltered(f => f.ImageName == input.ImageName && f.CreatedBy == input.CreatedBy).Select(s => s.Id).FirstOrDefault();
             if (imageID > 0)
             {
                 SetResponse(s => s.FileHasExist, input, result);
@@ -127,25 +127,25 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult Update(ImageDto input)
+        public ActionResult Edit(ImageDto input)
         {
             if (IsGetRequest)
             {
                 return View(input);
             }
             var result = new BaseOutput();
-            input.Creator = UserId;
+            input.CreatedBy = UserId;
             var repo = GetRepo<Image>();
-            var model = repo.GetFiltered(f => f.Id == input.ImageId && f.Creator == input.Creator, true).First();
+            var model = repo.GetFiltered(f => f.Id == input.ImageId && f.CreatedBy == input.CreatedBy, true).First();
             var oldImageName = model.ImageName;
             model.ImageName = input.ImageName;
-            model.Creator = input.Creator;
+            model.CreatedBy = input.CreatedBy;
             model.Remark = input.Remark;
-            model.Modified = DateTime.Now;
+            model.ModifiedAt = DateTime.Now;
             repo.UnitOfWork.SaveChanges();
             if (input.File != null)
             {
-                var absolutePath = GetAbsolutePath(input.Creator, oldImageName);
+                var absolutePath = GetAbsolutePath(input.CreatedBy, oldImageName);
                 DeleteFile(absolutePath);
                 SaveFile(absolutePath, input.File);
             }
@@ -157,7 +157,7 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var creator = UserId;
             var repo = GetRepo<Image>();
-            var model = repo.GetFiltered(f => f.Id == imageID && f.Creator == creator).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == imageID && f.CreatedBy == creator).FirstOrDefault();
             if (model != null)
             {
                 repo.Delete(model);
@@ -171,17 +171,17 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        private string GetImageUrl(int imageID, string userName)
+        private string GetImageUrl(int imageID, int userId)
         {
             var repo = GetRepo<Image>();
-            var model = repo.GetFiltered(f => f.Id == imageID && f.Creator == userName).FirstOrDefault();
-            if (string.IsNullOrEmpty(userName))
+            var model = repo.GetFiltered(f => f.Id == imageID && f.CreatedBy == userId).FirstOrDefault();
+            if (userId <= 0)
             {
                 return string.Format("{0}/{1}", AppConfig.GetValue("ImageServerPath"), model.ImageName);
             }
             else
             {
-                return string.Format("{0}/{1}/{2}", AppConfig.GetValue("ImageServerPath"), userName, model.ImageName);
+                return string.Format("{0}/{1}/{2}", AppConfig.GetValue("ImageServerPath"), userId, model.ImageName);
             }
         }
 
@@ -196,10 +196,10 @@ namespace GrainManage.Web.Controllers
             return thumbData;
         }
 
-        private string GetAbsolutePath(string userName, string imageName)
+        private string GetAbsolutePath(int userId, string imageName)
         {
             var rootPath = AppConfig.GetValue("ImagePath");
-            var absolutePath = string.IsNullOrEmpty(userName) ? Path.Combine(rootPath, imageName) : Path.Combine(rootPath, userName, imageName);
+            var absolutePath = userId <= 0 ? Path.Combine(rootPath, imageName) : Path.Combine(rootPath, userId.ToString(), imageName);
             return absolutePath;
         }
 
