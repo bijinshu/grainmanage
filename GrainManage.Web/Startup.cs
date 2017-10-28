@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GrainManage.Common;
+using GrainManage.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +9,7 @@ namespace GrainManage.Web
 {
     public class Startup
     {
+        //public IContainer ApplicationContainer { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,7 +20,19 @@ namespace GrainManage.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            AppConfig.Handler = (key) => { return Configuration[key]; };
+
+            services.AddMvc(options =>
+            {
+
+            });
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IContextFactory, ContextFactory>();
+            //var builder = new ContainerBuilder();
+            //builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
+            //builder.RegisterType<ContextFactory>().As<IContextFactory>();
+            //builder.Populate(services);
+            //return new AutofacServiceProvider(builder.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

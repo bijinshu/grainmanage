@@ -5,11 +5,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="automapper" Version="6.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="NLog" Version="5.0.0-beta11" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\DataBase.GrainManage\DataBase.GrainManage.csproj" />
+    <ProjectReference Include="..\Libraries\GrainManage.Common\GrainManage.Common.csproj" />
+    <ProjectReference Include="..\Libraries\GrainManage.Core\GrainManage.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

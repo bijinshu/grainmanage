@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GrainManage.Web.Models;
+using GrainManage.Core;
+using DataBase.GrainManage.Models;
 
 namespace GrainManage.Web.Controllers
 {

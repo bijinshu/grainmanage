@@ -1,1 +1,13 @@
 /*.suo
+/GrainManage.Web/bin
+/Libraries/DataBase.GrainManage/bin
+/Libraries/GrainManage.Common/bin
+/Libraries/GrainManage.Core/bin
+/Libraries/GrainManage.Encrypt/bin
+/Libraries/GrainManage.Message/bin
+/GrainManage.Web/obj
+/Libraries/DataBase.GrainManage/obj
+/Libraries/GrainManage.Common/obj
+/Libraries/GrainManage.Core/obj
+/Libraries/GrainManage.Encrypt/obj
+/Libraries/GrainManage.Message/obj
