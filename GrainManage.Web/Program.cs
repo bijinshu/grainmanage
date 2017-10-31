@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using GrainManage.Common;
 
 namespace GrainManage.Web
 {
@@ -17,9 +18,11 @@ namespace GrainManage.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args).UseUrls("http://*:5000")
+                  .UseStartup<Startup>()
+                  .Build();
+        }
     }
 }

@@ -24,20 +24,18 @@ namespace GrainManage.Web
 
             services.AddMvc(options =>
             {
-
+                //options.Filters.Add(new CheckLoginAttribute());
+                //options.Filters.Add(new LogActionAttribute());
+                //options.Filters.Add(new LogExceptionAttribute());
             });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IContextFactory, ContextFactory>();
-            //var builder = new ContainerBuilder();
-            //builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-            //builder.RegisterType<ContextFactory>().As<IContextFactory>();
-            //builder.Populate(services);
-            //return new AutofacServiceProvider(builder.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            GlobalVar.ContentRootPath = env.ContentRootPath;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

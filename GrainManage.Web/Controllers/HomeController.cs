@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using GrainManage.Web.Models;
 using GrainManage.Core;
 using DataBase.GrainManage.Models;
+using GrainManage.Web.Common;
+using NLog;
 
 namespace GrainManage.Web.Controllers
 {
@@ -14,13 +16,14 @@ namespace GrainManage.Web.Controllers
     {
         public IActionResult Index()
         {
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info(Request.ContentType);
             return View();
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 

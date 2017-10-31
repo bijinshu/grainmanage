@@ -1,0 +1,145 @@
+﻿[
+  {
+    "id": "price",
+    "text": "价格",
+    "url": "/Price/Index"
+  },
+  {
+    "id": "contact",
+    "text": "联系人",
+    "url": "/Contact/Index"
+  },
+  {
+    "id": "customer",
+    "text": "我要卖粮",
+    "url": "/Order/Index"
+  },
+  {
+    "id": "purchase",
+    "text": "收购",
+    "url": "/Contact/Index"
+  },
+  {
+    "id": "sale",
+    "text": "销售",
+    "url": "/Contact/Index"
+  },
+  {
+    "id": "retail",
+    "text": "零售",
+    "url": "/Contact/Index"
+  },
+  {
+    "id": "system",
+    "text": "系统管理",
+    "children": [
+      {
+        "id": "system.role",
+        "text": "角色管理",
+        "url": "/Role/Index",
+        "children": [
+          {
+            "id": "system.role.view",
+            "text": "查看"
+          },
+          {
+            "id": "system.role.add",
+            "text": "新增",
+            "url": "/Role/New"
+          },
+          {
+            "id": "system.role.edit",
+            "text": "编辑",
+            "url": "/Role/Edit"
+          },
+          {
+            "id": "system.role.delete",
+            "text": "删除",
+            "url": "/Role/Delete"
+          }
+        ]
+      },
+      {
+        "id": "system.user",
+        "text": "用户管理",
+        "url": "/User/Index",
+        "children": [
+          {
+            "id": "system.user.view",
+            "text": "查看"
+          },
+          {
+            "id": "system.user.add",
+            "text": "新增",
+            "url": "/User/New"
+          },
+          {
+            "id": "system.user.edit",
+            "text": "编辑",
+            "url": "/User/Edit"
+          },
+          {
+            "id": "system.user.delete",
+            "text": "删除",
+            "url": "/User/Delete"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "log",
+    "text": "日志管理",
+    "children": [
+      {
+        "id": "log.exception",
+        "text": "异常日志",
+        "url": "/Log/ExceptionList",
+        "children": [
+          {
+            "id": "log.exception.view",
+            "text": "查看"
+          },
+          {
+            "id": "log.exception.delete",
+            "text": "删除",
+            "url": "/Log/DeleteException"
+          }
+        ]
+      },
+      {
+        "id": "log.action",
+        "text": "访问日志",
+        "url": "/Log/ActionList",
+        "children": [
+          {
+            "id": "log.action.view",
+            "text": "查看"
+          }
+        ]
+      },
+      {
+        "id": "log.job",
+        "text": "任务日志",
+        "url": "/Log/JobList",
+        "children": [
+          {
+            "id": "log.job.view",
+            "text": "查看"
+          }
+        ]
+      },
+      {
+        "id": "log.login",
+        "text": "登录日志",
+        "url": "/Log/LoginList",
+        "children": [
+          {
+            "id": "log.login.view",
+            "text": "查看"
+          }
+        ]
+      }
+    ]
+  }
+]
