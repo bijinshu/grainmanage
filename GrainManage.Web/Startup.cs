@@ -1,5 +1,6 @@
 ﻿using GrainManage.Common;
 using GrainManage.Core;
+using GrainManage.Web.Cache;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,7 @@ namespace GrainManage.Web
             });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IContextFactory, ContextFactory>();
+            services.AddScoped<ICache, RedisCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

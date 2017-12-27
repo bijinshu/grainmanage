@@ -22,5 +22,6 @@ namespace GrainManage.Common
         bool ExpireAt(string key, DateTime expiresAt);
         void SaveAsync();
         void Increment(string key);
+        int Db { get; set; }
     }
 }
