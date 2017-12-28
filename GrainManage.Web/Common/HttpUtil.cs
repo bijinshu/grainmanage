@@ -41,18 +41,6 @@ namespace GrainManage.Web
             }
             return result;
         }
-        public static string GetRemoteAddr(HttpRequest request)
-        {
-            return request.Headers["REMOTE_ADDR"];
-        }
-        public static string GetXForwardedFor(HttpRequest request)
-        {
-            return request.Headers["HTTP_X_FORWARDED_FOR"];
-        }
-        public static string GetUserHostAddress(HttpRequest request)
-        {
-            return request.Host.Value;
-        }
 
         /// <summary>
         /// 获取本机所有IPv4地址

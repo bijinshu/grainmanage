@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -13,17 +14,19 @@ namespace GrainManage.Web
 {
     public class LogActionAttribute : ActionFilterAttribute
     {
-        GrainManage.Dal.GrainManageDB db = new GrainManage.Dal.GrainManageDB();
         private const string name = "log-action";
+        private static readonly FileSystemWatcher watcher = new FileSystemWatcher();
         private static readonly List<string> urlList = new List<string>();
+        private static readonly object lockObj = new object();
         static LogActionAttribute()
         {
             var path = HttpUtil.GetServerPath("url.txt");
-            if (System.IO.File.Exists(path))
-            {
-                var lines = System.IO.File.ReadAllLines(path);
-                urlList.AddRange(lines.Where(f => !string.IsNullOrEmpty(f)).Select(s => s.Trim()));
-            }
+            RefreshUrlList(path);
+            watcher.Path = Path.GetDirectoryName(path);
+            watcher.EnableRaisingEvents = true;
+            watcher.Filter = "url.txt";
+            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            watcher.Changed += (sender, e) => { RefreshUrlList(path); };
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -67,6 +70,18 @@ namespace GrainManage.Web
                 }
                 var model = new { Id = int.Parse(logAction[0]), EndTime = now, TimeSpan = now - DateTime.Parse(logAction[1]), Status = msg ?? string.Empty };
                 LogService.UpdateActionLog(model);
+            }
+        }
+        private static void RefreshUrlList(string path)
+        {
+            lock (lockObj)
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    var lines = System.IO.File.ReadAllLines(path);
+                    urlList.Clear();
+                    urlList.AddRange(lines.Where(f => !string.IsNullOrEmpty(f)).Select(s => s.Trim()));
+                }
             }
         }
     }

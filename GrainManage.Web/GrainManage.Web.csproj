@@ -5,6 +5,33 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\vue\build\**" />
+    <Compile Remove="wwwroot\lib\vue\packages\**" />
+    <Compile Remove="wwwroot\lib\vue\src\**" />
+    <Compile Remove="wwwroot\lib\vue\test\**" />
+    <Compile Remove="wwwroot\lib\vue\types\**" />
+    <Content Remove="wwwroot\lib\vue\build\**" />
+    <Content Remove="wwwroot\lib\vue\packages\**" />
+    <Content Remove="wwwroot\lib\vue\src\**" />
+    <Content Remove="wwwroot\lib\vue\test\**" />
+    <Content Remove="wwwroot\lib\vue\types\**" />
+    <EmbeddedResource Remove="wwwroot\lib\vue\build\**" />
+    <EmbeddedResource Remove="wwwroot\lib\vue\packages\**" />
+    <EmbeddedResource Remove="wwwroot\lib\vue\src\**" />
+    <EmbeddedResource Remove="wwwroot\lib\vue\test\**" />
+    <EmbeddedResource Remove="wwwroot\lib\vue\types\**" />
+    <None Remove="wwwroot\lib\vue\build\**" />
+    <None Remove="wwwroot\lib\vue\packages\**" />
+    <None Remove="wwwroot\lib\vue\src\**" />
+    <None Remove="wwwroot\lib\vue\test\**" />
+    <None Remove="wwwroot\lib\vue\types\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="automapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -20,6 +47,12 @@
 
   <ItemGroup>
     <None Include="NLog.config" />
+    <None Include="Views\Home\About.cshtml" />
+    <None Include="Views\Home\Contact.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\_Layout_template.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +68,11 @@
     <Content Update="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Price\" />
+    <Folder Include="Views\Trade\" />
   </ItemGroup>
 
 </Project>

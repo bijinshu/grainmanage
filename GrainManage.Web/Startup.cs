@@ -25,13 +25,15 @@ namespace GrainManage.Web
 
             services.AddMvc(options =>
             {
-                //options.Filters.Add(new CheckLoginAttribute());
-                //options.Filters.Add(new LogActionAttribute());
-                //options.Filters.Add(new LogExceptionAttribute());
+                options.Filters.Add(new CheckLoginAttribute());
+                options.Filters.Add(new LogActionAttribute());
+                options.Filters.Add(new LogExceptionAttribute());
             });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IContextFactory, ContextFactory>();
             services.AddScoped<ICache, RedisCache>();
+
+            MapperConfig.Initialize();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +43,7 @@ namespace GrainManage.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {

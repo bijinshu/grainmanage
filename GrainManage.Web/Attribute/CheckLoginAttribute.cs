@@ -1,9 +1,8 @@
 ﻿using GrainManage.Common;
 using GrainManage.Web.Common;
 using GrainManage.Web.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
@@ -31,53 +30,55 @@ namespace GrainManage.Web
                     }
                 }
             }
+#if DEBUG
             var path = HttpUtil.GetServerPath("url_all.txt");
             System.IO.File.WriteAllLines(path, allUrls);
+#endif
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
-            //if (!filterContext.ActionDescriptor.GetCustomAttributes(typeof(AllowAnonymousAttribute), true).Any())
-            //{
-            var cookies = filterContext.HttpContext.Request.Cookies;
-            if (!string.IsNullOrEmpty(CookieUtil.GetCookie(cookies, GlobalVar.CookieName)))
+            if (!filterContext.ActionDescriptor.FilterDescriptors.Any(f => f.Filter?.GetType() == typeof(AllowAnonymousFilter)))
             {
-                var userId = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.UserId);
-                var userName = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.UserName);
-                var level = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
-                var token = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
-                if (userId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
+                var cookies = filterContext.HttpContext.Request.Cookies;
+                if (!string.IsNullOrEmpty(CookieUtil.GetCookie(cookies, GlobalVar.CookieName)))
                 {
-                    var userKey = CacheKey.GetUserKey(userId);
-                    var cacheClient = filterContext.HttpContext.RequestServices.GetService(typeof(ICache)) as ICache;
-                    var userInfo = cacheClient.Get<UserInfo>(userKey);
-                    var expiresAt = DateTime.Now.AddMinutes(cacheMinute);
-                    if (userInfo != null && userInfo.UserName == userName && userInfo.Token == token && cacheClient.ExpireAt(userKey, expiresAt))
+                    var userId = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.UserId);
+                    var userName = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.UserName);
+                    var level = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
+                    var token = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
+                    if (userId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
                     {
-                        var values = filterContext.RouteData.Values;
-                        var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
-                        if (level >= GlobalVar.MaxLevel ||
-                              pubUrls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)) ||
-                            userInfo.Urls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)))
+                        var userKey = CacheKey.GetUserKey(userId);
+                        var cacheClient = filterContext.HttpContext.RequestServices.GetService(typeof(ICache)) as ICache;
+                        var userInfo = cacheClient.Get<UserInfo>(userKey);
+                        var expiresAt = DateTime.Now.AddMinutes(cacheMinute);
+                        if (userInfo != null && userInfo.UserName == userName && userInfo.Token == token && cacheClient.ExpireAt(userKey, expiresAt))
                         {
-                            return;
+                            var values = filterContext.RouteData.Values;
+                            var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
+                            if (level >= GlobalVar.MaxLevel ||
+                                  pubUrls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)) ||
+                                userInfo.Urls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)))
+                            {
+                                return;
+                            }
                         }
                     }
                 }
-            }
-            if (filterContext.HttpContext.Request.Method == "GET")
-            {
-                filterContext.Result = new ContentResult()
+                if (filterContext.HttpContext.Request.Method == "GET")
                 {
-                    Content = string.Format("<script>window.location='{0}';</script>", UrlVar.User_SignIn),
-                    ContentType = "text/html; charset=utf-8"
-                };
+                    filterContext.Result = new ContentResult()
+                    {
+                        Content = string.Format("<script>window.location='{0}';</script>", UrlVar.User_SignIn),
+                        ContentType = "text/html; charset=utf-8"
+                    };
+                }
+                else
+                {
+                    var mes = GrainManage.Message.CacheMessage.Get<StatusCode>(s => s.IdentityFailed);
+                    filterContext.Result = new JsonResult(new BaseOutput { code = mes.Code, msg = mes.Description, data = UrlVar.User_SignIn });
+                }
             }
-            else
-            {
-                var mes = GrainManage.Message.CacheMessage.Get<StatusCode>(s => s.IdentityFailed);
-                filterContext.Result = new JsonResult(new BaseOutput { code = mes.Code, msg = mes.Description, data = UrlVar.User_SignIn });
-            }
-            //}
         }
     }
 }

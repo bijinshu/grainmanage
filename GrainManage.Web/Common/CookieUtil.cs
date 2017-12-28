@@ -26,6 +26,10 @@ namespace GrainManage.Web.Common
                 cookies.Append(strName, UrlEncode(strValue));
             }
         }
+        public static void WriteCookie(IResponseCookies cookies, string strName, Dictionary<string, string> dic, int expires = 0)
+        {
+            WriteCookie(cookies, strName, GetCookieStr(dic), expires);
+        }
         /// <summary>
         /// 删除cookie
         /// </summary>
@@ -64,7 +68,7 @@ namespace GrainManage.Web.Common
                         var item = query.Split('=');
                         if (item[0] == strKey)
                         {
-                            return item?[1];
+                            return UrlDecode(item?[1]);
                         }
                     }
                 }
@@ -96,6 +100,10 @@ namespace GrainManage.Web.Common
         private static string UrlDecode(string str)
         {
             return string.IsNullOrEmpty(str) ? string.Empty : HttpUtility.UrlDecode(str, Encoding.UTF8);
+        }
+        public static string GetCookieStr(Dictionary<string, string> dic)
+        {
+            return string.Join("&", dic.Select(s => $"{s.Key}={UrlEncode(s.Value)}"));
         }
     }
 }

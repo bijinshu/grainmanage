@@ -1,0 +1,92 @@
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+<div class="container" id="loginInfo">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">用户名：</label>
+                        <input type="text" class="form-control" v-model="search.Name" placeholder="请输入用户名" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">开始时间：</label>
+                        <input type="date" class="form-control" id="StartTime" placeholder="请选择开始时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">终止时间：</label>
+                        <input type="date" class="form-control" id="EndTime" placeholder="请选择终止时间" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">登录日志</caption>
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>用户名</th>
+                            <th>登录IP</th>
+                            <th>状态</th>
+                            <th>登录时间</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list">
+                            <td>{{item.Id}}</td>
+                            <td>{{item.UserName}}</td>
+                            <td>{{item.LoginIP}}</td>
+                            <td>{{item.Status}}</td>
+                            <td style="white-space:nowrap;">{{item.CreatedAt|formatTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+</div>
+<script>
+    $(function () {
+        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+        new Vue({
+            el: "#loginInfo",
+            data: {
+                msg: '',
+                total: 0,
+                list: [],
+                search: { Name: '', StartTime: null, EndTime: null, PageIndex: 0, PageSize: 10 },
+            },
+            methods: {
+                getData: function () {
+                    this.search.StartTime = $("#StartTime").val();
+                    this.search.EndTime = $("#EndTime").val();
+                    $.post('@UrlVar.Log_LoginList', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1) {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                }
+            },
+            created: function () {
+                this.getData();
+            }
+        })
+        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+    })
+</script>
+

@@ -1,0 +1,105 @@
+﻿@using GrainManage.Web
+<div class="modal fade" id="saveContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-md-12">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" v-bind:class="{'has-error':!isContactNameValid}">
+                                <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">联系人名称</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.ContactName" type="text" class="form-control" id="ContactName" placeholder="请输入联系人名称">
+                                </div>
+                                <span v-if="!isContactNameValid" class="col-md-push-3 col-md-8" style="color:red">联系人名称只能由2-4个汉字组成</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
+                                <label for="Mobile" class="col-md-3 control-label hidden-xs hidden-sm">手机号码</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.Mobile" type="text" class="form-control" id="Mobile" placeholder="请输入手机号码">
+                                </div>
+                                <span v-if="!isPhoneValid" class="col-md-push-3 col-md-8" style="color:red">手机号码格式不正确</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label hidden-xs hidden-sm">地址识别</label>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="manual"><span>手工填写</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="baidu"> <span>百度定位</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="AddressType" type="radio" value="google"> <span>谷歌定位</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-push-3 col-md-8 "><p class="text-info" style="color:red">{{GeoMsg}}</p></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label hidden-xs hidden-sm">地址</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入联系地址">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="BirthDate" class="col-md-3 control-label hidden-xs hidden-sm">生日</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.BirthDate" type="date" class="form-control" id="BirthDate" placeholder="请选择生日">
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
+                                <label for="Weixin" class="col-md-3 control-label hidden-xs hidden-sm">微信号</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
+                                </div>
+                                <span v-if="!isWeixinValid" class="col-md-push-3 col-md-8" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
+                                <label for="QQ" class="col-md-3 control-label hidden-xs hidden-sm">QQ</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
+                                </div>
+                                <span v-if="!isQQValid" class="col-md-push-3 col-md-8" style="color:red">QQ格式不正确</span>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
+                                <label for="Email" class="col-md-3 control-label hidden-xs hidden-sm">邮箱地址</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
+                                </div>
+                                <span v-if="!isEmailValid" class="col-md-push-3 col-md-8" style="color:red">邮箱格式不正确</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label hidden-xs hidden-sm">性别</label>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Gender" type="radio" value="男"><span>男</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Gender" type="radio" value="女"> <span>女</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
+                                <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>
+                                <div class="col-md-8">
+                                    <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
+                                </div>
+                                <span v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">附加信息不能超过200个字符</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-3">
+                                    <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+                                    <button class="btn btn-primary pull-right" v-on:click.stop.prevent="saveContact" v-bind:disabled="IsDisabled">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

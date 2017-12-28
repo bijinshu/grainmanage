@@ -1,42 +1,28 @@
-﻿using System;
+﻿using GrainManage.Web.Common;
+using GrainManage.Web.Services;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using GrainManage.Web.Models;
-using GrainManage.Core;
-using DataBase.GrainManage.Models;
-using GrainManage.Web.Common;
-using NLog;
 
 namespace GrainManage.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            var logger = LogManager.GetCurrentClassLogger();
-            logger.Info(Request.ContentType);
-            return View();
+            return View(CurrentUser);
         }
-
-        public IActionResult About()
+        public ActionResult MenuTree()
         {
-            ViewData["Message"] = "Your application description page.";
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var menuList = CommonService.GetMenus();
+            if (!IsSuperAdmin)
+            {
+                TreeUtil.RemoveNotValid(menuList, CurrentUser.Auths);
+            }
+            TreeUtil.SetParent(menuList);
+            return JsonNet(menuList, true);
         }
     }
 }
