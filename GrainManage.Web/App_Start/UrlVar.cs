@@ -1,6 +1,4 @@
-﻿using GrainManage.Web.Common;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,9 +50,9 @@ namespace GrainManage.Web
         public const string Log_DeleteException = "/Log/DeleteException";
 
         #region 工具方法
-        public static bool Has(IRequestCookieCollection cookies, string url, IEnumerable<string> urlList)
+        public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {
-            if (CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level) < GlobalVar.MaxLevel)
+            if (currentLevel < GlobalVar.MaxLevel)
             {
                 return urlList.Any(a => string.Equals(a.Trim().Trim('/'), url.Trim().Trim('/'), StringComparison.CurrentCultureIgnoreCase));
             }

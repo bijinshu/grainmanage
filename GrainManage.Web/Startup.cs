@@ -49,7 +49,6 @@ namespace GrainManage.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -58,6 +57,7 @@ namespace GrainManage.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

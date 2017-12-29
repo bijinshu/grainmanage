@@ -2,35 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <UserSecretsId>736d4818-48b0-448d-8ba1-bd371a740be4</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="wwwroot\lib\vue\build\**" />
-    <Compile Remove="wwwroot\lib\vue\packages\**" />
-    <Compile Remove="wwwroot\lib\vue\src\**" />
-    <Compile Remove="wwwroot\lib\vue\test\**" />
-    <Compile Remove="wwwroot\lib\vue\types\**" />
-    <Content Remove="wwwroot\lib\vue\build\**" />
-    <Content Remove="wwwroot\lib\vue\packages\**" />
-    <Content Remove="wwwroot\lib\vue\src\**" />
-    <Content Remove="wwwroot\lib\vue\test\**" />
-    <Content Remove="wwwroot\lib\vue\types\**" />
-    <EmbeddedResource Remove="wwwroot\lib\vue\build\**" />
-    <EmbeddedResource Remove="wwwroot\lib\vue\packages\**" />
-    <EmbeddedResource Remove="wwwroot\lib\vue\src\**" />
-    <EmbeddedResource Remove="wwwroot\lib\vue\test\**" />
-    <EmbeddedResource Remove="wwwroot\lib\vue\types\**" />
-    <None Remove="wwwroot\lib\vue\build\**" />
-    <None Remove="wwwroot\lib\vue\packages\**" />
-    <None Remove="wwwroot\lib\vue\src\**" />
-    <None Remove="wwwroot\lib\vue\test\**" />
-    <None Remove="wwwroot\lib\vue\types\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="automapper" Version="6.2.2" />

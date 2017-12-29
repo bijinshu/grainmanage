@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        @if (UrlVar.Has(UrlVar.Role_New, Model.Urls))
+        @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls))
         {
             <div class="col-md-1">
                 <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
@@ -45,11 +45,11 @@
                             <td>{{item.Level}}</td>
                             <td>{{item.Remark}}</td>
                             <td v-if="item.Level < Level">
-                                @if (UrlVar.Has(UrlVar.Role_Edit, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
                                 }
-                                @if (UrlVar.Has(UrlVar.Role_Delete, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.Role_Delete, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
                                 }
@@ -65,7 +65,7 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(UrlVar.Role_New, Model.Urls) || UrlVar.Has(UrlVar.Role_Edit, Model.Urls))
+    @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
     {
         @Html.Partial("_RoleDetail")
     }

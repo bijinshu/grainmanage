@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>ftp://192.168.86.128/projects\demo</_PublishTargetUrl>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA3lkJKEobOUGp3/Pl5jwBlgAAAAACAAAAAAAQZgAAAAEAACAAAAA9gHK6TjMV9fOvK67H++Ubk6xwmU9UllaseCWoureHZQAAAAAOgAAAAAIAACAAAAA8trNAJDTwHZjuxRoD+4V3mJeSq7X9BfwZ6hICNX5zHBAAAAAGf1pYZ/PWsLtOjzjxS+0nQAAAAOvVns7yoCcXu00c6d0FCQwDaxhWld6Fp7a3n56Qn8VRTaRr1cfNE81kkmJEtFTPg0PlNRzn4pvYz3jpQ20ElJA=</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>10/31/2017 14:32:52</publishTime>
+    </File>
+    <File Include="AutoMapper.dll">
+      <publishTime>06/26/2017 20:07:14</publishTime>
+    </File>
+    <File Include="bower.json">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="bundleconfig.json">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="Dapper.dll">
+      <publishTime>09/14/2017 11:04:12</publishTime>
+    </File>
+    <File Include="DataBase.GrainManage.dll">
+      <publishTime>12/14/2017 15:32:30</publishTime>
+    </File>
+    <File Include="DataBase.GrainManage.pdb">
+      <publishTime>12/14/2017 15:32:30</publishTime>
+    </File>
+    <File Include="Google.Protobuf.dll">
+      <publishTime>05/04/2017 00:03:34</publishTime>
+    </File>
+    <File Include="GrainManage.Common.dll">
+      <publishTime>10/31/2017 14:07:11</publishTime>
+    </File>
+    <File Include="GrainManage.Common.pdb">
+      <publishTime>10/31/2017 14:07:11</publishTime>
+    </File>
+    <File Include="GrainManage.Core.dll">
+      <publishTime>12/14/2017 15:32:26</publishTime>
+    </File>
+    <File Include="GrainManage.Core.pdb">
+      <publishTime>12/14/2017 15:32:26</publishTime>
+    </File>
+    <File Include="GrainManage.Dal.dll">
+      <publishTime>12/14/2017 15:32:24</publishTime>
+    </File>
+    <File Include="GrainManage.Dal.pdb">
+      <publishTime>12/14/2017 15:32:24</publishTime>
+    </File>
+    <File Include="GrainManage.Encrypt.dll">
+      <publishTime>10/31/2017 14:07:13</publishTime>
+    </File>
+    <File Include="GrainManage.Encrypt.pdb">
+      <publishTime>10/31/2017 14:07:13</publishTime>
+    </File>
+    <File Include="GrainManage.Message.dll">
+      <publishTime>10/31/2017 14:07:09</publishTime>
+    </File>
+    <File Include="GrainManage.Message.pdb">
+      <publishTime>10/31/2017 14:07:09</publishTime>
+    </File>
+    <File Include="GrainManage.Web.deps.json">
+      <publishTime>12/14/2017 16:38:18</publishTime>
+    </File>
+    <File Include="GrainManage.Web.dll">
+      <publishTime>12/14/2017 16:38:16</publishTime>
+    </File>
+    <File Include="GrainManage.Web.pdb">
+      <publishTime>12/14/2017 16:38:16</publishTime>
+    </File>
+    <File Include="GrainManage.Web.PrecompiledViews.dll">
+      <publishTime>12/14/2017 16:38:18</publishTime>
+    </File>
+    <File Include="GrainManage.Web.PrecompiledViews.pdb">
+      <publishTime>12/14/2017 16:38:18</publishTime>
+    </File>
+    <File Include="GrainManage.Web.runtimeconfig.json">
+      <publishTime>12/14/2017 16:38:18</publishTime>
+    </File>
+    <File Include="menu.json">
+      <publishTime>08/29/2017 16:03:55</publishTime>
+    </File>
+    <File Include="MySql.Data.dll">
+      <publishTime>09/11/2017 17:04:32</publishTime>
+    </File>
+    <File Include="MySqlConnector.dll">
+      <publishTime>10/26/2017 11:24:12</publishTime>
+    </File>
+    <File Include="NLog.config">
+      <publishTime>10/25/2017 17:50:25</publishTime>
+    </File>
+    <File Include="NLog.dll">
+      <publishTime>09/23/2017 22:30:06</publishTime>
+    </File>
+    <File Include="Pomelo.EntityFrameworkCore.MySql.dll">
+      <publishTime>10/26/2017 23:38:10</publishTime>
+    </File>
+    <File Include="Pomelo.JsonObject.dll">
+      <publishTime>03/07/2017 20:39:04</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>12/14/2017 16:38:18</publishTime>
+    </File>
+    <File Include="wwwroot/css/site.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/css/site.min.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/favicon.ico">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner1.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner2.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner3.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner4.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/js/site.js">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/js/site.min.js">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/.bower.json">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.css.map">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.min.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.min.css.map">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.css.map">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.min.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/bootstrap.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/bootstrap.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/npm.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/LICENSE">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/additional-methods.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/additional-methods.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/jquery.validate.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/jquery.validate.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/LICENSE.md">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.min.map">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/LICENSE.txt">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

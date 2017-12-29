@@ -48,7 +48,7 @@
                             <td>{{item.Message}}</td>
                             <td style="white-space:nowrap;">{{item.ClientIP}}</td>
                             <td style="white-space:nowrap;">{{item.CreatedAt|formatTime}}</td>
-                            @if (UrlVar.Has(UrlVar.Log_DeleteException, Model.Urls))
+                            @if (UrlVar.Has(Model.Level, UrlVar.Log_DeleteException, Model.Urls))
                             {
                                 <td style="white-space:nowrap;"><a style="cursor:pointer" v-on:click="del(item)">删除</a></td>
                             }

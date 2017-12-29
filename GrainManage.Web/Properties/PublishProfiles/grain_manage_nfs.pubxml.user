@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>X:\projects\demo</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="wwwroot/css/site.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/css/site.min.css">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/favicon.ico">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner1.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner2.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner3.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/images/banner4.svg">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/js/common-tool.js">
+      <publishTime>08/25/2017 15:37:33</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/menu-tree.js">
+      <publishTime>08/25/2017 15:36:29</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/mixin.js">
+      <publishTime>08/29/2017 17:01:53</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/modal-dialog.js">
+      <publishTime>08/25/2017 15:36:48</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/pager.js">
+      <publishTime>08/25/2017 15:36:32</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/simple-tree.js">
+      <publishTime>08/25/2017 15:36:32</publishTime>
+    </File>
+    <File Include="wwwroot/js/components/tree.js">
+      <publishTime>07/28/2017 18:39:18</publishTime>
+    </File>
+    <File Include="wwwroot/js/Crypto/base64.js">
+      <publishTime>07/19/2017 11:28:51</publishTime>
+    </File>
+    <File Include="wwwroot/js/Crypto/md5.js">
+      <publishTime>07/19/2017 11:35:01</publishTime>
+    </File>
+    <File Include="wwwroot/js/Crypto/sha1.js">
+      <publishTime>07/19/2017 11:45:47</publishTime>
+    </File>
+    <File Include="wwwroot/js/site.js">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/js/site.min.js">
+      <publishTime>10/25/2017 16:27:02</publishTime>
+    </File>
+    <File Include="wwwroot/js/vue.js">
+      <publishTime>07/13/2017 11:18:06</publishTime>
+    </File>
+    <File Include="wwwroot/js/vue.min.js">
+      <publishTime>07/13/2017 11:18:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/.bower.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/bower.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/CHANGELOG.md">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.css">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.css.map">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.min.css">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap-theme.min.css.map">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.css">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.css.map">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.min.css">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/bootstrap.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/bootstrap.min.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/dist/js/npm.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/Gemfile">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/Gemfile.lock">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/.jshintrc">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/bs-commonjs-generator.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/bs-glyphicons-data-generator.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/bs-lessdoc-parser.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/bs-raw-files-generator.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/change-version.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/configBridge.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/npm-shrinkwrap.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/grunt/sauce_browsers.yml">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/Gruntfile.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/ISSUE_TEMPLATE.md">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/.jscsrc">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/.jshintrc">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/affix.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/alert.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/button.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/carousel.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/collapse.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/dropdown.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/modal.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/popover.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/scrollspy.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/tab.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/tooltip.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/js/transition.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/.csscomb.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/.csslintrc">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/alerts.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/badges.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/bootstrap.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/breadcrumbs.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/button-groups.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/buttons.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/carousel.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/close.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/code.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/component-animations.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/dropdowns.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/forms.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/glyphicons.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/grid.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/input-groups.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/jumbotron.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/labels.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/list-group.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/media.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/alerts.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/background-variant.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/border-radius.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/buttons.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/center-block.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/clearfix.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/forms.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/gradients.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/grid-framework.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/grid.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/hide-text.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/image.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/labels.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/list-group.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/nav-divider.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/nav-vertical-align.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/opacity.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/pagination.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/panels.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/progress-bar.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/reset-filter.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/reset-text.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/resize.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/responsive-visibility.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/size.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/tab-focus.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/table-row.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/text-emphasis.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/text-overflow.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/mixins/vendor-prefixes.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/modals.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/navbar.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/navs.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/normalize.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/pager.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/pagination.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/panels.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/popovers.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/print.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/progress-bars.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/responsive-embed.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/responsive-utilities.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/scaffolding.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/tables.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/theme.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/thumbnails.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/tooltip.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/type.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/utilities.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/variables.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/less/wells.less">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/LICENSE">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/nuget/bootstrap.less.nuspec">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/nuget/bootstrap.nuspec">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/nuget/MyGet.ps1">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/package.js">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/package.json">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/bootstrap/README.md">
+      <publishTime>12/28/2017 12:02:05</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/additional-methods.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/additional-methods.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/jquery.validate.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/dist/jquery.validate.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery-validation/LICENSE.md">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/.bower.json">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.min.js">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/dist/jquery.min.map">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+    <File Include="wwwroot/lib/jquery/LICENSE.txt">
+      <publishTime>10/25/2017 16:27:03</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

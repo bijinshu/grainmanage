@@ -1,5 +1,4 @@
 ﻿@using GrainManage.Web
-@using GrainManage.Web.Services
 @model GrainManage.Web.Models.UserInfo
 @{
     ViewBag.Title = "用户列表";
@@ -37,8 +36,8 @@
                 </div>
             </div>
         </div>
-        @if (UrlVar.Has(UrlVar.User_New, Model.Urls))
-            {
+        @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls))
+        {
             <div class="col-md-1">
                 <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
             </div>
@@ -75,11 +74,11 @@
                             <td>{{item.RoleNames}}</td>
                             <td>{{item.Status?'启用':'禁用'}}</td>
                             <td>
-                                @if (UrlVar.Has(UrlVar.User_Edit, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.User_Edit, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
                                 }
-                                @if (UrlVar.Has(UrlVar.User_New, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
                                 }
@@ -95,7 +94,7 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(UrlVar.User_New, Model.Urls) || UrlVar.Has(UrlVar.User_Edit, Model.Urls))
+    @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.User_Edit, Model.Urls))
     {
         @Html.Partial("_UserDetail")
     }
