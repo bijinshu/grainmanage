@@ -1,21 +1,19 @@
-﻿using System;
+﻿using DataBase.GrainManage.Models;
+using DataBase.GrainManage.Models.Log;
+using GrainManage.Common;
+using GrainManage.Core;
+using GrainManage.Encrypt;
+using GrainManage.Web.Common;
+using GrainManage.Web.Models;
+using GrainManage.Web.Models.User;
+using GrainManage.Web.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
-using GrainManage.Web.Models.User;
-using GrainManage.Web.Common;
-using Microsoft.AspNetCore.Authorization;
-using DataBase.GrainManage.Models;
-using GrainManage.Web;
-using GrainManage.Encrypt;
-using GrainManage.Common;
-using GrainManage.Web.Models;
-using System.Text.RegularExpressions;
-using GrainManage.Web.Services;
-using DataBase.GrainManage.Models.Log;
 using System.Linq.Expressions;
-using GrainManage.Core;
+using System.Text.RegularExpressions;
 
 namespace GrainManage.Web.Controllers
 {
@@ -211,10 +209,6 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult ChangePwd(InputChangePassword input)
         {
-            if (IsGetRequest)
-            {
-                return View();
-            }
             var result = new BaseOutput();
             if (string.IsNullOrEmpty(input.OldPwd) || string.IsNullOrEmpty(input.NewPwd))
             {

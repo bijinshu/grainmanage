@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace GrainManage.Web.Cache
         private static IConnectionMultiplexer connectionMultiplexer = null;
         protected static IDatabase GetDbClient(int db)
         {
-            return Redis.GetDatabase();
+            return Redis.GetDatabase(db);
         }
         public T Get<T>(string key)
         {

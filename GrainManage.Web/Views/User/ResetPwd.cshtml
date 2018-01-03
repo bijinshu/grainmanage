@@ -1,25 +1,25 @@
 ﻿@using GrainManage.Web
 @{
-    Layout = null;
+    Layout = null;string ss = "~/Home";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@GlobalResx.SysName</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/vue.min.js"></script>
-    <script src="~/Scripts/components/modal-dialog.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/components/modal-dialog.js"></script>
 </head>
 <body>
     <div class="container" id="app">
         <div class="row" style="margin-top:20px;">
             <div class="col-md-offset-2 col-md-8">
                 <ol class="breadcrumb" style="font-size:20px;">
-                    <li><a href="#">@GlobalResx.SysName</a></li>
+                    <li><a href="~/">@GlobalResx.SysName</a></li>
                     <li><a href="#" class="active">重设密码</a></li>
                 </ol>
             </div>

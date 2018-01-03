@@ -110,7 +110,7 @@
                         this.total = result.total;
                         if (result.code != 1) {
                             this.msg = result.msg;
-                            $("#myModal").modal({ backdrop: 'static' });
+                            this.showPanel("#myModal");
                         }
                     }.bind(this));
                 },
@@ -127,7 +127,7 @@
                     this.frm.Email = '';
                     this.frm.Gender = '男';
                     this.frm.Remark = '';
-                    $("#saveContactModal").modal({ backdrop: 'static' });
+                    this.showPanel( "#saveContactModal");
                 },
                 edit: function (item) {
                     this.PanelTitle = '编辑联系人';
@@ -142,7 +142,7 @@
                     this.frm.Email = item.Email;
                     this.frm.Gender = item.Gender;
                     this.frm.Remark = item.Remark;
-                    $("#saveContactModal").modal({ backdrop: 'static' });
+                    this.showPanel("#saveContactModal");
                 },
                 saveContact: function (event) {
                     if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
@@ -152,17 +152,17 @@
                             this.IsDisabled = false;
                             this.msg = result.msg;
                             if (result.code == 1) {
-                                $("#saveContactModal").modal('hide');
+                                this.hidePanel("#saveContactModal");
                                 this.getData();
                             }
                             else {
-                                $("#myModal").modal({ backdrop: 'static' });
+                                this.showPanel("#myModal");
                             }
                         }.bind(this));
                     }
                     else {
                         this.msg = '有信息格式不正确,请重新确认';
-                        $("#myModal").modal({ backdrop: 'static' });
+                        this.showPanel("#myModal");
                     }
                 },
                 showPosition: function (latitude, longitude, accuracy) {

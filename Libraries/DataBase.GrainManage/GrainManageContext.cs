@@ -10,10 +10,6 @@ namespace DataBase.GrainManage
 {
     public class GrainManageContext : BaseUnitOfWork
     {
-        static GrainManageContext()
-        {
-            //Database.SetInitializer<GrainManageContext>(null);
-        }
         public GrainManageContext()
             : base("DefaultConnection")
         {
