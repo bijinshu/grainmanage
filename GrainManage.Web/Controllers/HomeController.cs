@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GrainManage.Web.Controllers
 {
@@ -23,6 +24,11 @@ namespace GrainManage.Web.Controllers
             }
             TreeUtil.SetParent(menuList);
             return JsonNet(menuList, true);
+        }
+        [AllowAnonymous]
+        public ActionResult GetHeaders()
+        {
+            return Content(string.Join(",", Request.Headers.Select(s => string.Format("[{0}={1}]", s.Key, s.Value))));
         }
     }
 }

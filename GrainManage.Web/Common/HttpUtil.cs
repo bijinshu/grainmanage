@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,14 +21,18 @@ namespace GrainManage.Web
         }
         public static string GetRequestHostAddress(HttpRequest request)
         {
-            string result = request.Headers["HTTP_X_FORWARDED_FOR"];
+            string result = request.Headers.Where(f => string.Equals(f.Key, "X-Forwarded-For", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
             if (!string.IsNullOrEmpty(result))
             {
                 result = result.Split(',')[0];
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = request.Headers["REMOTE_ADDR"];
+                result = request.Headers.Where(f => string.Equals(f.Key, "X-Real-IP", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
+            }
+            if (string.IsNullOrEmpty(result))
+            {
+                result = request.Headers.Where(f => string.Equals(f.Key, "Remote_Addr", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
             }
             if (string.IsNullOrEmpty(result))
             {
@@ -35,7 +40,7 @@ namespace GrainManage.Web
             }
             if (string.IsNullOrEmpty(result) || !IsIPv4(result))
             {
-                result = GetLocalIP().First();
+                result = GetLocalIP().Where(f => IsIPv4(f)).FirstOrDefault();
             }
             return result;
         }
