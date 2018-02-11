@@ -12,12 +12,12 @@
                         <input type="text" class="form-control" v-model="search.Name" placeholder="请输入姓名" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">区域：</label>
-                        <input type="text" class="form-control" v-model="search.Area" placeholder="请输入区域" />
+                        <label class="control-label hidden-xs hidden-sm">手机号码：</label>
+                        <input type="text" class="form-control" v-model="search.Mobile" placeholder="手机号码" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">详细地址：</label>
-                        <input type="text" class="form-control" v-model="search.Address" placeholder="请输入详细地址" />
+                        <label class="control-label hidden-xs hidden-sm">地址：</label>
+                        <input type="text" class="form-control" v-model="search.Address" placeholder="请输入地址" />
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-info btn-block" v-on:click="getData">查询</button>
@@ -33,7 +33,7 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">联系人管理</caption>
+                    <caption style="color:red;font-weight:bolder;">我的客户</caption>
                     <thead>
                         <tr>
                             <th>姓名</th>
@@ -42,7 +42,6 @@
                             <th class="hidden-xs hidden-sm">微信</th>
                             <th class="hidden-xs hidden-sm">QQ</th>
                             <th class="hidden-xs hidden-sm">邮箱</th>
-                            <th class="hidden-xs hidden-sm">性别</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -54,7 +53,6 @@
                             <td class="hidden-xs hidden-sm">{{item.Weixin}}</td>
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Email}}</td>
-                            <td class="hidden-xs hidden-sm">{{item.Gender}}</td>
                             <td>
                                 <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
                                 <a>&nbsp;</a>
@@ -82,17 +80,15 @@
             data: {
                 total: 0,
                 list: [],
-                search: { Name: '', Area: '', Address: '', PageIndex: 0, PageSize: 10 },
+                search: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
                     ContactName: '',
                     Mobile: '',
                     Address: '',
-                    BirthDate: null,
                     Weixin: '',
                     QQ: '',
                     Email: '',
-                    Gender: '男',
                     Remark: ''
                 },
                 IsDisabled: false,
@@ -121,11 +117,9 @@
                     this.frm.ContactName = '';
                     this.frm.Mobile = '';
                     this.frm.Address = '';
-                    this.frm.BirthDate = '';
                     this.frm.Weixin = '';
                     this.frm.QQ = '';
                     this.frm.Email = '';
-                    this.frm.Gender = '男';
                     this.frm.Remark = '';
                     this.showPanel( "#saveContactModal");
                 },
@@ -136,11 +130,9 @@
                     this.frm.ContactName = item.ContactName;
                     this.frm.Mobile = item.Mobile;
                     this.frm.Address = item.Address;
-                    this.frm.BirthDate = item.BirthDate;
                     this.frm.Weixin = item.Weixin;
                     this.frm.QQ = item.QQ;
                     this.frm.Email = item.Email;
-                    this.frm.Gender = item.Gender;
                     this.frm.Remark = item.Remark;
                     this.showPanel("#saveContactModal");
                 },

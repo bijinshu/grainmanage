@@ -25,6 +25,10 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
             }
+            if (!string.IsNullOrEmpty(input.Mobile))
+            {
+                myFilter = myFilter.And(f => f.Mobile.Contains(input.Mobile));
+            }
             if (!string.IsNullOrEmpty(input.Address))
             {
                 myFilter = myFilter.And(f => f.Address.Contains(input.Address));
@@ -57,6 +61,7 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             input.CreatedBy = UserId;
+            SetEmptyIfNull(input);
             var model = MapTo<Contact>(input);
             var repo = GetRepo<Contact>();
             model = repo.Add(model);
@@ -76,17 +81,16 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             input.CreatedBy = UserId;
+            SetEmptyIfNull(input);
             var repo = GetRepo<Contact>();
             if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CreatedBy == input.CreatedBy).Any())
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id && f.CreatedBy == input.CreatedBy, true).First();
                 model.ContactName = input.ContactName;
                 model.Address = input.Address;
-                model.BirthDate = input.BirthDate;
                 model.Mobile = input.Mobile;
                 model.CreatedBy = input.CreatedBy;
                 model.Email = input.Email;
-                model.Gender = input.Gender;
                 model.ModifiedAt = DateTime.Now;
                 model.QQ = input.QQ;
                 model.Remark = input.Remark;

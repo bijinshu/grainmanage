@@ -28,7 +28,7 @@ namespace GrainManage.Web.Controllers
         [AllowAnonymous]
         public ActionResult GetHeaders()
         {
-            return Content(string.Join(",", Request.Headers.Select(s => string.Format("[{0}={1}]", s.Key, s.Value))));
+            return Content(string.Join("\r\n", Request.Headers.Select(s => string.Format("{0}:{1}", s.Key, s.Value))));
         }
     }
 }

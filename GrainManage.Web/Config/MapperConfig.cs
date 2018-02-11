@@ -30,8 +30,6 @@ namespace GrainManage.Web
 
                 cfg.CreateMap<ContactDto, Contact>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 
-                cfg.CreateMap<ImageDto, Image>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
-
                 cfg.CreateMap<MetaDataDto, MetaData>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 
                 cfg.CreateMap<PriceDto, Price>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();

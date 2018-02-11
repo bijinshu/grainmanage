@@ -6,8 +6,6 @@ namespace GrainManage.Web.Models.Contact
     {
         public int Id { get; set; }
         public string ContactName { get; set; }
-        public string Gender { get; set; }
-        public DateTime? BirthDate { get; set; }
         public string Address { get; set; }
         public string Mobile { get; set; }
         public string QQ { get; set; }
@@ -16,6 +14,6 @@ namespace GrainManage.Web.Models.Contact
         public int CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
-        public string PhotoUrl { get; set; }
+        public string ImgName { get; set; }
     }
 }

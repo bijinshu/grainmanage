@@ -21,7 +21,7 @@ namespace GrainManage.Web
                 var model = new ExceptionLog
                 {
                     Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8),
-                    InputParameter = HttpUtil.GetInputPara(filterContext.HttpContext.Request),
+                    Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request),
                     Message = errorMsg,
                     StackTrace = filterContext.Exception.StackTrace,
                     ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request),

@@ -24,7 +24,7 @@ namespace GrainManage.Web.Services
         public static void AddExceptionLog(ExceptionLog model)
         {
             var db = new GrainManageDB();
-            var sql = "insert into log_exception(Path,InputParameter,Message,StackTrace,ClientIP,CreatedAt) values(@Path,@InputParameter,@Message,@StackTrace,@ClientIP,@CreatedAt)";
+            var sql = "insert into log_exception(Path,Para,Message,StackTrace,ClientIP,CreatedAt) values(@Path,@Para,@Message,@StackTrace,@ClientIP,@CreatedAt)";
             db.Execute(sql, model);
         }
         public static int DeleteExceptionLog(params int[] ids)

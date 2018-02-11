@@ -14,6 +14,12 @@ namespace GrainManage.Web
 {
     public class HttpUtil
     {
+        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore
+        };
         public static bool IsIPv4(string ip)
         {
             //利用正则表达式判断字符串是否符合IPv4格式  
@@ -103,11 +109,5 @@ namespace GrainManage.Web
             }
             return null;
         }
-        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            NullValueHandling = NullValueHandling.Ignore
-        };
     }
 }

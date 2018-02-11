@@ -9,9 +9,10 @@ namespace DataBase.GrainManage.Models
     public class User
     {
         public int Id { get; set; }
+        public int AppId { get; set; }
         public string UserName { get; set; }
         public string Pwd { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
         public int Status { get; set; } //0:未激活 1:启用 2:禁用
         public string RealName { get; set; }
         public string Mobile { get; set; }
@@ -20,6 +21,7 @@ namespace DataBase.GrainManage.Models
         public string Weixin { get; set; }
         public string Remark { get; set; }
         public string Roles { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }

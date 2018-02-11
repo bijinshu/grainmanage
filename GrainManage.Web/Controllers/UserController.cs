@@ -39,7 +39,7 @@ namespace GrainManage.Web.Controllers
             {
                 var repo = GetRepo<User>();
                 var level = 0;
-                var account = repo.GetFiltered(f => f.UserName == input.UserName, true).FirstOrDefault();
+                var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
                 {
                     if (account.Status == Status.Enabled)
@@ -57,6 +57,7 @@ namespace GrainManage.Web.Controllers
                             var userInfo = new UserInfo
                             {
                                 UserId = account.Id,
+                                AppId = account.AppId,
                                 UserName = input.UserName,
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = result.data.token,
@@ -72,6 +73,7 @@ namespace GrainManage.Web.Controllers
                             dic[GlobalVar.UserName] = userInfo.UserName;
                             dic[GlobalVar.Level] = userInfo.Level.ToString();
                             dic[GlobalVar.AuthToken] = userInfo.Token;
+                            dic[GlobalVar.AppId] = userInfo.AppId.ToString();
                             CookieUtil.WriteCookie(Response.Cookies, GlobalVar.CookieName, dic);
                             level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
@@ -288,7 +290,7 @@ namespace GrainManage.Web.Controllers
             {
                 SetResponse(s => s.NoData, input, result);
             }
-            return JsonNet(result,true);
+            return JsonNet(result, true);
         }
         public ActionResult New(UserDto input)
         {

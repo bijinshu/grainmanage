@@ -1,4 +1,8 @@
-﻿using DataBase.GrainManage.Models.Log;
+﻿using DataBase.GrainManage.Models;
+using DataBase.GrainManage.Models.Log;
+using GrainManage.Common;
+using GrainManage.Core;
+using GrainManage.Web.Cache;
 using GrainManage.Web.Common;
 using GrainManage.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,26 +19,13 @@ namespace GrainManage.Web
     public class LogActionAttribute : ActionFilterAttribute
     {
         private const string name = "log-action";
-        private static readonly FileSystemWatcher watcher = new FileSystemWatcher();
-        private static readonly List<string> urlList = new List<string>();
-        private static readonly object lockObj = new object();
-        static LogActionAttribute()
-        {
-            var path = HttpUtil.GetServerPath("url.txt");
-            RefreshUrlList(path);
-            watcher.Path = Path.GetDirectoryName(path);
-            watcher.EnableRaisingEvents = true;
-            watcher.Filter = "url.txt";
-            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-            watcher.Changed += (sender, e) => { RefreshUrlList(path); };
-        }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var cookies = filterContext.HttpContext.Request.Cookies;
             var values = filterContext.RouteData.Values;
             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
-            if (urlList.Any(s => string.Equals(s, url, StringComparison.CurrentCultureIgnoreCase)))
+            if (UrlCache.IsUrlExisted(url))
             {
                 var headers = filterContext.HttpContext.Request.Headers;
                 ActionLog model = new ActionLog();
@@ -54,7 +45,7 @@ namespace GrainManage.Web
         {
             var values = filterContext.RouteData.Values;
             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
-            if (urlList.Any(s => string.Equals(s, url, StringComparison.CurrentCultureIgnoreCase)))
+            if (UrlCache.IsUrlExisted(url))
             {
                 var logAction = filterContext.HttpContext.Request.Headers[name].First().Split(',');
                 var now = DateTime.Now;
@@ -70,18 +61,6 @@ namespace GrainManage.Web
                 }
                 var model = new { Id = int.Parse(logAction[0]), EndTime = now, TimeSpan = now - DateTime.Parse(logAction[1]), Status = msg ?? string.Empty };
                 LogService.UpdateActionLog(model);
-            }
-        }
-        private static void RefreshUrlList(string path)
-        {
-            lock (lockObj)
-            {
-                if (System.IO.File.Exists(path))
-                {
-                    var lines = System.IO.File.ReadAllLines(path);
-                    urlList.Clear();
-                    urlList.AddRange(lines.Where(f => !string.IsNullOrEmpty(f)).Select(s => s.Trim()));
-                }
             }
         }
     }

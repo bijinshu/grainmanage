@@ -6,23 +6,13 @@
   },
   {
     "id": "contact",
-    "text": "联系人",
+    "text": "我的客户",
     "url": "/Contact/Index"
   },
   {
-    "id": "customer",
-    "text": "我要卖粮",
+    "id": "order",
+    "text": "我的订单",
     "url": "/Order/Index"
-  },
-  {
-    "id": "purchase",
-    "text": "收购",
-    "url": "/Contact/Index"
-  },
-  {
-    "id": "sale",
-    "text": "销售",
-    "url": "/Contact/Index"
   },
   {
     "id": "retail",

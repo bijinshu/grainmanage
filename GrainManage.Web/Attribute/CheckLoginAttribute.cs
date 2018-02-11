@@ -17,23 +17,17 @@ namespace GrainManage.Web
         private static readonly List<string> pubUrls = new List<string>();
         static CheckLoginAttribute()
         {
-            var allUrls = new List<string>();
             foreach (var item in typeof(UrlVar).GetProperties(BindingFlags.Public | BindingFlags.Static))
             {
                 var url = item.GetValue(null) as string;
                 if (!string.IsNullOrEmpty(url))
                 {
-                    allUrls.Add(url);
                     if (item.GetCustomAttributes<CommonAttribute>().Any())
                     {
                         pubUrls.Add(url);
                     }
                 }
             }
-#if DEBUG
-            var path = HttpUtil.GetServerPath("url_all.txt");
-            System.IO.File.WriteAllLines(path, allUrls);
-#endif
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {

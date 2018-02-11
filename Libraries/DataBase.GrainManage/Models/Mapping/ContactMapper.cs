@@ -11,8 +11,6 @@ namespace DataBase.GrainManage.Models.Mapping
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Id);
             builder.Property(m => m.ContactName).HasMaxLength(40);
-            builder.Property(m => m.Gender).HasMaxLength(1);
-            builder.Property(m => m.BirthDate);
             builder.Property(m => m.Mobile).HasMaxLength(11);
             builder.Property(m => m.QQ).HasMaxLength(20);
             builder.Property(m => m.Weixin).HasMaxLength(60);

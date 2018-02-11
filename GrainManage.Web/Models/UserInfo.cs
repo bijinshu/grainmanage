@@ -9,6 +9,7 @@ namespace GrainManage.Web.Models
     public class UserInfo
     {
         public int UserId { get; set; }
+        public int AppId { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>

@@ -11,6 +11,7 @@ namespace GrainManage.Web
         public const string CookieName = "GrainManage";
         public const string UserId = "UserId";
         public const string UserName = "UserName";
+        public const string AppId = "AppId";
         public const string AuthToken = "AuthToken";
         public const string ValidateCode = "ValidateCode";
         public const string Level = "Level";

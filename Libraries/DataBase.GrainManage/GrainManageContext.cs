@@ -20,13 +20,14 @@ namespace DataBase.GrainManage
             modelBuilder.ApplyConfiguration(new ActionLogMapper());
             modelBuilder.ApplyConfiguration(new ContactMapper());
             modelBuilder.ApplyConfiguration(new ExceptionLogMapper());
-            modelBuilder.ApplyConfiguration(new ImageMapper());
             modelBuilder.ApplyConfiguration(new JobLogMapper());
             modelBuilder.ApplyConfiguration(new LoginLogMapper());
             modelBuilder.ApplyConfiguration(new PriceMapper());
             modelBuilder.ApplyConfiguration(new RoleMapper());
             modelBuilder.ApplyConfiguration(new TradeMapper());
             modelBuilder.ApplyConfiguration(new UserMapper());
+            modelBuilder.ApplyConfiguration(new WhiteIPMapper());
+            modelBuilder.ApplyConfiguration(new AddressMapper());
         }
     }
 }

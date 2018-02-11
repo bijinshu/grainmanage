@@ -17,5 +17,9 @@ namespace GrainManage.Web
         {
             return string.Format("resource_{0}", userId);
         }
+        public static string GetUrlKey(string ip)
+        {
+            return string.Format("watching_url_{0}", ip);
+        }
     }
 }
