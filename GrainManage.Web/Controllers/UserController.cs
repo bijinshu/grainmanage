@@ -42,7 +42,11 @@ namespace GrainManage.Web.Controllers
                 var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
                 {
-                    if (account.Status == Status.Enabled)
+                    if (account.AppId == 0)
+                    {
+                        SetResponse(s => s.UserNotActivated, input, result);
+                    }
+                    else if (account.Status == Status.Enabled)
                     {
                         var encryptedPwd = SHAEncrypt.SHA1(input.Pwd);
                         if (account.Pwd != encryptedPwd)
@@ -121,6 +125,7 @@ namespace GrainManage.Web.Controllers
                     var model = DynamicMap<User>(input);
                     model.Pwd = SHAEncrypt.SHA1(input.Pwd);
                     model.CreatedAt = DateTime.Now;
+                    model.CreatedBy = -1;//系统注册
                     model.ModifiedAt = DateTime.Now;
                     repo.Add(model);
                     SetResponse(s => s.Success, input, result);
@@ -313,11 +318,14 @@ namespace GrainManage.Web.Controllers
             {
                 var now = DateTime.Now;
                 var model = MapTo<User>(input);
+                model.Status = Status.Enabled;
                 model.Pwd = SHAEncrypt.SHA1(input.Pwd);
                 model = repo.Add(model);
                 result.data = model.Id;
                 if (model.Id > 0)
                 {
+                    model.AppId = model.Id;
+                    repo.UnitOfWork.SaveChanges();
                     SetResponse(s => s.Success, input, result);
                 }
                 else

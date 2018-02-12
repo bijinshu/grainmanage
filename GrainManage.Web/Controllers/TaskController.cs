@@ -32,10 +32,6 @@ namespace GrainManage.Web.Controllers
                         {
                             item.AppId = item.Id;
                         }
-                        else if (array.Any(a => a == "5"))
-                        {
-                            item.AppId = item.CreatedBy;
-                        }
                     }
                 }
             }
