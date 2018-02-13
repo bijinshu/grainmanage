@@ -56,7 +56,7 @@
                             <td>
                                 <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
                                 <a>&nbsp;</a>
-                                <a style="cursor:pointer;" v-on:click.stop="trade(item)">交易</a>
+                                <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
                             </td>
                         </tr>
                     </tbody>
@@ -70,6 +70,7 @@
         </div>
     </div>
     @Html.Partial("_ContactDetail")
+    @Html.Partial("_TradeDetail")
     <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
@@ -80,6 +81,7 @@
             data: {
                 total: 0,
                 list: [],
+                productList:[],
                 search: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
@@ -90,6 +92,14 @@
                     QQ: '',
                     Email: '',
                     Remark: ''
+                },
+                frmTrade: {
+                    ContactId: 0,
+                    ProductId: 0,
+                    Price:0,
+                    Weight: 0,
+                    TradeType: 0,
+                    Remark:''
                 },
                 IsDisabled: false,
                 AddressType: 'manual',
@@ -108,6 +118,11 @@
                             this.msg = result.msg;
                             this.showPanel("#myModal");
                         }
+                    }.bind(this));
+                },
+                getProductList: function () {
+                    $.post('@UrlVar.Product_List').done(function (result, status) {
+                                this.productList = result;
                     }.bind(this));
                 },
                 add: function () {
@@ -156,6 +171,15 @@
                         this.msg = '有信息格式不正确,请重新确认';
                         this.showPanel("#myModal");
                     }
+                },
+                showTrade: function (item) {
+                    this.ContactId = 0;
+                    this.ProductId = 0;
+                    this.Price = 0;
+                    this.Weight = 0;
+                    this.TradeType = 0;
+                    this.Remark = '';
+                    this.showPanel("#saveTradeModal");
                 },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;
@@ -276,14 +300,7 @@
             },
             created: function () {
                 this.getData();
-                this.$watch('frm.ContactName', function (newVal, oldVal) {
-                    if (!this.isContactNameValid) {
-                        $("#ContactName").popover('show');
-                    }
-                    else {
-                        $("#ContactName").popover('hide');
-                    }
-                });
+                this.getProductList();
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
                 });

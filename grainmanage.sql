@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-02-12 18:13:48
+Date: 2018-02-13 16:08:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,24 +166,26 @@ CREATE TABLE `bm_product` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(20) NOT NULL COMMENT '产品名称',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
+  `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：离线 1：在线',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `CreatedBy` int(11) NOT NULL COMMENT '创建者',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   `ModifiedBy` int(11) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_product
 -- ----------------------------
-INSERT INTO `bm_product` VALUES ('1', '小麦', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('2', '收购', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('3', '水稻', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('4', '燕麦', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('5', '玉米', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('6', '花生', '', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('7', '菜籽', '', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('1', '小麦', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('2', '收购', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('3', '大稻', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('4', '燕麦', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('5', '玉米', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('6', '花生', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('7', '菜籽', '', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('8', '小稻', '', '1', '2018-02-13 15:17:04', '1', null, null);
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -192,11 +194,11 @@ DROP TABLE IF EXISTS `bm_trade`;
 CREATE TABLE `bm_trade` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ContactId` int(11) DEFAULT NULL COMMENT '客户Id',
-  `Grain` varchar(40) NOT NULL DEFAULT '' COMMENT '作物名称',
+  `ProductId` varchar(40) NOT NULL DEFAULT '' COMMENT '作物名称',
   `Price` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '计划价格',
   `Weight` decimal(20,2) DEFAULT '0.00' COMMENT '重量',
   `ActualMoney` decimal(20,2) DEFAULT '0.00' COMMENT '成交价格',
-  `TradeType` varchar(20) NOT NULL DEFAULT '' COMMENT '收购、销售',
+  `TradeType` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：收购: 1：出售',
   `Position` varchar(60) DEFAULT NULL,
   `PositionDesc` varchar(80) DEFAULT NULL,
   `Remark` varchar(6000) DEFAULT '',
@@ -209,44 +211,44 @@ CREATE TABLE `bm_trade` (
 -- ----------------------------
 -- Records of bm_trade
 -- ----------------------------
-INSERT INTO `bm_trade` VALUES ('1', '1', '玉米', '2.2200', '306.00', '679.32', '收购', null, null, '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('2', '2', '大稻', '2.7400', '316.00', '865.84', '收购', null, null, '', '4', '2012-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('3', '3', '小稻', '2.6600', '306.00', '813.96', '销售', null, null, '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('4', '4', '小麦', '2.0800', '208.00', '432.64', '收购', null, null, '', '4', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('5', '5', '菜籽', '3.4000', '306.00', '1040.40', '销售', null, null, '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('6', '6', '花生', '2.6700', '306.00', '817.02', '收购', null, null, '', '4', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('7', '7', '玉米', '2.4100', '306.00', '737.46', '收购', null, null, '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('8', '8', '大稻', '2.8300', '306.00', '865.98', '销售', null, null, '', '4', '2007-11-03 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('9', '9', '小稻', '2.4500', '306.00', '749.70', '销售', null, null, '', '1', '2009-11-04 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('10', '10', '小麦', '2.0700', '306.00', '633.42', '销售', null, null, '', '4', '2009-12-05 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('11', '11', '菜籽', '4.4900', '306.00', '1373.94', '销售', null, null, '', '1', '2012-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('12', '12', '花生', '4.8900', '316.00', '1545.24', '收购', null, null, '', '4', '2012-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('13', '13', '玉米', '2.0100', '406.00', '816.06', '收购', null, null, '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('14', '14', '大稻', '2.5200', '306.00', '771.12', '销售', null, null, '', '4', '2007-11-03 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('15', '15', '小稻', '2.3300', '306.00', '712.98', '收购', null, null, '', '1', '2009-11-04 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('16', '16', '小麦', '2.0400', '306.00', '624.24', '销售', null, null, '', '4', '2009-12-05 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('17', '17', '菜籽', '3.6500', '306.00', '1116.90', '销售', null, null, '', '1', '2007-06-01 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('18', '18', '花生', '3.0600', '316.00', '966.96', '收购', null, null, '', '4', '2006-08-02 14:22:00', null);
-INSERT INTO `bm_trade` VALUES ('19', '19', '大稻', '2.5200', '306.00', '771.12', '收购', null, null, '', '1', '2005-07-02 13:47:03', null);
-INSERT INTO `bm_trade` VALUES ('20', '20', '玉米', '2.3300', '406.00', '945.98', '销售', null, null, '', '4', '2004-09-02 08:47:03', null);
-INSERT INTO `bm_trade` VALUES ('21', '21', '玉米', '2.2900', '306.00', '700.74', '收购', null, null, '', '1', '2004-09-02 08:50:00', null);
-INSERT INTO `bm_trade` VALUES ('22', '22', '大稻', '2.6000', '306.00', '795.60', '收购', null, null, '', '4', '2006-01-02 09:47:56', null);
-INSERT INTO `bm_trade` VALUES ('23', '23', '小稻', '2.4200', '306.00', '740.52', '收购', null, null, '', '1', '2006-01-02 09:50:26', null);
-INSERT INTO `bm_trade` VALUES ('24', '24', '小麦', '2.1300', '306.00', '651.78', '收购', null, null, '', '4', '2010-11-03 10:00:00', null);
-INSERT INTO `bm_trade` VALUES ('25', '1', '菜籽', '3.7400', '306.00', '1144.44', '收购', null, null, '', '1', '2010-08-04 18:45:43', null);
-INSERT INTO `bm_trade` VALUES ('26', '1', '花生', '3.1700', '306.00', '970.02', '收购', null, null, '', '4', '2009-12-06 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('27', '2', '玉米', '2.2200', '306.00', '679.32', '销售', null, null, '', '1', '2007-11-02 10:40:03', null);
-INSERT INTO `bm_trade` VALUES ('28', '2', '大稻', '2.7400', '316.00', '865.84', '销售', null, null, '', '4', '2010-09-02 12:58:22', null);
-INSERT INTO `bm_trade` VALUES ('29', '2', '小稻', '2.6600', '316.00', '840.56', '收购', null, null, '', '1', '2010-05-02 08:42:27', null);
-INSERT INTO `bm_trade` VALUES ('30', '20', '小麦', '2.0800', '306.00', '636.48', '销售', null, null, '', '4', '2010-06-22 12:28:08', null);
-INSERT INTO `bm_trade` VALUES ('31', '18', '菜籽', '3.4000', '306.00', '1040.40', '销售', null, null, '', '1', '2010-11-04 19:20:08', null);
-INSERT INTO `bm_trade` VALUES ('32', '18', '花生', '2.6700', '306.00', '817.02', '收购', null, null, '', '4', '2010-12-05 16:36:09', null);
-INSERT INTO `bm_trade` VALUES ('33', '16', '玉米', '2.4100', '306.00', '737.46', '销售', null, null, '', '1', '2007-11-02 10:40:03', null);
-INSERT INTO `bm_trade` VALUES ('34', '16', '大稻', '2.8300', '316.00', '894.28', '销售', null, null, '', '4', '2006-09-02 12:58:22', null);
-INSERT INTO `bm_trade` VALUES ('35', '7', '小稻', '2.4500', '406.00', '994.70', '收购', null, null, '', '1', '2005-05-02 08:42:27', null);
-INSERT INTO `bm_trade` VALUES ('36', '8', '小麦', '2.0700', '306.00', '633.42', '销售', null, null, '', '4', '2007-06-22 12:28:08', null);
-INSERT INTO `bm_trade` VALUES ('37', '15', '菜籽', '4.4900', '306.00', '1373.94', '销售', null, null, '', '1', '2006-11-04 19:20:08', null);
-INSERT INTO `bm_trade` VALUES ('38', '9', '花生', '4.8900', '306.00', '1496.34', '销售', null, null, '', '4', '2009-12-05 16:36:09', null);
+INSERT INTO `bm_trade` VALUES ('1', '1', '5', '2.2200', '306.00', '679.32', '0', null, null, '', '1', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('2', '2', '3', '2.7400', '316.00', '865.84', '0', null, null, '', '4', '2012-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('3', '3', '8', '2.6600', '306.00', '813.96', '1', null, null, '', '1', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('4', '4', '1', '2.0800', '208.00', '432.64', '0', null, null, '', '4', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('5', '5', '7', '3.4000', '306.00', '1040.40', '1', null, null, '', '1', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('6', '6', '6', '2.6700', '306.00', '817.02', '0', null, null, '', '4', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('7', '7', '5', '2.4100', '306.00', '737.46', '0', null, null, '', '1', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('8', '8', '3', '2.8300', '306.00', '865.98', '1', null, null, '', '4', '2007-11-03 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('9', '9', '8', '2.4500', '306.00', '749.70', '1', null, null, '', '1', '2009-11-04 15:47:03', null);
+INSERT INTO `bm_trade` VALUES ('10', '10', '1', '2.0700', '306.00', '633.42', '1', null, null, '', '4', '2009-12-05 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('11', '11', '7', '4.4900', '306.00', '1373.94', '1', null, null, '', '1', '2012-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('12', '12', '6', '4.8900', '316.00', '1545.24', '0', null, null, '', '4', '2012-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('13', '13', '5', '2.0100', '406.00', '816.06', '0', null, null, '', '1', '2007-11-02 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('14', '14', '3', '2.5200', '306.00', '771.12', '1', null, null, '', '4', '2007-11-03 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('15', '15', '8', '2.3300', '306.00', '712.98', '0', null, null, '', '1', '2009-11-04 15:47:03', null);
+INSERT INTO `bm_trade` VALUES ('16', '16', '1', '2.0400', '306.00', '624.24', '1', null, null, '', '4', '2009-12-05 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('17', '17', '7', '3.6500', '306.00', '1116.90', '1', null, null, '', '1', '2007-06-01 15:47:03', null);
+INSERT INTO `bm_trade` VALUES ('18', '18', '6', '3.0600', '316.00', '966.96', '0', null, null, '', '4', '2006-08-02 14:22:00', null);
+INSERT INTO `bm_trade` VALUES ('19', '19', '3', '2.5200', '306.00', '771.12', '0', null, null, '', '1', '2005-07-02 13:47:03', null);
+INSERT INTO `bm_trade` VALUES ('20', '20', '5', '2.3300', '406.00', '945.98', '1', null, null, '', '4', '2004-09-02 08:47:03', null);
+INSERT INTO `bm_trade` VALUES ('21', '21', '5', '2.2900', '306.00', '700.74', '0', null, null, '', '1', '2004-09-02 08:50:00', null);
+INSERT INTO `bm_trade` VALUES ('22', '22', '3', '2.6000', '306.00', '795.60', '0', null, null, '', '4', '2006-01-02 09:47:56', null);
+INSERT INTO `bm_trade` VALUES ('23', '23', '8', '2.4200', '306.00', '740.52', '0', null, null, '', '1', '2006-01-02 09:50:26', null);
+INSERT INTO `bm_trade` VALUES ('24', '24', '1', '2.1300', '306.00', '651.78', '0', null, null, '', '4', '2010-11-03 10:00:00', null);
+INSERT INTO `bm_trade` VALUES ('25', '1', '7', '3.7400', '306.00', '1144.44', '0', null, null, '', '1', '2010-08-04 18:45:43', null);
+INSERT INTO `bm_trade` VALUES ('26', '1', '6', '3.1700', '306.00', '970.02', '0', null, null, '', '4', '2009-12-06 14:47:03', null);
+INSERT INTO `bm_trade` VALUES ('27', '2', '5', '2.2200', '306.00', '679.32', '1', null, null, '', '1', '2007-11-02 10:40:03', null);
+INSERT INTO `bm_trade` VALUES ('28', '2', '3', '2.7400', '316.00', '865.84', '1', null, null, '', '4', '2010-09-02 12:58:22', null);
+INSERT INTO `bm_trade` VALUES ('29', '2', '8', '2.6600', '316.00', '840.56', '0', null, null, '', '1', '2010-05-02 08:42:27', null);
+INSERT INTO `bm_trade` VALUES ('30', '20', '1', '2.0800', '306.00', '636.48', '1', null, null, '', '4', '2010-06-22 12:28:08', null);
+INSERT INTO `bm_trade` VALUES ('31', '18', '7', '3.4000', '306.00', '1040.40', '1', null, null, '', '1', '2010-11-04 19:20:08', null);
+INSERT INTO `bm_trade` VALUES ('32', '18', '6', '2.6700', '306.00', '817.02', '0', null, null, '', '4', '2010-12-05 16:36:09', null);
+INSERT INTO `bm_trade` VALUES ('33', '16', '5', '2.4100', '306.00', '737.46', '1', null, null, '', '1', '2007-11-02 10:40:03', null);
+INSERT INTO `bm_trade` VALUES ('34', '16', '3', '2.8300', '316.00', '894.28', '1', null, null, '', '4', '2006-09-02 12:58:22', null);
+INSERT INTO `bm_trade` VALUES ('35', '7', '8', '2.4500', '406.00', '994.70', '0', null, null, '', '1', '2005-05-02 08:42:27', null);
+INSERT INTO `bm_trade` VALUES ('36', '8', '1', '2.0700', '306.00', '633.42', '1', null, null, '', '4', '2007-06-22 12:28:08', null);
+INSERT INTO `bm_trade` VALUES ('37', '15', '7', '4.4900', '306.00', '1373.94', '1', null, null, '', '1', '2006-11-04 19:20:08', null);
+INSERT INTO `bm_trade` VALUES ('38', '9', '6', '4.8900', '306.00', '1496.34', '1', null, null, '', '4', '2009-12-05 16:36:09', null);
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -648,7 +650,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -688,6 +690,8 @@ INSERT INTO `log_login` VALUES ('74', 'bijinshu', '10.10.133.108', '成功', '10
 INSERT INTO `log_login` VALUES ('75', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-12 17:40:46');
 INSERT INTO `log_login` VALUES ('76', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-12 17:42:59');
 INSERT INTO `log_login` VALUES ('77', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-12 17:43:35');
+INSERT INTO `log_login` VALUES ('78', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-13 10:56:40');
+INSERT INTO `log_login` VALUES ('79', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-13 14:22:05');
 
 -- ----------------------------
 -- Table structure for `rm_address`

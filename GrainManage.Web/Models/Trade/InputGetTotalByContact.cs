@@ -4,7 +4,7 @@ namespace GrainManage.Web.Models.Trade
 {
     public class InputGetTotalByContact : BaseInput
     {
-        public string TradeType { get; set; }
+        public int? TradeType { get; set; }
         public string Grain { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }

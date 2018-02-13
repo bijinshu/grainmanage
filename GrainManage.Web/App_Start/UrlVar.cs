@@ -43,12 +43,15 @@ namespace GrainManage.Web
         //Trade
 
         //Log
-        public const string Log_ExceptionList = "/Log/ExceptionList";
-        public const string Log_ActionList = "/Log/ActionList";
-        public const string Log_JobList = "/Log/JobList";
-        public const string Log_LoginList = "/Log/LoginList";
-        public const string Log_DeleteException = "/Log/DeleteException";
+        public static string Log_ExceptionList { get { return GetUrl("/Log/ExceptionList"); } }
+        public static string Log_ActionList { get { return GetUrl("/Log/ActionList"); } }
+        public static string Log_JobList { get { return GetUrl("/Log/JobList"); } }
+        public static string Log_LoginList { get { return GetUrl("/Log/LoginList"); } }
+        public static string Log_DeleteException { get { return GetUrl("/Log/DeleteException"); } }
 
+
+        //Product
+        public static string Product_List { get { return GetUrl("/Product/List"); } }
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {

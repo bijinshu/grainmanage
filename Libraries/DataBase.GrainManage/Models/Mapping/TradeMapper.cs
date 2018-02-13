@@ -11,7 +11,7 @@ namespace DataBase.GrainManage.Models.Mapping
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Id);
             builder.HasOne(m => m.Contact).WithMany().HasForeignKey(c => c.ContactId).OnDelete(DeleteBehavior.SetNull);
-            builder.Property(m => m.Grain).HasMaxLength(40);
+            builder.Property(m => m.ProductId).HasMaxLength(40);
             builder.Property(m => m.Price);
             builder.Property(m => m.Weight);
             builder.Property(m => m.ActualMoney);

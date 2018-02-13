@@ -10,11 +10,11 @@ namespace DataBase.GrainManage.Models
     {
         public int Id { get; set; }
         public int ContactId { get; set; }
-        public string Grain { get; set; }
+        public int ProductId { get; set; }
         public decimal Price { get; set; }
         public decimal Weight { get; set; }
         public decimal ActualMoney { get; set; }
-        public string TradeType { get; set; }
+        public int TradeType { get; set; }
         public string Remark { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
