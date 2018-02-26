@@ -10,13 +10,18 @@
     "url": "/Contact/Index"
   },
   {
+    "id": "contact",
+    "text": "我的员工",
+    "url": "/Employee/Index"
+  },
+  {
     "id": "order",
     "text": "我的订单",
     "url": "/Order/Index"
   },
   {
-    "id": "retail",
-    "text": "零售",
+    "id": "trade",
+    "text": "交易历史",
     "url": "/Contact/Index"
   },
   {

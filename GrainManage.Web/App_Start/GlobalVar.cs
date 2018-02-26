@@ -11,7 +11,6 @@ namespace GrainManage.Web
         public const string CookieName = "GrainManage";
         public const string UserId = "UserId";
         public const string UserName = "UserName";
-        public const string AppId = "AppId";
         public const string AuthToken = "AuthToken";
         public const string ValidateCode = "ValidateCode";
         public const string Level = "Level";
@@ -20,5 +19,8 @@ namespace GrainManage.Web
         public const int AdminLevel = 90;
 
         public static string ContentRootPath { get; set; }
+
+        public const string Role_User = "2";
+        public const string Role_Shop = "3";
     }
 }

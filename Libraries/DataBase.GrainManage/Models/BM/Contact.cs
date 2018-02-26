@@ -16,7 +16,7 @@ namespace DataBase.GrainManage.Models
         public string Weixin { get; set; }
         public string Email { get; set; }
         public string Remark { get; set; }
-        public int AppId { get; set; }
+        public int CompId { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

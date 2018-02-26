@@ -20,7 +20,7 @@ namespace GrainManage.Web.Controllers
     public class UserController : BaseController
     {
         [AllowAnonymous]
-        public ActionResult SignIn(InputSignIn input)
+        public ActionResult SignIn(InputSignIn input, string type)
         {
             if (IsGetRequest)
             {
@@ -42,7 +42,7 @@ namespace GrainManage.Web.Controllers
                 var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
                 {
-                    if (account.AppId == 0)
+                    if (account.CompId == 0)
                     {
                         SetResponse(s => s.UserNotActivated, input, result);
                     }
@@ -61,7 +61,7 @@ namespace GrainManage.Web.Controllers
                             var userInfo = new UserInfo
                             {
                                 UserId = account.Id,
-                                AppId = account.AppId,
+                                AppId = account.CompId,
                                 UserName = input.UserName,
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = result.data.token,
@@ -77,7 +77,6 @@ namespace GrainManage.Web.Controllers
                             dic[GlobalVar.UserName] = userInfo.UserName;
                             dic[GlobalVar.Level] = userInfo.Level.ToString();
                             dic[GlobalVar.AuthToken] = userInfo.Token;
-                            dic[GlobalVar.AppId] = userInfo.AppId.ToString();
                             CookieUtil.WriteCookie(Response.Cookies, GlobalVar.CookieName, dic);
                             level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
@@ -123,7 +122,17 @@ namespace GrainManage.Web.Controllers
                 if (string.IsNullOrEmpty(input.Email) || IsEmailMatch(input.Email))
                 {
                     var model = DynamicMap<User>(input);
+                    SetEmptyIfNull(model);
                     model.Pwd = SHAEncrypt.SHA1(input.Pwd);
+                    if (input.IsShop)
+                    {
+                        model.CompId = -1;
+                        model.Roles = GlobalVar.Role_Shop;
+                    }
+                    else
+                    {
+                        model.Roles = GlobalVar.Role_User;
+                    }
                     model.CreatedAt = DateTime.Now;
                     model.CreatedBy = -1;//系统注册
                     model.ModifiedAt = DateTime.Now;
@@ -324,7 +333,7 @@ namespace GrainManage.Web.Controllers
                 result.data = model.Id;
                 if (model.Id > 0)
                 {
-                    model.AppId = model.Id;
+                    model.CompId = model.Id;
                     repo.UnitOfWork.SaveChanges();
                     SetResponse(s => s.Success, input, result);
                 }
@@ -394,7 +403,7 @@ namespace GrainManage.Web.Controllers
             }
             result.data = dto;
             SetResponse(s => s.Success, result);
-            return JsonNet(result);
+            return JsonNet(result, true);
         }
 
         private bool IsEmailMatch(string email)

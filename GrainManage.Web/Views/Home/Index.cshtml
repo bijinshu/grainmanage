@@ -23,14 +23,14 @@
                             </thead>
                             <tbody v-cloak>
                                 <tr>
-                                    <td>{{UserName}}</td>
-                                    <td>{{RealName}}</td>
-                                    <td>{{Gender}}</td>
-                                    <td>{{Mobile}}</td>
-                                    <td>{{QQ}}</td>
-                                    <td>{{Weixin}}</td>
-                                    <td>{{Email}}</td>
-                                    <td>{{RoleNames}}</td>
+                                    <td>{{userInfo.UserName}}</td>
+                                    <td>{{userInfo.RealName}}</td>
+                                    <td>{{userInfo.Gender==1?'女':'男'}}</td>
+                                    <td>{{userInfo.Mobile}}</td>
+                                    <td>{{userInfo.QQ}}</td>
+                                    <td>{{userInfo.Weixin}}</td>
+                                    <td>{{userInfo.Email}}</td>
+                                    <td>{{userInfo.RoleNames}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -63,6 +63,7 @@
             </div>
         </div>
     </div>
+    @Html.Partial("_CompanyDetail")
     <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
 </div>
 <script src="~/js/Crypto/sha1.js"></script>
@@ -72,30 +73,41 @@
             el: '#homePage',
             data: {
                 msg: '',
-                UserName: '',
-                RealName: '',
-                Gender: '',
-                Mobile: '',
-                QQ:'',
-                Weixin: '',
-                Email: '',
-                RoleNames: '',
+                frmComp: {
+                    Name: '',
+                    Address: ''
+                },
+                userInfo: {
+                    CompId:-1,
+                    UserName: '',
+                    RealName: '',
+                    Gender: '',
+                    Mobile: '',
+                    QQ: '',
+                    Weixin: '',
+                    Email: '',
+                    RoleNames: ''
+                },
                 OldPwd: '',
                 NewPwd: '',
-                IsDisabled: false
+                IsDisabled: false,
             },
             methods: {
                 getBasicInfo: function (event) {
                     $.post('@UrlVar.User_Info').always(function (result, status) {
                         if (result.code == 1) {
-                            this.UserName = result.data.UserName;
-                            this.RealName = result.data.RealName;
-                            this.Gender = result.data.Gender;
-                            this.Mobile = result.data.Mobile;
-                            this.QQ = result.data.QQ;
-                            this.Weixin = result.data.Weixin;
-                            this.Email = result.data.Email;
-                            this.RoleNames = result.data.RoleNames;
+                            this.userInfo.UserName = result.data.UserName;
+                            this.userInfo.RealName = result.data.RealName;
+                            this.userInfo.Gender = result.data.Gender;
+                            this.userInfo.Mobile = result.data.Mobile;
+                            this.userInfo.QQ = result.data.QQ;
+                            this.userInfo.Weixin = result.data.Weixin;
+                            this.userInfo.Email = result.data.Email;
+                            this.userInfo.RoleNames = result.data.RoleNames;
+                            this.userInfo.CompId = result.data.CompId;
+                            if (this.userInfo.CompId < 0) {
+                                this.showPanel("#saveCompanyModal");
+                            }
                         }
                     }.bind(this));
                 },
@@ -120,6 +132,27 @@
                 },
                 isPwdValid: function (pwd) {
                     return (/^.{2,20}$/g).test(pwd);
+                },
+                saveComp: function (event) {
+                    if (this.isCompanyNameValid && this.isAddressValid) {
+                        this.IsDisabled = true;
+                       $.post('@UrlVar.Home_PerfectComp', this.frmComp).always(function (result, status) {
+                           this.IsDisabled = false;
+                           if (result.code==1) {
+                               this.hidePanel("#saveCompanyModal");
+                           } else {
+                               this.showAlert(result.msg);
+                           }
+                        }.bind(this));
+                    }
+                }
+            },
+            computed: {
+                isCompanyNameValid: function () {
+                    return (/^[\u4E00-\u9FA5\uF900-\uFA2D,\w\-]{1,60}$/g).test(this.frmComp.Name);
+                },
+                isAddressValid: function () {
+                    return (/^.{0,200}$/g).test(this.frmComp.Address);
                 }
             },
             created: function () {

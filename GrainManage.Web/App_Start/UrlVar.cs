@@ -11,6 +11,8 @@ namespace GrainManage.Web
         public static string Home_Index { get { return GetUrl("/Home/Index"); } }
         [Common]
         public const string Home_MenuTree = "/Home/MenuTree";
+        [Common]
+        public const string Home_PerfectComp = "/Home/PerfectComp";
         //Role
         public static string Role_Index { get { return GetUrl("/Role/Index"); } }
         public static string Role_New { get { return GetUrl("/Role/New"); } }

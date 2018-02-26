@@ -19,7 +19,7 @@ namespace GrainManage.Web.Controllers
         public IActionResult ActivateUser()
         {
             var userRepo = GetRepo<User>();
-            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.AppId == 0 && f.CreatedBy > 0);
+            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.CompId == 0 && f.CreatedBy > 0);
             var list = userRepo.GetFiltered(myFilter, true).ToList();
             if (list.Any())
             {
@@ -30,7 +30,7 @@ namespace GrainManage.Web.Controllers
                         var array = item.Roles.Split(",");
                         if (array.Any(a => a == "3"))
                         {
-                            item.AppId = item.Id;
+                            item.CompId = item.Id;
                         }
                     }
                 }

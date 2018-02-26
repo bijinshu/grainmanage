@@ -27,6 +27,17 @@
             </div>
         </div>
         <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-md-2 control-label hidden-xs hidden-sm">用户类型</label>
+                <div class="col-md-10">
+                    <label class="checkbox-inline">
+                        <input v-model="frm.IsShop" type="radio" value="false"><span>普通用户</span>
+                    </label>
+                    <label class="checkbox-inline">
+                        <input v-model="frm.IsShop" type="radio" value="true"> <span>商户</span>
+                    </label>
+                </div>
+            </div>
             <div class="form-group" v-bind:class="{'has-error':!isUserNameValid}">
                 <label for="UserName" class="col-md-2 control-label hidden-xs hidden-sm">用户名</label>
                 <div class="col-md-10">
@@ -92,10 +103,10 @@
                                     <label class="col-md-2 control-label hidden-xs hidden-sm">性别</label>
                                     <div class="col-md-10">
                                         <label class="checkbox-inline">
-                                            <input v-model="frm.Gender" type="radio" value="男"><span>男</span>
+                                            <input v-model="frm.Gender" type="radio" value="0"><span>男</span>
                                         </label>
                                         <label class="checkbox-inline">
-                                            <input v-model="frm.Gender" type="radio" value="女"> <span>女</span>
+                                            <input v-model="frm.Gender" type="radio" value="1"> <span>女</span>
                                         </label>
                                     </div>
                                 </div>
@@ -125,10 +136,11 @@
                 el: '#app',
                 data: {
                     frm: {
+                        IsShop:false,
                         UserName: '',
                         Pwd: '',
                         RealName: '',
-                        Gender: '男',
+                        Gender: 0,
                         Mobile: '',
                         Email: '',
                         QQ: '',

@@ -40,14 +40,13 @@ namespace GrainManage.Web
                     var userName = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.UserName);
                     var level = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
                     var token = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
-                    var appId = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.AppId);
-                    if (userId > 0 && appId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
+                    if (userId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
                     {
                         var userKey = CacheKey.GetUserKey(userId);
                         var cacheClient = filterContext.HttpContext.RequestServices.GetService(typeof(ICache)) as ICache;
                         var userInfo = cacheClient.Get<UserInfo>(userKey);
                         var expiresAt = DateTime.Now.AddMinutes(cacheMinute);
-                        if (userInfo != null && userInfo.UserName == userName && userInfo.Token == token && userInfo.AppId == appId && cacheClient.ExpireAt(userKey, expiresAt))
+                        if (userInfo != null && userInfo.UserName == userName && userInfo.Token == token && cacheClient.ExpireAt(userKey, expiresAt))
                         {
                             var values = filterContext.RouteData.Values;
                             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);

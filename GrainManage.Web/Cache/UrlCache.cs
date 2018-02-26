@@ -10,15 +10,16 @@ namespace GrainManage.Web.Cache
         private static readonly List<string> urlList = new List<string>();
         private static DateTime lastModifiedAt = DateTime.Now;
         private static readonly object lockObj = new object();
+        private static int cacheMinute = 30;
 
         public static void RefreshUrlList(bool forceRefresh = false)
         {
             var now = DateTime.Now;
-            if (forceRefresh || !urlList.Any() || lastModifiedAt.AddHours(1) < now)
+            if (forceRefresh || !urlList.Any() || lastModifiedAt.AddMinutes(cacheMinute) < now)
             {
                 lock (lockObj)
                 {
-                    if (forceRefresh || !urlList.Any() || lastModifiedAt.AddHours(1) < now)
+                    if (forceRefresh || !urlList.Any() || lastModifiedAt.AddMinutes(cacheMinute) < now)
                     {
                         var urls = AddressService.GetUrl();
                         urlList.Clear();
