@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-02-26 19:43:57
+Date: 2018-02-27 19:28:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,12 +26,12 @@ CREATE TABLE `bm_company` (
   `Address` varchar(200) NOT NULL DEFAULT '' COMMENT '公司地址',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_userid` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_company
 -- ----------------------------
-INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购门市', '');
+INSERT INTO `bm_company` VALUES ('1', '1', '是的风格', '是的方法');
 
 -- ----------------------------
 -- Table structure for `bm_contact`
@@ -58,7 +58,7 @@ CREATE TABLE `bm_contact` (
 -- ----------------------------
 -- Records of bm_contact
 -- ----------------------------
-INSERT INTO `bm_contact` VALUES ('1', '1', '张海川', '15801992799', '', '914023961', 'bijinshu@163.com', '中国江苏省南京市雨花台区雨花南路4号-10号 邮政编码: 210012', '', '', '1', '2016-01-05 18:44:49', '2018-02-11 10:38:14');
+INSERT INTO `bm_contact` VALUES ('1', '1', '张海川', '15801992799', '', '914023961', 'bijinshu@163.com', '江苏省南京市雨花台区花神大道', '', '', '1', '2016-01-05 18:44:49', '2018-02-27 19:22:07');
 INSERT INTO `bm_contact` VALUES ('2', '1', '李玉飞', '15801992799', '', '914023961', 'bijinshu@163.com', '江苏省南京市雨花台区软件大道119号', '', '', '1', '2016-01-05 18:44:49', '2018-01-04 20:10:47');
 INSERT INTO `bm_contact` VALUES ('3', '1', '王亮亮', '15801992799', '', '914023961', 'bijinshu@163.com', '李祠堂', '', '', '1', '2016-01-05 18:44:49', '2017-07-21 17:07:42');
 INSERT INTO `bm_contact` VALUES ('4', '1', '张思贤', '15801992799', '', '914023961', 'bijinshu@163.com', '六塘', '', '', '1', '2016-01-05 18:44:49', '2016-05-17 18:01:29');
@@ -135,46 +135,41 @@ CREATE TABLE `bm_order_detail` (
 DROP TABLE IF EXISTS `bm_price`;
 CREATE TABLE `bm_price` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `CompId` int(11) NOT NULL COMMENT '店铺Id',
   `ProductId` int(11) NOT NULL COMMENT '产品ID',
-  `Price` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '价格',
-  `Unit` smallint(6) NOT NULL COMMENT '单位',
-  `PriceType` varchar(20) NOT NULL DEFAULT '' COMMENT '收购、销售',
+  `Price` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '价格(元/斤)',
+  `PriceType` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:收购 1:销售',
   `Remark` varchar(200) NOT NULL DEFAULT '' COMMENT '附加描述',
   `CreatedBy` int(11) NOT NULL COMMENT '创建者',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`Id`)
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `uq_product_user` (`ProductId`,`PriceType`,`CompId`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_price
 -- ----------------------------
-INSERT INTO `bm_price` VALUES ('1', '5', '2.0100', '0', '销售', '元/千克', '1', '2007-10-12 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('2', '3', '2.5200', '0', '收购', '元/千克', '4', '2007-10-13 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('3', '8', '2.3300', '0', '销售', '元/千克', '1', '2007-10-14 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('4', '1', '2.0400', '0', '收购', '元/千克', '4', '2007-10-15 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('5', '7', '3.6500', '0', '销售', '元/千克', '1', '2007-10-16 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('6', '6', '3.0600', '0', '收购', '元/千克', '4', '2010-10-17 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('7', '3', '2.5200', '0', '收购', '元/千克', '1', '2012-10-13 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('8', '5', '2.3300', '0', '销售', '元/千克', '4', '2012-10-14 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('9', '5', '2.2900', '0', '销售', '元/千克', '1', '2007-10-18 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('10', '3', '2.6000', '0', '收购', '元/千克', '4', '2007-10-19 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('11', '8', '2.4200', '0', '销售', '元/千克', '1', '2007-10-20 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('12', '1', '2.1300', '0', '收购', '元/千克', '4', '2007-10-21 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('13', '7', '3.7400', '0', '销售', '元/千克', '1', '2007-10-22 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('14', '6', '3.1700', '0', '收购', '元/千克', '4', '2010-10-23 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('15', '5', '2.2200', '0', '收购', '元/千克', '1', '2008-12-24 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('16', '3', '2.7400', '0', '销售', '元/千克', '4', '2008-12-25 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('17', '8', '2.6600', '0', '销售', '元/千克', '1', '2008-12-26 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('18', '1', '2.0800', '0', '收购', '元/千克', '4', '2008-12-27 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('19', '7', '3.4000', '0', '销售', '元/千克', '1', '2008-12-28 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('20', '6', '2.6700', '0', '销售', '元/千克', '4', '2008-10-29 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('21', '5', '2.4100', '0', '收购', '元/千克', '1', '2009-02-01 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('22', '3', '2.8300', '0', '销售', '元/千克', '4', '2009-02-12 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('23', '8', '2.4500', '0', '收购', '元/千克', '1', '2009-02-13 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('24', '1', '2.0700', '0', '收购', '元/千克', '4', '2009-02-14 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('25', '7', '4.4900', '0', '收购', '元/千克', '1', '2009-02-15 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('26', '6', '4.8900', '0', '收购', '元/千克', '4', '2009-02-16 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('7', '1', '3', '1.2600', '0', '', '1', '2012-10-13 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('8', '4', '5', '1.1650', '1', '', '4', '2012-10-14 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('9', '1', '5', '1.1450', '1', '', '1', '2007-10-18 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('10', '4', '3', '1.3000', '0', '', '4', '2007-10-19 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('11', '10', '8', '1.2100', '1', '', '10', '2007-10-20 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('12', '9', '1', '1.0650', '0', '', '9', '2007-10-21 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('13', '10', '7', '1.8700', '1', '', '10', '2007-10-22 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('14', '66', '6', '1.5850', '0', '', '66', '2010-10-23 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('15', '2', '5', '1.1100', '0', '', '2', '2008-12-24 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('16', '8', '3', '1.3700', '1', '', '8', '2008-12-25 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('17', '1', '8', '1.3300', '1', '', '1', '2008-12-26 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('18', '1', '1', '1.0400', '0', '', '4', '2008-12-27 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('19', '1', '7', '1.7000', '1', '', '1', '2008-12-28 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('20', '4', '6', '1.3350', '1', '', '4', '2008-10-29 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('21', '1', '5', '1.2050', '0', '', '1', '2009-02-01 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('22', '4', '3', '1.4150', '1', '', '4', '2009-02-12 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('23', '1', '8', '1.2250', '0', '', '1', '2009-02-13 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('24', '5', '1', '1.0350', '0', '', '5', '2009-02-14 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('25', '1', '7', '2.2450', '0', '', '1', '2009-02-15 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('26', '4', '6', '2.4450', '0', '', '4', '2009-02-16 08:40:22', null);
 
 -- ----------------------------
 -- Table structure for `bm_product`
@@ -285,7 +280,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=406 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -633,6 +628,20 @@ INSERT INTO `log_action` VALUES ('388', '', '/User/Register', '10.10.133.108', '
 INSERT INTO `log_action` VALUES ('389', '', '/User/Register', '10.10.133.108', 'GET', '', '', '0', '2018-02-26 18:07:35', '2018-02-26 18:07:35', '00:00:00');
 INSERT INTO `log_action` VALUES ('390', '', '/User/Register', '10.10.133.108', 'POST', '', '{\"IsShop\":\"false\",\"UserName\":\"ssddd\",\"Pwd\":\"56d8c2e51eaf50ef1baef529f12baf4c5bcd80d4\",\"RealName\":\"\",\"Gender\":\"1\",\"Mobile\":\"\",\"Email\":\"\",\"QQ\":\"\",\"Weinxin\":\"\",\"Remark\":\"\"}', '0', '2018-02-26 18:07:57', '2018-02-26 18:07:57', '00:00:01');
 INSERT INTO `log_action` VALUES ('391', '', '/User/Register', '10.10.133.108', 'POST', '成功', '{\"IsShop\":\"false\",\"UserName\":\"ssddd\",\"Pwd\":\"56d8c2e51eaf50ef1baef529f12baf4c5bcd80d4\",\"RealName\":\"\",\"Gender\":\"1\",\"Mobile\":\"\",\"Email\":\"\",\"QQ\":\"\",\"Weinxin\":\"\",\"Remark\":\"\"}', '0', '2018-02-26 18:10:15', '2018-02-26 18:10:15', '00:00:01');
+INSERT INTO `log_action` VALUES ('392', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 10:13:41', '2018-02-27 10:13:41', '00:00:01');
+INSERT INTO `log_action` VALUES ('393', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 10:34:41', '2018-02-27 10:34:41', '00:00:01');
+INSERT INTO `log_action` VALUES ('394', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 10:40:42', '2018-02-27 10:40:42', '00:00:01');
+INSERT INTO `log_action` VALUES ('395', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 11:13:14', '2018-02-27 11:13:14', '00:00:00');
+INSERT INTO `log_action` VALUES ('396', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 11:19:47', '2018-02-27 11:19:47', '00:00:00');
+INSERT INTO `log_action` VALUES ('397', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 11:20:15', '2018-02-27 11:20:15', '00:00:01');
+INSERT INTO `log_action` VALUES ('398', 'bijinshu', '/User/New', '10.10.133.108', 'POST', '成功', '{\"Id\":\"0\",\"UserName\":\"ds\",\"Pwd\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"RealName\":\"得到\",\"Gender\":\"0\",\"Mobile\":\"15698751458\",\"QQ\":\"\",\"Weixin\":\"\",\"Email\":\"\",\"Roles[]\":\"3,2\",\"Status\":\"1\",\"Remark\":\"\"}', '100', '2018-02-27 16:31:12', '2018-02-27 16:31:49', '00:00:38');
+INSERT INTO `log_action` VALUES ('399', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,contact,customer,purchase,sale,retail,system,system.role,system.role.view,system.user,system.user.view,system.user.delete,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view\"}', '100', '2018-02-27 16:37:42', '2018-02-27 16:37:42', '00:00:01');
+INSERT INTO `log_action` VALUES ('400', 'bijinshu', '/User/Delete', '10.10.133.108', 'POST', '成功', '{\"userId\":\"6\"}', '100', '2018-02-27 17:04:45', '2018-02-27 17:04:45', '00:00:01');
+INSERT INTO `log_action` VALUES ('401', 'bijinshu', '/User/Delete', '10.10.133.108', 'POST', '成功', '{\"userId\":\"5\"}', '100', '2018-02-27 17:04:49', '2018-02-27 17:04:49', '00:00:01');
+INSERT INTO `log_action` VALUES ('402', 'bijinshu', '/User/New', '10.10.133.108', 'POST', '成功', '{\"Id\":\"0\",\"UserName\":\"test\",\"Pwd\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"RealName\":\"测试\",\"Gender\":\"0\",\"Mobile\":\"15689478526\",\"QQ\":\"\",\"Weixin\":\"\",\"Email\":\"\",\"Status\":\"1\",\"Remark\":\"\"}', '100', '2018-02-27 17:05:25', '2018-02-27 17:05:25', '00:00:01');
+INSERT INTO `log_action` VALUES ('403', 'bijinshu', '/User/New', '10.10.133.108', 'POST', '', '{\"Id\":\"0\",\"UserName\":\"test\",\"Pwd\":\"40bd001563085fc35165329ea1ff5c5ecbdbbeef\",\"RealName\":\"得到\",\"Gender\":\"0\",\"Mobile\":\"15684521748\",\"QQ\":\"\",\"Weixin\":\"\",\"Email\":\"\",\"Status\":\"1\",\"Remark\":\"\"}', '100', '2018-02-27 17:07:44', null, null);
+INSERT INTO `log_action` VALUES ('404', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-02-27 17:16:09', '2018-02-27 17:16:10', '00:00:01');
+INSERT INTO `log_action` VALUES ('405', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"1\",\"ContactName\":\"张海川\",\"Mobile\":\"15801992799\",\"Address\":\"江苏省南京市雨花台区花神大道\",\"QQ\":\"914023961\",\"Email\":\"bijinshu@163.com\",\"Remark\":\"\"}', '100', '2018-02-27 19:22:07', '2018-02-27 19:22:07', '00:00:01');
 
 -- ----------------------------
 -- Table structure for `log_exception`
@@ -647,7 +656,7 @@ CREATE TABLE `log_exception` (
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log_exception
@@ -668,6 +677,7 @@ INSERT INTO `log_exception` VALUES ('19', '/User/Register', '{\"IsShop\":\"false
 INSERT INTO `log_exception` VALUES ('20', '/Home/PerfectComp', '{\"Name\":\"八集粮食收购门市\",\"Address\":\"\"}', 'An error occurred while updating the entries. See the inner exception for details.\r\nColumn \'Address\' cannot be null\r\nColumn \'Address\' cannot be null\r\n', '   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Update.Internal.MySqlBatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IReadOnlyList`1 entries)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IReadOnlyList`1 entriesToSave)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()\r\n   at GrainManage.Core.BaseUnitOfWork.SaveChanges(Boolean forceSave) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\BaseUnitOfWork.cs:line 123\r\n   at GrainManage.Core.Repository`1.Add(T item) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 44\r\n   at GrainManage.Web.Controllers.HomeController.PerfectComp(String Name, String Address) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\HomeController.cs:line 51\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-02-26 19:35:35');
 INSERT INTO `log_exception` VALUES ('21', '/Home/PerfectComp', '{\"Name\":\"八集粮食收购门市\",\"Address\":\"\"}', 'Operator \'>\' cannot be applied to operands of type \'DataBase.GrainManage.Models.BM.Company\' and \'int\'\r\n', '   at CallSite.Target(Closure , CallSite , Object , Int32 )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)\r\n   at GrainManage.Web.Controllers.HomeController.PerfectComp(String Name, String Address) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\HomeController.cs:line 52\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-02-26 19:36:25');
 INSERT INTO `log_exception` VALUES ('22', '/Home/PerfectComp', '{\"Name\":\"八集粮食收购门市\",\"Address\":\"\"}', 'Operator \'>\' cannot be applied to operands of type \'DataBase.GrainManage.Models.BM.Company\' and \'int\'\r\n', '   at CallSite.Target(Closure , CallSite , Object , Int32 )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)\r\n   at GrainManage.Web.Controllers.HomeController.PerfectComp(String Name, String Address) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\HomeController.cs:line 52\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-02-26 19:38:29');
+INSERT INTO `log_exception` VALUES ('23', '/Home/PerfectComp', '{\"Name\":\"松岛枫\",\"Address\":\"\"}', 'An error occurred while updating the entries. See the inner exception for details.\r\nDuplicate entry \'1\' for key \'uq_userid\'\r\nDuplicate entry \'1\' for key \'uq_userid\'\r\n', '   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Update.Internal.MySqlBatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IReadOnlyList`1 entries)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IReadOnlyList`1 entriesToSave)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()\r\n   at GrainManage.Core.BaseUnitOfWork.SaveChanges(Boolean forceSave) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\BaseUnitOfWork.cs:line 123\r\n   at GrainManage.Core.Repository`1.Add(T item) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 44\r\n   at GrainManage.Web.Controllers.HomeController.PerfectComp(String Name, String Address) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\HomeController.cs:line 52\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-02-27 10:35:23');
 
 -- ----------------------------
 -- Table structure for `log_job`
@@ -701,7 +711,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -750,6 +760,17 @@ INSERT INTO `log_login` VALUES ('83', 'bijinshu', '10.10.133.108', '成功', '10
 INSERT INTO `log_login` VALUES ('84', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-26 19:26:09');
 INSERT INTO `log_login` VALUES ('85', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-26 19:27:23');
 INSERT INTO `log_login` VALUES ('86', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-26 19:29:34');
+INSERT INTO `log_login` VALUES ('87', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 09:15:17');
+INSERT INTO `log_login` VALUES ('88', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 10:13:45');
+INSERT INTO `log_login` VALUES ('89', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 10:34:42');
+INSERT INTO `log_login` VALUES ('90', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 10:40:43');
+INSERT INTO `log_login` VALUES ('91', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 11:13:16');
+INSERT INTO `log_login` VALUES ('92', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 11:20:07');
+INSERT INTO `log_login` VALUES ('93', 'bijinshu', '10.10.133.108', '登录失败,该账户尚未激活.', '0', '0', '2018-02-27 11:20:26');
+INSERT INTO `log_login` VALUES ('94', 'bijinshu', '10.10.133.108', '登录失败,该账户尚未激活.', '0', '0', '2018-02-27 11:20:30');
+INSERT INTO `log_login` VALUES ('95', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 11:23:55');
+INSERT INTO `log_login` VALUES ('96', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 15:53:14');
+INSERT INTO `log_login` VALUES ('97', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-27 17:16:11');
 
 -- ----------------------------
 -- Table structure for `log_price`
@@ -759,8 +780,7 @@ CREATE TABLE `log_price` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Grain` varchar(40) NOT NULL DEFAULT '' COMMENT '作物名称',
   `Price` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '价格',
-  `Unit` smallint(6) NOT NULL COMMENT '单位',
-  `PriceType` varchar(20) NOT NULL DEFAULT '' COMMENT '收购、销售',
+  `PriceType` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:收购 1:销售',
   `CreatedBy` int(11) NOT NULL COMMENT '创建者',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
@@ -769,32 +789,32 @@ CREATE TABLE `log_price` (
 -- ----------------------------
 -- Records of log_price
 -- ----------------------------
-INSERT INTO `log_price` VALUES ('1', '玉米', '2.0100', '0', '销售', '1', '2007-10-12 08:40:22');
-INSERT INTO `log_price` VALUES ('2', '大稻', '2.5200', '0', '收购', '4', '2007-10-13 08:40:22');
-INSERT INTO `log_price` VALUES ('3', '小稻', '2.3300', '0', '销售', '1', '2007-10-14 08:40:22');
-INSERT INTO `log_price` VALUES ('4', '小麦', '2.0400', '0', '收购', '4', '2007-10-15 08:40:22');
-INSERT INTO `log_price` VALUES ('5', '菜籽', '3.6500', '0', '销售', '1', '2007-10-16 08:40:22');
-INSERT INTO `log_price` VALUES ('6', '花生', '3.0600', '0', '收购', '4', '2010-10-17 08:40:22');
-INSERT INTO `log_price` VALUES ('7', '大稻', '2.5200', '0', '收购', '1', '2012-10-13 08:40:22');
-INSERT INTO `log_price` VALUES ('8', '玉米', '2.3300', '0', '销售', '4', '2012-10-14 08:40:22');
-INSERT INTO `log_price` VALUES ('9', '玉米', '2.2900', '0', '销售', '1', '2007-10-18 08:40:22');
-INSERT INTO `log_price` VALUES ('10', '大稻', '2.6000', '0', '收购', '4', '2007-10-19 08:40:22');
-INSERT INTO `log_price` VALUES ('11', '小稻', '2.4200', '0', '销售', '1', '2007-10-20 08:40:22');
-INSERT INTO `log_price` VALUES ('12', '小麦', '2.1300', '0', '收购', '4', '2007-10-21 08:40:22');
-INSERT INTO `log_price` VALUES ('13', '菜籽', '3.7400', '0', '销售', '1', '2007-10-22 08:40:22');
-INSERT INTO `log_price` VALUES ('14', '花生', '3.1700', '0', '收购', '4', '2010-10-23 08:40:22');
-INSERT INTO `log_price` VALUES ('15', '玉米', '2.2200', '0', '收购', '1', '2008-12-24 08:40:22');
-INSERT INTO `log_price` VALUES ('16', '大稻', '2.7400', '0', '销售', '4', '2008-12-25 08:40:22');
-INSERT INTO `log_price` VALUES ('17', '小稻', '2.6600', '0', '销售', '1', '2008-12-26 08:40:22');
-INSERT INTO `log_price` VALUES ('18', '小麦', '2.0800', '0', '收购', '4', '2008-12-27 08:40:22');
-INSERT INTO `log_price` VALUES ('19', '菜籽', '3.4000', '0', '销售', '1', '2008-12-28 08:40:22');
-INSERT INTO `log_price` VALUES ('20', '花生', '2.6700', '0', '销售', '4', '2008-10-29 08:40:22');
-INSERT INTO `log_price` VALUES ('21', '玉米', '2.4100', '0', '收购', '1', '2009-02-01 08:40:22');
-INSERT INTO `log_price` VALUES ('22', '大稻', '2.8300', '0', '销售', '4', '2009-02-12 08:40:22');
-INSERT INTO `log_price` VALUES ('23', '小稻', '2.4500', '0', '收购', '1', '2009-02-13 08:40:22');
-INSERT INTO `log_price` VALUES ('24', '小麦', '2.0700', '0', '收购', '4', '2009-02-14 08:40:22');
-INSERT INTO `log_price` VALUES ('25', '菜籽', '4.4900', '0', '收购', '1', '2009-02-15 08:40:22');
-INSERT INTO `log_price` VALUES ('26', '花生', '4.8900', '0', '收购', '4', '2009-02-16 08:40:22');
+INSERT INTO `log_price` VALUES ('1', '玉米', '1.0050', '1', '1', '2007-10-12 08:40:22');
+INSERT INTO `log_price` VALUES ('2', '大稻', '1.2600', '0', '4', '2007-10-13 08:40:22');
+INSERT INTO `log_price` VALUES ('3', '小稻', '1.1650', '1', '1', '2007-10-14 08:40:22');
+INSERT INTO `log_price` VALUES ('4', '小麦', '1.0200', '0', '4', '2007-10-15 08:40:22');
+INSERT INTO `log_price` VALUES ('5', '菜籽', '1.8250', '1', '1', '2007-10-16 08:40:22');
+INSERT INTO `log_price` VALUES ('6', '花生', '1.5300', '0', '4', '2010-10-17 08:40:22');
+INSERT INTO `log_price` VALUES ('7', '大稻', '1.2600', '0', '1', '2012-10-13 08:40:22');
+INSERT INTO `log_price` VALUES ('8', '玉米', '1.1650', '1', '4', '2012-10-14 08:40:22');
+INSERT INTO `log_price` VALUES ('9', '玉米', '1.1450', '1', '1', '2007-10-18 08:40:22');
+INSERT INTO `log_price` VALUES ('10', '大稻', '1.3000', '0', '4', '2007-10-19 08:40:22');
+INSERT INTO `log_price` VALUES ('11', '小稻', '1.2100', '1', '1', '2007-10-20 08:40:22');
+INSERT INTO `log_price` VALUES ('12', '小麦', '1.0650', '0', '4', '2007-10-21 08:40:22');
+INSERT INTO `log_price` VALUES ('13', '菜籽', '1.8700', '1', '1', '2007-10-22 08:40:22');
+INSERT INTO `log_price` VALUES ('14', '花生', '1.5850', '0', '4', '2010-10-23 08:40:22');
+INSERT INTO `log_price` VALUES ('15', '玉米', '1.1100', '0', '1', '2008-12-24 08:40:22');
+INSERT INTO `log_price` VALUES ('16', '大稻', '1.3700', '1', '4', '2008-12-25 08:40:22');
+INSERT INTO `log_price` VALUES ('17', '小稻', '1.3300', '1', '1', '2008-12-26 08:40:22');
+INSERT INTO `log_price` VALUES ('18', '小麦', '1.0400', '0', '4', '2008-12-27 08:40:22');
+INSERT INTO `log_price` VALUES ('19', '菜籽', '1.7000', '1', '1', '2008-12-28 08:40:22');
+INSERT INTO `log_price` VALUES ('20', '花生', '1.3350', '1', '4', '2008-10-29 08:40:22');
+INSERT INTO `log_price` VALUES ('21', '玉米', '1.2050', '0', '1', '2009-02-01 08:40:22');
+INSERT INTO `log_price` VALUES ('22', '大稻', '1.4150', '1', '4', '2009-02-12 08:40:22');
+INSERT INTO `log_price` VALUES ('23', '小稻', '1.2250', '0', '1', '2009-02-13 08:40:22');
+INSERT INTO `log_price` VALUES ('24', '小麦', '1.0350', '0', '4', '2009-02-14 08:40:22');
+INSERT INTO `log_price` VALUES ('25', '菜籽', '2.2450', '0', '1', '2009-02-15 08:40:22');
+INSERT INTO `log_price` VALUES ('26', '花生', '2.4450', '0', '4', '2009-02-16 08:40:22');
 
 -- ----------------------------
 -- Table structure for `rm_address`
@@ -854,7 +874,7 @@ CREATE TABLE `rm_role` (
 INSERT INTO `rm_role` VALUES ('1', '超级管理员', '', '100', '开发者专用用户', '2016-03-05 18:09:24');
 INSERT INTO `rm_role` VALUES ('2', '普通用户', '', '80', '普通注册用户或关注公众号的用户', '2016-03-05 18:09:47');
 INSERT INTO `rm_role` VALUES ('3', '店铺管理员', '', '80', '管理店铺下的员工', '2017-07-19 18:27:34');
-INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'price,contact,customer,purchase,sale,retail,system,system.role,system.role.view,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view', '90', '管理系统用户', '2017-08-29 15:07:11');
+INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'price,contact,customer,purchase,sale,retail,system,system.role,system.role.view,system.user,system.user.view,system.user.delete,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view', '90', '管理系统用户', '2017-08-29 15:07:11');
 INSERT INTO `rm_role` VALUES ('5', '店铺员工', '', '30', '店铺的员工，协助店铺管理员工作', '2018-02-26 11:31:05');
 
 -- ----------------------------
@@ -881,15 +901,14 @@ CREATE TABLE `rm_user` (
   PRIMARY KEY (`Id`),
   KEY `uq_user_name` (`UserName`),
   KEY `index_mobile` (`Mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-02-26 15:45:19');
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-02-27 17:16:10');
 INSERT INTO `rm_user` VALUES ('2', 'testadmin', '0', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '3', '555', '2016-01-05 18:44:49', '1', '2018-02-11 11:50:22');
 INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
-INSERT INTO `rm_user` VALUES ('5', 'ssddd', '0', 'a5aef15e78685b79e998464a968914fb154be68f', '1', '0', '', '', '', '', '', '2', '', '2018-02-26 18:10:15', '-1', '2018-02-26 18:10:15');
 
 -- ----------------------------
 -- Table structure for `rm_white_ip`

@@ -5,6 +5,7 @@ namespace GrainManage.Web.Models.Contact
     public class ContactDto
     {
         public int Id { get; set; }
+        public int CompId { get; set; }
         public string ContactName { get; set; }
         public string Address { get; set; }
         public string Mobile { get; set; }
@@ -12,6 +13,7 @@ namespace GrainManage.Web.Models.Contact
         public string Email { get; set; }
         public string Remark { get; set; }
         public int CreatedBy { get; set; }
+        public bool CanModify { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public string ImgName { get; set; }

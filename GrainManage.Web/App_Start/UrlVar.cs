@@ -49,6 +49,10 @@ namespace GrainManage.Web
 
         //Trade
 
+        //Price
+        [Common]
+        public static string Price_GetPriceList { get { return GetUrl("/Price/GetPriceList"); } }
+
         //Log
         public static string Log_ExceptionList { get { return GetUrl("/Log/ExceptionList"); } }
         public static string Log_ActionList { get { return GetUrl("/Log/ActionList"); } }

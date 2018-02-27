@@ -15,12 +15,13 @@ namespace GrainManage.Web.Controllers
     {
         public ActionResult Index(InputSearch input)
         {
+            var currentUser = CurrentUser;
             if (IsGetRequest)
             {
-                return View(CurrentUser);
+                return View(currentUser);
             }
             var result = new BaseOutput();
-            Expression<Func<Contact, bool>> myFilter = f => f.CreatedBy == UserId;
+            Expression<Func<Contact, bool>> myFilter = f => f.CompId == currentUser.CompId;
             if (!string.IsNullOrEmpty(input.Name))
             {
                 myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
@@ -51,7 +52,15 @@ namespace GrainManage.Web.Controllers
             else
             {
                 result.total = total;
-                result.data = MapTo<List<ContactDto>>(list);
+                var dtoList = MapTo<List<ContactDto>>(list);
+                foreach (var item in dtoList)
+                {
+                    if (currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop)) || item.CreatedBy == currentUser.UserId)
+                    {
+                        item.CanModify = true;
+                    }
+                }
+                result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
             }
             return JsonNet(result);
@@ -60,7 +69,9 @@ namespace GrainManage.Web.Controllers
         public ActionResult New(ContactDto input)
         {
             var result = new BaseOutput();
-            input.CreatedBy = UserId;
+            var currentUser = CurrentUser;
+            input.CreatedBy = currentUser.UserId;
+            input.CompId = currentUser.CompId;
             SetEmptyIfNull(input);
             var model = MapTo<Contact>(input);
             var repo = GetRepo<Contact>();
@@ -80,16 +91,15 @@ namespace GrainManage.Web.Controllers
         public ActionResult Edit(ContactDto input)
         {
             var result = new BaseOutput();
-            input.CreatedBy = UserId;
+            var currentUser = CurrentUser;
             SetEmptyIfNull(input);
             var repo = GetRepo<Contact>();
-            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CreatedBy == input.CreatedBy).Any())
+            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CompId == currentUser.CompId).Any())
             {
-                var model = repo.GetFiltered(f => f.Id == input.Id && f.CreatedBy == input.CreatedBy, true).First();
+                var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
                 model.ContactName = input.ContactName;
                 model.Address = input.Address;
                 model.Mobile = input.Mobile;
-                model.CreatedBy = input.CreatedBy;
                 model.Email = input.Email;
                 model.ModifiedAt = DateTime.Now;
                 model.QQ = input.QQ;
@@ -108,8 +118,9 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var repo = GetRepo<Contact>();
-            var model = repo.GetFiltered(f => f.Id == contactId && f.CreatedBy == UserId).FirstOrDefault();
-            if (model != null)
+            var currentUser = CurrentUser;
+            var model = repo.GetFiltered(f => f.Id == contactId && f.CompId == currentUser.CompId).FirstOrDefault();
+            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop))))
             {
                 repo.Delete(model);
                 SetResponse(s => s.Success, null, result);

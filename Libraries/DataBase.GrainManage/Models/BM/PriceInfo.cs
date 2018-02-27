@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace DataBase.GrainManage.Models
 {
-    public class Price
+    public class PriceInfo
     {
         public int Id { get; set; }
-        public string Grain { get; set; }
-        public decimal UnitPrice { get; set; }
-        public string PriceType { get; set; }
+        public int CompId { get; set; }
+        public int ProductId { get; set; }
+        public decimal Price { get; set; }
+        public int PriceType { get; set; }
         public string Remark { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }

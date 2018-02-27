@@ -3,16 +3,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataBase.GrainManage.Models.Mapping
 {
-    public class PriceMapper : IEntityTypeConfiguration<Price>
+    public class PriceMapper : IEntityTypeConfiguration<PriceInfo>
     {
-        public void Configure(EntityTypeBuilder<Price> builder)
+        public void Configure(EntityTypeBuilder<PriceInfo> builder)
         {
             builder.ToTable("bm_price");
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Id);
-            builder.Property(m => m.Grain).HasMaxLength(40);
-            builder.Property(m => m.UnitPrice);
-            builder.Property(m => m.PriceType).HasMaxLength(20);
+            builder.Property(m => m.ProductId);
+            builder.Property(m => m.PriceType);
             builder.Property(m => m.Remark).HasMaxLength(200);
             builder.Property(m => m.CreatedAt);
             builder.Property(m => m.ModifiedAt);

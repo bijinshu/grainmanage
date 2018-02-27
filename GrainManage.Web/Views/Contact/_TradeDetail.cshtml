@@ -20,6 +20,17 @@
                                 <span v-if="!isContactNameValid" class="col-md-push-3 col-md-8" style="color:red">联系人名称只能由2-4个汉字组成</span>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-3 control-label hidden-xs hidden-sm">交易类型</label>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline">
+                                        <input value="0" v-model="frmTrade.TradeType" type="radio"><span>收购</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input value="1" v-model="frmTrade.TradeType" type="radio"><span>出售</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
                                 <div class="col-md-8">
                                     <label class="checkbox-inline" v-for="item in productList">
@@ -43,17 +54,6 @@
                                 <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">金额</label>
                                 <div class="col-md-8">
                                     <input type="text" readonly class="form-control" id="QQ" placeholder="金额" v-bind:value="frmTrade.Price*frmTrade.Weight">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Email" class="col-md-3 control-label hidden-xs hidden-sm">交易类型</label>
-                                <div class="col-md-8">
-                                    <label class="checkbox-inline">
-                                        <input value="0" v-model="frmTrade.TradeType" type="radio"><span>收购</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input value="1" v-model="frmTrade.TradeType" type="radio"><span>出售</span>
-                                    </label>
                                 </div>
                             </div>
                             <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">

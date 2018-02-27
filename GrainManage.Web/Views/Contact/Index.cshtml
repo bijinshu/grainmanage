@@ -54,7 +54,7 @@
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Email}}</td>
                             <td>
-                                <a style="cursor:pointer;" v-on:click.stop="edit(item)">编辑</a>
+                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="edit(item)">编辑</a>
                                 <a>&nbsp;</a>
                                 <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
                             </td>
@@ -95,12 +95,13 @@
                 },
                 frmTrade: {
                     ContactId: 0,
-                    ProductId: 0,
+                    ProductId: 1,
                     Price:0,
                     Weight: 0,
                     TradeType: 0,
                     Remark:''
                 },
+                priceDic: new Array(),
                 IsDisabled: false,
                 AddressType: 'manual',
                 GeoMsg: '',
@@ -122,8 +123,22 @@
                 },
                 getProductList: function () {
                     $.post('@UrlVar.Product_List').done(function (result, status) {
-                                this.productList = result;
+                        this.productList = result;
                     }.bind(this));
+                },
+                getPriceList: function () {
+                    $.post('@UrlVar.Price_GetPriceList').done(function (result, status) {
+                        this.priceDic = result;
+                        this.getPrice();
+                    }.bind(this));
+                },
+                getPrice: function () {
+                    var priceKey = this.frmTrade.ProductId + "-" + this.frmTrade.TradeType;
+                    if (priceKey in this.priceDic) {
+                        this.frmTrade.Price = this.priceDic[priceKey];
+                    } else {
+                        this.frmTrade.Price = 0;
+                    }
                 },
                 add: function () {
                     this.PanelTitle = '添加联系人';
@@ -301,6 +316,13 @@
             created: function () {
                 this.getData();
                 this.getProductList();
+                this.getPriceList();
+                this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
+                    this.getPrice();
+                });
+                this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
+                    this.getPrice();
+                });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
                 });

@@ -17,8 +17,7 @@ namespace GrainManage.Web.Controllers
         {
             if (IsGetRequest)
             {
-                var user = CurrentUser;
-                return View(user);
+                return View(CurrentUser);
             }
             var result = new BaseOutput();
             var userRepo = GetRepo<User>();
