@@ -73,7 +73,7 @@ namespace GrainManage.Web
         [Message("该用户不存在")]
         public readonly int UserNotExist = 518;
 
-        //User
+        //Contact
         [Message("该联系人已存在")]
         public readonly int ContactExisted = 201;
 
@@ -82,5 +82,11 @@ namespace GrainManage.Web
         public readonly int CompanyNameEmpty = 601;
         [Message("该商铺名称已存在")]
         public readonly int CompanyNameExisted = 602;
+
+        //Employee
+        [Message("非店铺管理员不可添加店员")]
+        public readonly int NotShopAdmin = 701;
+        [Message("请先完善店铺信息")]
+        public readonly int NotPerfectShopInfo = 702;
     }
 }

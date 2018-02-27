@@ -35,6 +35,11 @@ namespace GrainManage.Web
         [Common]
         public static string User_Info { get { return GetUrl("/User/Info"); } }
 
+        //Employee
+        public static string Employee_Index { get { return GetUrl("/Employee/Index"); } }
+        public static string Employee_New { get { return GetUrl("/Employee/New"); } }
+        public static string Employee_Edit { get { return GetUrl("/Employee/Edit"); } }
+        public static string Employee_Delete { get { return GetUrl("/Employee/Delete"); } }
 
         //Contact
         public static string Contact_Index { get { return GetUrl("/Contact/Index"); } }

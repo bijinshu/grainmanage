@@ -1,4 +1,5 @@
 ﻿using DataBase.GrainManage.Models;
+using DataBase.GrainManage.Models.BM;
 using DataBase.GrainManage.Models.Log;
 using GrainManage.Common;
 using GrainManage.Core;
@@ -42,11 +43,7 @@ namespace GrainManage.Web.Controllers
                 var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
                 {
-                    if (account.CompId == 0)
-                    {
-                        SetResponse(s => s.UserNotActivated, input, result);
-                    }
-                    else if (account.Status == Status.Enabled)
+                    if (account.Status == Status.Enabled)
                     {
                         var encryptedPwd = SHAEncrypt.SHA1(input.Pwd);
                         if (account.Pwd != encryptedPwd)
@@ -61,7 +58,7 @@ namespace GrainManage.Web.Controllers
                             var userInfo = new UserInfo
                             {
                                 UserId = account.Id,
-                                AppId = account.CompId,
+                                CompId = account.CompId,
                                 UserName = input.UserName,
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = result.data.token,
@@ -327,14 +324,12 @@ namespace GrainManage.Web.Controllers
             {
                 var now = DateTime.Now;
                 var model = MapTo<User>(input);
-                model.Status = Status.Enabled;
                 model.Pwd = SHAEncrypt.SHA1(input.Pwd);
+                model.CreatedBy = UserId;
                 model = repo.Add(model);
                 result.data = model.Id;
                 if (model.Id > 0)
                 {
-                    model.CompId = model.Id;
-                    repo.UnitOfWork.SaveChanges();
                     SetResponse(s => s.Success, input, result);
                 }
                 else
@@ -401,7 +396,19 @@ namespace GrainManage.Web.Controllers
                 var roles = roleRepo.GetFiltered(f => dto.Roles.Contains(f.Id)).Select(s => s.Name).ToList();
                 dto.RoleNames = string.Join(",", roles);
             }
-            result.data = dto;
+            Company comp = null;
+            if (user.CompId > 0)
+            {
+                comp = GetRepo<Company>().GetFiltered(f => f.Id == user.CompId).FirstOrDefault();
+            }
+            if (comp == null)
+            {
+                result.data = new { dto.UserName, dto.RealName, dto.Gender, dto.Mobile, dto.QQ, dto.Weixin, dto.Email, dto.RoleNames, dto.CompId };
+            }
+            else
+            {
+                result.data = new { dto.UserName, dto.RealName, dto.Gender, dto.Mobile, dto.QQ, dto.Weixin, dto.Email, dto.RoleNames, dto.CompId, ShopName = comp.Name, ShopAddress = comp.Address };
+            }
             SetResponse(s => s.Success, result);
             return JsonNet(result, true);
         }

@@ -2,11 +2,11 @@
     <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
     <form slot="body" class="form-horizontal" role="form">
         <div class="form-group">
-            <label for="UserName" class="col-md-3 control-label hidden-xs hidden-sm">用户名</label>
+            <label for="UserName" class="col-md-3 control-label hidden-xs hidden-sm">登录名称</label>
             <div class="col-md-8">
-                <input v-model="frm.UserName" type="text" class="form-control" id="UserName" placeholder="请输入用户名">
+                <input v-model="frm.UserName" type="text" class="form-control" id="UserName" placeholder="请输入登录名称">
             </div>
-            <span v-if="!isUserNameValid" class="col-md-push-3 col-md-8" style="color:red">用户名只能由2-20个字符组成</span>
+            <span v-if="!isUserNameValid" class="col-md-push-3 col-md-8" style="color:red">登录名称只能由2-20个字符组成</span>
         </div>
         <div v-if="frm.Id==0" class="form-group">
             <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">密码</label>
@@ -16,11 +16,11 @@
             <span v-if="!isPwdValid" class="col-md-push-3 col-md-8" style="color:red">密码只能由2-20个字符组成</span>
         </div>
         <div class="form-group">
-            <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">真实姓名</label>
+            <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">员工姓名</label>
             <div class="col-md-8">
-                <input v-model="frm.RealName" type="text" class="form-control" id="RealName" placeholder="请输入真实姓名">
+                <input v-model="frm.RealName" type="text" class="form-control" id="RealName" placeholder="请输入员工姓名">
             </div>
-            <span v-if="!isRealNameValid" class="col-md-push-3 col-md-8" style="color:red">真实姓名只能由2-4个汉字组成</span>
+            <span v-if="!isRealNameValid" class="col-md-push-3 col-md-8" style="color:red">员工姓名只能由2-4个汉字组成</span>
         </div>
         <div class="form-group">
             <label for="Mobile" class="col-md-3 control-label hidden-xs hidden-sm">手机号码</label>
@@ -58,14 +58,6 @@
                 </label>
                 <label class="checkbox-inline">
                     <input v-model="frm.Gender" type="radio" value="1"><span>女</span>
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">角色</label>
-            <div class="col-md-8">
-                <label class="checkbox-inline" v-for="role in roleList">
-                    <input v-model="frm.Roles" type="checkbox" v-bind:value="role.value"><span>{{role.text}}</span>
                 </label>
             </div>
         </div>

@@ -1,7 +1,7 @@
 ﻿@using GrainManage.Web
 @model GrainManage.Web.Models.UserInfo
 @{
-    ViewBag.Title = "用户列表";
+    ViewBag.Title = "员工列表";
 }
 <script src="~/js/Crypto/base64.js"></script>
 <script src="~/js/Crypto/sha1.js"></script>
@@ -12,12 +12,12 @@
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">用户名：</label>
-                        <input type="text" class="form-control" v-model="search.UserName" placeholder="请输入用户名" />
+                        <label class="control-label hidden-xs hidden-sm">登录账号：</label>
+                        <input type="text" class="form-control" v-model="search.UserName" placeholder="请输入登录账号" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">真实姓名：</label>
-                        <input type="text" class="form-control" v-model="search.RealName" placeholder="请输入真实姓名" />
+                        <label class="control-label hidden-xs hidden-sm">员工姓名：</label>
+                        <input type="text" class="form-control" v-model="search.RealName" placeholder="请输入员工姓名" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <label class="control-label hidden-xs hidden-sm">手机号：</label>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls))
+        @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls))
         {
             <div class="col-md-1">
                 <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
@@ -47,17 +47,16 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">用户管理</caption>
+                    <caption style="color:red;font-weight:bolder;">员工管理</caption>
                     <thead>
                         <tr>
-                            <th>用户名</th>
-                            <th>真实姓名</th>
+                            <th>登录名称</th>
+                            <th>员工姓名</th>
                             <th>性别</th>
                             <th>手机</th>
                             <th>QQ</th>
                             <th>微信</th>
                             <th>邮箱</th>
-                            <th>角色</th>
                             <th>状态</th>
                             <th>操作</th>
                         </tr>
@@ -71,14 +70,13 @@
                             <td>{{item.QQ}}</td>
                             <td>{{item.Weixin}}</td>
                             <td>{{item.Email}}</td>
-                            <td>{{item.RoleNames}}</td>
                             <td>{{item.Status?'启用':'禁用'}}</td>
                             <td>
-                                @if (UrlVar.Has(Model.Level, UrlVar.User_Edit, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
                                 }
-                                @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls))
+                                @if (UrlVar.Has(Model.Level, UrlVar.Employee_Delete, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
                                 }
@@ -94,9 +92,9 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.User_Edit, Model.Urls))
+    @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
     {
-        @Html.Partial("_UserDetail")
+        @Html.Partial("_EmployeeDetail")
     }
     <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
 </div>
@@ -109,7 +107,6 @@
                 total: 0,
                 tmpPwd: '',
                 list: [],
-                roleList: [],
                 search: { UserName: '', RealName: '', Mobile: '', Status: null, PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
@@ -131,7 +128,7 @@
             },
             methods: {
                 getData: function () {
-                    $.post('@UrlVar.User_Index', this.search).always(function (result, status) {
+                    $.post('@UrlVar.Employee_Index', this.search).always(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
                         if (result.code != 1) {
@@ -144,7 +141,7 @@
                     this.frm.Id = 0;
                     this.frm.UserName = '';
                     this.frm.RealName = '';
-                    this.frm.Gender =0;
+                    this.frm.Gender = 0;
                     this.frm.Mobile = '';
                     this.frm.QQ = '';
                     this.frm.Email = '';
@@ -152,7 +149,7 @@
                     this.frm.Roles = [];
                     this.frm.Status = 0;
                     this.frm.Remark = '';
-                    this.showPanel('添加用户', "#saveUserModal");
+                    this.showPanel('添加员工', "#saveUserModal");
                 },
                 edit: function (item) {
                     this.frm.Id = item.Id;
@@ -166,7 +163,7 @@
                     this.frm.Roles = item.Roles;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
-                    this.showPanel('编辑用户', "#saveUserModal");
+                    this.showPanel('编辑员工', "#saveUserModal");
                 },
                 saveUser: function (event) {
                     if (this.isUserNameValid && this.isRealNameValid && this.isMobileValid && this.isEmailValid &&
@@ -176,7 +173,7 @@
                         if (this.frm.Id == 0) {
                             this.frm.Pwd = new sha1().encrypt(this.tmpPwd);
                         }
-                        var url = this.frm.Id > 0 ? '@UrlVar.User_Edit' : '@UrlVar.User_New';
+                        var url = this.frm.Id > 0 ? '@UrlVar.Employee_Edit' : '@UrlVar.Employee_New';
                         $.post(url, this.frm).always(function (result, status) {
                             this.IsDisabled = false;
                             if (result.code == 1) {
@@ -184,27 +181,22 @@
                                 this.getData();
                             }
                             else {
-                                this.showAlert(this.frm.Id > 0 ? '编辑用户提示' : '添加用户提示', result.msg);
+                                this.showAlert(this.frm.Id > 0 ? '编辑员工提示' : '添加员工提示', result.msg);
                             }
                         }.bind(this));
                     }
                     else {
-                        this.showAlert(this.frm.Id > 0 ? '编辑用户提示' : '添加用户提示', '有信息格式不正确,请重新确认');
+                        this.showAlert(this.frm.Id > 0 ? '编辑员工提示' : '添加员工提示', '有信息格式不正确,请重新确认');
                     }
                 },
                 deleteItem: function (item) {
-                    $.post('@UrlVar.User_Delete', { userId: item.Id }).always(function (result, status) {
+                    $.post('@UrlVar.Employee_Delete', { userId: item.Id }).always(function (result, status) {
                         if (result.code == 1) {
                             this.getData();
                         }
                         else {
                             this.showAlert('删除提示', result.msg);
                         }
-                    }.bind(this));
-                },
-                getRoleList: function () {
-                    $.post('@UrlVar.Role_GetRoleList').always(function (result, status) {
-                        this.roleList = result.data;
                     }.bind(this));
                 }
             },
@@ -236,7 +228,6 @@
             },
             created: function () {
                 this.getData();
-                this.getRoleList();
             }
         })
     })

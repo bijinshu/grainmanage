@@ -22,5 +22,6 @@ namespace GrainManage.Web
 
         public const string Role_User = "2";
         public const string Role_Shop = "3";
+        public const string Role_Employee = "5";
     }
 }
