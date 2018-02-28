@@ -1,0 +1,259 @@
+﻿@using GrainManage.Web
+@{
+    ViewBag.Title = "交易历史";
+}
+<script src="~/js/common-tool.js"></script>
+<div class="container" id="tradeInfo">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control"  v-model="search.ContactName" placeholder="请输入联系人姓名" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control"  v-model="search.ProductName" placeholder="请输入产品名称" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">开始时间：</label>
+                        <input type="date" class="form-control"  id="StartTime" placeholder="请选择开始时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">终止时间：</label>
+                        <input type="date" class="form-control"  id="EndTime" placeholder="请选择终止时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.TradeType" class="form-control" >
+                            <option value="null">请选择交易类型</option>
+                            <option value="0">收购</option>
+                            <option value="1">出售</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">交易历史</caption>
+                    <thead>
+                        <tr>
+                            <th>联系人名称</th>
+                            <th>产品名称</th>
+                            <th>产品价格</th>
+                            <th>产品重量</th>
+                            <th>计算金额</th>
+                            <th>成交金额</th>
+                            <th>交易类型</th>
+                            <th>交易时间</th>
+                            <th>创建人</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in list">
+                            <td>{{item.ContactName}}</td>
+                            <td>{{item.ProductName}}</td>
+                            <td>{{item.Price}}</td>
+                            <td>{{item.Weight}}</td>
+                            <td>{{(item.Price*item.Weight).toFixed(2)}}</td>
+                            <td>{{item.ActualMoney}}</td>
+                            <td>{{item.TradeType==1?'出售':'收购'}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.Creator}}</td>
+                            <td>
+                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showTrade(item)">编辑</a>
+                                <a>&nbsp;</a>
+                                <a style="cursor:pointer;" v-on:click.stop="del(item)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    @Html.Partial("_TradeDetail")
+    <modal-dialog title="删除交易" id="tradeDeleteModal" v-bind:msg="msg">
+        <div slot="footer" style="text-align:center;">
+            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
+            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
+        </div>
+    </modal-dialog>
+    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+</div>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script>
+    $(function () {
+        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+        new Vue({
+            el: "#tradeInfo",
+            data: {
+                total: 0,
+                list: [],
+                productList: [],
+                search: { ContactName: '', ProductName: '', TradeType: null, PageIndex: 0, PageSize: 10 },
+                frmTrade: {
+                    Id:0,
+                    ContactId: 0,
+                    ContactName:'',
+                    ProductId: 1,
+                    ProductName:'',
+                    Price:0,
+                    Weight: 0,
+                    TradeType: 0,
+                    ActualMoney:0,
+                    Remark:''
+                },
+                priceDic: new Array(),
+                IsDisabled: false,
+                AlertTitle: '',
+                PanelTitle: '',
+                AllowRefreshPrice: false,
+                currentItem: {},
+                msg: ''
+            },
+            methods: {
+                getData: function () {
+                    this.search.StartTime = $("#StartTime").val();
+                    this.search.EndTime = $("#EndTime").val();
+                    $.post('@UrlVar.Trade_Index', this.search).done(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1) {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                getProductList: function () {
+                    $.post('@UrlVar.Product_List').done(function (result, status) {
+                        this.productList = result;
+                    }.bind(this));
+                },
+                getPriceList: function () {
+                    $.post('@UrlVar.Price_GetPriceList').done(function (result, status) {
+                        this.priceDic = result;
+                    }.bind(this));
+                },
+                setPrice: function () {
+                    if (this.AllowRefreshPrice) {
+                        var priceKey = this.frmTrade.ProductId + "-" + this.frmTrade.TradeType;
+                        if (priceKey in this.priceDic) {
+                            this.frmTrade.Price = this.priceDic[priceKey];
+                        } else {
+                            this.frmTrade.Price = '';
+                        }
+                    }
+                },
+                setMoney: function () {
+                    this.frmTrade.ActualMoney = this.TotalMoney;
+                },
+                saveTrade: function () {
+                    this.IsDisabled = true;
+                    if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
+                        for (var i = 0; i < this.productList.length; i++) {
+                            if (this.productList[i].Id == this.frmTrade.ProductId) {
+                                this.frmTrade.ProductName = this.productList[i].Name;
+                                break;
+                            }
+                        }
+                        $.post('@UrlVar.Trade_Edit', this.frmTrade).always(function (result, status) {
+                          this.IsDisabled = false;
+                          if (result.code == 1) {
+                             this.getData();
+                             this.hidePanel("#saveTradeModal");
+                          }
+                          else {
+                            this.showAlert(result.msg);
+                          }
+                         }.bind(this));
+                    } else {
+                        this.showAlert('请检查各项参数是否正确');
+                        this.IsDisabled = false;
+                    }
+                },
+                showTrade: function (item) {
+                    this.AllowRefreshPrice = false;
+                    this.frmTrade.ProductId = item.ProductId;
+                    this.frmTrade.TradeType = item.TradeType;
+                    this.frmTrade.Id = item.Id;
+                    this.frmTrade.ContactId = item.ContactId;
+                    this.frmTrade.ContactName = item.ContactName;
+                    this.frmTrade.ProductName = item.ProductName;
+                    this.frmTrade.Weight = item.Weight;
+                    this.frmTrade.ActualMoney = item.ActualMoney;
+                    this.frmTrade.Remark = item.Remark;
+                    this.frmTrade.Price = item.Price;
+                    this.showPanel("#saveTradeModal");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.Trade_Delete', { tradeId: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel('#tradeDeleteModal');
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert('删除提示', result.msg);
+                        }
+                    }.bind(this));
+                },
+                del: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
+                    this.showPanel("#tradeDeleteModal");
+                },
+            },
+            computed: {
+                isContactNameValid: function () {
+                    return (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frmTrade.ContactName);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frmTrade.Remark);
+                },
+                isPriceValid: function () {
+                    return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
+                },
+                isActualMoneyValid: function () {
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney >= 0;
+                },
+                isWeightValid: function () {
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
+                },
+                TotalMoney: function () {
+                    return ((this.frmTrade.Price ? this.frmTrade.Price : 0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0)).toFixed(2);
+                }
+            },
+            created: function () {
+                this.getData();
+                this.getProductList();
+                this.getPriceList();
+                this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
+                    this.setPrice();
+                });
+                this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
+                    this.setPrice();
+                });
+                this.$watch('frmTrade.Price', function (newVal, oldVal) {
+                    this.AllowRefreshPrice = true;//编辑时，只有正确显示原来价格后才允许搜寻新价格
+                    this.setMoney();
+                });
+                this.$watch('frmTrade.Weight', function (newVal, oldVal) {
+                    this.setMoney();
+                });
+                this.$watch('AddressType', function (newVal, oldVal) {
+                    this.getLocation();
+                });
+            }
+        })
+        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+    })
+</script>

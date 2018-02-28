@@ -80,7 +80,7 @@
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.User_New, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
+                                    <a style="cursor:pointer" v-on:click="del(item)">删除</a>
                                 }
                             </td>
                         </tr>
@@ -98,6 +98,12 @@
     {
         @Html.Partial("_UserDetail")
     }
+    <modal-dialog title="删除用户" id="userDeleteModal" v-bind:msg="msg">
+        <div slot="footer" style="text-align:center;">
+            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
+            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
+        </div>
+    </modal-dialog>
     <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
 </div>
 <script>
@@ -125,6 +131,7 @@
                     Status: 1,
                     Remark:''
                 },
+                currentUser: {},
                 IsDisabled: false,
                 AlertTitle: '',
                 PanelTitle: ''
@@ -192,8 +199,9 @@
                         this.showAlert(this.frm.Id > 0 ? '编辑用户提示' : '添加用户提示', '有信息格式不正确,请重新确认');
                     }
                 },
-                deleteItem: function (item) {
-                    $.post('@UrlVar.User_Delete', { userId: item.Id }).always(function (result, status) {
+                deleteItem: function () {
+                    $.post('@UrlVar.User_Delete', { userId: this.currentUser.Id }).always(function (result, status) {
+                        this.hidePanel('#userDeleteModal');
                         if (result.code == 1) {
                             this.getData();
                         }
@@ -201,6 +209,11 @@
                             this.showAlert('删除提示', result.msg);
                         }
                     }.bind(this));
+                },
+                del: function (item) {
+                    this.currentUser = item;
+                    this.msg = "您确定要删除 " + item.UserName + "[" + item.RealName + "]吗?";
+                    this.showPanel("#userDeleteModal");
                 },
                 getRoleList: function () {
                     $.post('@UrlVar.Role_GetRoleList').always(function (result, status) {

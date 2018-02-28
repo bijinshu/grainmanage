@@ -7,24 +7,80 @@ using System.Linq.Expressions;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using GrainManage.Core;
+using DataBase.GrainManage.Models.BM;
 
 namespace GrainManage.Web.Controllers
 {
     public class TradeController : BaseController
     {
-        public ActionResult SearchTrade()
+        public ActionResult Index(InputSearchDetail input)
         {
-            return View();
+            var currentUser = CurrentUser;
+            if (IsGetRequest)
+            {
+                return View(currentUser);
+            }
+            var result = new BaseOutput();
+            Expression<Func<Trade, bool>> myFilter = f => f.CompId == currentUser.CompId;
+            if (input.TradeType.HasValue)
+            {
+                myFilter = myFilter.And(f => f.TradeType == input.TradeType);
+            }
+            if (!string.IsNullOrEmpty(input.ProductName))
+            {
+                myFilter = myFilter.And(f => f.ProductName.Contains(input.ProductName));
+            }
+            if (!string.IsNullOrEmpty(input.ContactName))
+            {
+                myFilter = myFilter.And(f => f.ContactName.Contains(input.ContactName));
+            }
+            if (input.StartTime.HasValue)
+            {
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
+            }
+            if (input.EndTime.HasValue)
+            {
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
+            }
+            int total = 0;
+            var repo = GetRepo<Trade>();
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
+            if (!list.Any())
+            {
+                SetResponse(s => s.NoData, input, result);
+            }
+            else
+            {
+                result.total = total;
+                var dtoList = MapTo<List<TradeDto>>(list);
+                var contactRepo = GetRepo<Contact>();
+                var userRepo = GetRepo<User>();
+                var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
+                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
+                foreach (var item in dtoList)
+                {
+                    if (item.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop)))
+                    {
+                        item.CanModify = true;
+                    }
+                    if (usertDic.ContainsKey(item.CreatedBy))
+                    {
+                        item.Creator = usertDic[item.CreatedBy];
+                    }
+                }
+                result.data = dtoList;
+                SetResponse(s => s.Success, input, result);
+            }
+            return JsonNet(result, true);
         }
 
         public ActionResult New(TradeDto input)
         {
-            if (IsGetRequest)
-            {
-                return View();
-            }
             var result = new BaseOutput();
-            input.CreatedBy = UserId;
+            SetEmptyIfNull(input);
+            var currentUser = CurrentUser;
+            input.CreatedBy = currentUser.UserId;
+            input.CompId = currentUser.CompId;
             var repo = GetRepo<Trade>();
             var model = repo.Add(MapTo<Trade>(input));
             result.data = model.Id;
@@ -41,26 +97,20 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult Edit(TradeDto input)
         {
-            if (IsGetRequest)
-            {
-                return View();
-            }
             var result = new BaseOutput();
-            input.CreatedBy = UserId;
-            var now = DateTime.Now;
-            var model = MapTo<Trade>(input);
-            model.ModifiedAt = now;
+            SetEmptyIfNull(input);
             var repo = GetRepo<Trade>();
-            repo.Update(model);
-            model = repo.GetFiltered(f => f.Id == input.TradeId).First();
-            if (model.ModifiedAt == now)
-            {
-                SetResponse(s => s.Success, input, result);
-            }
-            else
-            {
-                SetResponse(s => s.UpdateFailed, input, result);
-            }
+            var model = repo.Get(input.Id);
+            model.ProductId = input.ProductId;
+            model.ProductName = input.ProductName;
+            model.ContactName = input.ContactName;
+            model.Price = input.Price;
+            model.Weight = input.Weight;
+            model.TradeType = input.TradeType;
+            model.Remark = input.Remark;
+            model.ModifiedAt = DateTime.Now;
+            repo.UnitOfWork.SaveChanges();
+            SetResponse(s => s.Success, input, result);
             return JsonNet(result);
         }
 
@@ -81,162 +131,15 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        //[HttpPost]
-        //public ActionResult SearchDetail(InputSearchDetail input)
-        //{
-        //    var result = new BaseOutput();
-        //    var creator = UserId;
-        //    Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
-        //    if (input.TradeType.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.TradeType == input.TradeType);
-        //    }
-        //    if (!string.IsNullOrEmpty(input.Grain))
-        //    {
-        //        myFilter = myFilter.And(f => f.ProductId.Contains(input.Grain));
-        //    }
-        //    if (!string.IsNullOrEmpty(input.ContactName))
-        //    {
-        //        myFilter = myFilter.And(f => f.Contact.ContactName.Contains(input.ContactName));
-        //    }
-        //    if (input.StartTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
-        //    }
-        //    if (input.EndTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
-        //    }
-        //    int total = 0;
-        //    var repo = GetRepo<Trade>();
-        //    var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
-        //    if (!list.Any())
-        //    {
-        //        SetResponse(s => s.NoData, input, result);
-        //    }
-        //    else
-        //    {
-        //        result.total = total;
-        //        result.data = MapTo<List<TradeDetailView>>(list);
-        //        SetResponse(s => s.Success, input, result);
-        //    }
-        //    return JsonNet(result);
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetTotal(InputGetTotal input)
-        //{
-        //    var result = new BaseOutput();
-        //    var creator = UserId;
-        //    Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
-        //    if (input.TradeType.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.TradeType == input.TradeType);
-        //    }
-        //    if (!string.IsNullOrEmpty(input.Grain))
-        //    {
-        //        myFilter = myFilter.And(f => f.ProductId.Contains(input.Grain));
-        //    }
-        //    if (input.StartTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
-        //    }
-        //    if (input.EndTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
-        //    }
-        //    var repo = GetRepo<Trade>();
-        //    var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.CreatedBy, g.ProductId, g.TradeType }).Select(g => new
-        //    {
-        //        g.Key.CreatedBy,
-        //        g.Key.Grain,
-        //        g.Key.TradeType,
-        //        Frequency = g.Count(),
-        //        TotalAmount = g.Sum(item => item.Weight),
-        //        TotalMoney = g.Sum(item => item.Weight * item.Price),
-        //        ActualTotalMoney = g.Sum(item => item.ActualMoney),
-        //    });
-        //    result.total = query.Count();
-        //    query = query.OrderBy(o => o.TradeType).ThenByDescending(o => o.ActualTotalMoney).Skip(input.PageIndex * input.PageSize).Take(input.PageSize);
-        //    var list = query.ToList();
-        //    if (!list.Any())
-        //    {
-        //        SetResponse(s => s.NoData, input, result);
-        //    }
-        //    else
-        //    {
-        //        result.data = DynamicMap<List<TradeTotalView>>(list);
-        //        SetResponse(s => s.Success, input, result);
-        //    }
-        //    return JsonNet(result);
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetTotalByContact(InputGetTotalByContact input)
-        //{
-        //    var result = new BaseOutput();
-        //    var creator = UserId;
-        //    Expression<Func<Trade, bool>> myFilter = f => f.CreatedBy == creator;
-        //    if (input.TradeType.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.TradeType == input.TradeType);
-        //    }
-        //    if (!string.IsNullOrEmpty(input.Grain))
-        //    {
-        //        myFilter = myFilter.And(f => f.ProductId.Contains(input.Grain));
-        //    }
-        //    if (!string.IsNullOrEmpty(input.ContactName))
-        //    {
-        //        myFilter = myFilter.And(f => f.Contact.ContactName.Contains(input.ContactName));
-        //    }
-        //    if (input.StartTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
-        //    }
-        //    if (input.EndTime.HasValue)
-        //    {
-        //        myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
-        //    }
-        //    var repo = GetRepo<Trade>();
-        //    var query = repo.GetFiltered(myFilter).GroupBy(g => new { g.CreatedBy, g.ContactId, g.ProductId, g.TradeType }).Select(g => new
-        //    {
-        //        g.Key.CreatedBy,
-        //        g.First(item => item.ContactId == g.Key.ContactId).Contact.ContactName,
-        //        g.Key.Grain,
-        //        g.Key.TradeType,
-        //        Frequency = g.Count(),
-        //        TotalAmount = g.Sum(item => item.Weight),
-        //        TotalMoney = g.Sum(item => item.Weight * item.Price),
-        //        ActualTotalMoney = g.Sum(item => item.ActualMoney),
-        //    });
-        //    result.total = query.Count();
-        //    query = query.OrderBy(o => o.TradeType).ThenByDescending(o => o.ActualTotalMoney).Skip(input.PageIndex * input.PageSize).Take(input.PageSize);
-        //    var list = query.ToList();
-        //    if (!list.Any())
-        //    {
-        //        SetResponse(s => s.NoData, input, result);
-        //    }
-        //    else
-        //    {
-        //        result.data = DynamicMap<List<TradeWithContactView>>(list);
-        //        SetResponse(s => s.Success, input, result);
-        //    }
-        //    return JsonNet(result);
-        //}
-
         public ActionResult Delete(int tradeId)
         {
             var result = new BaseOutput();
-            var creator = UserId;
+            var currentUser = CurrentUser;
             var repo = GetRepo<Trade>();
-            var model = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == creator).FirstOrDefault();
-            if (model != null)
+            var model = repo.GetFiltered(f => f.Id == tradeId && f.CompId == currentUser.CompId).FirstOrDefault();
+            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop))))
             {
                 repo.Delete(model);
-                model = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == creator).FirstOrDefault();
-            }
-            if (model == null)
-            {
                 SetResponse(s => s.Success, null, result);
             }
             else

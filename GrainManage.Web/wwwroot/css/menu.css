@@ -1,0 +1,15 @@
+﻿#example-navbar-collapse li a.btn.btn-lg {
+    text-align: left;
+}
+
+@media screen and (max-width:768px ) {
+    #personal-info {
+        float: left;
+    }
+}
+
+@media screen and (min-width:768px ) {
+    #personal-info {
+        float: right;
+    }
+}

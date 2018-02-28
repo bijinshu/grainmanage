@@ -23,6 +23,9 @@
             },
             hidePanel: function (selector) {
                 $(selector).modal('hide');
+            },
+            isNumber: function (obj) {
+                return typeof obj === 'number' && obj % 1 === 0
             }
         },
         filters: {

@@ -147,10 +147,11 @@
                             this.userInfo.Email = result.data.Email;
                             this.userInfo.RoleNames = result.data.RoleNames;
                             this.userInfo.CompId = result.data.CompId;
-                            this.frmComp.Name = result.data.ShopName ? result.data.ShopName : '';
-                            this.frmComp.Address = result.data.ShopAddress ? result.data.ShopAddress : '';
                             if (this.userInfo.CompId < 0) {
                                 this.showPanel("#saveCompanyModal");
+                            } else {
+                                this.frmComp.Name = result.data.ShopName ? result.data.ShopName : '';
+                                this.frmComp.Address = result.data.ShopAddress ? result.data.ShopAddress : '';
                             }
                         }
                     }.bind(this));

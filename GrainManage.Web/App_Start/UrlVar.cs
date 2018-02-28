@@ -48,7 +48,10 @@ namespace GrainManage.Web
         public static string Contact_Delete { get { return GetUrl("/Contact/Delete"); } }
 
         //Trade
-
+        public static string Trade_Index { get { return GetUrl("/Trade/Index"); } }
+        public static string Trade_New { get { return GetUrl("/Trade/New"); } }
+        public static string Trade_Edit { get { return GetUrl("/Trade/Edit"); } }
+        public static string Trade_Delete { get { return GetUrl("/Trade/Delete"); } }
         //Price
         [Common]
         public static string Price_GetPriceList { get { return GetUrl("/Price/GetPriceList"); } }

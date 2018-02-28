@@ -18,6 +18,7 @@
     <title>@GlobalResx.SysName</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/css/menu.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/vue.js"></script>
@@ -68,18 +69,18 @@
                                 }
                             }
                         </ul>
-                        <ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
+                        <ul class="nav navbar-nav" id="personal-info">
                             <li class="dropdown">
-                                <form class="navbar-form" role="search">
-                                    <div class="input-group">
-                                        <span class="badge btn" style="margin-top:8px;">
-                                            <span class="glyphicon glyphicon-user"></span> @Model.UserName
-                                        </span>
-                                    </div>
-                                    <div class="input-group">
-                                        <a class="btn" href="@UrlVar.User_SignOut" style="margin-top:8px;">退出</a>
-                                    </div>
-                                </form>
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="badge btn" style="color:Highlight;">
+                                        <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;<span>@Model.UserName</span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@UrlVar.User_SignOut">退出</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

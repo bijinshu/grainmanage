@@ -95,10 +95,13 @@
                 },
                 frmTrade: {
                     ContactId: 0,
+                    ContactName:'',
                     ProductId: 1,
+                    ProductName:'',
                     Price:0,
                     Weight: 0,
                     TradeType: 0,
+                    ActualMoney:0,
                     Remark:''
                 },
                 priceDic: new Array(),
@@ -109,15 +112,13 @@
                 PanelTitle: '',
                 msg: ''
             },
-
             methods: {
                 getData: function () {
                     $.post('@UrlVar.Contact_Index', this.search).done(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
                         if (result.code != 1) {
-                            this.msg = result.msg;
-                            this.showPanel("#myModal");
+                            this.showAlert(result.msg);
                         }
                     }.bind(this));
                 },
@@ -129,16 +130,18 @@
                 getPriceList: function () {
                     $.post('@UrlVar.Price_GetPriceList').done(function (result, status) {
                         this.priceDic = result;
-                        this.getPrice();
                     }.bind(this));
                 },
-                getPrice: function () {
+                setPrice: function () {
                     var priceKey = this.frmTrade.ProductId + "-" + this.frmTrade.TradeType;
                     if (priceKey in this.priceDic) {
                         this.frmTrade.Price = this.priceDic[priceKey];
                     } else {
-                        this.frmTrade.Price = 0;
+                        this.frmTrade.Price = '';
                     }
+                },
+                setMoney: function () {
+                    this.frmTrade.ActualMoney = this.TotalMoney;
                 },
                 add: function () {
                     this.PanelTitle = '添加联系人';
@@ -167,33 +170,53 @@
                     this.showPanel("#saveContactModal");
                 },
                 saveContact: function (event) {
-                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
+                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid && this.isPriceValid) {
                         this.IsDisabled = true;
                         var url = this.frm.Id > 0 ? '@UrlVar.Contact_Edit' : '@UrlVar.Contact_New';
                         $.post(url, this.frm).always(function (result, status) {
                             this.IsDisabled = false;
-                            this.msg = result.msg;
                             if (result.code == 1) {
                                 this.hidePanel("#saveContactModal");
                                 this.getData();
                             }
                             else {
                                 this.showPanel("#myModal");
+                                this.showAlert(result.msg);
                             }
                         }.bind(this));
                     }
                     else {
-                        this.msg = '有信息格式不正确,请重新确认';
-                        this.showPanel("#myModal");
+                        this.showAlert('请检查各项参数是否正确');
+                    }
+                },
+                saveTrade: function () {
+                    this.IsDisabled = true;
+                    if (this.isActualMoneyValid && this.isWeightValid) {
+                        for (var i = 0; i < this.productList.length; i++) {
+                            if (this.productList[i].Id == this.frmTrade.ProductId) {
+                                this.frmTrade.ProductName = this.productList[i].Name;
+                                break;
+                            }
+                        }
+                        $.post('@UrlVar.Trade_New', this.frmTrade).always(function (result, status) {
+                          this.IsDisabled = false;
+                          if (result.code == 1) {
+                            this.hidePanel("#saveTradeModal");
+                          }
+                          else {
+                            this.showAlert(result.msg);
+                          }
+                         }.bind(this));
+                    } else {
+                        this.showAlert('实际金额或者重量不正确');
                     }
                 },
                 showTrade: function (item) {
-                    this.ContactId = 0;
-                    this.ProductId = 0;
-                    this.Price = 0;
-                    this.Weight = 0;
-                    this.TradeType = 0;
-                    this.Remark = '';
+                    this.frmTrade.ContactId = item.Id;
+                    this.frmTrade.ContactName = item.ContactName;
+                    this.setPrice();
+                    this.frmTrade.Weight = '';
+                    this.frmTrade.Remark = '';
                     this.showPanel("#saveTradeModal");
                 },
                 showPosition: function (latitude, longitude, accuracy) {
@@ -311,6 +334,18 @@
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frm.Remark);
+                },
+                isPriceValid: function () {
+                    return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
+                },
+                isActualMoneyValid: function () {
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney >= 0;
+                },
+                isWeightValid: function () {
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
+                },
+                TotalMoney: function () {
+                    return ((this.frmTrade.Price ? this.frmTrade.Price:0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0)).toFixed(2);
                 }
             },
             created: function () {
@@ -318,10 +353,16 @@
                 this.getProductList();
                 this.getPriceList();
                 this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
-                    this.getPrice();
+                    this.setPrice();
                 });
                 this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
-                    this.getPrice();
+                    this.setPrice();
+                });
+                this.$watch('frmTrade.Price', function (newVal, oldVal) {
+                    this.setMoney();
+                });
+                this.$watch('frmTrade.Weight', function (newVal, oldVal) {
+                    this.setMoney();
                 });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
