@@ -55,6 +55,10 @@ namespace GrainManage.Web
         //Price
         [Common]
         public static string Price_GetPriceList { get { return GetUrl("/Price/GetPriceList"); } }
+        public static string Price_Index { get { return GetUrl("/Price/Index"); } }
+        public static string Price_New { get { return GetUrl("/Price/New"); } }
+        public static string Price_Edit { get { return GetUrl("/Price/Edit"); } }
+        public static string Price_Delete { get { return GetUrl("/Price/Delete"); } }
 
         //Log
         public static string Log_ExceptionList { get { return GetUrl("/Log/ExceptionList"); } }

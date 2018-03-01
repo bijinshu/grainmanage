@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-01 18:00:57
+Date: 2018-03-01 21:08:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -137,39 +137,41 @@ CREATE TABLE `bm_price` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `CompId` int(11) NOT NULL COMMENT '店铺Id',
   `ProductId` int(11) NOT NULL COMMENT '产品ID',
+  `ProductName` varchar(20) NOT NULL DEFAULT '' COMMENT '产品名称',
   `Price` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '价格(元/斤)',
   `PriceType` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:收购 1:出售',
   `Remark` varchar(200) NOT NULL DEFAULT '' COMMENT '附加描述',
   `CreatedBy` int(11) NOT NULL COMMENT '创建者',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
+  `ModifiedBy` int(11) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_product_user` (`ProductId`,`PriceType`,`CompId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_price
 -- ----------------------------
-INSERT INTO `bm_price` VALUES ('7', '1', '3', '1.2600', '0', '', '1', '2012-10-13 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('8', '4', '5', '1.1650', '1', '', '4', '2012-10-14 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('9', '1', '5', '1.1450', '1', '', '1', '2007-10-18 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('10', '4', '3', '1.3000', '0', '', '4', '2007-10-19 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('11', '10', '8', '1.2100', '1', '', '10', '2007-10-20 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('12', '9', '1', '1.0650', '0', '', '9', '2007-10-21 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('13', '10', '7', '1.8700', '1', '', '10', '2007-10-22 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('14', '66', '6', '1.5850', '0', '', '66', '2010-10-23 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('15', '2', '5', '1.1100', '0', '', '2', '2008-12-24 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('16', '8', '3', '1.3700', '1', '', '8', '2008-12-25 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('17', '1', '8', '1.3300', '1', '', '1', '2008-12-26 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('18', '1', '1', '1.0400', '0', '', '4', '2008-12-27 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('19', '1', '7', '1.7000', '1', '', '1', '2008-12-28 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('20', '4', '6', '1.3350', '1', '', '4', '2008-10-29 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('21', '1', '5', '1.2050', '0', '', '1', '2009-02-01 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('22', '4', '3', '1.4150', '1', '', '4', '2009-02-12 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('23', '1', '8', '1.2250', '0', '', '1', '2009-02-13 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('24', '5', '1', '1.0350', '0', '', '5', '2009-02-14 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('25', '1', '7', '2.2450', '0', '', '1', '2009-02-15 08:40:22', null);
-INSERT INTO `bm_price` VALUES ('26', '4', '6', '2.4450', '0', '', '4', '2009-02-16 08:40:22', null);
+INSERT INTO `bm_price` VALUES ('7', '1', '3', '大稻', '1.2600', '0', '', '1', '2012-10-13 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('8', '4', '5', '玉米', '1.1650', '1', '', '4', '2012-10-14 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('10', '4', '3', '大稻', '1.3000', '0', '', '4', '2007-10-19 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('11', '10', '8', '小稻', '1.2100', '1', '', '10', '2007-10-20 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('12', '9', '1', '小麦', '1.0650', '0', '', '9', '2007-10-21 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('13', '10', '7', '菜籽', '1.8700', '1', '', '10', '2007-10-22 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('14', '66', '6', '花生', '1.5850', '0', '', '66', '2010-10-23 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('15', '2', '5', '玉米', '1.1100', '0', '', '2', '2008-12-24 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('16', '8', '3', '大稻', '1.3700', '1', '', '8', '2008-12-25 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('17', '1', '8', '小稻', '1.3300', '1', '', '1', '2008-12-26 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('18', '1', '1', '小麦', '1.0400', '0', '', '4', '2008-12-27 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('19', '1', '7', '菜籽', '1.7000', '1', '', '1', '2008-12-28 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('20', '4', '6', '花生', '1.3350', '1', '', '4', '2008-10-29 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('21', '1', '5', '玉米', '1.2050', '0', '', '1', '2009-02-01 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('22', '4', '3', '大稻', '1.4150', '1', '', '4', '2009-02-12 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('23', '1', '8', '小稻', '1.2250', '0', '', '1', '2009-02-13 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('24', '5', '1', '小麦', '1.0350', '0', '', '5', '2009-02-14 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('25', '1', '7', '菜籽', '2.2450', '0', '', '1', '2009-02-15 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('26', '4', '6', '花生', '2.4450', '0', '', '4', '2009-02-16 08:40:22', null, null);
+INSERT INTO `bm_price` VALUES ('27', '1', '5', '玉米', '1.9000', '1', '电放费', '1', '2018-03-01 21:04:57', '2018-03-01 21:05:12', '1');
 
 -- ----------------------------
 -- Table structure for `bm_product`
@@ -194,12 +196,12 @@ CREATE TABLE `bm_product` (
 -- Records of bm_product
 -- ----------------------------
 INSERT INTO `bm_product` VALUES ('1', '小麦', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('2', '黄豆', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('3', '大稻', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('4', '燕麦', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('5', '玉米', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('6', '花生', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('7', '菜籽', '0', '', '1', '0', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('2', '黄豆', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('3', '大稻', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('4', '燕麦', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('5', '玉米', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('6', '花生', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('7', '菜籽', '0', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
 INSERT INTO `bm_product` VALUES ('8', '小稻', '0', '', '0', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
 
 -- ----------------------------
@@ -224,7 +226,7 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
@@ -274,6 +276,7 @@ INSERT INTO `bm_trade` VALUES ('42', '1', '1', '张海川', '1', '小麦', '1.04
 INSERT INTO `bm_trade` VALUES ('43', '1', '1', '张海川', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
 INSERT INTO `bm_trade` VALUES ('44', '1', '3', '王亮亮', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
 INSERT INTO `bm_trade` VALUES ('46', '1', '1', '张海川', '1', '小麦', '1.0460', '555.00', '580.53', '0', '', '', '', '1', '2018-02-28 19:38:31', null);
+INSERT INTO `bm_trade` VALUES ('47', '1', '1', '张海川', '3', '大稻', '1.2600', '655.00', '825.30', '0', '', '', '', '1', '2018-03-01 17:36:26', null);
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -292,7 +295,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=413 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=414 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -661,6 +664,7 @@ INSERT INTO `log_action` VALUES ('409', 'bijinshu', '/User/Delete', '10.10.133.1
 INSERT INTO `log_action` VALUES ('410', 'bijinshu', '/User/New', '10.10.133.108', 'POST', '成功', '{\"Id\":\"0\",\"UserName\":\"sdf\",\"Pwd\":\"a1ea55a264d39addbabaa967269aee40a951bb84\",\"RealName\":\"松岛枫\",\"Gender\":\"0\",\"Mobile\":\"15894266786\",\"QQ\":\"\",\"Weixin\":\"\",\"Email\":\"\",\"Status\":\"0\",\"Remark\":\"\"}', '100', '2018-02-28 13:01:22', '2018-02-28 13:01:22', '00:00:00');
 INSERT INTO `log_action` VALUES ('411', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-01 10:16:59', '2018-03-01 10:16:59', '00:00:01');
 INSERT INTO `log_action` VALUES ('412', 'bijinshu', '/User/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"11\",\"UserName\":\"sdf\",\"Pwd\":\"\",\"RealName\":\"松岛枫\",\"Gender\":\"0\",\"Mobile\":\"15894266786\",\"QQ\":\"\",\"Weixin\":\"\",\"Email\":\"\",\"Roles[]\":\"5\",\"Status\":\"0\",\"Remark\":\"\"}', '100', '2018-03-01 17:36:37', '2018-03-01 17:36:38', '00:00:01');
+INSERT INTO `log_action` VALUES ('413', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-01 20:29:58', '2018-03-01 20:29:58', '00:00:01');
 
 -- ----------------------------
 -- Table structure for `log_exception`
@@ -675,7 +679,7 @@ CREATE TABLE `log_exception` (
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log_exception
@@ -704,6 +708,7 @@ INSERT INTO `log_exception` VALUES ('27', '/Trade/New', '{\"Id\":\"1\",\"Contact
 INSERT INTO `log_exception` VALUES ('28', '/Trade/Edit', '{\"Id\":\"1\",\"ContactId\":\"1\",\"ProductId\":\"6\",\"ContactName\":\"张海川\",\"Price\":\"3\",\"Weight\":\"612\",\"TradeType\":\"0\",\"ActualMoney\":\"1836.00\",\"Remark\":\"\"}', 'An error occurred while updating the entries. See the inner exception for details.\r\nColumn \'Remark\' cannot be null\r\nColumn \'Remark\' cannot be null\r\n', '   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Update.Internal.MySqlBatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IReadOnlyList`1 entries)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IReadOnlyList`1 entriesToSave)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()\r\n   at GrainManage.Core.BaseUnitOfWork.SaveChanges(Boolean forceSave) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\BaseUnitOfWork.cs:line 123\r\n   at GrainManage.Web.Controllers.TradeController.Edit(TradeDto input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\TradeController.cs:line 107\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-02-28 17:38:18');
 INSERT INTO `log_exception` VALUES ('29', '/Product/Index', '{\"ProductName\":\"\",\"ProductType\":\"\",\"Status\":\"\",\"PageIndex\":\"0\",\"PageSize\":\"10\"}', 'An exception occurred while reading a database value for property \'Product.ModifiedBy\'. The expected type was \'System.Int32\' but the actual value was null.\r\nObject reference not set to an instance of an object.\r\n', '   at Microsoft.EntityFrameworkCore.Metadata.Internal.EntityMaterializerSource.ThrowReadValueException[TValue](Exception exception, Object value, IPropertyBase property)\r\n   at Microsoft.EntityFrameworkCore.Metadata.Internal.EntityMaterializerSource.TryReadValue[TValue](ValueBuffer valueBuffer, Int32 index, IPropertyBase property)\r\n   at lambda_method(Closure , ValueBuffer )\r\n   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.UnbufferedEntityShaper`1.Shape(QueryContext queryContext, ValueBuffer valueBuffer)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at GrainManage.Core.Repository`1.GetPaged(Int32& total, Int32 pageIndex, Int32 pageSize, IDictionary`2 orderBy, Expression`1 filter, IEnumerable`1 pathList) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 192\r\n   at GrainManage.Core.Repository`1.GetPaged(Int32& total, Int32 pageIndex, Int32 pageSize, Expression`1 filter, Expression`1 orderByExpression, Boolean asc) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 146\r\n   at GrainManage.Web.Controllers.ProductController.Index(InputSearch input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\ProductController.cs:line 49\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-01 15:44:51');
 INSERT INTO `log_exception` VALUES ('30', '/Product/Index', '{\"ProductName\":\"\",\"ProductType\":\"\",\"Status\":\"\",\"PageIndex\":\"0\",\"PageSize\":\"10\"}', 'An exception occurred while reading a database value for property \'Product.ModifiedBy\'. The expected type was \'System.Int32\' but the actual value was null.\r\nObject reference not set to an instance of an object.\r\n', '   at Microsoft.EntityFrameworkCore.Metadata.Internal.EntityMaterializerSource.ThrowReadValueException[TValue](Exception exception, Object value, IPropertyBase property)\r\n   at Microsoft.EntityFrameworkCore.Metadata.Internal.EntityMaterializerSource.TryReadValue[TValue](ValueBuffer valueBuffer, Int32 index, IPropertyBase property)\r\n   at lambda_method(Closure , ValueBuffer )\r\n   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.UnbufferedEntityShaper`1.Shape(QueryContext queryContext, ValueBuffer valueBuffer)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()\r\n   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at GrainManage.Core.Repository`1.GetPaged(Int32& total, Int32 pageIndex, Int32 pageSize, IDictionary`2 orderBy, Expression`1 filter, IEnumerable`1 pathList) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 192\r\n   at GrainManage.Core.Repository`1.GetPaged(Int32& total, Int32 pageIndex, Int32 pageSize, Expression`1 filter, Expression`1 orderByExpression, Boolean asc) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 146\r\n   at GrainManage.Web.Controllers.ProductController.Index(InputSearch input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\ProductController.cs:line 49\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-01 15:45:04');
+INSERT INTO `log_exception` VALUES ('31', '/Price/New', '{\"Id\":\"0\",\"ProductId\":\"5\",\"ProductName\":\"\",\"Price\":\"1.6\",\"PriceType\":\"1\",\"Remark\":\"\"}', 'An error occurred while updating the entries. See the inner exception for details.\r\nColumn \'Remark\' cannot be null\r\nColumn \'Remark\' cannot be null\r\n', '   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute(IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Update.Internal.MySqlBatchExecutor.Execute(IEnumerable`1 commandBatches, IRelationalConnection connection)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChanges(IReadOnlyList`1 entries)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(IReadOnlyList`1 entriesToSave)\r\n   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges(Boolean acceptAllChangesOnSuccess)\r\n   at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()\r\n   at GrainManage.Core.BaseUnitOfWork.SaveChanges(Boolean forceSave) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\BaseUnitOfWork.cs:line 123\r\n   at GrainManage.Core.Repository`1.Add(T item) in D:\\github.netcore.GrainManage\\Libraries\\GrainManage.Core\\Repository.cs:line 44\r\n   at GrainManage.Web.Controllers.PriceController.New(PriceDto input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\PriceController.cs:line 100\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-01 21:03:36');
 
 -- ----------------------------
 -- Table structure for `log_job`
@@ -737,7 +742,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -801,6 +806,7 @@ INSERT INTO `log_login` VALUES ('98', 'bijinshu', '10.10.133.108', '成功', '10
 INSERT INTO `log_login` VALUES ('99', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-02-28 12:52:23');
 INSERT INTO `log_login` VALUES ('100', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-01 10:16:26');
 INSERT INTO `log_login` VALUES ('101', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-01 10:17:05');
+INSERT INTO `log_login` VALUES ('102', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-01 20:30:00');
 
 -- ----------------------------
 -- Table structure for `log_price`
@@ -936,7 +942,7 @@ CREATE TABLE `rm_user` (
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-01 10:16:59');
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-01 20:29:58');
 INSERT INTO `rm_user` VALUES ('2', 'testadmin', '0', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '3', '555', '2016-01-05 18:44:49', '1', '2018-02-11 11:50:22');
 INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
 

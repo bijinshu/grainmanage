@@ -96,5 +96,11 @@ namespace GrainManage.Web
         public readonly int ProductNameEmpty = 802;
         [Message("产品已存在")]
         public readonly int ProductNameExisted = 803;
+
+        //Price
+        [Message("产品价格已存在")]
+        public readonly int PriceExisted = 902;
+        [Message("请先选择产品")]
+        public readonly int ProductNotSelected = 903;
     }
 }
