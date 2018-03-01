@@ -21,7 +21,8 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var userRepo = GetRepo<User>();
-            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.CreatedBy == UserId && f.Roles == GlobalVar.Role_Employee);
+            var employee = GlobalVar.Role_Employee.ToString();
+            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.CreatedBy == UserId && f.Roles == employee);
             if (!string.IsNullOrEmpty(input.UserName))
             {
                 myFilter = myFilter.And(f => f.UserName.Contains(input.UserName));
@@ -88,7 +89,7 @@ namespace GrainManage.Web.Controllers
                     var now = DateTime.Now;
                     var model = MapTo<User>(input);
                     model.Pwd = SHAEncrypt.SHA1(input.Pwd);
-                    model.Roles = GlobalVar.Role_Employee;
+                    model.Roles = GlobalVar.Role_Employee.ToString();
                     model.CompId = currentUser.CompId;
                     model.CreatedBy = currentUser.UserId;
                     model = repo.Add(model);

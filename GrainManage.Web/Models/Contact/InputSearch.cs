@@ -2,7 +2,7 @@
 
 namespace GrainManage.Web.Models.Contact
 {
-    public class InputSearch : BaseInput
+    public class InputSearch : Pageable
     {
         public string Name { get; set; }
         public string Mobile { get; set; }

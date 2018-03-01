@@ -1,0 +1,191 @@
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+@{
+    ViewBag.Title = "产品列表";
+}
+<div class="container" id="productInfo">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">产品名称：</label>
+                        <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入产品名称" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.ProductType" class="form-control">
+                            <option value="null">请选择类型</option>
+                            <option value="0">私有产品</option>
+                            <option value="1">公共产品</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.Status" class="form-control">
+                            <option value="null">请选择状态</option>
+                            <option value="0">禁用</option>
+                            <option value="1">启用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新产品</button>
+                        }
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>产品名称</th>
+                            <th>产品类型</th>
+                            <th>备注</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>创建人</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list">
+                            <td>{{item.Name}}</td>
+                            <td>{{item.Type==1?'公共':'私有'}}</td>
+                            <td>{{item.Remark}}</td>
+                            <td>{{item.Status?'启用':'禁用'}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.Creator}}</td>
+                            <td>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Product_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="showEdit(item)">编辑</a>
+                                }
+                                @if (UrlVar.Has(Model.Level, UrlVar.Product_Delete, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
+    {
+        @Html.Partial("_ProductDetail")
+    }
+    <modal-dialog title="删除产品" id="productDeleteModal" v-bind:msg="msg">
+        <div slot="footer" style="text-align:center;">
+            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
+            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
+        </div>
+    </modal-dialog>
+    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#productInfo",
+            data: {
+                msg: '',
+                total: 0,
+                tmpPwd: '',
+                list: [],
+                search: { ProductName: '', ProductType: null, Status: null, PageIndex: 0, PageSize: 10 },
+                frm: {
+                    Id: 0,
+                    Name: '',
+                    Type: 0,
+                    Status: 1,
+                    Remark:''
+                },
+                IsDisabled: false,
+                isFirstTime: true,
+                currentItem: {},
+                AlertTitle: '',
+                PanelTitle: ''
+            },
+            methods: {
+                getData: function () {
+                    $.post('@UrlVar.Product_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1 && !this.isFirstTime) {
+                            this.showAlert(result.msg);
+                        }
+                        this.isFirstTime = false;
+                    }.bind(this));
+                },
+                showAdd: function () {
+                    this.frm.Id = 0;
+                    this.frm.Name = '';
+                    this.frm.Type = 0;
+                    this.frm.Status = 1;
+                    this.frm.Remark = '';
+                    this.showPanel('添加产品', "#saveProductModal");
+                },
+                showEdit: function (item) {
+                    this.frm.Id = item.Id;
+                    this.frm.Name = item.Name;
+                    this.frm.Type = item.Type;
+                    this.frm.Status = item.Status;
+                    this.frm.Remark = item.Remark;
+                    this.showPanel('编辑产品', "#saveProductModal");
+                },
+                saveProduct: function (event) {
+                    var url = this.frm.Id > 0 ? '@UrlVar.Product_Edit' : '@UrlVar.Product_New';
+                    $.post(url, this.frm).always(function (result, status) {
+                        this.IsDisabled = false;
+                        if (result.code == 1) {
+                            this.hidePanel("#saveProductModal");
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除 [" +  item.Name + "]吗?";
+                    this.showPanel("#productDeleteModal");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.Product_Delete', { productId: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel("#productDeleteModal");
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                }
+            },
+            computed: {
+                isProductNameValid: function () {
+                    return (/^.{1,20}$/g).test(this.frm.Name);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
+                }
+            },
+            created: function () {
+                this.getData();
+            }
+        })
+    })
+</script>

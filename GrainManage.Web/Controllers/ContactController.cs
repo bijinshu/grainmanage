@@ -55,7 +55,7 @@ namespace GrainManage.Web.Controllers
                 var dtoList = MapTo<List<ContactDto>>(list);
                 foreach (var item in dtoList)
                 {
-                    if (currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop)) || item.CreatedBy == currentUser.UserId)
+                    if (currentUser.Roles.Contains(GlobalVar.Role_Shop) || item.CreatedBy == currentUser.UserId)
                     {
                         item.CanModify = true;
                     }
@@ -120,7 +120,7 @@ namespace GrainManage.Web.Controllers
             var repo = GetRepo<Contact>();
             var currentUser = CurrentUser;
             var model = repo.GetFiltered(f => f.Id == contactId && f.CompId == currentUser.CompId).FirstOrDefault();
-            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop))))
+            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop)))
             {
                 repo.Delete(model);
                 SetResponse(s => s.Success, null, result);

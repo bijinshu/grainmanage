@@ -130,7 +130,7 @@
                     Status: 1,
                     Remark: ''
                 },
-                currentUser: {},
+                currentItem: {},
                 isFirstTime: true,
                 IsDisabled: false,
                 AlertTitle: '',
@@ -201,7 +201,7 @@
                     }
                 },
                 deleteItem: function () {
-                    $.post('@UrlVar.User_Delete', { userId: this.currentUser.Id }).always(function (result, status) {
+                    $.post('@UrlVar.User_Delete', { userId: this.currentItem.Id }).always(function (result, status) {
                             this.hidePanel('#userDeleteModal');
                             if (result.code == 1) {
                                 this.getData();
@@ -212,7 +212,7 @@
                         }.bind(this));
                 },
                 del: function (item) {
-                    this.currentUser = item;
+                    this.currentItem = item;
                     this.msg = "您确定要删除 " + item.UserName + "[" + item.RealName + "]吗?";
                     this.showPanel("#userDeleteModal");
                 },

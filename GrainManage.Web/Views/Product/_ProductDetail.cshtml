@@ -1,0 +1,64 @@
+﻿@model UserInfo
+<div class="modal fade" id="saveProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-md-12">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" v-bind:class="{'has-error':!isProductNameValid}">
+                                <label for="ProductName" class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
+                                <div class="col-md-8">
+                                    <input v-model="frm.Name" type="text" class="form-control" id="ProductName" placeholder="请输入产品名称">
+                                </div>
+                                <span v-if="!isProductNameValid" class="col-md-push-3 col-md-8" style="color:red">产品名称不能超过20个字符</span>
+                            </div>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <div class="form-group">
+                                    <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">产品类型</label>
+                                    <div class="col-md-8">
+                                        <label class="checkbox-inline">
+                                            <input v-model="frm.Type" type="radio" value="1"><span>公共</span>
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input v-model="frm.Type" type="radio" value="0"><span>私有</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">状态</label>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Status" type="radio" value="1"><span>启用</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input v-model="frm.Status" type="radio" value="0"><span>禁用</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
+                                <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>
+                                <div class="col-md-8">
+                                    <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
+                                </div>
+                                <span v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">附加信息不能超过200个字符</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-3">
+                                    <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+                                    <button class="btn btn-primary pull-right" v-on:click.stop.prevent="saveProduct" v-bind:disabled="IsDisabled">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

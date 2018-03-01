@@ -44,7 +44,7 @@
                     <caption style="color:red;font-weight:bolder;">
                         @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls))
                         {
-                            <button type="button" class="btn btn-success btn-sm" v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加新员工</button>
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新员工</button>
                         }
                     </caption>
                     <thead>
@@ -73,11 +73,11 @@
                             <td>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
+                                    <a style="cursor:pointer" v-on:click="showEdit(item)">编辑</a>
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Employee_Delete, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
+                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
                                 }
                             </td>
                         </tr>
@@ -95,6 +95,12 @@
     {
         @Html.Partial("_EmployeeDetail")
     }
+    <modal-dialog title="删除员工" id="contactDeleteModal" v-bind:msg="msg">
+        <div slot="footer" style="text-align:center;">
+            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
+            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
+        </div>
+    </modal-dialog>
     <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
 </div>
 <script>
@@ -123,6 +129,7 @@
                 },
                 IsDisabled: false,
                 isFirstTime: true,
+                currentItem: {},
                 AlertTitle: '',
                 PanelTitle: ''
             },
@@ -137,7 +144,7 @@
                         this.isFirstTime = false;
                     }.bind(this));
                 },
-                add: function () {
+                showAdd: function () {
                     this.tmpPwd = '';
                     this.frm.Id = 0;
                     this.frm.UserName = '';
@@ -152,7 +159,7 @@
                     this.frm.Remark = '';
                     this.showPanel('添加员工', "#saveUserModal");
                 },
-                edit: function (item) {
+                showEdit: function (item) {
                     this.frm.Id = item.Id;
                     this.frm.UserName = item.UserName;
                     this.frm.RealName = item.RealName;
@@ -190,8 +197,14 @@
                         this.showAlert( '有信息格式不正确,请重新确认');
                     }
                 },
-                deleteItem: function (item) {
-                    $.post('@UrlVar.Employee_Delete', { userId: item.Id }).always(function (result, status) {
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除 " + item.UserName + "[" + item.RealName + "]吗?";
+                    this.showPanel("#contactDeleteModal");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.Employee_Delete', { userId: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel("#contactDeleteModal");
                         if (result.code == 1) {
                             this.getData();
                         }

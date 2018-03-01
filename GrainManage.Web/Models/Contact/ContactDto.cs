@@ -14,8 +14,7 @@ namespace GrainManage.Web.Models.Contact
         public string Remark { get; set; }
         public int CreatedBy { get; set; }
         public bool CanModify { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string ImgName { get; set; }
     }
 }

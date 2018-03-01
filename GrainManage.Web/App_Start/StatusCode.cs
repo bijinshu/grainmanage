@@ -88,5 +88,13 @@ namespace GrainManage.Web
         public readonly int NotShopAdmin = 701;
         [Message("请先完善店铺信息")]
         public readonly int NotPerfectShopInfo = 702;
+
+        //Product
+        [Message("改产品不存在")]
+        public readonly int ProductNotExisted = 801;
+        [Message("产品名称不能为空")]
+        public readonly int ProductNameEmpty = 802;
+        [Message("产品已存在")]
+        public readonly int ProductNameExisted = 803;
     }
 }

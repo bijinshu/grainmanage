@@ -20,8 +20,8 @@ namespace GrainManage.Web
 
         public static string ContentRootPath { get; set; }
 
-        public const string Role_User = "2";
-        public const string Role_Shop = "3";
-        public const string Role_Employee = "5";
+        public const int Role_User = 2;
+        public const int Role_Shop = 3;
+        public const int Role_Employee = 5;
     }
 }

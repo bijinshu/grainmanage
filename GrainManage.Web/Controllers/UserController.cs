@@ -124,11 +124,11 @@ namespace GrainManage.Web.Controllers
                     if (input.IsShop)
                     {
                         model.CompId = -1;
-                        model.Roles = GlobalVar.Role_Shop;
+                        model.Roles = GlobalVar.Role_Shop.ToString();
                     }
                     else
                     {
-                        model.Roles = GlobalVar.Role_User;
+                        model.Roles = GlobalVar.Role_User.ToString();
                     }
                     model.CreatedAt = DateTime.Now;
                     model.CreatedBy = -1;//系统注册

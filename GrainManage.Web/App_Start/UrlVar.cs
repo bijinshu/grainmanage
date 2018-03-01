@@ -65,7 +65,12 @@ namespace GrainManage.Web
 
 
         //Product
+        [Common]
         public static string Product_List { get { return GetUrl("/Product/List"); } }
+        public static string Product_Index { get { return GetUrl("/Product/Index"); } }
+        public static string Product_New { get { return GetUrl("/Product/New"); } }
+        public static string Product_Edit { get { return GetUrl("/Product/Edit"); } }
+        public static string Product_Delete { get { return GetUrl("/Product/Delete"); } }
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {

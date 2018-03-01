@@ -19,6 +19,5 @@ namespace GrainManage.Web.Models.Trade
         public string Creator { get; set; }
         public bool CanModify { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
     }
 }

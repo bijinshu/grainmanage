@@ -13,7 +13,7 @@ namespace GrainManage.Web.Controllers
 {
     public class TradeController : BaseController
     {
-        public ActionResult Index(InputSearchDetail input)
+        public ActionResult Index(InputSearch input)
         {
             var currentUser = CurrentUser;
             if (IsGetRequest)
@@ -59,7 +59,7 @@ namespace GrainManage.Web.Controllers
                 var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
                 foreach (var item in dtoList)
                 {
-                    if (item.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop)))
+                    if (item.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop))
                     {
                         item.CanModify = true;
                     }
@@ -137,7 +137,7 @@ namespace GrainManage.Web.Controllers
             var currentUser = CurrentUser;
             var repo = GetRepo<Trade>();
             var model = repo.GetFiltered(f => f.Id == tradeId && f.CompId == currentUser.CompId).FirstOrDefault();
-            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(int.Parse(GlobalVar.Role_Shop))))
+            if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop)))
             {
                 repo.Delete(model);
                 SetResponse(s => s.Success, null, result);

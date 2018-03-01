@@ -1,10 +1,5 @@
 ﻿[
   {
-    "id": "price",
-    "text": "价格",
-    "url": "/Price/Index"
-  },
-  {
     "id": "contact",
     "text": "我的客户",
     "url": "/Contact/Index"
@@ -23,6 +18,64 @@
     "id": "trade",
     "text": "交易历史",
     "url": "/Trade/Index"
+  },
+  {
+    "id": "config",
+    "text": "配置管理",
+    "children": [
+      {
+        "id": "config.product",
+        "text": "产品管理",
+        "url": "/Product/Index",
+        "children": [
+          {
+            "id": "config.product.view",
+            "text": "查看"
+          },
+          {
+            "id": "config.product.add",
+            "text": "新增",
+            "url": "/Product/New"
+          },
+          {
+            "id": "config.product.edit",
+            "text": "编辑",
+            "url": "/Product/Edit"
+          },
+          {
+            "id": "config.product.delete",
+            "text": "删除",
+            "url": "/Product/Delete"
+          }
+        ]
+      },
+      {
+        "id": "config.price",
+        "text": "价格管理",
+        "url": "/Price/Index",
+        "children": [
+          {
+            "id": "config.price.view",
+            "text": "查看"
+          },
+          {
+            "id": "config.product.add",
+            "text": "新增",
+            "url": "/Price/New"
+          },
+          {
+            "id": "config.product.edit",
+            "text": "编辑",
+            "url": "/Price/Edit"
+          },
+          {
+            "id": "config.price.delete",
+            "text": "删除",
+            "url": "/Price/Delete"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "system",

@@ -8,6 +8,6 @@ namespace GrainManage.Web
     public class Status
     {
         public const int Enabled = 1;
-        public const int Disabled = 2;
+        public const int Disabled = 0;
     }
 }

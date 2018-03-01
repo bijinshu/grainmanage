@@ -69,7 +69,7 @@
                             <td>
                                 <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showTrade(item)">编辑</a>
                                 <a>&nbsp;</a>
-                                <a style="cursor:pointer;" v-on:click.stop="del(item)">删除</a>
+                                <a style="cursor:pointer;" v-on:click.stop="showDelete(item)">删除</a>
                             </td>
                         </tr>
                     </tbody>
@@ -98,6 +98,7 @@
         new Vue({
             el: "#tradeInfo",
             data: {
+                msg: '',
                 total: 0,
                 list: [],
                 productList: [],
@@ -120,8 +121,7 @@
                 PanelTitle: '',
                 AllowRefreshPrice: false,
                 currentItem: {},
-                isFirstTime:true,
-                msg: ''
+                isFirstTime:true
             },
             methods: {
                 getData: function () {
@@ -208,7 +208,7 @@
                         }
                     }.bind(this));
                 },
-                del: function (item) {
+                showDelete: function (item) {
                     this.currentItem = item;
                     this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
                     this.showPanel("#tradeDeleteModal");

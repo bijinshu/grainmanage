@@ -81,6 +81,7 @@
         new Vue({
             el: "#contactInfo",
             data: {
+                msg: '',
                 total: 0,
                 list: [],
                 productList:[],
@@ -112,8 +113,7 @@
                 GeoMsg: '',
                 AlertTitle: '',
                 PanelTitle: '',
-                isFirstTime: true,
-                msg: ''
+                isFirstTime: true
             },
             methods: {
                 getData: function () {
