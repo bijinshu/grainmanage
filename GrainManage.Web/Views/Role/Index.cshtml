@@ -92,6 +92,7 @@
                 AlertTitle: '',
                 PanelTitle: '',
                 Level: parseInt('@Model.Level'),
+                isFirstTime: true
             },
             methods: {
                 indexOf: function (currentItem, array) {
@@ -108,9 +109,10 @@
                     $.post('@UrlVar.Role_Index', this.search).always(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
-                        if (result.code != 1) {
+                        if (result.code != 1 && !this.isFirstTime) {
                             this.showAlert(result.msg);
                         }
+                        this.isFirstTime = false;
                     }.bind(this));
                 },
                 add: function (item) {
@@ -141,16 +143,16 @@
                         $.post(url, this.frm).always(function (result, status) {
                             this.IsDisabled = false;
                             if (result.code == 1) {
-                                $("#saveRoleModal").modal('hide');
+                                this.hidePanel("#saveRoleModal");
                                 this.getData();
                             }
                             else {
-                                this.showAlert(this.frm.Id > 0 ? '编辑角色提示' : '添加角色提示', result.msg);
+                                this.showAlert( result.msg);
                             }
                         }.bind(this));
                     }
                     else {
-                        this.showAlert(this.frm.Id > 0 ? '编辑角色提示' : '添加角色提示', '有信息格式不正确,请重新确认');
+                        this.showAlert('有信息格式不正确,请重新确认');
                     }
                 },
                 getMenu: function (event) {

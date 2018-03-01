@@ -8,7 +8,7 @@
 <script src="~/js/components/simple-tree.js"></script>
 <div class="container" id="userInfo">
     <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
@@ -36,18 +36,17 @@
                 </div>
             </div>
         </div>
-        @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls))
-        {
-            <div class="col-md-1">
-                <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
-            </div>
-        }
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">员工管理</caption>
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加新员工</button>
+                        }
+                    </caption>
                     <thead>
                         <tr>
                             <th>登录名称</th>
@@ -123,6 +122,7 @@
                     Remark:''
                 },
                 IsDisabled: false,
+                isFirstTime: true,
                 AlertTitle: '',
                 PanelTitle: ''
             },
@@ -131,9 +131,10 @@
                     $.post('@UrlVar.Employee_Index', this.search).always(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
-                        if (result.code != 1) {
+                        if (result.code != 1 && !this.isFirstTime) {
                             this.showAlert(result.msg);
                         }
+                        this.isFirstTime = false;
                     }.bind(this));
                 },
                 add: function () {
@@ -181,12 +182,12 @@
                                 this.getData();
                             }
                             else {
-                                this.showAlert(this.frm.Id > 0 ? '编辑员工提示' : '添加员工提示', result.msg);
+                                this.showAlert(result.msg);
                             }
                         }.bind(this));
                     }
                     else {
-                        this.showAlert(this.frm.Id > 0 ? '编辑员工提示' : '添加员工提示', '有信息格式不正确,请重新确认');
+                        this.showAlert( '有信息格式不正确,请重新确认');
                     }
                 },
                 deleteItem: function (item) {
@@ -195,7 +196,7 @@
                             this.getData();
                         }
                         else {
-                            this.showAlert('删除提示', result.msg);
+                            this.showAlert(result.msg);
                         }
                     }.bind(this));
                 }

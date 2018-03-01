@@ -1,7 +1,9 @@
 ﻿#example-navbar-collapse li a.btn.btn-lg {
     text-align: left;
 }
-
+[v-cloak] {
+    display:none;
+}
 @media screen and (max-width:768px ) {
     #personal-info {
         float: left;

@@ -10,11 +10,11 @@
                     <div class="col-md-12">
                         <form class="form-horizontal" role="form">
                             <div class="form-group" v-bind:class="{'has-error':!isContactNameValid}">
-                                <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">联系人名称</label>
+                                <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">客户姓名</label>
                                 <div class="col-md-8">
-                                    <input v-model="frm.ContactName" type="text" class="form-control" id="ContactName" placeholder="请输入联系人名称">
+                                    <input v-model="frm.ContactName" type="text" class="form-control" id="ContactName" placeholder="请输入客户姓名">
                                 </div>
-                                <span v-if="!isContactNameValid" class="col-md-push-3 col-md-8" style="color:red">联系人名称只能由2-4个汉字组成</span>
+                                <span v-if="!isContactNameValid" class="col-md-push-3 col-md-8" style="color:red">客户姓名只能由2-4个汉字组成</span>
                             </div>
                             <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
                                 <label for="Mobile" class="col-md-3 control-label hidden-xs hidden-sm">手机号码</label>
@@ -39,7 +39,7 @@
                                 <div class="col-md-push-3 col-md-8 "><p class="text-info" style="color:red">{{GeoMsg}}</p></div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label hidden-xs hidden-sm">地址</label>
+                                <label class="col-md-3 control-label hidden-xs hidden-sm">联系地址</label>
                                 <div class="col-md-8">
                                     <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入联系地址">
                                 </div>

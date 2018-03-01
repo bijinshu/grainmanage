@@ -68,6 +68,7 @@
                 total: 0,
                 list: [],
                 search: { Name: '', StartTime: null, EndTime: null, PageIndex: 0, PageSize: 10 },
+                isFirstTime: true
             },
             methods: {
                 getData: function () {
@@ -76,9 +77,10 @@
                     $.post('@UrlVar.Log_LoginList', this.search).always(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
-                        if (result.code != 1) {
+                        if (result.code != 1 && !this.isFirstTime) {
                             this.showAlert(result.msg);
                         }
+                        this.isFirstTime = false;
                     }.bind(this));
                 }
             },

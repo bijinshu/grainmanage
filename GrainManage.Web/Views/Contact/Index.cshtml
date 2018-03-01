@@ -1,15 +1,15 @@
 ﻿@using GrainManage.Web
 @{
-    ViewBag.Title = "联系人列表";
+    ViewBag.Title = "客户列表";
 }
 <div class="container" id="contactInfo">
     <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">姓名：</label>
-                        <input type="text" class="form-control" v-model="search.Name" placeholder="请输入姓名" />
+                        <label class="control-label hidden-xs hidden-sm">客户姓名：</label>
+                        <input type="text" class="form-control" v-model="search.Name" placeholder="请输入客户姓名" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <label class="control-label hidden-xs hidden-sm">手机号码：</label>
@@ -25,19 +25,21 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-1">
-            <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
-        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">我的客户</caption>
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Contact_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加新客户</button>
+                        }
+                    </caption>
                     <thead>
                         <tr>
-                            <th>姓名</th>
-                            <th>手机</th>
+                            <th>客户姓名</th>
+                            <th>手机号码</th>
                             <th>地址</th>
                             <th class="hidden-xs hidden-sm">微信</th>
                             <th class="hidden-xs hidden-sm">QQ</th>
@@ -45,7 +47,7 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-cloak>
                         <tr v-for="item in list">
                             <td>{{item.ContactName}}</td>
                             <td>{{item.Mobile}}</td>
@@ -110,6 +112,7 @@
                 GeoMsg: '',
                 AlertTitle: '',
                 PanelTitle: '',
+                isFirstTime: true,
                 msg: ''
             },
             methods: {
@@ -117,9 +120,10 @@
                     $.post('@UrlVar.Contact_Index', this.search).done(function (result, status) {
                         this.list = result.data;
                         this.total = result.total;
-                        if (result.code != 1) {
+                        if (result.code != 1 && !this.isFirstTime) {
                             this.showAlert(result.msg);
                         }
+                        this.isFirstTime = false;
                     }.bind(this));
                 },
                 getProductList: function () {
@@ -144,8 +148,6 @@
                     this.frmTrade.ActualMoney = this.TotalMoney;
                 },
                 add: function () {
-                    this.PanelTitle = '添加联系人';
-                    this.AlertTitle = '添加提示';
                     this.frm.Id = 0;
                     this.frm.ContactName = '';
                     this.frm.Mobile = '';
@@ -154,11 +156,9 @@
                     this.frm.QQ = '';
                     this.frm.Email = '';
                     this.frm.Remark = '';
-                    this.showPanel( "#saveContactModal");
+                    this.showPanel('添加新客户', "#saveContactModal");
                 },
                 edit: function (item) {
-                    this.PanelTitle = '编辑联系人';
-                    this.AlertTitle = '编辑提示';
                     this.frm.Id = item.Id;
                     this.frm.ContactName = item.ContactName;
                     this.frm.Mobile = item.Mobile;
@@ -167,7 +167,7 @@
                     this.frm.QQ = item.QQ;
                     this.frm.Email = item.Email;
                     this.frm.Remark = item.Remark;
-                    this.showPanel("#saveContactModal");
+                    this.showPanel('编辑客户',"#saveContactModal");
                 },
                 saveContact: function (event) {
                     if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid && this.isPriceValid) {
@@ -180,7 +180,6 @@
                                 this.getData();
                             }
                             else {
-                                this.showPanel("#myModal");
                                 this.showAlert(result.msg);
                             }
                         }.bind(this));
@@ -339,7 +338,7 @@
                     return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
                 },
                 isActualMoneyValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney >= 0;
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney > 0;
                 },
                 isWeightValid: function () {
                     return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
