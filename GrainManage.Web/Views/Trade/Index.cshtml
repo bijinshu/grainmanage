@@ -56,7 +56,7 @@
                         </tr>
                     </thead>
                     <tbody v-cloak>
-                        <tr v-for="item in list">
+                        <tr v-for="item in list" :key="item.Id">
                             <td>{{item.ContactName}}</td>
                             <td>{{item.ProductName}}</td>
                             <td>{{item.Price}}</td>
@@ -165,12 +165,6 @@
                 save: function () {
                     this.IsDisabled = true;
                     if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
-                        for (var i = 0; i < this.productList.length; i++) {
-                            if (this.productList[i].Id == this.frmTrade.ProductId) {
-                                this.frmTrade.ProductName = this.productList[i].Name;
-                                break;
-                            }
-                        }
                         $.post('@UrlVar.Trade_Edit', this.frmTrade).always(function (result, status) {
                           this.IsDisabled = false;
                           if (result.code == 1) {
@@ -240,9 +234,6 @@
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
-                    this.setPrice();
-                });
                 this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
                     this.setPrice();
                 });

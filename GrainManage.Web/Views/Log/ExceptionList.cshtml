@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody v-cloak>
-                        <tr v-for="item in list" v-bind:title="item.StackTrace">
+                        <tr v-for="item in list" v-bind:title="item.StackTrace" :key="item.Id">
                             <td>{{item.Id}}</td>
                             <td>{{item.Path}}</td>
                             <td>{{item.Para}}</td>

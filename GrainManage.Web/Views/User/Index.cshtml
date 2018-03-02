@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
                     <tbody v-cloak>
-                        <tr v-for="item in list">
+                        <tr v-for="item in list" :key="item.Id">
                             <td>{{item.UserName}}</td>
                             <td>{{item.RealName}}</td>
                             <td>{{item.Gender==1?'女':'男'}}</td>

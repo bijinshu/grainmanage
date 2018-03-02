@@ -63,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody v-cloak>
-                        <tr v-for="item in list">
+                        <tr v-for="item in list" :key="item.Id">
                             <td>{{item.Name}}</td>
                             <td>{{item.Price}}</td>
                             @if (Model.Level >= GlobalVar.AdminLevel)
