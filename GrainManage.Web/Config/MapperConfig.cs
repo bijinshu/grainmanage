@@ -1,7 +1,6 @@
 ﻿using DataBase.GrainManage.Models;
 using GrainManage.Web.Models.Contact;
 using GrainManage.Web.Models.MetaData;
-using GrainManage.Web.Models.Price;
 using GrainManage.Web.Models.Product;
 using GrainManage.Web.Models.Role;
 using GrainManage.Web.Models.Trade;
@@ -29,8 +28,6 @@ namespace GrainManage.Web
                 cfg.CreateMap<ContactDto, Contact>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 
                 cfg.CreateMap<MetaDataDto, MetaData>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
-
-                cfg.CreateMap<PriceDto, PriceInfo>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 
                 cfg.CreateMap<TradeDto, Trade>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 

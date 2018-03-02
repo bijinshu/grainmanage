@@ -106,6 +106,7 @@ namespace GrainManage.Web.Controllers
             model.ContactName = input.ContactName;
             model.Price = input.Price;
             model.Weight = input.Weight;
+            model.ActualMoney = input.ActualMoney;
             model.TradeType = input.TradeType;
             model.Remark = input.Remark;
             model.ModifiedAt = DateTime.Now;

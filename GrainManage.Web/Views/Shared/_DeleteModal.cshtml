@@ -1,0 +1,7 @@
+﻿@model string
+<modal-dialog title="@Model" id="deleteDialog" v-bind:msg="msg">
+    <div slot="footer" style="text-align:center;">
+        <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
+        <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
+    </div>
+</modal-dialog>

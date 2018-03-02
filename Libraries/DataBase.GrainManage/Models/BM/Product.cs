@@ -7,8 +7,9 @@ namespace DataBase.GrainManage.Models
     public class Product
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public int CompId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }

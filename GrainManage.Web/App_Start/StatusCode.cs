@@ -58,7 +58,7 @@ namespace GrainManage.Web
         public readonly int UserForbidden = 507;
         [Message("登录失败,该账户尚未激活.")]
         public readonly int UserNotActivated = 508;
-        [Message("注册失败,该用户名已存在.")]
+        [Message("该用户名已存在.")]
         public readonly int NameExist = 510;
         [Message("对不起,您没有权限进行此操作,请先登录.")]
         public readonly int NotLogin = 511;

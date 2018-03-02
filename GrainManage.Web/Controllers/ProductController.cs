@@ -167,7 +167,12 @@ namespace GrainManage.Web.Controllers
         {
             var repo = GetRepo<Product>();
             var currentUser = CurrentUser;
-            var list = repo.GetFiltered(f => f.Status == Status.Enabled && (f.Type == 1 || f.CompId == currentUser.CompId)).Select(s => new { s.Id, s.Name }).ToList();
+            var list = repo.GetFiltered(f => f.Status == Status.Enabled && (f.Type == 1 || f.CompId == currentUser.CompId)).Select(s => new { s.Id, s.Name, s.Price, s.CompId }).ToList();
+            var repeatedList = list.GroupBy(s => s.Name).Select(s => new { ProductName = s.Key, Count = s.Count() }).Where(s => s.Count > 1);
+            foreach (var item in repeatedList)
+            {
+                list.RemoveAll(s => s.Name == item.ProductName && s.CompId != currentUser.CompId);
+            }
             return JsonNet(list);
         }
     }

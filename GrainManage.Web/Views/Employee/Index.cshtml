@@ -91,17 +91,14 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
-    {
-        @Html.Partial("_EmployeeDetail")
-    }
-    <modal-dialog title="删除员工" id="contactDeleteModal" v-bind:msg="msg">
-        <div slot="footer" style="text-align:center;">
-            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
-            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
-        </div>
-    </modal-dialog>
-    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @if (UrlVar.Has(Model.Level, UrlVar.Employee_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Employee_Edit, Model.Urls))
+        {
+            @Html.Partial("_EmployeeDetail")
+        }
+        @Html.Partial("_DeleteModal", "删除员工")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script>
     $(function () {
@@ -200,11 +197,11 @@
                 showDelete: function (item) {
                     this.currentItem = item;
                     this.msg = "您确定要删除 " + item.UserName + "[" + item.RealName + "]吗?";
-                    this.showPanel("#contactDeleteModal");
+                    this.showPanel("#deleteDialog");
                 },
                 deleteItem: function () {
                     $.post('@UrlVar.Employee_Delete', { userId: this.currentItem.Id }).always(function (result, status) {
-                        this.hidePanel("#contactDeleteModal");
+                        this.hidePanel("#deleteDialog");
                         if (result.code == 1) {
                             this.getData();
                         }

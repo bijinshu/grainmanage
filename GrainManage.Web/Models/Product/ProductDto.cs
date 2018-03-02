@@ -9,6 +9,7 @@ namespace GrainManage.Web.Models.Product
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public decimal Price { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }

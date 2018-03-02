@@ -22,7 +22,7 @@
         @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls))
         {
             <div class="col-md-1">
-                <button type="button" class="btn btn-success btn-block " v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+                <button type="button" class="btn btn-success btn-block " v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加</button>
             </div>
         }
     </div>
@@ -47,11 +47,11 @@
                             <td v-if="item.Level < Level">
                                 @if (UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="edit(item)">编辑</a>
+                                    <a style="cursor:pointer" v-on:click="showEdit(item)">编辑</a>
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Role_Delete, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="deleteItem(item)">删除</a>
+                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
                                 }
                             </td>
                         </tr>
@@ -65,11 +65,14 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
-    {
-        @Html.Partial("_RoleDetail")
-    }
-    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
+        {
+            @Html.Partial("_RoleDetail")
+        }
+        @Html.Partial("_DeleteModal", "删除角色")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script>
     $(function () {
@@ -91,6 +94,7 @@
                 IsDisabled: false,
                 AlertTitle: '',
                 PanelTitle: '',
+                currentItem: {},
                 Level: parseInt('@Model.Level'),
                 isFirstTime: true
             },
@@ -115,7 +119,7 @@
                         this.isFirstTime = false;
                     }.bind(this));
                 },
-                add: function (item) {
+                showAdd: function (item) {
                     this.frm.Id = 0;
                     this.frm.Name = '';
                     this.frm.Level = 30;
@@ -123,7 +127,7 @@
                     this.frm.Auths = [];
                     this.showPanel('添加角色', "#saveRoleModal");
                 },
-                edit: function (item) {
+                showEdit: function (item) {
                     this.frm.Id = item.Id;
                     this.frm.Name = item.Name;
                     this.frm.Level = item.Level;
@@ -131,12 +135,23 @@
                     this.frm.Auths = item.Auths.slice(0);
                     this.showPanel('编辑角色', "#saveRoleModal");
                 },
-                deleteItem: function (item) {
-                    $.post('@UrlVar.Role_Delete', { roleId: item.Id }).always(function (result, status) {
-                        this.getData();
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
+                    this.showPanel("#deleteDialog");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.Role_Delete', { roleId: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel("#deleteDialog");
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
                     }.bind(this));
                 },
-                saveRole: function (event) {
+                save: function (event) {
                     if (this.isRoleNameValid && this.isRemarkValid && this.isLevelValid) {
                         this.IsDisabled = true;
                         var url = this.frm.Id > 0 ? '@UrlVar.Role_Edit' : '@UrlVar.Role_New';

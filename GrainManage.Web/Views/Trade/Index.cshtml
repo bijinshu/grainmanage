@@ -67,9 +67,15 @@
                             <td>{{item.CreatedAt|formatTime}}</td>
                             <td>{{item.Creator}}</td>
                             <td>
-                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showTrade(item)">编辑</a>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Trade_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showTrade(item)">编辑</a>
+                                }
                                 <a>&nbsp;</a>
-                                <a style="cursor:pointer;" v-on:click.stop="showDelete(item)">删除</a>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Trade_Delete, Model.Urls))
+                                {
+                                    <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showDelete(item)">删除</a>
+                                }
                             </td>
                         </tr>
                     </tbody>
@@ -82,14 +88,11 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @Html.Partial("_TradeDetail")
-    <modal-dialog title="删除交易" id="tradeDeleteModal" v-bind:msg="msg">
-        <div slot="footer" style="text-align:center;">
-            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
-            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
-        </div>
-    </modal-dialog>
-    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @Html.Partial("_TradeDetail")
+        @Html.Partial("_DeleteModal", "删除交易")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
@@ -115,11 +118,11 @@
                     ActualMoney:0,
                     Remark:''
                 },
-                priceDic: new Array(),
                 IsDisabled: false,
                 AlertTitle: '',
                 PanelTitle: '',
                 AllowRefreshPrice: false,
+                AllowRefreshActualMoney: false,
                 currentItem: {},
                 isFirstTime:true
             },
@@ -141,25 +144,25 @@
                         this.productList = result;
                     }.bind(this));
                 },
-                getPriceList: function () {
-                    $.post('@UrlVar.Price_GetPriceList').done(function (result, status) {
-                        this.priceDic = result;
-                    }.bind(this));
-                },
                 setPrice: function () {
                     if (this.AllowRefreshPrice) {
-                        var priceKey = this.frmTrade.ProductId + "-" + this.frmTrade.TradeType;
-                        if (priceKey in this.priceDic) {
-                            this.frmTrade.Price = this.priceDic[priceKey];
-                        } else {
-                            this.frmTrade.Price = '';
+                        var existedItem = null;
+                        for (var i = 0; i < this.productList.length; i++) {
+                            if (this.productList[i].Id == this.frmTrade.ProductId) {
+                                existedItem = this.productList[i];
+                                break;
+                            }
                         }
+                        this.frmTrade.Price = existedItem ? existedItem.Price : '';
+                        this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
                     }
                 },
                 setMoney: function () {
-                    this.frmTrade.ActualMoney = this.TotalMoney;
+                    if (this.AllowRefreshPrice && this.AllowRefreshActualMoney) {
+                        this.frmTrade.ActualMoney = this.TotalMoney;
+                    }
                 },
-                saveTrade: function () {
+                save: function () {
                     this.IsDisabled = true;
                     if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
                         for (var i = 0; i < this.productList.length; i++) {
@@ -199,7 +202,7 @@
                 },
                 deleteItem: function () {
                     $.post('@UrlVar.Trade_Delete', { tradeId: this.currentItem.Id }).always(function (result, status) {
-                        this.hidePanel('#tradeDeleteModal');
+                        this.hidePanel('#deleteDialog');
                         if (result.code == 1) {
                             this.getData();
                         }
@@ -211,8 +214,8 @@
                 showDelete: function (item) {
                     this.currentItem = item;
                     this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
-                    this.showPanel("#tradeDeleteModal");
-                },
+                    this.showPanel("#deleteDialog");
+                }
             },
             computed: {
                 isContactNameValid: function () {
@@ -237,7 +240,6 @@
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.getPriceList();
                 this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
                     this.setPrice();
                 });
@@ -245,11 +247,18 @@
                     this.setPrice();
                 });
                 this.$watch('frmTrade.Price', function (newVal, oldVal) {
-                    this.AllowRefreshPrice = true;//编辑时，只有正确显示原来价格后才允许搜寻新价格
-                    this.setMoney();
+                    if (!this.AllowRefreshPrice) {
+                        this.AllowRefreshPrice = true;//编辑时，只有正确显示原来价格后才允许搜寻新价格
+                    } else {
+                        this.setMoney();
+                    }
                 });
                 this.$watch('frmTrade.Weight', function (newVal, oldVal) {
-                    this.setMoney();
+                    if (!this.AllowRefreshActualMoney) {
+                        this.AllowRefreshActualMoney = true;//编辑时，只有正确显示原来成交金额后才允许更改
+                    } else {
+                        this.setMoney();
+                    }
                 });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();

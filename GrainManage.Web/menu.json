@@ -2,78 +2,114 @@
   {
     "id": "contact",
     "text": "我的客户",
-    "url": "/Contact/Index"
+    "asTop": true,
+    "children": [
+      {
+        "id": "contact.view",
+        "text": "查看",
+        "url": "/Contact/Index"
+      },
+      {
+        "id": "contact.add",
+        "text": "新增",
+        "url": "/Contact/New"
+      },
+      {
+        "id": "contact.edit",
+        "text": "编辑",
+        "url": "/Contact/Edit"
+      },
+      {
+        "id": "contact.delete",
+        "text": "删除",
+        "url": "/Contact/Delete"
+      }
+    ]
   },
   {
-    "id": "contact",
+    "id": "employee",
     "text": "我的员工",
-    "url": "/Employee/Index"
+    "asTop": true,
+    "children": [
+      {
+        "id": "employee.view",
+        "text": "查看",
+        "url": "/Employee/Index"
+      },
+      {
+        "id": "employee.add",
+        "text": "新增",
+        "url": "/Employee/New"
+      },
+      {
+        "id": "employee.edit",
+        "text": "编辑",
+        "url": "/Employee/Edit"
+      },
+      {
+        "id": "employee.delete",
+        "text": "删除",
+        "url": "/Employee/Delete"
+      }
+    ]
   },
   {
     "id": "order",
     "text": "我的订单",
-    "url": "/Order/Index"
+    "asTop": true,
+    "children": [
+      {
+        "id": "order.view",
+        "text": "查看",
+        "url": "/Order/Index"
+      },
+      {
+        "id": "order.add",
+        "text": "新增",
+        "url": "/Order/New"
+      },
+      {
+        "id": "order.edit",
+        "text": "编辑",
+        "url": "/Order/Edit"
+      },
+      {
+        "id": "order.delete",
+        "text": "删除",
+        "url": "/Order/Delete"
+      }
+    ]
   },
   {
     "id": "trade",
     "text": "交易历史",
+    "asTop": true,
     "url": "/Trade/Index"
   },
   {
-    "id": "config",
-    "text": "配置管理",
+    "id": "product",
+    "text": "产品管理",
+    "asTop": true,
     "children": [
       {
-        "id": "config.product",
-        "text": "产品管理",
-        "url": "/Product/Index",
-        "children": [
-          {
-            "id": "config.product.view",
-            "text": "查看"
-          },
-          {
-            "id": "config.product.add",
-            "text": "新增",
-            "url": "/Product/New"
-          },
-          {
-            "id": "config.product.edit",
-            "text": "编辑",
-            "url": "/Product/Edit"
-          },
-          {
-            "id": "config.product.delete",
-            "text": "删除",
-            "url": "/Product/Delete"
-          }
-        ]
+        "id": "product.view",
+        "text": "查看",
+        "url": "/Product/Index"
       },
       {
-        "id": "config.price",
-        "text": "价格管理",
-        "url": "/Price/Index",
-        "children": [
-          {
-            "id": "config.price.view",
-            "text": "查看"
-          },
-          {
-            "id": "config.product.add",
-            "text": "新增",
-            "url": "/Price/New"
-          },
-          {
-            "id": "config.product.edit",
-            "text": "编辑",
-            "url": "/Price/Edit"
-          },
-          {
-            "id": "config.price.delete",
-            "text": "删除",
-            "url": "/Price/Delete"
-          }
-        ]
+        "id": "product.add",
+        "text": "新增",
+        "url": "/Product/New"
+      },
+      {
+        "id": "product.edit",
+        "text": "编辑",
+        "url": "/Product/Edit"
+      },
+      {
+        "id": "product.delete",
+        "text": "删除",
+        "url": "/Product/Delete"
       }
     ]
   },

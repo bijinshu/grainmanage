@@ -22,7 +22,6 @@ namespace DataBase.GrainManage
             modelBuilder.ApplyConfiguration(new ExceptionLogMapper());
             modelBuilder.ApplyConfiguration(new JobLogMapper());
             modelBuilder.ApplyConfiguration(new LoginLogMapper());
-            modelBuilder.ApplyConfiguration(new PriceMapper());
             modelBuilder.ApplyConfiguration(new RoleMapper());
             modelBuilder.ApplyConfiguration(new TradeMapper());
             modelBuilder.ApplyConfiguration(new UserMapper());

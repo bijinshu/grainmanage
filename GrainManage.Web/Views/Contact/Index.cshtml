@@ -33,7 +33,7 @@
                     <caption style="color:red;font-weight:bolder;">
                         @if (UrlVar.Has(Model.Level, UrlVar.Contact_New, Model.Urls))
                         {
-                            <button type="button" class="btn btn-success btn-sm" v-on:click="add"><span class="glyphicon glyphicon-plus"></span> 添加新客户</button>
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新客户</button>
                         }
                     </caption>
                     <thead>
@@ -56,7 +56,7 @@
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Email}}</td>
                             <td>
-                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="edit(item)">编辑</a>
+                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showEdit(item)">编辑</a>
                                 <a>&nbsp;</a>
                                 <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
                             </td>
@@ -71,9 +71,11 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @Html.Partial("_ContactDetail")
-    @Html.Partial("_TradeDetail")
-    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @Html.Partial("_ContactDetail")
+        @Html.Partial("_TradeDetail")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
@@ -107,7 +109,6 @@
                     ActualMoney:0,
                     Remark:''
                 },
-                priceDic: new Array(),
                 IsDisabled: false,
                 AddressType: 'manual',
                 GeoMsg: '',
@@ -131,23 +132,21 @@
                         this.productList = result;
                     }.bind(this));
                 },
-                getPriceList: function () {
-                    $.post('@UrlVar.Price_GetPriceList').done(function (result, status) {
-                        this.priceDic = result;
-                    }.bind(this));
-                },
                 setPrice: function () {
-                    var priceKey = this.frmTrade.ProductId + "-" + this.frmTrade.TradeType;
-                    if (priceKey in this.priceDic) {
-                        this.frmTrade.Price = this.priceDic[priceKey];
-                    } else {
-                        this.frmTrade.Price = '';
+                    var existedItem = null;
+                    for (var i = 0; i < this.productList.length; i++) {
+                        if (this.productList[i].Id == this.frmTrade.ProductId) {
+                            existedItem = this.productList[i];
+                            break;
+                        }
                     }
+                    this.frmTrade.Price = existedItem ? existedItem.Price : '';
+                    this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
                 },
                 setMoney: function () {
                     this.frmTrade.ActualMoney = this.TotalMoney;
                 },
-                add: function () {
+                showAdd: function () {
                     this.frm.Id = 0;
                     this.frm.ContactName = '';
                     this.frm.Mobile = '';
@@ -158,7 +157,7 @@
                     this.frm.Remark = '';
                     this.showPanel('添加新客户', "#saveContactModal");
                 },
-                edit: function (item) {
+                showEdit: function (item) {
                     this.frm.Id = item.Id;
                     this.frm.ContactName = item.ContactName;
                     this.frm.Mobile = item.Mobile;
@@ -169,8 +168,8 @@
                     this.frm.Remark = item.Remark;
                     this.showPanel('编辑客户',"#saveContactModal");
                 },
-                saveContact: function (event) {
-                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid && this.isPriceValid) {
+                save: function (event) {
+                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid ) {
                         this.IsDisabled = true;
                         var url = this.frm.Id > 0 ? '@UrlVar.Contact_Edit' : '@UrlVar.Contact_New';
                         $.post(url, this.frm).always(function (result, status) {
@@ -188,15 +187,17 @@
                         this.showAlert('请检查各项参数是否正确');
                     }
                 },
+                showTrade: function (item) {
+                    this.frmTrade.ContactId = item.Id;
+                    this.frmTrade.ContactName = item.ContactName;
+                    this.setPrice();
+                    this.frmTrade.Weight = '';
+                    this.frmTrade.Remark = '';
+                    this.showPanel("#saveTradeModal");
+                },
                 saveTrade: function () {
                     this.IsDisabled = true;
-                    if (this.isActualMoneyValid && this.isWeightValid) {
-                        for (var i = 0; i < this.productList.length; i++) {
-                            if (this.productList[i].Id == this.frmTrade.ProductId) {
-                                this.frmTrade.ProductName = this.productList[i].Name;
-                                break;
-                            }
-                        }
+                    if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
                         $.post('@UrlVar.Trade_New', this.frmTrade).always(function (result, status) {
                           this.IsDisabled = false;
                           if (result.code == 1) {
@@ -207,16 +208,8 @@
                           }
                          }.bind(this));
                     } else {
-                        this.showAlert('实际金额或者重量不正确');
+                        this.showAlert('价格、重量、金额必须大于0');
                     }
-                },
-                showTrade: function (item) {
-                    this.frmTrade.ContactId = item.Id;
-                    this.frmTrade.ContactName = item.ContactName;
-                    this.setPrice();
-                    this.frmTrade.Weight = '';
-                    this.frmTrade.Remark = '';
-                    this.showPanel("#saveTradeModal");
                 },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;
@@ -350,7 +343,6 @@
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.getPriceList();
                 this.$watch('frmTrade.TradeType', function (newVal, oldVal) {
                     this.setPrice();
                 });

@@ -12,13 +12,17 @@
                         <label class="control-label hidden-xs hidden-sm">产品名称：</label>
                         <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入产品名称" />
                     </div>
-                    <div class="form-group" style="margin-right:6px;">
-                        <select v-model="search.ProductType" class="form-control">
-                            <option value="null">请选择类型</option>
-                            <option value="0">私有产品</option>
-                            <option value="1">公共产品</option>
-                        </select>
-                    </div>
+                    @if (Model.Level >= GlobalVar.AdminLevel)
+                    {
+                        <div class="form-group" style="margin-right:6px;">
+                            <select v-model="search.ProductType" class="form-control">
+                                <option value="null">请选择产品类型</option>
+                                <option value="0">私有产品</option>
+                                <option value="1">公共产品</option>
+                            </select>
+                        </div>
+                    }
+
                     <div class="form-group" style="margin-right:6px;">
                         <select v-model="search.Status" class="form-control">
                             <option value="null">请选择状态</option>
@@ -46,7 +50,11 @@
                     <thead>
                         <tr>
                             <th>产品名称</th>
-                            <th>产品类型</th>
+                            <th>产品价格</th>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <th>产品类型</th>
+                            }
                             <th>备注</th>
                             <th>状态</th>
                             <th>创建时间</th>
@@ -57,7 +65,11 @@
                     <tbody v-cloak>
                         <tr v-for="item in list">
                             <td>{{item.Name}}</td>
-                            <td>{{item.Type==1?'公共':'私有'}}</td>
+                            <td>{{item.Price}}</td>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <td>{{item.Type==1?'公共':'私有'}}</td>
+                            }
                             <td>{{item.Remark}}</td>
                             <td>{{item.Status?'启用':'禁用'}}</td>
                             <td>{{item.CreatedAt|formatTime}}</td>
@@ -83,17 +95,14 @@
             <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
         </div>
     </div>
-    @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Product_Edit, Model.Urls))
-    {
-        @Html.Partial("_ProductDetail")
-    }
-    <modal-dialog title="删除产品" id="productDeleteModal" v-bind:msg="msg">
-        <div slot="footer" style="text-align:center;">
-            <button class="btn btn-danger" v-on:click.stop.prevent="deleteItem" style="margin-right:20px;">是</button>
-            <button class="btn btn-info" data-dismiss="modal" style="margin-left:20px;">否</button>
-        </div>
-    </modal-dialog>
-    <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Product_Edit, Model.Urls))
+        {
+            @Html.Partial("_ProductDetail")
+        }
+        @Html.Partial("_DeleteModal", "删除产品")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script>
     $(function () {
@@ -108,6 +117,7 @@
                 frm: {
                     Id: 0,
                     Name: '',
+                    Price:0,
                     Type: 0,
                     Status: 1,
                     Remark:''
@@ -132,6 +142,7 @@
                 showAdd: function () {
                     this.frm.Id = 0;
                     this.frm.Name = '';
+                    this.frm.Price='',
                     this.frm.Type = 0;
                     this.frm.Status = 1;
                     this.frm.Remark = '';
@@ -140,12 +151,13 @@
                 showEdit: function (item) {
                     this.frm.Id = item.Id;
                     this.frm.Name = item.Name;
+                    this.frm.Price = item.Price,
                     this.frm.Type = item.Type;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
                     this.showPanel('编辑产品', "#saveProductModal");
                 },
-                saveProduct: function (event) {
+                save: function (event) {
                     var url = this.frm.Id > 0 ? '@UrlVar.Product_Edit' : '@UrlVar.Product_New';
                     $.post(url, this.frm).always(function (result, status) {
                         this.IsDisabled = false;
@@ -161,11 +173,11 @@
                 showDelete: function (item) {
                     this.currentItem = item;
                     this.msg = "您确定要删除 [" +  item.Name + "]吗?";
-                    this.showPanel("#productDeleteModal");
+                    this.showPanel("#deleteDialog");
                 },
                 deleteItem: function () {
                     $.post('@UrlVar.Product_Delete', { productId: this.currentItem.Id }).always(function (result, status) {
-                        this.hidePanel("#productDeleteModal");
+                        this.hidePanel("#deleteDialog");
                         if (result.code == 1) {
                             this.getData();
                         }
@@ -178,6 +190,9 @@
             computed: {
                 isProductNameValid: function () {
                     return (/^.{1,20}$/g).test(this.frm.Name);
+                },
+                isPriceValid: function () {
+                    return (/^\d+(.\d{1,4})?$/g).test(this.frm.Price) && this.frm.Price > 0;
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frm.Remark);
