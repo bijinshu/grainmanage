@@ -23,6 +23,11 @@
         "id": "contact.delete",
         "text": "删除",
         "url": "/Contact/Delete"
+      },
+      {
+        "id": "contact.trade",
+        "text": "历史交易",
+        "url": "/Trade/GetByContactId"
       }
     ]
   },

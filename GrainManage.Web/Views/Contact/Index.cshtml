@@ -56,9 +56,17 @@
                             <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
                             <td class="hidden-xs hidden-sm">{{item.Email}}</td>
                             <td>
-                                <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showEdit(item)">编辑</a>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Contact_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showEdit(item)">编辑</a>
+                                }
                                 <a>&nbsp;</a>
                                 <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Trade_GetByContactId, Model.Urls))
+                                {
+                                    <a>&nbsp;</a>
+                                    <a style="cursor:pointer;" v-on:click.stop="showHistory(item)">历史</a>
+                                }
                             </td>
                         </tr>
                     </tbody>
@@ -74,6 +82,7 @@
     <div v-cloak>
         @Html.Partial("_ContactDetail")
         @Html.Partial("_TradeDetail")
+        @Html.Partial("_History")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -86,7 +95,8 @@
                 msg: '',
                 total: 0,
                 list: [],
-                productList:[],
+                productList: [],
+                tradeList:[],
                 search: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
@@ -131,6 +141,13 @@
                     $.post('@UrlVar.Product_List').done(function (result, status) {
                         this.productList = result;
                     }.bind(this));
+                },
+                showHistory: function (item) {
+                    this.tradeList = [];
+                    $.post('@UrlVar.Trade_GetByContactId', { contactId: item.Id }).done(function (result, status) {
+                        this.tradeList = result.data;
+                    }.bind(this));
+                    this.showPanel("交易历史","#historyModal");
                 },
                 setPrice: function () {
                     var existedItem = null;

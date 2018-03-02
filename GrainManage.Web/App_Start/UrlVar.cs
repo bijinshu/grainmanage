@@ -49,9 +49,11 @@ namespace GrainManage.Web
 
         //Trade
         public static string Trade_Index { get { return GetUrl("/Trade/Index"); } }
+        [Common]
         public static string Trade_New { get { return GetUrl("/Trade/New"); } }
         public static string Trade_Edit { get { return GetUrl("/Trade/Edit"); } }
         public static string Trade_Delete { get { return GetUrl("/Trade/Delete"); } }
+        public static string Trade_GetByContactId { get { return GetUrl("/Trade/GetByContactId"); } }
 
         //Log
         public static string Log_ExceptionList { get { return GetUrl("/Log/ExceptionList"); } }

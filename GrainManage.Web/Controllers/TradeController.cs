@@ -115,21 +115,32 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult GetByID(int tradeId)
+        public ActionResult GetByContactId(int contactId)
         {
             var result = new BaseOutput();
             var repo = GetRepo<Trade>();
-            var trade = repo.GetFiltered(f => f.Id == tradeId && f.CreatedBy == UserId).FirstOrDefault();
-            if (trade == null)
+            var list = repo.GetFiltered(f => f.ContactId == contactId).ToList();
+            if (!list.Any())
             {
                 SetResponse(s => s.NoData, null, result);
             }
             else
             {
-                result.data = MapTo<TradeDto>(trade);
+                var dtoList = MapTo<List<TradeDto>>(list);
+                var userRepo = GetRepo<User>();
+                var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
+                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
+                foreach (var item in dtoList)
+                {
+                    if (usertDic.ContainsKey(item.CreatedBy))
+                    {
+                        item.Creator = usertDic[item.CreatedBy];
+                    }
+                }
+                result.data = dtoList;
                 SetResponse(s => s.Success, null, result);
             }
-            return JsonNet(result);
+            return JsonNet(result,true);
         }
 
         public ActionResult Delete(int tradeId)
