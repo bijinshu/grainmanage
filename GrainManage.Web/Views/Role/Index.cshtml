@@ -1,7 +1,7 @@
 ﻿@using GrainManage.Web
 @model GrainManage.Web.Models.UserInfo
 @{
-    ViewBag.Title = "角色列表";
+    ViewBag.Title= "角色管理";
 }
 <script src="~/js/components/menu-tree.js"></script>
 <div class="container" id="roleInfo">
@@ -30,7 +30,7 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">角色管理</caption>
+                    <caption style="color:red;font-weight:bolder;">角色列表</caption>
                     <thead>
                         <tr>
                             <th>角色名称</th>
@@ -137,7 +137,7 @@
                 },
                 showDelete: function (item) {
                     this.currentItem = item;
-                    this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
+                    this.msg = "您确定要删除 [" + item.Name + "] 吗?";
                     this.showPanel("#deleteDialog");
                 },
                 deleteItem: function () {

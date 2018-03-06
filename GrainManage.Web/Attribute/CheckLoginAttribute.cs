@@ -34,12 +34,12 @@ namespace GrainManage.Web
             if (!filterContext.ActionDescriptor.FilterDescriptors.Any(f => f.Filter?.GetType() == typeof(AllowAnonymousFilter)))
             {
                 var cookies = filterContext.HttpContext.Request.Cookies;
-                if (!string.IsNullOrEmpty(CookieUtil.GetCookie(cookies, GlobalVar.CookieName)))
+                if (!string.IsNullOrEmpty(CookieUtil.Get(cookies, GlobalVar.CookieName)))
                 {
-                    var userId = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.UserId);
-                    var userName = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.UserName);
-                    var level = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
-                    var token = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
+                    var userId = CookieUtil.Get<int>(cookies, GlobalVar.CookieName, GlobalVar.UserId);
+                    var userName = CookieUtil.Get(cookies, GlobalVar.CookieName, GlobalVar.UserName);
+                    var level = CookieUtil.Get<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
+                    var token = CookieUtil.Get(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
                     if (userId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
                     {
                         var userKey = CacheKey.GetUserKey(userId);

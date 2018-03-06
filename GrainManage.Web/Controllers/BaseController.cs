@@ -63,9 +63,9 @@ namespace GrainManage.Web.Controllers
             return mapper.Map<T>(srcObj);
         }
         protected UserInfo CurrentUser { get { return Resolve<ICache>().Get<UserInfo>(CacheKey.GetUserKey(UserId)); } }
-        protected int UserId { get { return CookieUtil.GetCookie<int>(Request.Cookies, GlobalVar.CookieName, GlobalVar.UserId); } }
-        protected int Level { get { return int.Parse(CookieUtil.GetCookie(Request.Cookies, GlobalVar.CookieName, GlobalVar.Level)); } }
-        protected string AuthToken { get { return CookieUtil.GetCookie(Request.Cookies, GlobalVar.CookieName, GlobalVar.AuthToken); } }
+        protected int UserId { get { return CookieUtil.Get<int>(Request.Cookies, GlobalVar.CookieName, GlobalVar.UserId); } }
+        protected int Level { get { return int.Parse(CookieUtil.Get(Request.Cookies, GlobalVar.CookieName, GlobalVar.Level)); } }
+        protected string AuthToken { get { return CookieUtil.Get(Request.Cookies, GlobalVar.CookieName, GlobalVar.AuthToken); } }
         protected void SetEmptyIfNull<T>(T obj)
         {
             var type = typeof(T);

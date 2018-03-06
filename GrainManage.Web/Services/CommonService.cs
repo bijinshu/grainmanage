@@ -33,7 +33,7 @@ namespace GrainManage.Web.Services
         {
             var list = new List<string>();
             var db = new GrainManageDB();
-            var auths = db.Select<string>(string.Format("select Auths from rm_role where Id in({0})", string.Join(",", roleIds)));
+            var auths = db.Select<string>(string.Format("select Auths from rm_role where Id in({0})", string.Join(",", roleIds))).Where(f => !string.IsNullOrEmpty(f));
             if (auths != null && auths.Any())
             {
                 foreach (var auth in auths)
@@ -58,7 +58,7 @@ namespace GrainManage.Web.Services
         {
             var list = new List<string>();
             var db = new GrainManageDB();
-            var auths = db.Select<string>(string.Format("select Auths from rm_role where Id in({0})", string.Join(",", roleIds)));
+            var auths = db.Select<string>(string.Format("select Auths from rm_role where Id in({0})", string.Join(",", roleIds))).Where(f => !string.IsNullOrEmpty(f));
             if (auths != null && auths.Any())
             {
                 var menus = GetMenus();

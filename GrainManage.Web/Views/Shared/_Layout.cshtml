@@ -8,6 +8,7 @@
     {
         TreeUtil.RemoveNotValid(menuList, Model.Auths);
     }
+    ViewBag.Title = string.IsNullOrEmpty(ViewBag.Title as string) ? @GlobalResx.SysName : ViewBag.Title;
 }
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -15,7 +16,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@GlobalResx.SysName</title>
+    <title>@ViewBag.Title</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
     <link href="~/css/menu.css" rel="stylesheet" />

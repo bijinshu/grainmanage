@@ -26,37 +26,16 @@
       },
       {
         "id": "contact.trade",
-        "text": "历史交易",
+        "text": "交易历史",
         "url": "/Trade/GetByContactId"
       }
     ]
   },
   {
-    "id": "employee",
-    "text": "我的员工",
+    "id": "trade",
+    "text": "交易管理",
     "asTop": true,
-    "children": [
-      {
-        "id": "employee.view",
-        "text": "查看",
-        "url": "/Employee/Index"
-      },
-      {
-        "id": "employee.add",
-        "text": "新增",
-        "url": "/Employee/New"
-      },
-      {
-        "id": "employee.edit",
-        "text": "编辑",
-        "url": "/Employee/Edit"
-      },
-      {
-        "id": "employee.delete",
-        "text": "删除",
-        "url": "/Employee/Delete"
-      }
-    ]
+    "url": "/Trade/Index"
   },
   {
     "id": "order",
@@ -86,12 +65,6 @@
     ]
   },
   {
-    "id": "trade",
-    "text": "交易历史",
-    "asTop": true,
-    "url": "/Trade/Index"
-  },
-  {
     "id": "product",
     "text": "产品管理",
     "asTop": true,
@@ -115,6 +88,33 @@
         "id": "product.delete",
         "text": "删除",
         "url": "/Product/Delete"
+      }
+    ]
+  },
+  {
+    "id": "employee",
+    "text": "我的员工",
+    "asTop": true,
+    "children": [
+      {
+        "id": "employee.view",
+        "text": "查看",
+        "url": "/Employee/Index"
+      },
+      {
+        "id": "employee.add",
+        "text": "新增",
+        "url": "/Employee/New"
+      },
+      {
+        "id": "employee.edit",
+        "text": "编辑",
+        "url": "/Employee/Edit"
+      },
+      {
+        "id": "employee.delete",
+        "text": "删除",
+        "url": "/Employee/Delete"
       }
     ]
   },

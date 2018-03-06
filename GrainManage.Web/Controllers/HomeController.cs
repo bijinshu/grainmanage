@@ -28,11 +28,7 @@ namespace GrainManage.Web.Controllers
             TreeUtil.SetParent(menuList);
             return JsonNet(menuList, true);
         }
-        [AllowAnonymous]
-        public ActionResult GetHeaders()
-        {
-            return Content(string.Join("\r\n", Request.Headers.Select(s => string.Format("{0}:{1}", s.Key, s.Value))));
-        }
+
         public ActionResult PerfectComp(string Name, string Address)
         {
             var result = new BaseOutput();

@@ -20,9 +20,9 @@
                             <div class="form-group" v-bind:class="{'has-error':!isPriceValid}">
                                 <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
                                 <div class="col-md-8">
-                                    <input v-model="frm.Price" type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格（元/斤）">
+                                    <input v-model="frm.Price" type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
                                 </div>
-                                <span v-if="!isPriceValid" class="col-md-push-3 col-md-8" style="color:red">价格必须为大于0的数字（最多四位小数）</span>
+                                <span v-if="!isPriceValid" class="col-md-push-3 col-md-8" style="color:red">价格必须为大于0的数字(最多四位小数)</span>
                             </div>
                             @if (Model.Level >= GlobalVar.AdminLevel)
     {

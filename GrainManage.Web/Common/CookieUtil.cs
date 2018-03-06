@@ -15,7 +15,7 @@ namespace GrainManage.Web.Common
         /// <param name="strName">名称</param>
         /// <param name="strValue">值</param>
         /// <param name="expires">过期时间(分钟)</param>
-        public static void WriteCookie(IResponseCookies cookies, string strName, string strValue, int expires = 0)
+        public static void Write(IResponseCookies cookies, string strName, string strValue, int expires = 0)
         {
             if (expires > 0)
             {
@@ -26,15 +26,15 @@ namespace GrainManage.Web.Common
                 cookies.Append(strName, UrlEncode(strValue));
             }
         }
-        public static void WriteCookie(IResponseCookies cookies, string strName, Dictionary<string, string> dic, int expires = 0)
+        public static void Write(IResponseCookies cookies, string strName, Dictionary<string, string> dic, int expires = 0)
         {
-            WriteCookie(cookies, strName, GetCookieStr(dic), expires);
+            Write(cookies, strName, GetCookieStr(dic), expires);
         }
         /// <summary>
         /// 删除cookie
         /// </summary>
         /// <param name="strName"></param>
-        public static void DeleteCookie(IResponseCookies cookies, string strName)
+        public static void Delete(IResponseCookies cookies, string strName)
         {
             cookies.Delete(strName);
         }
@@ -44,7 +44,7 @@ namespace GrainManage.Web.Common
         /// </summary>
         /// <param name="strName">名称</param>
         /// <returns>cookie值</returns>
-        public static string GetCookie(IRequestCookieCollection cookies, string strName)
+        public static string Get(IRequestCookieCollection cookies, string strName)
         {
             return cookies != null && cookies[strName] != null ? UrlDecode(cookies[strName]) : string.Empty;
         }
@@ -55,7 +55,7 @@ namespace GrainManage.Web.Common
         /// <param name="strName">名称</param>
         /// <param name="strKey">键</param>
         /// <returns>cookie值</returns>
-        public static string GetCookie(IRequestCookieCollection cookies, string strName, string strKey)
+        public static string Get(IRequestCookieCollection cookies, string strName, string strKey)
         {
             if (cookies != null && cookies[strName] != null)
             {
@@ -75,12 +75,12 @@ namespace GrainManage.Web.Common
             }
             return string.Empty;
         }
-        public static T GetCookie<T>(IRequestCookieCollection cookies, string strName, string strKey)
+        public static T Get<T>(IRequestCookieCollection cookies, string strName, string strKey)
         {
             T result = default(T);
             try
             {
-                var strValue = GetCookie(cookies, strName, strKey);
+                var strValue = Get(cookies, strName, strKey);
                 if (!string.IsNullOrWhiteSpace(strValue))
                 {
                     result = (T)Convert.ChangeType(strValue, typeof(T));

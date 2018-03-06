@@ -52,6 +52,9 @@ namespace GrainManage.Web.Controllers
             else
             {
                 result.total = total;
+                var tradeRepo = GetRepo<Trade>();
+                var contactIdList = list.Select(s => s.Id).ToList();
+                var existedTradeList = tradeRepo.GetFiltered(f => f.CompId == currentUser.CompId && contactIdList.Contains(f.ContactId)).GroupBy(s => s.ContactId).Select(s => new { ContactId = s.Key, Count = s.Count() }).ToList();
                 var dtoList = MapTo<List<ContactDto>>(list);
                 foreach (var item in dtoList)
                 {
@@ -59,6 +62,7 @@ namespace GrainManage.Web.Controllers
                     {
                         item.CanModify = true;
                     }
+                    item.TradeCount = existedTradeList.Any(a => a.ContactId == item.Id) ? existedTradeList.First(f => f.ContactId == item.Id).Count : 0;
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);

@@ -74,7 +74,7 @@ namespace GrainManage.Web.Controllers
                             dic[GlobalVar.UserName] = userInfo.UserName;
                             dic[GlobalVar.Level] = userInfo.Level.ToString();
                             dic[GlobalVar.AuthToken] = userInfo.Token;
-                            CookieUtil.WriteCookie(Response.Cookies, GlobalVar.CookieName, dic);
+                            CookieUtil.Write(Response.Cookies, GlobalVar.CookieName, dic);
                             level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
                         }
@@ -205,7 +205,7 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult SignOut()
         {
-            CookieUtil.DeleteCookie(Response.Cookies, GlobalVar.CookieName);
+            CookieUtil.Delete(Response.Cookies, GlobalVar.CookieName);
             var repo = GetRepo<User>();
             var account = repo.GetFiltered(f => f.Id == UserId, true).First();
             account.ModifiedAt = DateTime.Now;

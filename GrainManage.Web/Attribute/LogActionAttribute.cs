@@ -26,10 +26,10 @@ namespace GrainManage.Web
                 ActionLog model = new ActionLog();
                 model.Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8);
                 model.ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request);
-                model.UserName = CookieUtil.GetCookie(cookies, GlobalVar.CookieName, GlobalVar.UserName);
+                model.UserName = CookieUtil.Get(cookies, GlobalVar.CookieName, GlobalVar.UserName);
                 model.Method = filterContext.HttpContext.Request.Method;
                 model.Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request);
-                model.Level = CookieUtil.GetCookie<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
+                model.Level = CookieUtil.Get<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
                 model.StartTime = DateTime.Now;
                 model.Id = LogService.AddActionLog(model);
                 headers.Add(name, string.Format("{0},{1}", model.Id.ToString(), model.StartTime.ToString("yyyy-MM-dd HH:mm:ss")));
