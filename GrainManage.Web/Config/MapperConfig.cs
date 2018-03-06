@@ -1,4 +1,5 @@
 ﻿using DataBase.GrainManage.Models;
+using GrainManage.Web.Models.Company;
 using GrainManage.Web.Models.Contact;
 using GrainManage.Web.Models.MetaData;
 using GrainManage.Web.Models.Product;
@@ -32,6 +33,7 @@ namespace GrainManage.Web
                 cfg.CreateMap<TradeDto, Trade>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
 
                 cfg.CreateMap<ProductDto, Product>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
+                cfg.CreateMap<CompanyDto, Company>().ForMember(d => d.CreatedAt, s => s.UseValue(DateTime.Now)).ReverseMap();
             });
         }
     }

@@ -62,12 +62,22 @@
                                         <tr>
                                             <th>店铺名称</th>
                                             <th>店铺地址</th>
+                                            <th>Logo</th>
+                                            @if (UrlVar.Has(Model.Level, UrlVar.Company_Edit, Model.Urls))
+                                            {
+                                                <th>操作</th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody v-cloak>
                                         <tr>
                                             <td>{{frmComp.Name}}</td>
                                             <td>{{frmComp.Address}}</td>
+                                            <td><img style="width:80px;" v-bind:src="frmComp.ImgName|imgUrl" /></td>
+                                            @if (UrlVar.Has(Model.Level, UrlVar.Company_Edit, Model.Urls))
+                                            {
+                                                <td><a style="cursor:pointer;" v-on:click.stop="showComp()">编辑</a></td>
+                                            }
                                         </tr>
                                     </tbody>
                                 </table>
@@ -102,7 +112,7 @@
             </div>
         </div>
     </div>
-    @if (Model.CompId < 0)
+    @if (Model.CompId != 0)
     {
         @Html.Partial("_CompanyDetail")
     }
@@ -116,8 +126,10 @@
             data: {
                 msg: '',
                 frmComp: {
+                    Id:0,
                     Name: '',
-                    Address: ''
+                    Address: '',
+                    ImgName: ''
                 },
                 userInfo: {
                     CompId:0,
@@ -150,8 +162,10 @@
                             if (this.userInfo.CompId < 0) {
                                 this.showPanel("#saveCompanyModal");
                             } else {
+                                this.frmComp.Id = result.data.CompId;
                                 this.frmComp.Name = result.data.ShopName ? result.data.ShopName : '';
                                 this.frmComp.Address = result.data.ShopAddress ? result.data.ShopAddress : '';
+                                this.frmComp.ImgName = result.data.ImgName ? result.data.ImgName : '';
                             }
                         }
                     }.bind(this));
@@ -178,18 +192,48 @@
                 isPwdValid: function (pwd) {
                     return (/^.{2,20}$/g).test(pwd);
                 },
+                showComp: function () {
+                    this.showPanel("#saveCompanyModal");
+                },
                 saveComp: function (event) {
                     if (this.isCompanyNameValid && this.isAddressValid) {
                         this.IsDisabled = true;
-                       $.post('@UrlVar.Home_PerfectComp', this.frmComp).always(function (result, status) {
-                           this.IsDisabled = false;
-                           if (result.code==1) {
-                               window.location.reload(true);
-                           } else {
-                               this.showAlert(result.msg);
-                           }
-                        }.bind(this));
+                        var url = this.frmComp.Id > 0 ? '@UrlVar.Company_Edit' : '@UrlVar.Company_New';
+                        var data = new FormData($("#frmCompany")[0]);
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: data,
+                            dataType: 'JSON',
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            complete: function (result, status) {
+                                this.IsDisabled = false;
+                                if (result.responseJSON.code == 1) {
+                                    window.location.reload(true);
+                                }
+                                else {
+                                    this.showAlert(result.responseJSON.msg);
+                                }
+                            }.bind(this)
+                        })
                     }
+                },
+                deleteFile: function (Id) {
+                    $.post('@UrlVar.Company_DeleteFile', { compId: Id }).always(function (result, status) {
+                        if (result.code == 1) {
+                            this.frmComp.ImgName = '';
+                        }
+                    }.bind(this));
+                },
+            },
+            filters: {
+                imgUrl: function (value) {
+                    if (value) {
+                        return '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/"  + value;
+                    }
+                    return "javascript:void()";
                 }
             },
             computed: {

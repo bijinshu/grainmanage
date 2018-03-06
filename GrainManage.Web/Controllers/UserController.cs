@@ -1,5 +1,4 @@
 ﻿using DataBase.GrainManage.Models;
-using DataBase.GrainManage.Models.BM;
 using DataBase.GrainManage.Models.Log;
 using GrainManage.Common;
 using GrainManage.Core;
@@ -407,7 +406,7 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
-                result.data = new { dto.UserName, dto.RealName, dto.Gender, dto.Mobile, dto.QQ, dto.Weixin, dto.Email, dto.RoleNames, dto.CompId, ShopName = comp.Name, ShopAddress = comp.Address };
+                result.data = new { dto.UserName, dto.RealName, dto.Gender, dto.Mobile, dto.QQ, dto.Weixin, dto.Email, dto.RoleNames, dto.CompId, ShopName = comp.Name, ShopAddress = comp.Address, comp.ImgName };
             }
             SetResponse(s => s.Success, result);
             return JsonNet(result, true);

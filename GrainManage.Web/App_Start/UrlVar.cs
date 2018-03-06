@@ -10,16 +10,19 @@ namespace GrainManage.Web
         [Common]
         public static string Home_Index { get { return GetUrl("/Home/Index"); } }
         [Common]
-        public const string Home_MenuTree = "/Home/MenuTree";
+        public static string Home_MenuTree { get { return GetUrl("/Home/MenuTree"); } }
+        //Company
         [Common]
-        public const string Home_PerfectComp = "/Home/PerfectComp";
+        public static string Company_New { get { return GetUrl("/Company/New"); } }
+        public static string Company_Edit { get { return GetUrl("/Company/Edit"); } }
+        public static string Company_DeleteFile { get { return GetUrl("/Company/DeleteFile"); } }
         //Role
         public static string Role_Index { get { return GetUrl("/Role/Index"); } }
         public static string Role_New { get { return GetUrl("/Role/New"); } }
         public static string Role_Edit { get { return GetUrl("/Role/Edit"); } }
         public static string Role_Delete { get { return GetUrl("/Role/Delete"); } }
         [Common]
-        public const string Role_GetRoleList = "/Role/GetRoleList";
+        public static string Role_GetRoleList { get { return GetUrl("/Role/GetRoleList"); } }
         //User
         public static string User_Index { get { return GetUrl("/User/Index"); } }
         public static string User_New { get { return GetUrl("/User/New"); } }

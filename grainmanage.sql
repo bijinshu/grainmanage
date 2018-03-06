@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-02 14:04:21
+Date: 2018-03-06 18:18:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,14 +24,18 @@ CREATE TABLE `bm_company` (
   `UserId` int(11) NOT NULL COMMENT '用户编号',
   `Name` varchar(60) NOT NULL DEFAULT '' COMMENT '公司名称',
   `Address` varchar(200) NOT NULL DEFAULT '' COMMENT '公司地址',
+  `ImgName` varchar(60) NOT NULL DEFAULT '' COMMENT '图片名称',
+  `CreatedAt` datetime NOT NULL COMMENT '创建时间',
+  `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_userid` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_company
 -- ----------------------------
-INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街');
+INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 15:05:35', '2018-03-06 17:39:19');
+INSERT INTO `bm_company` VALUES ('6', '2', '是的法人', '松岛枫松岛枫', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
 
 -- ----------------------------
 -- Table structure for `bm_contact`
@@ -97,8 +101,8 @@ CREATE TABLE `bm_order` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Mobile` varchar(11) NOT NULL COMMENT '手机号码',
   `Address` varchar(200) NOT NULL DEFAULT '' COMMENT '地址',
-  `FromUserId` int(11) NOT NULL DEFAULT '0' COMMENT '发单用户编号',
-  `ToUserId` int(11) NOT NULL DEFAULT '0' COMMENT '接单商户编号',
+  `UserId` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
+  `CompId` int(11) NOT NULL DEFAULT '0' COMMENT '店铺编号',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
   `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:待发送 1:待接单 2:已接单 3:交易成功 4:交易失败',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
@@ -120,7 +124,6 @@ CREATE TABLE `bm_order_detail` (
   `ProductId` int(11) NOT NULL COMMENT '产品编号',
   `Price` decimal(20,4) NOT NULL COMMENT '价格',
   `Num` decimal(20,2) NOT NULL COMMENT '数量',
-  `Unit` smallint(6) NOT NULL COMMENT '单位',
   `TotalMoney` decimal(20,2) NOT NULL COMMENT '总价',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
@@ -160,7 +163,7 @@ INSERT INTO `bm_product` VALUES ('4', '0', '燕麦', '1.3000', '', '1', '1', '20
 INSERT INTO `bm_product` VALUES ('5', '0', '玉米', '1.2050', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
 INSERT INTO `bm_product` VALUES ('6', '0', '花生', '2.4450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
 INSERT INTO `bm_product` VALUES ('7', '0', '菜籽', '2.2450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '0', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
+INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '1', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -184,62 +187,40 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
 -- ----------------------------
 INSERT INTO `bm_trade` VALUES ('1', '1', '1', '张海川', '3', '大稻', '1.2600', '612.00', '679.32', '0', '', '', '', '1', '2007-11-02 14:47:03', '2018-02-28 18:06:50');
-INSERT INTO `bm_trade` VALUES ('2', '1', '2', '李玉飞', '3', '大稻', '1.3700', '632.00', '865.84', '0', '', '', '', '4', '2012-11-02 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('3', '1', '3', '王亮亮', '8', '小稻', '1.3300', '612.00', '813.96', '1', '', '', '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('4', '1', '4', '张思贤', '1', '小麦', '1.0400', '416.00', '432.64', '0', '', '', '', '4', '2007-11-02 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('5', '1', '5', '刘江', '7', '菜籽', '1.7000', '612.00', '1040.40', '1', '', '', '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('6', '1', '6', '鲍菲菲', '6', '花生', '1.3350', '612.00', '817.02', '0', '', '', '', '4', '2007-11-02 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('7', '1', '7', '成杰', '5', '玉米', '1.2050', '612.00', '737.46', '0', '', '', '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('8', '1', '8', '陈千业', '3', '大稻', '1.4150', '612.00', '865.98', '1', '', '', '', '4', '2007-11-03 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('9', '1', '9', '齐昊', '8', '小稻', '1.2250', '612.00', '749.70', '1', '', '', '', '1', '2009-11-04 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('10', '1', '10', '任思', '1', '小麦', '1.0350', '612.00', '633.42', '1', '', '', '', '4', '2009-12-05 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('11', '1', '11', '贾亮', '7', '菜籽', '2.2450', '612.00', '1373.94', '1', '', '', '', '1', '2012-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('12', '1', '12', '何远', '6', '花生', '2.4450', '632.00', '1545.24', '0', '', '', '', '4', '2012-11-02 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('13', '1', '13', '文一毫', '5', '玉米', '1.0050', '812.00', '816.06', '0', '', '', '', '1', '2007-11-02 14:47:03', null);
-INSERT INTO `bm_trade` VALUES ('14', '1', '14', '鲁云', '3', '大稻', '1.2600', '612.00', '771.12', '1', '', '', '', '4', '2007-11-03 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('15', '1', '15', '毛强国', '8', '小稻', '1.1650', '612.00', '712.98', '0', '', '', '', '1', '2009-11-04 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('16', '1', '16', '陈桥锋', '1', '小麦', '1.0200', '612.00', '624.24', '1', '', '', '', '4', '2009-12-05 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('17', '1', '17', '秦汉', '7', '菜籽', '1.8250', '612.00', '1116.90', '1', '', '', '', '1', '2007-06-01 15:47:03', null);
-INSERT INTO `bm_trade` VALUES ('18', '1', '18', '李双江', '6', '花生', '1.5300', '632.00', '966.96', '0', '', '', '', '4', '2006-08-02 14:22:00', null);
 INSERT INTO `bm_trade` VALUES ('19', '1', '19', '贝乐石', '3', '大稻', '1.2600', '612.00', '771.12', '0', '', '', '', '1', '2005-07-02 13:47:03', null);
-INSERT INTO `bm_trade` VALUES ('20', '1', '20', '关楚生', '5', '玉米', '1.1650', '812.00', '945.98', '1', '', '', '', '4', '2004-09-02 08:47:03', null);
 INSERT INTO `bm_trade` VALUES ('21', '1', '21', '楚博雄', '5', '玉米', '1.1450', '612.00', '700.74', '0', '', '', '', '1', '2004-09-02 08:50:00', null);
-INSERT INTO `bm_trade` VALUES ('22', '1', '22', '张一凡', '3', '大稻', '1.3000', '612.00', '795.60', '0', '', '', '', '4', '2006-01-02 09:47:56', null);
 INSERT INTO `bm_trade` VALUES ('23', '1', '23', '刘玉生', '8', '小稻', '1.2100', '612.00', '740.52', '0', '', '', '', '1', '2006-01-02 09:50:26', null);
-INSERT INTO `bm_trade` VALUES ('24', '1', '24', '吴雪奇', '1', '小麦', '1.0650', '612.00', '651.78', '0', '', '', '', '4', '2010-11-03 10:00:00', null);
 INSERT INTO `bm_trade` VALUES ('25', '1', '1', '张海川', '7', '菜籽', '1.8700', '612.00', '1144.44', '0', '', '', '', '1', '2010-08-04 18:45:43', null);
-INSERT INTO `bm_trade` VALUES ('26', '1', '1', '张海川', '6', '花生', '1.5850', '612.00', '970.02', '0', '', '', '', '4', '2009-12-06 14:47:03', null);
 INSERT INTO `bm_trade` VALUES ('27', '1', '2', '李玉飞', '5', '玉米', '1.1100', '612.00', '679.32', '1', '', '', '', '1', '2007-11-02 10:40:03', null);
-INSERT INTO `bm_trade` VALUES ('28', '1', '2', '李玉飞', '3', '大稻', '1.3700', '632.00', '865.84', '1', '', '', '', '4', '2010-09-02 12:58:22', null);
 INSERT INTO `bm_trade` VALUES ('29', '1', '2', '李玉飞', '8', '小稻', '1.3300', '632.00', '840.56', '0', '', '', '', '1', '2010-05-02 08:42:27', null);
-INSERT INTO `bm_trade` VALUES ('30', '1', '20', '关楚生', '1', '小麦', '1.0400', '612.00', '636.48', '1', '', '', '', '4', '2010-06-22 12:28:08', null);
 INSERT INTO `bm_trade` VALUES ('31', '1', '18', '李双江', '7', '菜籽', '1.7000', '612.00', '1040.40', '1', '', '', '', '1', '2010-11-04 19:20:08', null);
-INSERT INTO `bm_trade` VALUES ('32', '1', '18', '李双江', '6', '花生', '1.3350', '612.00', '817.02', '0', '', '', '', '4', '2010-12-05 16:36:09', null);
 INSERT INTO `bm_trade` VALUES ('33', '1', '16', '陈桥锋', '5', '玉米', '1.2050', '612.00', '737.46', '1', '', '', '', '1', '2007-11-02 10:40:03', null);
-INSERT INTO `bm_trade` VALUES ('34', '1', '16', '陈桥锋', '3', '大稻', '1.4150', '632.00', '894.28', '1', '', '', '', '4', '2006-09-02 12:58:22', null);
 INSERT INTO `bm_trade` VALUES ('35', '1', '7', '成杰', '8', '小稻', '1.2250', '812.00', '994.70', '0', '', '', '', '1', '2005-05-02 08:42:27', null);
-INSERT INTO `bm_trade` VALUES ('36', '1', '8', '陈千业', '1', '小麦', '1.0350', '612.00', '633.42', '1', '', '', '', '4', '2007-06-22 12:28:08', null);
 INSERT INTO `bm_trade` VALUES ('37', '1', '15', '毛强国', '7', '菜籽', '2.2450', '612.00', '1373.94', '1', '', '', '', '1', '2006-11-04 19:20:08', null);
-INSERT INTO `bm_trade` VALUES ('38', '1', '9', '齐昊', '6', '花生', '2.4450', '612.00', '1496.34', '1', '', '', '', '4', '2009-12-05 16:36:09', null);
 INSERT INTO `bm_trade` VALUES ('39', '1', '4', '张思贤', '1', '小麦', '1.6000', '560.00', '582.40', '1', '', '', '', '1', '2018-02-28 14:41:18', '2018-02-28 20:26:46');
-INSERT INTO `bm_trade` VALUES ('40', '1', '1', '张海川', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
-INSERT INTO `bm_trade` VALUES ('41', '1', '1', '张海川', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
-INSERT INTO `bm_trade` VALUES ('42', '1', '1', '张海川', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
-INSERT INTO `bm_trade` VALUES ('43', '1', '1', '张海川', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
-INSERT INTO `bm_trade` VALUES ('44', '1', '3', '王亮亮', '1', '小麦', '1.0400', '0.00', '0.00', '0', '', '', '', '1', '2018-02-28 15:07:01', null);
+INSERT INTO `bm_trade` VALUES ('40', '1', '1', '张海川', '1', '小麦', '1.0400', '50.00', '52.00', '0', '', '', '', '1', '2018-02-28 15:07:01', '2018-03-06 10:14:53');
 INSERT INTO `bm_trade` VALUES ('46', '1', '1', '张海川', '1', '小麦', '1.0460', '555.00', '580.53', '0', '', '', '', '1', '2018-02-28 19:38:31', null);
 INSERT INTO `bm_trade` VALUES ('47', '1', '1', '张海川', '3', '大稻', '1.2600', '655.00', '825.30', '0', '', '', '', '1', '2018-03-01 17:36:26', null);
-INSERT INTO `bm_trade` VALUES ('48', '1', '1', '张海川', '3', '大稻', '1.2600', '600.00', '756.00', '0', '', '', '', '1', '2018-03-02 10:12:34', '2018-03-02 10:56:16');
-INSERT INTO `bm_trade` VALUES ('49', '1', '1', '张海川', '7', '', '2.2450', '100.00', '224.50', '0', '', '', '', '1', '2018-03-02 11:59:27', null);
-INSERT INTO `bm_trade` VALUES ('50', '1', '3', '王亮亮', '3', '大稻', '1.2600', '500.00', '630.00', '0', '', '', '', '1', '2018-03-02 12:05:03', '2018-03-02 12:09:40');
+INSERT INTO `bm_trade` VALUES ('48', '1', '1', '张海川', '5', '玉米', '1.2050', '600.00', '723.00', '0', '', '', '', '1', '2018-03-02 10:12:34', '2018-03-02 14:39:40');
+INSERT INTO `bm_trade` VALUES ('49', '1', '1', '张海川', '2', '黄豆', '1.3000', '100.00', '130.00', '0', '', '', '', '1', '2018-03-02 11:59:27', '2018-03-02 14:35:50');
+INSERT INTO `bm_trade` VALUES ('50', '1', '3', '王亮亮', '7', '菜籽', '2.2450', '500.00', '1122.50', '0', '', '', '', '1', '2018-03-02 12:05:03', '2018-03-02 14:31:40');
 INSERT INTO `bm_trade` VALUES ('51', '1', '6', '鲍菲菲', '3', '大稻', '1.2600', '900.00', '1134.00', '0', '', '', '', '1', '2018-03-02 12:08:51', null);
 INSERT INTO `bm_trade` VALUES ('52', '1', '7', '成杰', '2', '黄豆', '1.3000', '700.00', '910.00', '0', '', '', '', '1', '2018-03-02 12:08:51', null);
+INSERT INTO `bm_trade` VALUES ('53', '1', '3', '王亮亮', '1', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-02 16:16:35', null);
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -258,11 +239,17 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=418 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=424 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
 -- ----------------------------
+INSERT INTO `log_action` VALUES ('418', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-06 16:02:35', '2018-03-06 16:02:35', '00:00:01');
+INSERT INTO `log_action` VALUES ('419', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-06 16:05:06', '2018-03-06 16:05:06', '00:00:00');
+INSERT INTO `log_action` VALUES ('420', 'testadmin', '/User/SignOut', '10.10.133.108', 'GET', '', '', '80', '2018-03-06 16:06:26', '2018-03-06 16:06:26', '00:00:00');
+INSERT INTO `log_action` VALUES ('421', 'testadmin', '/User/SignOut', '10.10.133.108', 'GET', '', '', '80', '2018-03-06 17:21:23', '2018-03-06 17:21:24', '00:00:02');
+INSERT INTO `log_action` VALUES ('422', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:31:26', '2018-03-06 17:31:26', '00:00:00');
+INSERT INTO `log_action` VALUES ('423', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:32:25', null, null);
 
 -- ----------------------------
 -- Table structure for `log_exception`
@@ -277,11 +264,12 @@ CREATE TABLE `log_exception` (
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log_exception
 -- ----------------------------
+INSERT INTO `log_exception` VALUES ('34', '/Contact/Edit', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', 'Sequence contains no elements\r\n', '   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at lambda_method(Closure , QueryContext )\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.First[TSource](IQueryable`1 source)\r\n   at GrainManage.Web.Controllers.ContactController.Edit(ContactDto input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\ContactController.cs:line 103\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-06 17:31:26');
 
 -- ----------------------------
 -- Table structure for `log_job`
@@ -315,11 +303,20 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
 -- ----------------------------
+INSERT INTO `log_login` VALUES ('104', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-02 14:23:34');
+INSERT INTO `log_login` VALUES ('105', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-02 16:15:59');
+INSERT INTO `log_login` VALUES ('106', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-05 14:10:24');
+INSERT INTO `log_login` VALUES ('107', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 10:01:07');
+INSERT INTO `log_login` VALUES ('108', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 14:51:15');
+INSERT INTO `log_login` VALUES ('109', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 16:03:45');
+INSERT INTO `log_login` VALUES ('110', 'testadmin', '10.10.133.108', '成功', '80', '0', '2018-03-06 16:05:14');
+INSERT INTO `log_login` VALUES ('111', 'testadmin', '10.10.133.108', '成功', '80', '0', '2018-03-06 16:06:28');
+INSERT INTO `log_login` VALUES ('112', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 17:23:03');
 
 -- ----------------------------
 -- Table structure for `rm_address`
@@ -411,10 +408,10 @@ CREATE TABLE `rm_user` (
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-01 20:29:58');
-INSERT INTO `rm_user` VALUES ('2', 'testadmin', '0', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '3', '555', '2016-01-05 18:44:49', '1', '2018-02-11 11:50:22');
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-06 16:05:06');
+INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-06 17:21:23');
 INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
-INSERT INTO `rm_user` VALUES ('15', 'sdf', '1', '0890415b5cfa009e717eb24407ed1d20a695fec8', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
+INSERT INTO `rm_user` VALUES ('15', 'test', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
 
 -- ----------------------------
 -- Table structure for `rm_white_ip`

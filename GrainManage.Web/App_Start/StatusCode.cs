@@ -77,11 +77,13 @@ namespace GrainManage.Web
         [Message("该联系人已存在")]
         public readonly int ContactExisted = 201;
 
-        //Home
+        //Company
         [Message("商铺名称不能为空")]
         public readonly int CompanyNameEmpty = 601;
         [Message("该商铺名称已存在")]
         public readonly int CompanyNameExisted = 602;
+        [Message("该商铺不存在")]
+        public readonly int CompanyNotExisted = 603;
 
         //Employee
         [Message("非店铺管理员不可添加店员")]
