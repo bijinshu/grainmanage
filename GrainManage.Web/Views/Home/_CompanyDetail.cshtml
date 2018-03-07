@@ -1,50 +1,38 @@
-﻿<div class="modal fade" id="saveCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">店铺信息</h4>
+﻿<modal-dialog id="saveCompanyModal">
+    <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">店铺信息</h4>
+    <form slot="body" id="frmCompany" class="form-horizontal" role="form" style="margin-top:10px;">
+        <div class="form-group" style="display:none;">
+            <input v-model="frmComp.Id" type="hidden" class="form-control" id="Company_Id" name="Id">
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isCompanyNameValid}">
+            <label for="CompanyName" class="col-md-3 control-label hidden-xs hidden-sm">店铺名称</label>
+            <div class="col-md-8">
+                <input v-model="frmComp.Name" type="text" class="form-control" id="CompanyName" name="Name" placeholder="请输入店铺名称">
             </div>
-            <div class="modal-body ">
-                <div class="row" style="margin-top:20px;">
-                    <div class="col-md-12">
-                        <form id="frmCompany" class="form-horizontal" role="form" enctype="multipart/form-data">
-                            <div class="form-group" style="display:none;">
-                                <input v-model="frmComp.Id" type="hidden" class="form-control" id="Company_Id" name="Id">
-                            </div>
-                            <div class="form-group" v-bind:class="{'has-error':!isCompanyNameValid}">
-                                <label for="CompanyName" class="col-md-3 control-label hidden-xs hidden-sm">店铺名称</label>
-                                <div class="col-md-8">
-                                    <input v-model="frmComp.Name" type="text" class="form-control" id="CompanyName" name="Name" placeholder="请输入店铺名称">
-                                </div>
-                                <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺名称只能由1-60个汉字或英文组成</span>
-                            </div>
-                            <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
-                                <label for="Company_Address" class="col-md-3 control-label hidden-xs hidden-sm">店铺地址</label>
-                                <div class="col-md-8">
-                                    <input v-model="frmComp.Address" type="text" class="form-control" id="Company_Address" name="Address" placeholder="请输入店铺地址">
-                                </div>
-                                <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺地址不能超过200个字符</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="CompImg" class="col-md-3 control-label hidden-xs hidden-sm">Logo</label>
-                                <div class="col-md-6">
-                                    <input accept="image/*" type="file" id="CompImg" name="imgFile" />
-                                </div>
-                                <div class="col-md-3">
-                                    <button v-if="frmComp.ImgName" class="btn btn-danger" v-on:click.stop.prevent="deleteFile(frmComp.Id)"> 删除</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-3">
-                                    <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
-                                    <button class="btn btn-primary pull-right" v-on:click.stop.prevent="saveComp" v-bind:disabled="IsDisabled">保存</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺名称只能由1-60个汉字或英文组成</span>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
+            <label for="Company_Address" class="col-md-3 control-label hidden-xs hidden-sm">店铺地址</label>
+            <div class="col-md-8">
+                <input v-model="frmComp.Address" type="text" class="form-control" id="Company_Address" name="Address" placeholder="请输入店铺地址">
+            </div>
+            <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺地址不能超过200个字符</span>
+        </div>
+        <div class="form-group">
+            <label for="CompImg" class="col-md-3 control-label hidden-xs hidden-sm">Logo</label>
+            <div class="col-md-6">
+                <input accept="image/*" type="file" id="CompImg" name="imgFile" />
+            </div>
+            <div class="col-md-3">
+                <button v-if="frmComp.ImgName" class="btn btn-danger" v-on:click.stop.prevent="deleteFile(frmComp.Id)"> 删除</button>
             </div>
         </div>
-    </div>
-</div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-3">
+                <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+                <button class="btn btn-primary pull-right" v-on:click.stop.prevent="saveComp" v-bind:disabled="IsDisabled">保存</button>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="display:none"></div>
+</modal-dialog>

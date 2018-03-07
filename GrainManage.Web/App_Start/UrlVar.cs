@@ -49,10 +49,10 @@ namespace GrainManage.Web
         public static string Contact_New { get { return GetUrl("/Contact/New"); } }
         public static string Contact_Edit { get { return GetUrl("/Contact/Edit"); } }
         public static string Contact_Delete { get { return GetUrl("/Contact/Delete"); } }
+        public static string Contact_GetList { get { return GetUrl("/Contact/GetList"); } }
 
         //Trade
         public static string Trade_Index { get { return GetUrl("/Trade/Index"); } }
-        [Common]
         public static string Trade_New { get { return GetUrl("/Trade/New"); } }
         public static string Trade_Edit { get { return GetUrl("/Trade/Edit"); } }
         public static string Trade_Delete { get { return GetUrl("/Trade/Delete"); } }

@@ -102,6 +102,7 @@ namespace GrainManage.Web.Controllers
             var model = repo.Get(input.Id);
             model.ProductId = input.ProductId;
             model.ProductName = input.ProductName;
+            model.ContactId = input.ContactId;
             model.ContactName = input.ContactName;
             model.Price = input.Price;
             model.Weight = input.Weight;

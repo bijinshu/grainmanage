@@ -73,6 +73,42 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        public ActionResult GetList(InputSearch input)
+        {
+            var currentUser = CurrentUser;
+            if (IsGetRequest)
+            {
+                return View(currentUser);
+            }
+            var result = new BaseOutput();
+            Expression<Func<Contact, bool>> myFilter = f => f.CompId == currentUser.CompId;
+            if (!string.IsNullOrEmpty(input.Name))
+            {
+                myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
+            }
+            if (!string.IsNullOrEmpty(input.Mobile))
+            {
+                myFilter = myFilter.And(f => f.Mobile.Contains(input.Mobile));
+            }
+            if (!string.IsNullOrEmpty(input.Address))
+            {
+                myFilter = myFilter.And(f => f.Address.Contains(input.Address));
+            }
+            int total = 0;
+            var repo = GetRepo<Contact>();
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt);
+            if (!list.Any())
+            {
+                SetResponse(s => s.NoData, input, result);
+            }
+            else
+            {
+                result.total = total;
+                result.data = list.Select(s => new { s.Id, s.ContactName, s.Mobile, s.Address });
+                SetResponse(s => s.Success, input, result);
+            }
+            return JsonNet(result);
+        }
 
         public ActionResult New(ContactDto input)
         {

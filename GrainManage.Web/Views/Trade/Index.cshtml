@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-info btn-block" v-on:click="getData">查询</button>
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,12 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">交易历史</caption>
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Trade_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新交易</button>
+                        }
+                    </caption>
                     <thead>
                         <tr>
                             <th>客户姓名</th>
@@ -69,7 +74,7 @@
                             <td>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_Edit, Model.Urls))
                                 {
-                                    <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showTrade(item)">编辑</a>
+                                    <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showEdit(item)">编辑</a>
                                 }
                                 <a>&nbsp;</a>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_Delete, Model.Urls))
@@ -91,6 +96,7 @@
     <div v-cloak>
         @Html.Partial("_TradeDetail")
         @Html.Partial("_DeleteModal", "删除交易")
+        @Html.Partial("_ContactList")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -105,7 +111,10 @@
                 total: 0,
                 list: [],
                 productList: [],
+                contactList: [],
+                contactTotal:0,
                 search: { ContactName: '', ProductName: '', TradeType: null, PageIndex: 0, PageSize: 10 },
+                contactSearch: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frmTrade: {
                     Id:0,
                     ContactId: 0,
@@ -124,6 +133,7 @@
                 AllowRefreshPrice: false,
                 AllowRefreshActualMoney: false,
                 currentItem: {},
+                currentContact: {},
                 isFirstTime:true
             },
             methods: {
@@ -137,6 +147,12 @@
                             this.showAlert(result.msg);
                         }
                         this.isFirstTime = false;
+                    }.bind(this));
+                },
+                getContactList: function () {
+                    $.post('@UrlVar.Contact_GetList', this.contactSearch).done(function (result, status) {
+                          this.contactList = result.data;
+                          this.contactTotal = result.total;
                     }.bind(this));
                 },
                 getProductList: function () {
@@ -180,7 +196,21 @@
                         this.IsDisabled = false;
                     }
                 },
-                showTrade: function (item) {
+                showAdd: function () {
+                    this.AllowRefreshPrice = true;
+                    this.AllowRefreshActualMoney = true;
+                    this.frmTrade.Id = 0;
+                    this.frmTrade.ProductId = this.productList[0].Id;
+                    this.frmTrade.TradeType = 0;
+                    this.frmTrade.ContactId = 0;
+                    this.frmTrade.ContactName ='';
+                    this.frmTrade.Weight = '';
+                    this.frmTrade.ActualMoney = '';
+                    this.frmTrade.Remark ='';
+                    this.frmTrade.Price = '';
+                    this.showPanel("新增交易","#saveTradeModal");
+                },
+                showEdit: function (item) {
                     this.AllowRefreshPrice = false;
                     this.frmTrade.ProductId = item.ProductId;
                     this.frmTrade.TradeType = item.TradeType;
@@ -192,7 +222,12 @@
                     this.frmTrade.ActualMoney = item.ActualMoney;
                     this.frmTrade.Remark = item.Remark;
                     this.frmTrade.Price = item.Price;
-                    this.showPanel("#saveTradeModal");
+                    this.showPanel("编辑交易","#saveTradeModal");
+                },
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
+                    this.showPanel("#deleteDialog");
                 },
                 deleteItem: function () {
                     $.post('@UrlVar.Trade_Delete', { tradeId: this.currentItem.Id }).always(function (result, status) {
@@ -205,10 +240,9 @@
                         }
                     }.bind(this));
                 },
-                showDelete: function (item) {
-                    this.currentItem = item;
-                    this.msg = "您确定要删除与 [" + item.ContactName + "] 的交易记录吗?";
-                    this.showPanel("#deleteDialog");
+                showContact: function () {
+                    this.getContactList();
+                    this.showPanel("#chooseContactModal");
                 }
             },
             computed: {
@@ -253,6 +287,10 @@
                 });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
+                });
+                this.$watch('currentContact', function (newVal, oldVal) {
+                    this.frmTrade.ContactId = newVal.Id;
+                    this.frmTrade.ContactName = newVal.ContactName;
                 });
             }
         })

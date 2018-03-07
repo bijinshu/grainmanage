@@ -1,12 +1,12 @@
 ﻿@using GrainManage.Web
 @model GrainManage.Web.Models.UserInfo
 @{
-    ViewBag.Title= "角色管理";
+    ViewBag.Title = "角色管理";
 }
 <script src="~/js/components/menu-tree.js"></script>
 <div class="container" id="roleInfo">
     <div class="row">
-        <div class="col-md-11">
+        <div class="col-md-12">
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
@@ -19,18 +19,17 @@
                 </div>
             </div>
         </div>
-        @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls))
-        {
-            <div class="col-md-1">
-                <button type="button" class="btn btn-success btn-block " v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加</button>
-            </div>
-        }
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
-                    <caption style="color:red;font-weight:bolder;">角色列表</caption>
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Role_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新角色</button>
+                        }
+                    </caption>
                     <thead>
                         <tr>
                             <th>角色名称</th>

@@ -4,6 +4,9 @@
 [v-cloak] {
     display:none;
 }
+.table-responsive table th, .table-responsive table td {
+    text-align: center;
+}
 @media screen and (max-width:768px ) {
     #personal-info {
         float: left;
