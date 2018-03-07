@@ -9,6 +9,6 @@ namespace GrainManage.Web.Models.Product
     {
         public string ProductName { get; set; }
         public int? Status { get; set; }
-        public int? ProductType { get; set; }
+        public int? Source { get; set; }
     }
 }

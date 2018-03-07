@@ -12,7 +12,7 @@ namespace DataBase.GrainManage.Models
         public decimal Price { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
-        public int Type { get; set; }
+        public int Source { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }

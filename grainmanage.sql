@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-06 18:18:24
+Date: 2018-03-07 15:24:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `bm_company` (
 -- ----------------------------
 -- Records of bm_company
 -- ----------------------------
-INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 15:05:35', '2018-03-06 17:39:19');
+INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'c7aaa3434441933a0965123b37d0407f.jpg', '2018-03-06 15:05:35', '2018-03-06 18:22:20');
 INSERT INTO `bm_company` VALUES ('6', '2', '是的法人', '松岛枫松岛枫', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
 
 -- ----------------------------
@@ -144,14 +144,14 @@ CREATE TABLE `bm_product` (
   `Price` decimal(20,4) NOT NULL COMMENT '价格',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
   `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：离线 1：在线',
-  `Type` smallint(6) NOT NULL COMMENT '0：私有产品 1：公共产品',
+  `Source` smallint(6) NOT NULL COMMENT '来源/归属( 0：店铺产品 1：系统产品)',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `CreatedBy` int(11) NOT NULL COMMENT '创建者',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   `ModifiedBy` int(11) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `uq_name` (`Name`,`CompId`,`Type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `uq_name` (`Name`,`CompId`,`Source`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_product
@@ -164,6 +164,10 @@ INSERT INTO `bm_product` VALUES ('5', '0', '玉米', '1.2050', '', '1', '1', '20
 INSERT INTO `bm_product` VALUES ('6', '0', '花生', '2.4450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
 INSERT INTO `bm_product` VALUES ('7', '0', '菜籽', '2.2450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
 INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '1', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
+INSERT INTO `bm_product` VALUES ('9', '1', '小麦', '1.0400', '', '1', '0', '2018-03-07 13:07:13', '1', '2018-03-07 14:36:24', '1');
+INSERT INTO `bm_product` VALUES ('21', '1', '大稻', '1.2600', '', '1', '0', '2018-03-07 14:47:51', '1', '2018-03-07 14:48:24', '1');
+INSERT INTO `bm_product` VALUES ('22', '1', '小稻', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', null, null);
+INSERT INTO `bm_product` VALUES ('23', '1', '玉米', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', null, null);
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -187,7 +191,7 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
@@ -221,6 +225,9 @@ INSERT INTO `bm_trade` VALUES ('50', '1', '3', '王亮亮', '7', '菜籽', '2.24
 INSERT INTO `bm_trade` VALUES ('51', '1', '6', '鲍菲菲', '3', '大稻', '1.2600', '900.00', '1134.00', '0', '', '', '', '1', '2018-03-02 12:08:51', null);
 INSERT INTO `bm_trade` VALUES ('52', '1', '7', '成杰', '2', '黄豆', '1.3000', '700.00', '910.00', '0', '', '', '', '1', '2018-03-02 12:08:51', null);
 INSERT INTO `bm_trade` VALUES ('53', '1', '3', '王亮亮', '1', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-02 16:16:35', null);
+INSERT INTO `bm_trade` VALUES ('54', '1', '11', '贾亮', '22', '小稻', '1.2250', '600.00', '735.00', '0', '', '', '', '1', '2018-03-07 15:07:22', null);
+INSERT INTO `bm_trade` VALUES ('55', '1', '13', '文一毫', '23', '玉米', '1.2050', '367.00', '442.24', '0', '', '', '', '1', '2018-03-07 15:08:45', null);
+INSERT INTO `bm_trade` VALUES ('56', '1', '15', '毛强国', '9', '小麦', '1.0400', '600.00', '624.00', '0', '', '', '', '1', '2018-03-07 15:09:06', null);
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -239,7 +246,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=424 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=428 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -250,6 +257,10 @@ INSERT INTO `log_action` VALUES ('420', 'testadmin', '/User/SignOut', '10.10.133
 INSERT INTO `log_action` VALUES ('421', 'testadmin', '/User/SignOut', '10.10.133.108', 'GET', '', '', '80', '2018-03-06 17:21:23', '2018-03-06 17:21:24', '00:00:02');
 INSERT INTO `log_action` VALUES ('422', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:31:26', '2018-03-06 17:31:26', '00:00:00');
 INSERT INTO `log_action` VALUES ('423', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:32:25', null, null);
+INSERT INTO `log_action` VALUES ('424', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 13:43:39', '2018-03-07 13:43:39', '00:00:01');
+INSERT INTO `log_action` VALUES ('425', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:02:04', null, null);
+INSERT INTO `log_action` VALUES ('426', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:09:06', '2018-03-07 14:09:46', '00:00:40');
+INSERT INTO `log_action` VALUES ('427', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:12:09', '2018-03-07 14:12:10', '00:00:01');
 
 -- ----------------------------
 -- Table structure for `log_exception`
@@ -303,7 +314,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -317,6 +328,7 @@ INSERT INTO `log_login` VALUES ('109', 'bijinshu', '10.10.133.108', '成功', '1
 INSERT INTO `log_login` VALUES ('110', 'testadmin', '10.10.133.108', '成功', '80', '0', '2018-03-06 16:05:14');
 INSERT INTO `log_login` VALUES ('111', 'testadmin', '10.10.133.108', '成功', '80', '0', '2018-03-06 16:06:28');
 INSERT INTO `log_login` VALUES ('112', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 17:23:03');
+INSERT INTO `log_login` VALUES ('113', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-07 11:03:58');
 
 -- ----------------------------
 -- Table structure for `rm_address`
@@ -363,7 +375,7 @@ DROP TABLE IF EXISTS `rm_role`;
 CREATE TABLE `rm_role` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(20) NOT NULL COMMENT '角色名称',
-  `Auths` varchar(600) NOT NULL DEFAULT '' COMMENT '权限列表',
+  `Auths` varchar(1600) NOT NULL DEFAULT '' COMMENT '权限列表',
   `Level` smallint(6) NOT NULL COMMENT '级别',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
@@ -376,7 +388,7 @@ CREATE TABLE `rm_role` (
 INSERT INTO `rm_role` VALUES ('1', '超级管理员', '', '100', '开发者专用用户', '2016-03-05 18:09:24');
 INSERT INTO `rm_role` VALUES ('2', '普通用户', '', '80', '普通注册用户或关注公众号的用户', '2016-03-05 18:09:47');
 INSERT INTO `rm_role` VALUES ('3', '店铺管理员', 'contact.add,contact,contact.view', '80', '管理店铺下的员工', '2017-07-19 18:27:34');
-INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'price,contact,customer,purchase,sale,retail,system,system.role,system.role.view,system.user,system.user.view,system.user.delete,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view', '90', '管理系统用户', '2017-08-29 15:07:11');
+INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,employee,employee.add,employee.delete,employee.edit,employee.view,home,home.edit,log,log.action,log.action.view,log.exception,log.exception.delete,log.exception.view,log.job,log.job.view,log.login,log.login.view,order,order.add,order.delete,order.edit,order.view,product,product.add,product.delete,product.edit,product.view,system,system.role,system.role.add,system.role.delete,system.role.edit,system.role.view,system.user,system.user.add,system.user.delete,system.user.edit,system.user.view,trade,trade.add,trade.delete,trade.edit,trade.view', '90', '管理系统用户', '2017-08-29 15:07:11');
 INSERT INTO `rm_role` VALUES ('5', '店铺员工', '', '30', '店铺的员工，协助店铺管理员工作', '2018-02-26 11:31:05');
 
 -- ----------------------------

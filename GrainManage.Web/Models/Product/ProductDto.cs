@@ -12,7 +12,7 @@ namespace GrainManage.Web.Models.Product
         public decimal Price { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
-        public int Type { get; set; }
+        public int Source { get; set; }
         public bool CanModify { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }

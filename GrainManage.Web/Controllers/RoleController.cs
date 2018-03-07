@@ -7,6 +7,8 @@ using System.Linq.Expressions;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using GrainManage.Core;
+using GrainManage.Web.Services;
+using GrainManage.Web.Common;
 
 namespace GrainManage.Web.Controllers
 {
@@ -38,7 +40,7 @@ namespace GrainManage.Web.Controllers
             {
                 SetResponse(s => s.NoData, input, result);
             }
-            return JsonNet(result,true);
+            return JsonNet(result, true);
         }
         public ActionResult New(RoleDto input)
         {
@@ -50,12 +52,15 @@ namespace GrainManage.Web.Controllers
             }
             else if (!repo.GetFiltered(f => f.Name == input.Name).Any())
             {
-                var model = MapTo<Role>(input);
+                var model = new Role { Name = input.Name, Level = input.Level, Remark = input.Remark ?? string.Empty, CreatedAt = DateTime.Now };
+                var authList = new List<string>();
+                var menus = CommonService.GetMenus();
+                TreeUtil.GetIds(menus, authList);
                 if (!IsSuperAdmin)
                 {
-                    model.Auths = string.Join(",", input.Auths.Intersect(CurrentUser.Auths));
+                    authList = authList.Intersect(CurrentUser.Auths).ToList();
                 }
-                model.Remark = model.Remark ?? string.Empty;
+                model.Auths = string.Join(",", input.Auths.Intersect(authList).OrderBy(s => s));
                 model = repo.Add(model);
                 result.data = model.Id;
                 if (model.Id > 0)
@@ -84,14 +89,17 @@ namespace GrainManage.Web.Controllers
             else if (!repo.GetFiltered(f => f.Name == input.Name && f.Id != input.Id).Any())
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
+                var authList = new List<string>();
+                var menus = CommonService.GetMenus();
+                TreeUtil.GetIds(menus, authList);
                 if (!IsSuperAdmin)
                 {
-                    model.Auths = string.Join(",", input.Auths.Intersect(CurrentUser.Auths));
+                    authList = authList.Intersect(CurrentUser.Auths).ToList();
                 }
                 model.Name = input.Name;
+                model.Auths = string.Join(",", input.Auths.Intersect(authList).OrderBy(s => s));
                 model.Level = input.Level;
                 model.Remark = input.Remark ?? string.Empty;
-                model.Auths = input.Auths != null && input.Auths.Any() ? string.Join(",", input.Auths) : string.Empty;
                 repo.UnitOfWork.SaveChanges();
                 SetResponse(s => s.Success, input, result);
             }

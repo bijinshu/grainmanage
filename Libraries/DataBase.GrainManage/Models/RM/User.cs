@@ -22,7 +22,7 @@ namespace DataBase.GrainManage.Models
         public string Remark { get; set; }
         public string Roles { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }
 }

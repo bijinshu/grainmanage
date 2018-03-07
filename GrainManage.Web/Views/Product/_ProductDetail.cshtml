@@ -25,19 +25,19 @@
                                 <span v-if="!isPriceValid" class="col-md-push-3 col-md-8" style="color:red">价格必须为大于0的数字(最多四位小数)</span>
                             </div>
                             @if (Model.Level >= GlobalVar.AdminLevel)
-    {
-                        <div class="form-group">
-                            <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">产品类型</label>
-                            <div class="col-md-8">
-                                <label class="checkbox-inline">
-                                    <input v-model="frm.Type" type="radio" value="1"><span>公共</span>
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input v-model="frm.Type" type="radio" value="0"><span>私有</span>
-                                </label>
-                            </div>
-                        </div>
-}
+                            {
+                                <div class="form-group">
+                                    <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">来源/归属</label>
+                                    <div class="col-md-8">
+                                        <label class="checkbox-inline">
+                                            <input v-model="frm.Source" type="radio" value="0"><span>店铺</span>
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input v-model="frm.Source" type="radio" value="1"><span>系统</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
                             <div class="form-group">
                                 <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">状态</label>
                                 <div class="col-md-8">

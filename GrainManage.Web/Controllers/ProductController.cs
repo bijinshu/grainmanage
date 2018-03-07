@@ -21,19 +21,19 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var productRepo = GetRepo<Product>();
             Expression<Func<Product, bool>> myFilter = ExpressionBuilder.Where<Product>(f => true);
-            if (input.ProductType.HasValue)
+            if (input.Source.HasValue)
             {
-                myFilter = myFilter.And(f => f.Type == input.ProductType);
+                myFilter = myFilter.And(f => f.Source == input.Source);
             }
             if (currentUser.Level < GlobalVar.AdminLevel)
             {
-                if (input.ProductType.HasValue)
+                if (input.Source.HasValue)
                 {
                     myFilter = myFilter.And(f => f.CompId == currentUser.CompId);
                 }
                 else
                 {
-                    myFilter = myFilter.And(f => f.CompId == currentUser.CompId || f.Type == 1);
+                    myFilter = myFilter.And(f => f.CompId == currentUser.CompId || f.Source > 0);
                 }
             }
             if (!string.IsNullOrEmpty(input.ProductName))
@@ -77,14 +77,19 @@ namespace GrainManage.Web.Controllers
         public ActionResult New(ProductDto input)
         {
             var result = new BaseOutput();
+            input.Id = 0;
             SetEmptyIfNull(input);
             var repo = GetRepo<Product>();
             var currentUser = CurrentUser;
+            if (currentUser.Level < GlobalVar.AdminLevel)
+            {
+                input.Source = 0;
+            }
             if (string.IsNullOrEmpty(input.Name))
             {
                 SetResponse(s => s.ProductNameEmpty, input, result);
             }
-            else if (repo.GetFiltered(f => f.Name == input.Name && (f.CompId == currentUser.CompId || f.Type == 1)).Any())
+            else if (repo.GetFiltered(f => f.Name == input.Name && f.CompId == currentUser.CompId && f.Source == input.Source).Any())
             {
                 SetResponse(s => s.ProductNameExisted, input, result);
             }
@@ -94,10 +99,7 @@ namespace GrainManage.Web.Controllers
                 var model = MapTo<Product>(input);
                 model.CompId = currentUser.CompId;
                 model.CreatedBy = currentUser.UserId;
-                if (Level >= GlobalVar.AdminLevel)
-                {
-                    model.Type = input.Type;
-                }
+                model.Source = input.Source;
                 model = repo.Add(model);
                 result.data = model.Id;
                 if (model.Id > 0)
@@ -118,17 +120,17 @@ namespace GrainManage.Web.Controllers
             SetEmptyIfNull(input);
             var repo = GetRepo<Product>();
             var currentUser = CurrentUser;
-            if (repo.GetFiltered(f => f.Name == input.Name && (f.CompId == currentUser.CompId || f.Type == 1) && f.Id != input.Id).Any())
+            if (currentUser.Level < GlobalVar.AdminLevel)
+            {
+                input.Source = 0;
+            }
+            if (repo.GetFiltered(f => f.Name == input.Name && f.CompId == currentUser.CompId && f.Source == input.Source && f.Id != input.Id).Any())
             {
                 SetResponse(s => s.ProductNameExisted, input, result);
             }
             else
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
-                if (Level >= GlobalVar.AdminLevel)
-                {
-                    model.Type = input.Type;
-                }
                 model.Name = input.Name;
                 model.Status = input.Status;
                 model.Remark = input.Remark;
@@ -163,16 +165,47 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        public ActionResult Copy(ProductDto input)
+        {
+            var result = new BaseOutput();
+            input.Id = 0;
+            input.Source = 0;
+            SetEmptyIfNull(input);
+            var repo = GetRepo<Product>();
+            var currentUser = CurrentUser;
+            var existedModel = repo.GetFiltered(f => f.Name == input.Name && f.CompId == currentUser.CompId && f.Source == input.Source, true).FirstOrDefault();
+            if (existedModel == null)
+            {
+                var model = MapTo<Product>(input);
+                model.CompId = currentUser.CompId;
+                model.CreatedBy = currentUser.UserId;
+                model.Source = input.Source;
+                model = repo.Add(model);
+                result.data = model.Id;
+                if (model.Id > 0)
+                {
+                    SetResponse(s => s.Success, input, result);
+                }
+                else
+                {
+                    SetResponse(s => s.InsertFailed, input, result);
+                }
+            }
+            else
+            {
+                existedModel.Price = input.Price;
+                existedModel.ModifiedAt = DateTime.Now;
+                existedModel.ModifiedBy = currentUser.UserId;
+                repo.UnitOfWork.SaveChanges();
+                SetResponse(s => s.Success, input, result);
+            }
+            return JsonNet(result);
+        }
         public IActionResult List()
         {
             var repo = GetRepo<Product>();
             var currentUser = CurrentUser;
-            var list = repo.GetFiltered(f => f.Status == Status.Enabled && (f.Type == 1 || f.CompId == currentUser.CompId)).Select(s => new { s.Id, s.Name, s.Price, s.CompId }).ToList();
-            var repeatedList = list.GroupBy(s => s.Name).Select(s => new { ProductName = s.Key, Count = s.Count() }).Where(s => s.Count > 1);
-            foreach (var item in repeatedList)
-            {
-                list.RemoveAll(s => s.Name == item.ProductName && s.CompId != currentUser.CompId);
-            }
+            var list = repo.GetFiltered(f => f.Status == Status.Enabled && f.Source == 0 && f.CompId == currentUser.CompId).Select(s => new { s.Id, s.Name, s.Price }).ToList();
             return JsonNet(list);
         }
     }

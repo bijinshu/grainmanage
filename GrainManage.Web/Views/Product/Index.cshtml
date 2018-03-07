@@ -12,17 +12,13 @@
                         <label class="control-label hidden-xs hidden-sm">产品名称：</label>
                         <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入产品名称" />
                     </div>
-                    @if (Model.Level >= GlobalVar.AdminLevel)
-                    {
-                        <div class="form-group" style="margin-right:6px;">
-                            <select v-model="search.ProductType" class="form-control">
-                                <option value="null">请选择产品类型</option>
-                                <option value="0">私有产品</option>
-                                <option value="1">公共产品</option>
-                            </select>
-                        </div>
-                    }
-
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.Source" class="form-control">
+                            <option value="null">请选择来源/归属</option>
+                            <option value="0">店铺产品</option>
+                            <option value="1">系统产品</option>
+                        </select>
+                    </div>
                     <div class="form-group" style="margin-right:6px;">
                         <select v-model="search.Status" class="form-control">
                             <option value="null">请选择状态</option>
@@ -51,10 +47,7 @@
                         <tr>
                             <th>产品名称</th>
                             <th>产品价格</th>
-                            @if (Model.Level >= GlobalVar.AdminLevel)
-                            {
-                                <th>产品类型</th>
-                            }
+                            <th>来源/归属</th>
                             <th>备注</th>
                             <th>状态</th>
                             <th>创建时间</th>
@@ -66,10 +59,7 @@
                         <tr v-for="item in list" :key="item.Id">
                             <td>{{item.Name}}</td>
                             <td>{{item.Price}}</td>
-                            @if (Model.Level >= GlobalVar.AdminLevel)
-                            {
-                                <td>{{item.Type==1?'公共':'私有'}}</td>
-                            }
+                            <td>{{item.Source==1?'系统':'店铺'}}</td>
                             <td>{{item.Remark}}</td>
                             <td>{{item.Status?'启用':'禁用'}}</td>
                             <td>{{item.CreatedAt|formatTime}}</td>
@@ -82,6 +72,10 @@
                                 @if (UrlVar.Has(Model.Level, UrlVar.Product_Delete, Model.Urls))
                                 {
                                     <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
+                                }
+                                @if (UrlVar.Has(Model.Level, UrlVar.Product_Copy, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-if="item.Source>0" v-on:click="copy(item)">复制</a>
                                 }
                             </td>
                         </tr>
@@ -113,12 +107,12 @@
                 total: 0,
                 tmpPwd: '',
                 list: [],
-                search: { ProductName: '', ProductType: null, Status: null, PageIndex: 0, PageSize: 10 },
+                search: { ProductName: '', Source: 0, Status: null, PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
                     Name: '',
                     Price:0,
-                    Type: 0,
+                    Source: 0,
                     Status: 1,
                     Remark:''
                 },
@@ -143,7 +137,7 @@
                     this.frm.Id = 0;
                     this.frm.Name = '';
                     this.frm.Price='',
-                    this.frm.Type = 0;
+                    this.frm.Source = 0;
                     this.frm.Status = 1;
                     this.frm.Remark = '';
                     this.showPanel('添加产品', "#saveProductModal");
@@ -152,7 +146,7 @@
                     this.frm.Id = item.Id;
                     this.frm.Name = item.Name;
                     this.frm.Price = item.Price,
-                    this.frm.Type = item.Type;
+                    this.frm.Source = item.Source;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
                     this.showPanel('编辑产品', "#saveProductModal");
@@ -168,6 +162,14 @@
                         else {
                             this.showAlert(result.msg);
                         }
+                    }.bind(this));
+                },
+                copy: function (item) {
+                    $.post('@UrlVar.Product_Copy', item).always(function (result, status) {
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        this.showAlert(result.msg);
                     }.bind(this));
                 },
                 showDelete: function (item) {

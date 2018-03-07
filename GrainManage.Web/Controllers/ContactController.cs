@@ -62,7 +62,11 @@ namespace GrainManage.Web.Controllers
                     {
                         item.CanModify = true;
                     }
-                    item.TradeCount = existedTradeList.Any(a => a.ContactId == item.Id) ? existedTradeList.First(f => f.ContactId == item.Id).Count : 0;
+                    var trade = existedTradeList.FirstOrDefault(a => a.ContactId == item.Id);
+                    if (trade != null)
+                    {
+                        item.TradeCount = trade.Count;
+                    }
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);

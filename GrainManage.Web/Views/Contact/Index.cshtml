@@ -218,7 +218,8 @@
                         $.post('@UrlVar.Trade_New', this.frmTrade).always(function (result, status) {
                           this.IsDisabled = false;
                           if (result.code == 1) {
-                            this.hidePanel("#saveTradeModal");
+                              this.hidePanel("#saveTradeModal");
+                              this.getData();
                           }
                           else {
                             this.showAlert(result.msg);

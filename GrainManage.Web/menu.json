@@ -1,5 +1,17 @@
 ﻿[
   {
+    "id": "home",
+    "text": "首页",
+    "hidden": true,
+    "children": [
+      {
+        "id": "home.edit",
+        "text": "编辑店铺",
+        "url": "/Company/Edit"
+      }
+    ]
+  },
+  {
     "id": "contact",
     "text": "我的客户",
     "asTop": true,
@@ -35,7 +47,28 @@
     "id": "trade",
     "text": "交易管理",
     "asTop": true,
-    "url": "/Trade/Index"
+    "children": [
+      {
+        "id": "trade.view",
+        "text": "查看",
+        "url": "/Trade/Index"
+      },
+      {
+        "id": "trade.add",
+        "text": "新增",
+        "url": "/Trade/New"
+      },
+      {
+        "id": "trade.edit",
+        "text": "编辑",
+        "url": "/Trade/Edit"
+      },
+      {
+        "id": "trade.delete",
+        "text": "删除",
+        "url": "/Trade/Delete"
+      }
+    ]
   },
   {
     "id": "order",
@@ -88,6 +121,11 @@
         "id": "product.delete",
         "text": "删除",
         "url": "/Product/Delete"
+      },
+      {
+        "id": "product.copy",
+        "text": "复制",
+        "url": "/Product/Copy"
       }
     ]
   },
