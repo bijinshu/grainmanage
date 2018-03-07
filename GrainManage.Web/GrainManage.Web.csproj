@@ -18,12 +18,12 @@
 
   <ItemGroup>
     <PackageReference Include="automapper" Version="6.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
     <PackageReference Include="NLog.Config" Version="4.5.0-rc03" />
     <PackageReference Include="NLog.Schema" Version="4.5.0-rc03" />
-    <PackageReference Include="StackExchange.Redis.StrongName" Version="1.2.4" />
+    <PackageReference Include="StackExchange.Redis.StrongName" Version="1.2.6" />
   </ItemGroup>
 
   <ItemGroup>
