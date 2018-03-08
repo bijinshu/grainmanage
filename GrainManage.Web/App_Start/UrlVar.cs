@@ -16,6 +16,8 @@ namespace GrainManage.Web
         public static string Company_New { get { return GetUrl("/Company/New"); } }
         public static string Company_Edit { get { return GetUrl("/Company/Edit"); } }
         [Common]
+        public static string Company_GetList { get { return GetUrl("/Company/GetList"); } }
+        [Common]
         public static string Company_DeleteFile { get { return GetUrl("/Company/DeleteFile"); } }
         //Role
         public static string Role_Index { get { return GetUrl("/Role/Index"); } }

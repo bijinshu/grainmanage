@@ -1,0 +1,101 @@
+﻿@using GrainManage.Web
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@GlobalResx.SysName</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/css/company.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/components/modal-dialog.js"></script>
+    <script src="~/js/components/pager.js"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group">
+                    <input v-model="search.Name" type="text" class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="button" v-on:click="getData(search.PageIndex=0)">搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" v-cloak>
+            <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="">
+                <div style="margin-top:2px;">
+                    <div class="company-title">
+                        {{item.CompanyName}}
+                    </div>
+                    <img v-bind:src="item.ImgName|imgUrl" class="img-circle company-logo" />
+                    <div class="company-main">
+                        <div style="font-weight:bold;color:red;font-style:italic;">经营范围：</div>
+                        <div>
+                            <span style="color:darkgreen" v-for="item2 in item.Products">{{item2.Name}}&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="company-address">
+                        <span>联系地址：</span>
+                        <span>{{item.Address}}</span>
+                    </div>
+                </div>
+                <div style="margin-top:2px;">
+                    <button class="btn btn-info btn-block">请求收购</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize" other-class="pagination-sm"></pager>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            new Vue({
+                el: '#app',
+                data: {
+                    total:0,
+                    msg: '',
+                    search: { Name: '', PageIndex: 0, PageSize: 20 },
+                    list: [],
+                    isFirstTime: true
+                },
+                methods: {
+                    getData: function () {
+                      $.post('@UrlVar.Company_GetList', this.search).always(function (result, status) {
+                          this.list = result.data;
+                          this.total = result.total;
+                          if (result.code != 1 && !this.isFirstTime) {
+                              this.showAlert(result.msg);
+                          }
+                          this.isFirstTime = false;
+                      }.bind(this));
+                    }
+                },
+                computed: {
+
+                },
+                filters: {
+                    imgUrl: function (value) {
+                        if (value) {
+                            return '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/"  + value;
+                        }
+                        return "javascript:void()";
+                    }
+                },
+                created: function () {
+                    this.getData();
+                }
+            })
+        })
+    </script>
+</body>
+</html>

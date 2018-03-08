@@ -1,0 +1,36 @@
+﻿[v-cloak] {
+    display: none;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+.company-title {
+    text-align: center;
+    font-weight: bold;
+    font-family: YouYuan;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.company-logo {
+    width: 50%;
+    height: 100px;
+    display: inline-block;
+}
+
+.company-main {
+    width: 50%;
+    float: right;
+    padding-left: 8px;
+    overflow-y: auto;
+}
+
+.company-address {
+    clear: both;
+}
+
+    .company-address span:first-child {
+        font-style: italic;
+        padding-left: 2px;
+    }

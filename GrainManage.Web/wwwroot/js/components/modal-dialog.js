@@ -1,7 +1,7 @@
 ﻿$(function () {
     Vue.component('modal-dialog', {
         template: ' <div class="modal fade" v-bind:id="myId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
-        <div v-bind:class="myClass">\
+        <div v-bind:class="[\'modal-dialog\',otherClass]">\
             <div class="modal-content">\
                 <div class="modal-header bg-info">\
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
@@ -16,16 +16,10 @@
             </div>\
         </div>\
     </div>',
-        props: ['title', 'msg', 'id', 'isLg'],
+        props: ['title', 'msg', 'id', 'otherClass'],
         computed: {
             myId: function () {
                 return this.id ? this.id : 'myModal';
-            },
-            myClass: function () {
-                return {
-                    'modal-dialog': true,
-                    'modal-lg': this.isLg == 'true'
-                };
             }
         }
     })

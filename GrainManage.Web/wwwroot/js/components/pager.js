@@ -3,7 +3,7 @@
         template: ' \
        <div style="margin-top:-20px;"> \
        <nav style="float:left">\
-            <ul class="pagination ">\
+            <ul v-bind:class="[\'pagination\',otherClass]">\
                 <li v-on:click="changePage(-1)"><a href="#">&laquo;</a></li>\
                 <li v-on:click="changePage(num)" v-for="num in pageNumbers" v-bind:class="{active:pageIndex==num-1}" style="font-weight:bold;"><a href="#">{{num}}</a></li>\
                 <li v-on:click="changePage(-2)"><a href="#">&raquo;</a></li>\
@@ -16,7 +16,8 @@
         props: {
             total: Number,
             pageIndex: Number,
-            pageSize: Number
+            pageSize: Number,
+            otherClass: String
         },
         data: function () {
             return {
