@@ -133,7 +133,6 @@
                 IsDisabled: false,
                 AlertTitle: '',
                 PanelTitle: '',
-                AllowRefreshPrice: false,
                 AllowRefreshActualMoney: false,
                 currentItem: {},
                 currentContact: {},
@@ -164,20 +163,18 @@
                     }.bind(this));
                 },
                 setPrice: function () {
-                    if (this.AllowRefreshPrice) {
-                        var existedItem = null;
-                        for (var i = 0; i < this.productList.length; i++) {
-                            if (this.productList[i].Id == this.frmTrade.ProductId) {
-                                existedItem = this.productList[i];
-                                break;
-                            }
+                    var existedItem = null;
+                    for (var i = 0; i < this.productList.length; i++) {
+                        if (this.productList[i].Id == this.frmTrade.ProductId) {
+                            existedItem = this.productList[i];
+                            break;
                         }
-                        this.frmTrade.Price = existedItem ? existedItem.Price : '';
-                        this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
                     }
+                    this.frmTrade.Price = existedItem ? existedItem.Price : '';
+                    this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
                 },
                 setMoney: function () {
-                    if (this.AllowRefreshPrice && this.AllowRefreshActualMoney) {
+                    if (this.AllowRefreshActualMoney) {
                         this.frmTrade.ActualMoney = this.TotalMoney;
                     }
                 },
@@ -201,7 +198,6 @@
                     }
                 },
                 showAdd: function () {
-                    this.AllowRefreshPrice = true;
                     this.AllowRefreshActualMoney = true;
                     this.frmTrade.Id = 0;
                     this.frmTrade.ProductId = this.productList[0].Id;
@@ -212,10 +208,11 @@
                     this.frmTrade.ActualMoney = '';
                     this.frmTrade.Remark ='';
                     this.frmTrade.Price = '';
+                    this.setPrice();
                     this.showPanel("新增交易","#saveTradeModal");
                 },
                 showEdit: function (item) {
-                    this.AllowRefreshPrice = false;
+                    this.AllowRefreshActualMoney = false;
                     this.frmTrade.ProductId = item.ProductId;
                     this.frmTrade.TradeType = item.TradeType;
                     this.frmTrade.Id = item.Id;
@@ -272,21 +269,15 @@
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
-                    this.setPrice();
-                });
                 this.$watch('frmTrade.Price', function (newVal, oldVal) {
-                    if (!this.AllowRefreshPrice) {
-                        this.AllowRefreshPrice = true;//编辑时，只有正确显示原来价格后才允许搜寻新价格
-                    } else {
-                        this.setMoney();
-                    }
+                      this.setMoney();
                 });
                 this.$watch('frmTrade.Weight', function (newVal, oldVal) {
+                      this.setMoney();
+                });
+                this.$watch('frmTrade.ActualMoney', function (newVal, oldVal) {
                     if (!this.AllowRefreshActualMoney) {
-                        this.AllowRefreshActualMoney = true;//编辑时，只有正确显示原来成交金额后才允许更改
-                    } else {
-                        this.setMoney();
+                        this.AllowRefreshActualMoney = true;
                     }
                 });
                 this.$watch('AddressType', function (newVal, oldVal) {

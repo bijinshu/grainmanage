@@ -234,6 +234,7 @@
                     this.frmTrade.ProductId = this.productList[0].Id;
                     this.frmTrade.Weight = '';
                     this.frmTrade.Remark = '';
+                    this.setPrice();
                     this.showPanel("#saveTradeModal");
                 },
                 saveTrade: function () {
@@ -385,9 +386,6 @@
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.$watch('frmTrade.ProductId', function (newVal, oldVal) {
-                    this.setPrice();
-                });
                 this.$watch('frmTrade.Price', function (newVal, oldVal) {
                     this.setMoney();
                 });
