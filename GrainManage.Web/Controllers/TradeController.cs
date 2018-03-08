@@ -80,6 +80,31 @@ namespace GrainManage.Web.Controllers
             var currentUser = CurrentUser;
             input.CreatedBy = currentUser.UserId;
             input.CompId = currentUser.CompId;
+            if (!string.IsNullOrEmpty(input.ContactName))
+            {
+                input.ContactName = input.ContactName.Trim();
+                var contactRepo = GetRepo<Contact>();
+                var contactList = contactRepo.GetFiltered(f => f.CompId == currentUser.CompId && f.ContactName == input.ContactName).ToList();
+                if (contactList.Any())
+                {
+                    if (contactList.Count == 1)
+                    {
+                        input.ContactId = contactList.First().Id;
+                    }
+                    else if (input.ContactId > 0 && !contactList.Any(a => a.Id == input.ContactId))
+                    {
+                        input.ContactId = 0;
+                    }
+                }
+                else
+                {
+                    input.ContactId = 0;
+                }
+            }
+            else
+            {
+                input.ContactId = 0;
+            }
             var repo = GetRepo<Trade>();
             var model = repo.Add(MapTo<Trade>(input));
             result.data = model.Id;
@@ -98,6 +123,32 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             SetEmptyIfNull(input);
+            if (!string.IsNullOrEmpty(input.ContactName))
+            {
+                var currentUser = CurrentUser;
+                input.ContactName = input.ContactName.Trim();
+                var contactRepo = GetRepo<Contact>();
+                var contactList = contactRepo.GetFiltered(f => f.CompId == currentUser.CompId && f.ContactName == input.ContactName).ToList();
+                if (contactList.Any())
+                {
+                    if (contactList.Count == 1)
+                    {
+                        input.ContactId = contactList.First().Id;
+                    }
+                    else if (input.ContactId > 0 && !contactList.Any(a => a.Id == input.ContactId))
+                    {
+                        input.ContactId = 0;
+                    }
+                }
+                else
+                {
+                    input.ContactId = 0;
+                }
+            }
+            else
+            {
+                input.ContactId = 0;
+            }
             var repo = GetRepo<Trade>();
             var model = repo.Get(input.Id);
             model.ProductId = input.ProductId;
@@ -140,7 +191,7 @@ namespace GrainManage.Web.Controllers
                 result.data = dtoList;
                 SetResponse(s => s.Success, null, result);
             }
-            return JsonNet(result,true);
+            return JsonNet(result, true);
         }
 
         public ActionResult Delete(int tradeId)

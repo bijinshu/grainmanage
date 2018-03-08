@@ -62,7 +62,8 @@
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
-                            <td>{{item.ContactName}}</td>
+                            <td v-if="item.ContactId>0">{{item.ContactName}}</td>
+                            <td style="color:red;" title="该用户不存在" v-else>{{item.ContactName}}</td>
                             <td>{{item.ProductName}}</td>
                             <td>{{item.Price}}</td>
                             <td>{{item.Weight}}</td>
