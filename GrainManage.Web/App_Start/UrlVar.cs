@@ -15,6 +15,7 @@ namespace GrainManage.Web
         [Common]
         public static string Company_New { get { return GetUrl("/Company/New"); } }
         public static string Company_Edit { get { return GetUrl("/Company/Edit"); } }
+        [Common]
         public static string Company_DeleteFile { get { return GetUrl("/Company/DeleteFile"); } }
         //Role
         public static string Role_Index { get { return GetUrl("/Role/Index"); } }
@@ -49,6 +50,7 @@ namespace GrainManage.Web
         public static string Contact_New { get { return GetUrl("/Contact/New"); } }
         public static string Contact_Edit { get { return GetUrl("/Contact/Edit"); } }
         public static string Contact_Delete { get { return GetUrl("/Contact/Delete"); } }
+        [Common]
         public static string Contact_GetList { get { return GetUrl("/Contact/GetList"); } }
 
         //Trade

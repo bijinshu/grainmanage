@@ -1,6 +1,6 @@
 ﻿@using GrainManage.Web
 @{
-    ViewBag.Title = "客户列表";
+    ViewBag.Title = "我的客户";
 }
 <div class="container" id="contactInfo">
     <div class="row">
@@ -60,16 +60,19 @@
                                 {
                                     <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showEdit(item)">编辑</a>
                                 }
-                                <a>&nbsp;</a>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Contact_Delete, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
+                                }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_New, Model.Urls))
                                 {
                                     <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_GetByContactId, Model.Urls))
                                 {
-                                    <a>&nbsp;</a>
                                     <a style="cursor:pointer;" v-if="item.TradeCount" v-on:click.stop="showHistory(item)">历史&nbsp;<span class="badge" style="background-color:green">{{item.TradeCount}}</span></a>
                                 }
+
                             </td>
                         </tr>
                     </tbody>
@@ -86,6 +89,7 @@
         @Html.Partial("_ContactDetail")
         @Html.Partial("_TradeDetail")
         @Html.Partial("_History")
+        @Html.Partial("_DeleteModal", "删除客户")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -122,6 +126,7 @@
                     ActualMoney:0,
                     Remark:''
                 },
+                currentItem: {},
                 IsDisabled: false,
                 AddressType: 'manual',
                 GeoMsg: '',
@@ -206,6 +211,22 @@
                     else {
                         this.showAlert('请检查各项参数是否正确');
                     }
+                },
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除 [" +  item.ContactName + "]吗?";
+                    this.showPanel("#deleteDialog");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.Contact_Delete', { contactId: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel("#deleteDialog");
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
                 },
                 showTrade: function (item) {
                     this.frmTrade.ContactId = item.Id;

@@ -279,7 +279,7 @@ namespace GrainManage.Web.Controllers
             }
             int total = 0;
             var now = DateTime.Now;
-            var list = userRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter).ToList();
+            var list = userRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
             result.total = total;
             var dtoList = MapTo<List<UserDto>>(list);
             if (dtoList.Any())

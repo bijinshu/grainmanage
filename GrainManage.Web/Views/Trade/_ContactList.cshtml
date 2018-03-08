@@ -37,9 +37,9 @@
                             </tr>
                         </thead>
                         <tbody v-cloak>
-                            <tr v-for="item in contactList" :key="item.Id">
+                            <tr v-for="item in contactList" :key="item.Id" v-on:click="currentContact=item" v-on:dblclick="hidePanel('#chooseContactModal')">
                                 <td>
-                                    <input v-model="currentContact" type="radio" v-bind:value="item" style="display:inline-block;width:100%;height:1.2em;">
+                                    <input v-model="currentContact" type="radio" v-bind:value="item">
                                 </td>
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Mobile}}</td>

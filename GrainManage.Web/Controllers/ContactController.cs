@@ -44,7 +44,7 @@ namespace GrainManage.Web.Controllers
             }
             int total = 0;
             var repo = GetRepo<Contact>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -96,7 +96,7 @@ namespace GrainManage.Web.Controllers
             }
             int total = 0;
             var repo = GetRepo<Contact>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);
@@ -144,10 +144,11 @@ namespace GrainManage.Web.Controllers
                 model.ContactName = input.ContactName;
                 model.Address = input.Address;
                 model.Mobile = input.Mobile;
+                model.Weixin = input.Weixin;
                 model.Email = input.Email;
-                model.ModifiedAt = DateTime.Now;
                 model.QQ = input.QQ;
                 model.Remark = input.Remark;
+                model.ModifiedAt = DateTime.Now;
                 repo.UnitOfWork.SaveChanges();
                 SetResponse(s => s.Success, input, result);
             }

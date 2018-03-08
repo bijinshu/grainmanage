@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace GrainManage.Core
 {
-    public class Repository<T> : IRepository<T> where T : class,new()
+    public class Repository<T> : IRepository<T> where T : class, new()
     {
         #region 私有变量及构造函数
         private IUnitOfWorkContext context;
@@ -203,7 +203,8 @@ namespace GrainManage.Core
                     memberName = Regex.Replace(memberName, @"\w*\(+", string.Empty);
                     memberName = Regex.Replace(memberName, @"\)+\w*", string.Empty);
                     memberName = Regex.Replace(memberName, @"\s*\w*\s*\.+\s*", string.Empty);
-                    dic[memberName.Trim()] = item.Value;
+                    memberName = memberName.Trim().Split(',')[0];
+                    dic[memberName] = item.Value;
                 }
             }
             return dic;

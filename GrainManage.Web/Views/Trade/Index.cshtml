@@ -103,7 +103,9 @@
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
     $(function () {
-        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+        var startDate = new Date();
+        startDate.setDate(startDate.getDate()-1);
+        $("#StartTime").val(startDate.format("yyyy-MM-dd"));
         new Vue({
             el: "#tradeInfo",
             data: {
@@ -181,7 +183,8 @@
                 save: function () {
                     this.IsDisabled = true;
                     if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
-                        $.post('@UrlVar.Trade_Edit', this.frmTrade).always(function (result, status) {
+                        var url = this.frmTrade.Id > 0 ? '@UrlVar.Trade_Edit' : '@UrlVar.Trade_New';
+                        $.post(url, this.frmTrade).always(function (result, status) {
                           this.IsDisabled = false;
                           if (result.code == 1) {
                              this.getData();
@@ -294,6 +297,6 @@
                 });
             }
         })
-        $("#StartTime").val(new Date().format("yyyy-MM-dd"));
+        $("#StartTime").val(startDate.format("yyyy-MM-dd"));
     })
 </script>

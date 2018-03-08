@@ -43,7 +43,7 @@ namespace GrainManage.Web.Controllers
             }
             int total = 0;
             var repo = GetRepo<Trade>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.CreatedAt, false);
+            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
             if (!list.Any())
             {
                 SetResponse(s => s.NoData, input, result);

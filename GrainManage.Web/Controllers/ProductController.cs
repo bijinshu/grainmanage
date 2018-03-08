@@ -46,7 +46,7 @@ namespace GrainManage.Web.Controllers
             }
             int total = 0;
             var now = DateTime.Now;
-            var list = productRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter).ToList();
+            var list = productRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
             result.total = total;
             var dtoList = MapTo<List<ProductDto>>(list);
             if (dtoList.Any())

@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">联系人名称</label>
             <div class="col-md-6">
-                <input v-bind:value="frmTrade.ContactName" disabled type="text" class="form-control" id="ContactName">
+                <input v-model="frmTrade.ContactName" v-bind:disabled="frmTrade.ContactId>0" type="text" class="form-control" id="ContactName">
             </div>
             <div class="col-md-3">
                 <button v-on:click.stop.prevent="showContact" class="btn btn-info btn-block">选择</button>
