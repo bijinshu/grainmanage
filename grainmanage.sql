@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-07 19:28:07
+Date: 2018-03-09 14:45:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,7 +35,7 @@ CREATE TABLE `bm_company` (
 -- Records of bm_company
 -- ----------------------------
 INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'c7aaa3434441933a0965123b37d0407f.jpg', '2018-03-06 15:05:35', '2018-03-06 18:22:20');
-INSERT INTO `bm_company` VALUES ('6', '2', '是的法人', '松岛枫松岛枫', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
+INSERT INTO `bm_company` VALUES ('6', '2', '泗阳粮食收购总代理', '泗阳农场90号', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
 
 -- ----------------------------
 -- Table structure for `bm_contact`
@@ -57,7 +57,7 @@ CREATE TABLE `bm_contact` (
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `ContactName` (`ContactName`,`Mobile`,`CompId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_contact
@@ -91,7 +91,6 @@ INSERT INTO `bm_contact` VALUES ('26', '1', '江涛', '15801992799', '', '914023
 INSERT INTO `bm_contact` VALUES ('27', '1', '萧见浪', '15801992799', '', '914023961', 'bijinshu@163.com', '合兴', '', '', '1', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('28', '1', '殷了', '15801992799', '', '914023961', 'bijinshu@163.com', '合兴', '', '', '1', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('29', '1', '薛子琼', '15801992799', '', '914023961', 'bijinshu@163.com', '桥西', '', '', '1', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('30', '1', '松岛枫', '15698615469', '', '', '', '', '', '', '1', '2018-03-02 10:12:34', null);
 
 -- ----------------------------
 -- Table structure for `bm_order`
@@ -167,7 +166,7 @@ INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '1', '1', '20
 INSERT INTO `bm_product` VALUES ('9', '1', '小麦', '1.0400', '', '1', '0', '2018-03-07 13:07:13', '1', '2018-03-07 14:36:24', '1');
 INSERT INTO `bm_product` VALUES ('21', '1', '大稻', '1.2600', '', '1', '0', '2018-03-07 14:47:51', '1', '2018-03-07 14:48:24', '1');
 INSERT INTO `bm_product` VALUES ('22', '1', '小稻', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', null, null);
-INSERT INTO `bm_product` VALUES ('23', '1', '玉米', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', null, null);
+INSERT INTO `bm_product` VALUES ('23', '6', '玉米', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', null, null);
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -191,7 +190,7 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
@@ -228,6 +227,8 @@ INSERT INTO `bm_trade` VALUES ('53', '1', '3', '王亮亮', '1', '小麦', '1.04
 INSERT INTO `bm_trade` VALUES ('54', '1', '6', '鲍菲菲', '22', '小稻', '2.6000', '600.00', '1560.00', '0', '', '', '', '1', '2018-03-07 15:07:22', '2018-03-07 19:26:29');
 INSERT INTO `bm_trade` VALUES ('55', '1', '13', '文一毫', '23', '玉米', '1.2050', '367.00', '442.24', '0', '', '', '', '1', '2018-03-07 15:08:45', null);
 INSERT INTO `bm_trade` VALUES ('56', '1', '15', '毛强国', '9', '小麦', '1.0400', '600.00', '624.00', '0', '', '', '', '1', '2018-03-07 15:09:06', null);
+INSERT INTO `bm_trade` VALUES ('57', '1', '1', '张海川', '9', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-08 10:10:36', '2018-03-08 11:58:02');
+INSERT INTO `bm_trade` VALUES ('60', '1', '0', '毕建昌', '9', '小麦', '1.5000', '900.00', '939.00', '0', '', '', '', '1', '2018-03-08 12:01:48', '2018-03-08 17:43:56');
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -235,7 +236,8 @@ INSERT INTO `bm_trade` VALUES ('56', '1', '15', '毛强国', '9', '小麦', '1.0
 DROP TABLE IF EXISTS `log_action`;
 CREATE TABLE `log_action` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `UserName` varchar(20) NOT NULL DEFAULT '' COMMENT '用户Id',
+  `UserId` int(11) unsigned NOT NULL COMMENT '用户Id',
+  `UserName` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名称',
   `Path` varchar(200) NOT NULL DEFAULT '' COMMENT '动作名称',
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '访问端IP',
   `Method` varchar(6) NOT NULL DEFAULT '' COMMENT '请求方法',
@@ -246,21 +248,11 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=428 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=439 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
 -- ----------------------------
-INSERT INTO `log_action` VALUES ('418', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-06 16:02:35', '2018-03-06 16:02:35', '00:00:01');
-INSERT INTO `log_action` VALUES ('419', 'bijinshu', '/User/SignOut', '10.10.133.108', 'GET', '', '', '100', '2018-03-06 16:05:06', '2018-03-06 16:05:06', '00:00:00');
-INSERT INTO `log_action` VALUES ('420', 'testadmin', '/User/SignOut', '10.10.133.108', 'GET', '', '', '80', '2018-03-06 16:06:26', '2018-03-06 16:06:26', '00:00:00');
-INSERT INTO `log_action` VALUES ('421', 'testadmin', '/User/SignOut', '10.10.133.108', 'GET', '', '', '80', '2018-03-06 17:21:23', '2018-03-06 17:21:24', '00:00:02');
-INSERT INTO `log_action` VALUES ('422', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:31:26', '2018-03-06 17:31:26', '00:00:00');
-INSERT INTO `log_action` VALUES ('423', 'bijinshu', '/Contact/Edit', '10.10.133.108', 'POST', '', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', '100', '2018-03-06 17:32:25', null, null);
-INSERT INTO `log_action` VALUES ('424', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 13:43:39', '2018-03-07 13:43:39', '00:00:01');
-INSERT INTO `log_action` VALUES ('425', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:02:04', null, null);
-INSERT INTO `log_action` VALUES ('426', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"price,customer,purchase,sale,retail,system.user.append,user,user.change_pwd,user.sign_out,log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:09:06', '2018-03-07 14:09:46', '00:00:40');
-INSERT INTO `log_action` VALUES ('427', 'bijinshu', '/Role/Edit', '10.10.133.108', 'POST', '成功', '{\"Id\":\"4\",\"Name\":\"系统管理员\",\"Level\":\"90\",\"Remark\":\"管理系统用户\",\"Auths[]\":\"log,log.exception,log.exception.view,log.exception.delete,log.action,log.action.view,log.job,log.job.view,log.login,log.login.view,home,home.edit,contact,contact.view,contact.add,contact.edit,contact.delete,contact.trade,trade,trade.view,trade.add,trade.edit,trade.delete,order,order.view,order.add,order.edit,order.delete,product,product.view,product.add,product.edit,product.delete,employee,employee.view,employee.add,employee.edit,employee.delete,system,system.role,system.role.view,system.role.add,system.role.edit,system.role.delete,system.user,system.user.view,system.user.add,system.user.edit,system.user.delete\"}', '100', '2018-03-07 14:12:09', '2018-03-07 14:12:10', '00:00:01');
 
 -- ----------------------------
 -- Table structure for `log_exception`
@@ -275,12 +267,13 @@ CREATE TABLE `log_exception` (
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log_exception
 -- ----------------------------
 INSERT INTO `log_exception` VALUES ('34', '/Contact/Edit', '{\"Name\":\"八集粮食收购\",\"Address\":\"八集街\"}', 'Sequence contains no elements\r\n', '   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)\r\n   at lambda_method(Closure , QueryContext )\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)\r\n   at System.Linq.Queryable.First[TSource](IQueryable`1 source)\r\n   at GrainManage.Web.Controllers.ContactController.Edit(ContactDto input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\ContactController.cs:line 103\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-06 17:31:26');
+INSERT INTO `log_exception` VALUES ('35', '/Trade/Edit', '{\"Id\":\"0\",\"ContactId\":\"3\",\"ContactName\":\"王亮亮\",\"ProductId\":\"21\",\"ProductName\":\"大稻\",\"Price\":\"1.26\",\"Weight\":\"900\",\"TradeType\":\"0\",\"ActualMoney\":\"1134.00\",\"Remark\":\"\"}', 'Object reference not set to an instance of an object.\r\n', '   at GrainManage.Web.Controllers.TradeController.Edit(TradeDto input) in D:\\github.netcore.GrainManage\\GrainManage.Web\\Controllers\\TradeController.cs:line 103\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()', '10.10.133.108', '2018-03-08 10:05:08');
 
 -- ----------------------------
 -- Table structure for `log_job`
@@ -314,7 +307,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -329,6 +322,9 @@ INSERT INTO `log_login` VALUES ('110', 'testadmin', '10.10.133.108', '成功', '
 INSERT INTO `log_login` VALUES ('111', 'testadmin', '10.10.133.108', '成功', '80', '0', '2018-03-06 16:06:28');
 INSERT INTO `log_login` VALUES ('112', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-06 17:23:03');
 INSERT INTO `log_login` VALUES ('113', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-07 11:03:58');
+INSERT INTO `log_login` VALUES ('114', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-08 09:30:13');
+INSERT INTO `log_login` VALUES ('115', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-09 14:28:15');
+INSERT INTO `log_login` VALUES ('116', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-09 14:39:08');
 
 -- ----------------------------
 -- Table structure for `rm_address`

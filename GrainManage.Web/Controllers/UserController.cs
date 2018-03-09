@@ -20,7 +20,7 @@ namespace GrainManage.Web.Controllers
     public class UserController : BaseController
     {
         [AllowAnonymous]
-        public ActionResult SignIn(InputSignIn input, string type)
+        public ActionResult SignIn(InputSignIn input, string returnUrl)
         {
             if (IsGetRequest)
             {
@@ -67,13 +67,9 @@ namespace GrainManage.Web.Controllers
                             userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
                             userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
                             userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
-                            Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId), userInfo, expireAt);
-                            var dic = new Dictionary<string, string>();
-                            dic[GlobalVar.UserId] = userInfo.UserId.ToString();
-                            dic[GlobalVar.UserName] = userInfo.UserName;
-                            dic[GlobalVar.Level] = userInfo.Level.ToString();
-                            dic[GlobalVar.AuthToken] = userInfo.Token;
-                            CookieUtil.Write(Response.Cookies, GlobalVar.CookieName, dic);
+                            var agent = string.IsNullOrEmpty(returnUrl) ? 0 : 1;
+                            Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId, agent), userInfo, expireAt);
+                            UserUtil.SaveToClient(Response.Cookies, userInfo, agent);
                             level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
                         }
@@ -209,7 +205,7 @@ namespace GrainManage.Web.Controllers
             var account = repo.GetFiltered(f => f.Id == UserId, true).First();
             account.ModifiedAt = DateTime.Now;
             repo.UnitOfWork.SaveChanges();
-            Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId));
+            Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId, CookieUser.Agent));
             if (IsGetRequest)
             {
                 return RedirectToAction("SignIn");

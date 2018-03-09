@@ -1,6 +1,9 @@
-﻿using GrainManage.Common;
+﻿using DataBase.GrainManage.Models;
+using GrainManage.Common;
+using GrainManage.Core;
 using GrainManage.Web.Common;
 using GrainManage.Web.Models;
+using GrainManage.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -15,6 +18,7 @@ namespace GrainManage.Web
     {
         private static readonly double cacheMinute = AppConfig.GetValue<double>(GlobalVar.CacheMinute);
         private static readonly List<string> pubUrls = new List<string>();
+        private static readonly object lockObj = new object();
         static CheckLoginAttribute()
         {
             foreach (var item in typeof(UrlVar).GetProperties(BindingFlags.Public | BindingFlags.Static))
@@ -36,23 +40,34 @@ namespace GrainManage.Web
                 var cookies = filterContext.HttpContext.Request.Cookies;
                 if (!string.IsNullOrEmpty(CookieUtil.Get(cookies, GlobalVar.CookieName)))
                 {
-                    var userId = CookieUtil.Get<int>(cookies, GlobalVar.CookieName, GlobalVar.UserId);
-                    var userName = CookieUtil.Get(cookies, GlobalVar.CookieName, GlobalVar.UserName);
-                    var level = CookieUtil.Get<int>(cookies, GlobalVar.CookieName, GlobalVar.Level);
-                    var token = CookieUtil.Get(cookies, GlobalVar.CookieName, GlobalVar.AuthToken);
-                    if (userId > 0 && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(token))
+                    var cookieUserInfo = UserUtil.GetFromCookie(cookies);
+                    if (cookieUserInfo != null && cookieUserInfo.UserId > 0 && !string.IsNullOrEmpty(cookieUserInfo.Token))
                     {
-                        var userKey = CacheKey.GetUserKey(userId);
+                        var userKey = CacheKey.GetUserKey(cookieUserInfo.UserId, cookieUserInfo.Agent);
                         var cacheClient = filterContext.HttpContext.RequestServices.GetService(typeof(ICache)) as ICache;
                         var userInfo = cacheClient.Get<UserInfo>(userKey);
                         var expiresAt = DateTime.Now.AddMinutes(cacheMinute);
-                        if (userInfo != null && userInfo.UserName == userName && userInfo.Token == token && cacheClient.ExpireAt(userKey, expiresAt))
+                        if (cookieUserInfo.Agent == 0)
                         {
-                            var values = filterContext.RouteData.Values;
-                            var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
-                            if (level >= GlobalVar.MaxLevel ||
-                                  pubUrls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)) ||
-                                userInfo.Urls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)))
+                            if (userInfo != null && userInfo.Token == cookieUserInfo.Token && cacheClient.ExpireAt(userKey, expiresAt) &&
+                                AllowAccess(filterContext.RouteData.Values, userInfo))
+                            {
+                                return;
+                            }
+                        }
+                        else if (cookieUserInfo.Agent == 1 && DateTime.TryParse(cookieUserInfo.ExpiredAt, out DateTime expireAt) && expireAt >= DateTime.Now)
+                        {
+                            if (userInfo == null)
+                            {
+                                lock (lockObj)
+                                {
+                                    if (userInfo == null)
+                                    {
+                                        userInfo = GetUserInfo(filterContext, cookieUserInfo, cacheClient);
+                                    }
+                                }
+                            }
+                            if (userInfo != null && AllowAccess(filterContext.RouteData.Values, userInfo))
                             {
                                 return;
                             }
@@ -73,6 +88,47 @@ namespace GrainManage.Web
                     filterContext.Result = new JsonResult(new BaseOutput { code = mes.Code, msg = mes.Description, data = UrlVar.User_SignIn });
                 }
             }
+        }
+        private static bool AllowAccess(Microsoft.AspNetCore.Routing.RouteValueDictionary values, UserInfo userInfo)
+        {
+            var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
+            if (userInfo.Level >= GlobalVar.MaxLevel ||
+                  pubUrls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)) ||
+                userInfo.Urls.Any(a => string.Equals(a, url, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return true;
+            }
+            return false;
+        }
+        private static UserInfo GetUserInfo(AuthorizationFilterContext filterContext, CookieUserInfo cookieUserInfo, ICache cacheClient)
+        {
+            UserInfo userInfo = null;
+            try
+            {
+                var userRepo = filterContext.HttpContext.RequestServices.GetService(typeof(IRepository<User>)) as IRepository<User>;
+                var account = userRepo.GetFiltered(f => f.Id == cookieUserInfo.UserId).FirstOrDefault();
+                if (account != null)
+                {
+                    userInfo = new UserInfo
+                    {
+                        UserId = account.Id,
+                        CompId = account.CompId,
+                        UserName = account.UserName,
+                        Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
+                        Token = cookieUserInfo.Token,
+                        ExpiredAt = cookieUserInfo.ExpiredAt,
+                        LoginIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request)
+                    };
+                    userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
+                    userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
+                    userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
+                    cacheClient.Set(CacheKey.GetUserKey(cookieUserInfo.UserId, cookieUserInfo.Agent), userInfo, DateTime.Parse(cookieUserInfo.ExpiredAt));
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return userInfo;
         }
     }
 }

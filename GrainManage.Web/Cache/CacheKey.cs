@@ -9,9 +9,9 @@ namespace GrainManage.Web
 {
     public class CacheKey
     {
-        public static string GetUserKey(int userId)
+        public static string GetUserKey(int userId, int agent)
         {
-            return string.Format("user_{0}", userId);
+            return string.Format("user_{0}_{1}", userId, agent);
         }
         public static string GetResourceKey(int userId)
         {

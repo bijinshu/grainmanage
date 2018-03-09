@@ -13,7 +13,7 @@ namespace GrainManage.Web.Services
         public static int AddActionLog(ActionLog model)
         {
             var db = new GrainManageDB();
-            var sql = "insert into log_action(UserName,Path,ClientIP,Method,Para,Level,StartTime) values(@UserName,@Path,@ClientIP,@Method,@Para,@Level,@StartTime);select last_insert_id()";
+            var sql = "insert into log_action(UserId,UserName,Path,ClientIP,Method,Para,Level,StartTime) values(@UserId,@UserName,@Path,@ClientIP,@Method,@Para,@Level,@StartTime);select last_insert_id()";
             return db.ExecuteScalar<int>(sql, model);
         }
         public static int UpdateActionLog(dynamic model)

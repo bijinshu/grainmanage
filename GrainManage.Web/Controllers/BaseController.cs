@@ -19,6 +19,7 @@ namespace GrainManage.Web.Controllers
             DefaultValueHandling = DefaultValueHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore
         };
+        private CookieUserInfo _cookieUser = null;
         public bool IsGetRequest { get { return Request.Method == "GET"; } }
         public bool IsSuperAdmin { get { return Level >= GlobalVar.MaxLevel; } }
         protected ActionResult JsonNet(object data, bool includeNotValid = false)
@@ -62,10 +63,20 @@ namespace GrainManage.Web.Controllers
             var mapper = config.CreateMapper();
             return mapper.Map<T>(srcObj);
         }
-        protected UserInfo CurrentUser { get { return Resolve<ICache>().Get<UserInfo>(CacheKey.GetUserKey(UserId)); } }
-        protected int UserId { get { return CookieUtil.Get<int>(Request.Cookies, GlobalVar.CookieName, GlobalVar.UserId); } }
-        protected int Level { get { return int.Parse(CookieUtil.Get(Request.Cookies, GlobalVar.CookieName, GlobalVar.Level)); } }
-        protected string AuthToken { get { return CookieUtil.Get(Request.Cookies, GlobalVar.CookieName, GlobalVar.AuthToken); } }
+        protected UserInfo CurrentUser { get { return Resolve<ICache>().Get<UserInfo>(CacheKey.GetUserKey(CookieUser.UserId, CookieUser.Agent)); } }
+        protected CookieUserInfo CookieUser
+        {
+            get
+            {
+                if (_cookieUser == null)
+                {
+                    _cookieUser = UserUtil.GetFromCookie(Request.Cookies);
+                }
+                return _cookieUser;
+            }
+        }
+        protected int UserId { get { return CookieUser.UserId; } }
+        protected int Level { get { return CookieUser.Level; } }
         protected void SetEmptyIfNull<T>(T obj)
         {
             var type = typeof(T);

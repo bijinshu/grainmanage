@@ -16,6 +16,7 @@ namespace GrainManage.Web.Controllers
 {
     public class CompanyController : BaseController
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -105,7 +106,7 @@ namespace GrainManage.Web.Controllers
                     var userInfo = CurrentUser;
                     userInfo.CompId = comp.Id;
                     var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
-                    Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId), userInfo, expireAt);
+                    Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId, CookieUser.Agent), userInfo, expireAt);
                     result.data = comp.Id;
                 }
                 SetResponse(s => s.Success, result);

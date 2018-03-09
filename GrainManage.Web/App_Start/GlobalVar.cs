@@ -9,11 +9,9 @@ namespace GrainManage.Web
     {
         public const string CacheMinute = "CacheMinute";
         public const string CookieName = "GrainManage";
-        public const string UserId = "UserId";
-        public const string UserName = "UserName";
-        public const string AuthToken = "AuthToken";
-        public const string ValidateCode = "ValidateCode";
-        public const string Level = "Level";
+
+        public const string Content = "c";
+        public const string Sign = "s";
 
         public const int MaxLevel = 100;
         public const int AdminLevel = 90;
