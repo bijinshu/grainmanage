@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-09 14:45:00
+Date: 2018-03-14 19:06:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,7 +57,7 @@ CREATE TABLE `bm_contact` (
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `ContactName` (`ContactName`,`Mobile`,`CompId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_contact
@@ -98,20 +98,23 @@ INSERT INTO `bm_contact` VALUES ('29', '1', '薛子琼', '15801992799', '', '914
 DROP TABLE IF EXISTS `bm_order`;
 CREATE TABLE `bm_order` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserId` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
   `Mobile` varchar(11) NOT NULL COMMENT '手机号码',
   `Address` varchar(200) NOT NULL DEFAULT '' COMMENT '地址',
-  `UserId` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
   `CompId` int(11) NOT NULL DEFAULT '0' COMMENT '店铺编号',
+  `CompName` varchar(60) NOT NULL DEFAULT '' COMMENT '店铺名称',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
-  `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:待发送 1:待接单 2:已接单 3:交易成功 4:交易失败',
+  `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0:待发送 1:待接单 2:已接单 3:交易成功 4:交易失败 5:拒绝接单',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `AcceptedAt` datetime DEFAULT NULL COMMENT '接单时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_order
 -- ----------------------------
+INSERT INTO `bm_order` VALUES ('1', '1', '15801992799', '八集', '6', '泗阳粮食收购总代理', '', '1', '2018-03-14 13:46:37', null);
+INSERT INTO `bm_order` VALUES ('2', '1', '15801992799', '八集', '6', '泗阳粮食收购总代理', '', '1', '2018-03-14 15:39:08', null);
 
 -- ----------------------------
 -- Table structure for `bm_order_detail`
@@ -120,17 +123,21 @@ DROP TABLE IF EXISTS `bm_order_detail`;
 CREATE TABLE `bm_order_detail` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `OrderId` int(10) unsigned NOT NULL COMMENT '订单编号',
+  `UserId` int(10) unsigned NOT NULL,
   `ProductId` int(11) NOT NULL COMMENT '产品编号',
+  `ProductName` varchar(20) NOT NULL DEFAULT '' COMMENT '产品名称',
   `Price` decimal(20,4) NOT NULL COMMENT '价格',
-  `Num` decimal(20,2) NOT NULL COMMENT '数量',
+  `Weight` decimal(20,2) NOT NULL COMMENT '重量',
   `TotalMoney` decimal(20,2) NOT NULL COMMENT '总价',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_order_detail
 -- ----------------------------
+INSERT INTO `bm_order_detail` VALUES ('1', '1', '1', '9', '小麦', '1.0400', '500.00', '520.00', '2018-03-14 13:46:37');
+INSERT INTO `bm_order_detail` VALUES ('2', '2', '1', '23', '玉米', '1.2050', '600.00', '723.00', '2018-03-14 15:39:08');
 
 -- ----------------------------
 -- Table structure for `bm_product`
@@ -150,7 +157,7 @@ CREATE TABLE `bm_product` (
   `ModifiedBy` int(11) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_name` (`Name`,`CompId`,`Source`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_product
@@ -165,8 +172,11 @@ INSERT INTO `bm_product` VALUES ('7', '0', '菜籽', '2.2450', '', '1', '1', '20
 INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '1', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
 INSERT INTO `bm_product` VALUES ('9', '1', '小麦', '1.0400', '', '1', '0', '2018-03-07 13:07:13', '1', '2018-03-07 14:36:24', '1');
 INSERT INTO `bm_product` VALUES ('21', '1', '大稻', '1.2600', '', '1', '0', '2018-03-07 14:47:51', '1', '2018-03-07 14:48:24', '1');
-INSERT INTO `bm_product` VALUES ('22', '1', '小稻', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', null, null);
+INSERT INTO `bm_product` VALUES ('22', '1', '小稻', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', '2018-03-13 19:32:26', '1');
 INSERT INTO `bm_product` VALUES ('23', '6', '玉米', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', null, null);
+INSERT INTO `bm_product` VALUES ('24', '1', '菜籽', '2.2450', '', '1', '0', '2018-03-13 19:32:29', '1', '2018-03-13 19:32:31', '1');
+INSERT INTO `bm_product` VALUES ('25', '1', '花生', '2.4450', '', '1', '0', '2018-03-13 19:32:33', '1', '2018-03-13 19:32:36', '1');
+INSERT INTO `bm_product` VALUES ('26', '1', '玉米', '1.2050', '', '1', '0', '2018-03-13 19:32:38', '1', null, null);
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -248,7 +258,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=439 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -307,7 +317,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -325,6 +335,18 @@ INSERT INTO `log_login` VALUES ('113', 'bijinshu', '10.10.133.108', '成功', '1
 INSERT INTO `log_login` VALUES ('114', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-08 09:30:13');
 INSERT INTO `log_login` VALUES ('115', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-09 14:28:15');
 INSERT INTO `log_login` VALUES ('116', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-09 14:39:08');
+INSERT INTO `log_login` VALUES ('117', 'bijinshu', '127.0.0.1', '成功', '100', '0', '2018-03-09 19:07:39');
+INSERT INTO `log_login` VALUES ('118', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-10 08:21:17');
+INSERT INTO `log_login` VALUES ('119', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-10 08:22:03');
+INSERT INTO `log_login` VALUES ('120', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-10 08:29:11');
+INSERT INTO `log_login` VALUES ('121', 'bijinshu', '192.168.86.1', '成功', '100', '0', '2018-03-12 14:23:35');
+INSERT INTO `log_login` VALUES ('122', 'bijinshu', '192.168.86.1', '成功', '100', '0', '2018-03-12 17:12:59');
+INSERT INTO `log_login` VALUES ('123', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-12 17:13:21');
+INSERT INTO `log_login` VALUES ('124', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-13 18:36:13');
+INSERT INTO `log_login` VALUES ('125', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-14 10:07:09');
+INSERT INTO `log_login` VALUES ('126', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-14 10:15:38');
+INSERT INTO `log_login` VALUES ('127', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-14 13:40:57');
+INSERT INTO `log_login` VALUES ('128', 'bijinshu', '10.10.133.108', '成功', '100', '0', '2018-03-14 18:51:26');
 
 -- ----------------------------
 -- Table structure for `rm_address`
@@ -344,15 +366,42 @@ CREATE TABLE `rm_address` (
 -- ----------------------------
 -- Records of rm_address
 -- ----------------------------
+INSERT INTO `rm_address` VALUES ('/Company/DeleteFile', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Company/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Company/GetList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Company/New', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Contact/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Contact/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
+INSERT INTO `rm_address` VALUES ('/Contact/GetList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Contact/Index', '0', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Contact/New', '1', '1', '0', '', '2018-02-11 16:43:27', null);
+INSERT INTO `rm_address` VALUES ('/Employee/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Employee/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Employee/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Employee/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Home/Index', '0', '1', '1', '', '2018-02-11 16:43:23', null);
+INSERT INTO `rm_address` VALUES ('/Home/MenuTree', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Log/ActionList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Log/DeleteException', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Log/ExceptionList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Log/JobList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Log/LoginList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/Copy', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/List', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Role/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Role/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
+INSERT INTO `rm_address` VALUES ('/Role/GetRoleList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Role/Index', '0', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Role/New', '1', '1', '0', '', '2018-02-11 16:43:27', null);
+INSERT INTO `rm_address` VALUES ('/Trade/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/GetByContactId', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/User/ChangePwd', '1', '1', '1', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
@@ -403,6 +452,7 @@ CREATE TABLE `rm_user` (
   `Email` varchar(64) NOT NULL DEFAULT '' COMMENT '邮箱',
   `QQ` varchar(20) NOT NULL DEFAULT '' COMMENT 'QQ',
   `Weixin` varchar(20) NOT NULL DEFAULT '' COMMENT '微信',
+  `Address` varchar(60) NOT NULL DEFAULT '' COMMENT '住址',
   `Roles` varchar(200) NOT NULL DEFAULT '' COMMENT '角色',
   `Remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
@@ -411,15 +461,16 @@ CREATE TABLE `rm_user` (
   PRIMARY KEY (`Id`),
   KEY `uq_user_name` (`UserName`),
   KEY `index_mobile` (`Mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-06 16:05:06');
-INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-06 17:21:23');
-INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
-INSERT INTO `rm_user` VALUES ('15', 'test', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '八集', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-06 16:05:06');
+INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-06 17:21:23');
+INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
+INSERT INTO `rm_user` VALUES ('15', 'test', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
+INSERT INTO `rm_user` VALUES ('16', 'sdfd', '1', '3dc9b89542b978ec91ea47c0b1b4ce21b54eb791', '0', '0', '收到了分', '15689245789', '', '', '', '', '5', '', '2018-03-14 11:41:02', '1', null);
 
 -- ----------------------------
 -- Table structure for `rm_white_ip`
