@@ -47,8 +47,12 @@ namespace GrainManage.Web.Common
             }
             return info;
         }
-        public static void SaveToClient(IResponseCookies cookies, UserInfo u, int agent)
+        public static void WriteToCookie(IResponseCookies cookies, UserInfo u, int agent)
         {
+            if (agent > 0)
+            {
+                u.ExpiredAt = DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd HH:mm:ss");
+            }
             var content = $"{u.UserId}|{u.UserName}|{u.CompId}|{u.Level}|{u.Token}|{u.ExpiredAt}|{agent}";
             content = AESEncrypt.Encrypt(content, AppConfig.GetValue("AesKey"));
             var md5Key = AppConfig.GetValue("Md5Key");

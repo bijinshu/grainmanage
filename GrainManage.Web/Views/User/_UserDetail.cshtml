@@ -50,6 +50,13 @@
             </div>
             <span v-if="!isEmailValid" class="col-md-push-3 col-md-8" style="color:red">邮箱格式不正确</span>
         </div>
+        <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
+            <label for="Address" class="col-md-2 control-label hidden-xs hidden-sm">住址</label>
+            <div class="col-md-8">
+                <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入地址">
+            </div>
+            <span v-if="!isAddressValid" class="col-md-2" style="color:red">住址不能超过60个字符不正确</span>
+        </div>
         <div class="form-group">
             <label class="col-md-3 control-label hidden-xs hidden-sm">性别</label>
             <div class="col-md-8">

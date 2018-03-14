@@ -2,6 +2,7 @@
 using GrainManage.Web.Models.Company;
 using GrainManage.Web.Models.Contact;
 using GrainManage.Web.Models.MetaData;
+using GrainManage.Web.Models.Order;
 using GrainManage.Web.Models.Product;
 using GrainManage.Web.Models.Role;
 using GrainManage.Web.Models.Trade;
@@ -34,6 +35,8 @@ namespace GrainManage.Web
 
                 cfg.CreateMap<ProductDto, Product>().ForMember(d => d.CreatedAt, s => s.AddTransform((f) => DateTime.Now)).ReverseMap();
                 cfg.CreateMap<CompanyDto, Company>().ForMember(d => d.CreatedAt, s => s.AddTransform((f) => DateTime.Now)).ReverseMap();
+                cfg.CreateMap<OrderDto, Order>().ForMember(d => d.CreatedAt, s => s.AddTransform((f) => DateTime.Now)).ReverseMap();
+                cfg.CreateMap<OrderDetailDto, OrderDetail>().ForMember(d => d.CreatedAt, s => s.AddTransform((f) => DateTime.Now)).ReverseMap();
             });
         }
     }

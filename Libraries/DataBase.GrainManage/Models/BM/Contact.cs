@@ -18,7 +18,7 @@ namespace DataBase.GrainManage.Models
         public string Remark { get; set; }
         public int CompId { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public virtual User Owner { get; set; }
     }

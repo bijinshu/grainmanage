@@ -123,6 +123,7 @@
                     QQ: '',
                     Weixin: '',
                     Email: '',
+                    Address:'',
                     Roles: [],
                     Status: 1,
                     Remark: ''
@@ -154,6 +155,7 @@
                     this.frm.QQ = '';
                     this.frm.Email = '';
                     this.frm.Weixin = '';
+                    this.frm.Address = '';
                     this.frm.Roles = [];
                     this.frm.Status = 0;
                     this.frm.Remark = '';
@@ -168,6 +170,7 @@
                     this.frm.QQ = item.QQ;
                     this.frm.Email = item.Email;
                     this.frm.Weixin = item.Weixin;
+                    this.frm.Address = item.Address;
                     this.frm.Roles = item.Roles;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
@@ -240,6 +243,9 @@
                 },
                 isWeixinValid: function () {
                     return !this.frm.Weixin || (/^[\w_]{5,20}$/g).test(this.frm.Weixin);
+                },
+                isAddressValid: function () {
+                    return !this.frm.Address || (/^.{0,60}$/g).test(this.frm.Address);
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frm.Remark);

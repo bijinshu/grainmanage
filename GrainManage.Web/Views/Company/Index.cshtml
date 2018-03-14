@@ -13,6 +13,7 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/vue.js"></script>
+    <script src="~/js/components/mixin.js"></script>
     <script src="~/js/components/modal-dialog.js"></script>
     <script src="~/js/components/pager.js"></script>
 </head>
@@ -38,7 +39,7 @@
                     <div class="company-main">
                         <div style="font-weight:bold;color:red;font-style:italic;">经营范围：</div>
                         <div>
-                            <span style="color:darkgreen" v-for="item2 in item.Products">{{item2.Name}}&nbsp;</span>
+                            <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
                         </div>
                     </div>
                     <div class="company-address">
@@ -47,7 +48,7 @@
                     </div>
                 </div>
                 <div style="margin-top:2px;">
-                    <button class="btn btn-info btn-block">请求收购</button>
+                    <button class="btn btn-info btn-block" v-on:click="showOrder(item)">请求收购</button>
                 </div>
             </div>
         </div>
@@ -55,6 +56,10 @@
             <div class="col-md-12">
                 <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize" other-class="pagination-sm"></pager>
             </div>
+        </div>
+        <div v-cloak>
+            @Html.Partial("_Order")
+            <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
         </div>
     </div>
     <script>
@@ -66,7 +71,12 @@
                     msg: '',
                     search: { Name: '', PageIndex: 0, PageSize: 20 },
                     list: [],
-                    isFirstTime: true
+                    productList: [],
+                    userInfo: {},
+                    frm: { CompId: 0, CompName: '', Mobile: '', Address: '', Remark: '', Details: [] },
+                    isFirstTime: true,
+                    IsDisabled: false,
+                    AlertTitle: ''
                 },
                 methods: {
                     getData: function () {
@@ -78,10 +88,90 @@
                           }
                           this.isFirstTime = false;
                       }.bind(this));
+                    },
+                    getSimpleInfo: function () {
+                        $.post('@UrlVar.User_SimpleInfo').done(function (result, status) {
+                            if (result.code==1) {
+                                this.userInfo = result.data;
+                            } else {
+                                this.userInfo = null;
+                            }
+                      }.bind(this));
+                    },
+                    showOrder: function (item) {
+                        if (this.userInfo) {
+                            this.productList = item.Products;
+                            this.frm.CompId = item.Id;
+                            this.frm.CompName = item.CompanyName;
+                            this.frm.Mobile = this.userInfo.Mobile;
+                            this.frm.Address = this.userInfo.Address;
+                            this.frm.Remark = '';
+                            this.frm.Details = [];
+                            this.addNewDetailForm();
+                            this.showPanel("#newOrderModal");
+                        }
+                        else {
+                            window.location.href = '@UrlVar.User_SignIn' + '?returnUrl=' + encodeURI(window.location.href);
+                        }
+                    },
+                    setPrice: function (detail) {
+                        var existedItem = null;
+                        for (var i = 0; i < this.productList.length; i++) {
+                            if (this.productList[i].Id == detail.ProductId) {
+                                existedItem = this.productList[i];
+                                break;
+                            }
+                        }
+                        detail.Price = existedItem ? existedItem.Price : '';
+                        detail.ProductName = existedItem ? existedItem.Name : '';
+                    },
+                    save: function () {
+                        this.IsDisabled = true;
+                        var data = { CompId: this.frm.CompId, CompName: this.frm.CompName, Mobile: this.frm.Mobile, Address: this.frm.Address, Remark: this.frm.Remark, Details: [] };
+                        for (var i = 0; i < this.frm.Details.length; i++) {
+                            var item = this.frm.Details[i];
+                            data.Details.push({ ProductId: item.ProductId, ProductName: item.ProductName, Price: item.Price, Weight: item.Weight });
+                        }
+                        $.post('@UrlVar.Order_New', data).done(function (result, status) {
+                            this.IsDisabled = false;
+                            if (result.code==1) {
+                                this.hidePanel("#newOrderModal");
+                            } else {
+                                this.showAlert(result.msg);
+                            }
+                         }.bind(this));
+                    },
+                    addNewDetailForm: function () {
+                        var newDetail = this.newDetailForm();
+                        this.frm.Details.push(newDetail);
+                        this.setPrice(newDetail);
+                    },
+                    delDetailForm: function (index) {
+                        if (this.frm.Details.length>1) {
+                            this.frm.Details.splice(index, 1);
+                        }
+                    },
+                    getMoney: function (detail) {
+                        if (detail && detail.Weight && detail.Price) {
+                            var result = (detail.Weight * detail.Price).toFixed(2);
+                            return parseInt(result) == result ? parseInt(result) : result;
+                        }
+                        return 0;
+                    },
+                    newDetailForm: function () {
+                        var productId = this.productList[0].Id;
+                        var obj = { ProductId: productId, ProductName: '', Price: 0, Weight: '', TotalMoney: 0, ProductList: [] };
+                        obj.ProductList = this.productList.concat();
+                        return obj;
                     }
                 },
                 computed: {
-
+                    isPhoneValid: function () {
+                        return (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
+                    },
+                    isRemarkValid: function () {
+                        return (/^.{0,200}$/g).test(this.frm.Remark);
+                    }
                 },
                 filters: {
                     imgUrl: function (value) {
@@ -89,10 +179,19 @@
                             return '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/"  + value;
                         }
                         return "javascript:void()";
+                    },
+                    productName: function (value, index, length) {
+                        if (index == length - 1) {
+                            return value.Name + '(' + value.Price + ')'
+                        }
+                        else {
+                            return value.Name + '(' + value.Price + ')、'
+                        }
                     }
                 },
                 created: function () {
                     this.getData();
+                    this.getSimpleInfo();
                 }
             })
         })

@@ -109,6 +109,7 @@ namespace GrainManage.Web
                 var account = userRepo.GetFiltered(f => f.Id == cookieUserInfo.UserId).FirstOrDefault();
                 if (account != null)
                 {
+                    var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                     userInfo = new UserInfo
                     {
                         UserId = account.Id,
@@ -122,7 +123,7 @@ namespace GrainManage.Web
                     userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
                     userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
                     userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
-                    cacheClient.Set(CacheKey.GetUserKey(cookieUserInfo.UserId, cookieUserInfo.Agent), userInfo, DateTime.Parse(cookieUserInfo.ExpiredAt));
+                    cacheClient.Set(CacheKey.GetUserKey(cookieUserInfo.UserId, cookieUserInfo.Agent), userInfo, expireAt);
                 }
             }
             catch (Exception)

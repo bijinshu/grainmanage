@@ -20,6 +20,7 @@ namespace DataBase.GrainManage.Models
         public string QQ { get; set; }
         public string Weixin { get; set; }
         public string Remark { get; set; }
+        public string Address { get; set; }
         public string Roles { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }

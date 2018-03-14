@@ -104,5 +104,17 @@ namespace GrainManage.Web
         public readonly int PriceExisted = 902;
         [Message("请先选择产品")]
         public readonly int ProductNotSelected = 903;
+
+        //Order
+        [Message("未选择店铺")]
+        public readonly int NoCompany = 1001;
+        [Message("未选择产品")]
+        public readonly int NoProduct = 1002;
+        [Message("存在未填写重量的产品")]
+        public readonly int NoWeight = 1003;
+        [Message("禁止店铺管理员和员工给自己店铺刷单")]
+        public readonly int NoValidOrderUser = 1004;
+        [Message("今日已发送过该类订单")]
+        public readonly int OrderSended = 1005;
     }
 }

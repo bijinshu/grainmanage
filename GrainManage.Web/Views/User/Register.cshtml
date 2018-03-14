@@ -110,6 +110,13 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
+                                    <label for="Address" class="col-md-2 control-label hidden-xs hidden-sm">住址</label>
+                                    <div class="col-md-8">
+                                        <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入地址">
+                                    </div>
+                                    <span v-if="!isAddressValid" class="col-md-2" style="color:red">住址不能超过60个字符不正确</span>
+                                </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
                                     <label for="Remark" class="col-md-2 control-label hidden-xs hidden-sm">其他信息</label>
                                     <div class="col-md-8">
@@ -145,6 +152,7 @@
                         Email: '',
                         QQ: '',
                         Weinxin: '',
+                        Address:'',
                         Remark: ''
                     },
                     Pwd: '',
@@ -197,6 +205,9 @@
                     },
                     isWeixinValid: function () {
                         return !this.frm.Weinxin || (/^[a-zA-Z\d_]{5,20}$/g).test(this.frm.Weinxin);
+                    },
+                    isAddressValid: function () {
+                        return !this.frm.Address || (/^.{0,60}$/g).test(this.frm.Address);
                     },
                     isRemarkValid: function () {
                         return (/^.{0,200}$/g).test(this.frm.Remark);

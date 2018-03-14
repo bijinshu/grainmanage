@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrainManage.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace GrainManage.Web
 {
     public class UrlVar
     {
+        public static readonly string PreUrl = AppConfig.GetValue("PreUrl");
         //Home
         [Common]
         public static string Home_Index { get { return GetUrl("/Home/Index"); } }
@@ -40,6 +42,8 @@ namespace GrainManage.Web
         public static string User_ChangePwd { get { return GetUrl("/User/ChangePwd"); } }
         [Common]
         public static string User_Info { get { return GetUrl("/User/Info"); } }
+        [Common]
+        public static string User_SimpleInfo { get { return GetUrl("/User/SimpleInfo"); } }
 
         //Employee
         public static string Employee_Index { get { return GetUrl("/Employee/Index"); } }
@@ -79,6 +83,10 @@ namespace GrainManage.Web
         public static string Product_Delete { get { return GetUrl("/Product/Delete"); } }
         [Common]
         public static string Product_Copy { get { return GetUrl("/Product/Copy"); } }
+
+        //Order
+        [Common]
+        public static string Order_New { get { return GetUrl("/Order/New"); } }
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {
@@ -99,7 +107,7 @@ namespace GrainManage.Web
             {
                 return "javascript:void(0)";
             }
-            return HttpUtil.GetServerPath(relativeUrl);
+            return $"{PreUrl}{relativeUrl}";
         }
         #endregion
     }

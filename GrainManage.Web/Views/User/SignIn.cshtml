@@ -68,11 +68,16 @@
                         }
                         else {
                             this.IsDisabled = true;
-                            $.post('@UrlVar.User_SignIn', { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
+                            var returnUrl = '';
+                            var arrays = window.location.href.split('?');
+                            if (arrays.length > 1 && arrays[1]) {
+                                returnUrl = '?' + arrays[1];
+                            }
+                            $.post('@UrlVar.User_SignIn' + returnUrl, { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
                                 this.IsDisabled = false;
                                 if (result.code == 1) {
                                     this.changeRemember();
-                                    window.location = result.data.url;
+                                    window.location.href = result.data.url;
                                 }
                                 else {
                                     this.msg = result.msg;

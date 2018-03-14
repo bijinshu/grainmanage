@@ -45,9 +45,13 @@ namespace GrainManage.Web.Controllers
             output.code = messageInfo.Code;
             output.msg = messageInfo.Description;
         }
-        protected void SetResponse(Expression<Func<StatusCode, int>> selector, BaseOutput output)
+        protected void SetResponse(Expression<Func<StatusCode, int>> selector, BaseOutput output, string msg = "")
         {
             SetResponse(selector, null, output);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                output.msg = msg;
+            }
         }
         protected static T MapTo<T>(Object srcObj)
         {

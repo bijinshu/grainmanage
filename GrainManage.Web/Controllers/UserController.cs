@@ -52,7 +52,7 @@ namespace GrainManage.Web.Controllers
                         else
                         {
                             account.ModifiedAt = DateTime.Now;
-                            result.data = new { token = RandomGenerator.Next(20), url = UrlVar.Home_Index };
+                            result.data = new { token = RandomGenerator.Next(20), url = string.IsNullOrEmpty(returnUrl) ? UrlVar.Home_Index : returnUrl };
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                             var userInfo = new UserInfo
                             {
@@ -69,7 +69,7 @@ namespace GrainManage.Web.Controllers
                             userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
                             var agent = string.IsNullOrEmpty(returnUrl) ? 0 : 1;
                             Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId, agent), userInfo, expireAt);
-                            UserUtil.SaveToClient(Response.Cookies, userInfo, agent);
+                            UserUtil.WriteToCookie(Response.Cookies, userInfo, agent);
                             level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
                         }
@@ -353,6 +353,7 @@ namespace GrainManage.Web.Controllers
                 model.Email = input.Email;
                 model.Weixin = input.Weixin;
                 model.Gender = input.Gender;
+                model.Address = input.Address;
                 model.Status = input.Status;
                 model.Roles = input.Roles != null && input.Roles.Any() ? string.Join(",", input.Roles) : string.Empty;
                 model.Remark = input.Remark;
@@ -404,6 +405,15 @@ namespace GrainManage.Web.Controllers
             {
                 result.data = new { dto.UserName, dto.RealName, dto.Gender, dto.Mobile, dto.QQ, dto.Weixin, dto.Email, dto.RoleNames, dto.CompId, ShopName = comp.Name, ShopAddress = comp.Address, comp.ImgName };
             }
+            SetResponse(s => s.Success, result);
+            return JsonNet(result, true);
+        }
+        public ActionResult SimpleInfo()
+        {
+            var result = new BaseOutput();
+            var userRepo = GetRepo<User>();
+            var user = userRepo.GetFiltered(f => f.Id == UserId).First();
+            result.data = new { user.Mobile, user.Address };
             SetResponse(s => s.Success, result);
             return JsonNet(result, true);
         }

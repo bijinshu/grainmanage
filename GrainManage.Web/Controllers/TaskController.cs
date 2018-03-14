@@ -16,28 +16,6 @@ namespace GrainManage.Web.Controllers
     public class TaskController : BaseController
     {
         [AllowAnonymous, CheckIP]
-        public IActionResult ActivateUser()
-        {
-            var userRepo = GetRepo<User>();
-            Expression<Func<User, bool>> myFilter = ExpressionBuilder.Where<User>(f => f.CompId == 0 && f.CreatedBy > 0);
-            var list = userRepo.GetFiltered(myFilter, true).ToList();
-            if (list.Any())
-            {
-                foreach (var item in list)
-                {
-                    if (item.Roles != null && item.Roles.Any())
-                    {
-                        var array = item.Roles.Split(",");
-                        if (array.Any(a => a == "3"))
-                        {
-                            item.CompId = item.Id;
-                        }
-                    }
-                }
-            }
-            return Content($"激活商户：本次共获取到{list.Count}条数据");
-        }
-        [AllowAnonymous, CheckIP]
         public IActionResult RefreshDbUrl()
         {
             var urlRepo = GetRepo<Address>();

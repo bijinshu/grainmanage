@@ -19,11 +19,11 @@ namespace GrainManage.Web.Common
         {
             if (expires > 0)
             {
-                cookies.Append(strName, UrlEncode(strValue), new CookieOptions { Expires = DateTime.Now.AddMinutes(expires) });
+                cookies.Append(strName, strValue, new CookieOptions { Expires = DateTime.Now.AddMinutes(expires) });
             }
             else
             {
-                cookies.Append(strName, UrlEncode(strValue));
+                cookies.Append(strName, strValue);
             }
         }
         public static void Write(IResponseCookies cookies, string strName, Dictionary<string, string> dic, int expires = 0)
@@ -46,7 +46,7 @@ namespace GrainManage.Web.Common
         /// <returns>cookie值</returns>
         public static string Get(IRequestCookieCollection cookies, string strName)
         {
-            return cookies != null && cookies[strName] != null ? UrlDecode(cookies[strName]) : string.Empty;
+            return cookies != null && cookies[strName] != null ? cookies[strName]: string.Empty;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace GrainManage.Web.Common
         {
             if (cookies != null && cookies[strName] != null)
             {
-                var str = UrlDecode(cookies[strName]);
+                var str = cookies[strName];
                 var queryList = str.Split('&');
                 if (queryList != null && queryList.Any())
                 {

@@ -1,0 +1,79 @@
+﻿<modal-dialog id="newOrderModal">
+    <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">创建订单</h4>
+    <div slot="body" class="form-horizontal" role="form" style="margin-top:10px;">
+        <div class="form-group">
+            <label for="CompanyName" class="col-md-3 control-label hidden-xs hidden-sm">店铺名称</label>
+            <div class="col-md-8">
+                <input v-model="frm.CompName" type="text" class="form-control" id="CompanyName">
+            </div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
+            <label for="Mobile" class="col-md-3 control-label hidden-xs hidden-sm">我的手机号码</label>
+            <div class="col-md-8">
+                <input v-model="frm.Mobile" type="text" class="form-control" id="Mobile" placeholder="请输入我的手机号码">
+            </div>
+            <span v-if="!isPhoneValid" class="col-md-push-3 col-md-8" style="color:red">手机号码格式不正确</span>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">我的地址</label>
+            <div class="col-md-8">
+                <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入我的地址">
+            </div>
+        </div>
+        <div class="form-group" title="产品详情">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">我的产品</label>
+            <div class="col-md-8">
+                <form v-for="(detail,index) in frm.Details" style="border:solid 1px;margin-bottom:2px;">
+                    <div class="form-group">
+                        <div class="col-md-9"> </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-danger btn-sm btn-block" v-if="frm.Details.length>1" v-on:click.stop.prevent="delDetailForm(index)">删除</a>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:-20px;" title="选择产品">
+                        <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
+                        <div class="col-md-8">
+                            <label class="checkbox-inline" v-for="item in detail.ProductList" v-on:click.stop="setPrice(detail)">
+                                <input v-bind:value="item.Id" v-model="detail.ProductId" type="radio"><span>{{item.Name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" title="产品价格">
+                        <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.Price" disabled type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
+                        </div>
+                    </div>
+                    <div class="form-group" v-bind:class="{'has-error':!detail.Weight||detail.Weight<=0}" title="预估重量(斤)">
+                        <label for="Weight" class="col-md-3 control-label hidden-xs hidden-sm">预估重量</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.Weight" type="number" step="20" class="form-control" id="Weight" placeholder="请输入重量(斤)">
+                        </div>
+                        <span v-if="!detail.Weight||detail.Weight<=0" class="col-md-push-3 col-md-8" style="color:red;">重量必须为大于0的数字(最多两位小数)</span>
+                    </div>
+                    <div class="form-group" title="预估总金额(元)">
+                        <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">计算金额</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="getMoney(detail)" type="number" disabled class="form-control" id="TotalMoney" placeholder="计算金额">
+                        </div>
+                    </div>
+                </form>
+                <button class="btn btn-warning btn-block" style="margin-top:2px;" v-on:click="addNewDetailForm">继续添加</button>
+            </div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
+            <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>
+            <div class="col-md-8">
+                <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
+            </div>
+            <span v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">附加信息不能超过200个字符</span>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-3">
+                <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+                <button class="btn btn-primary pull-right" v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled">保存</button>
+            </div>
+        </div>
+    </div>
+    <div slot="footer" style="display:none"></div>
+</modal-dialog>

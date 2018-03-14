@@ -8,6 +8,10 @@ namespace GrainManage.Web.Services
 {
     public class AddressService
     {
+        /// <summary>
+        /// 获取待监控地址
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetUrl()
         {
             var db = new GrainManageDB();

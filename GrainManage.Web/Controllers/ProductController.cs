@@ -201,11 +201,11 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
-        public IActionResult List()
+        public IActionResult List(int? compId)
         {
             var repo = GetRepo<Product>();
-            var currentUser = CurrentUser;
-            var list = repo.GetFiltered(f => f.Status == Status.Enabled && f.Source == 0 && f.CompId == currentUser.CompId).Select(s => new { s.Id, s.Name, s.Price }).ToList();
+            var companyId = compId.HasValue ? compId.Value : CookieUser.CompId;
+            var list = repo.GetFiltered(f => f.Status == Status.Enabled && f.Source == 0 && f.CompId == companyId).Select(s => new { s.Id, s.Name, s.Price }).ToList();
             return JsonNet(list);
         }
     }

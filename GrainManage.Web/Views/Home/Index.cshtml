@@ -112,11 +112,13 @@
             </div>
         </div>
     </div>
-    @if (Model.CompId != 0)
-    {
-        @Html.Partial("_CompanyDetail")
-    }
-    <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    <div v-cloak>
+        @if (Model.CompId != 0)
+        {
+            @Html.Partial("_CompanyDetail")
+        }
+        <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    </div>
 </div>
 <script src="~/js/Crypto/sha1.js"></script>
 <script>

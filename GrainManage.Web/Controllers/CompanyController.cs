@@ -132,7 +132,6 @@ namespace GrainManage.Web.Controllers
                     model.Address = input.Address;
                     if (imgFile != null && imgFile.Length > 0)
                     {
-                        var oldImgName = model.ImgName;
                         model.ImgName = MD5Encrypt.Encrypt(imgFile.OpenReadStream()) + Path.GetExtension(imgFile.FileName);
                         var filePath = GetImagePath(model.ImgName);
                         if (!System.IO.File.Exists(filePath))

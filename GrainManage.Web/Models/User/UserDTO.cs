@@ -16,6 +16,7 @@ namespace GrainManage.Web.Models.User
         public string Email { get; set; }
         public string QQ { get; set; }
         public string Weixin { get; set; }
+        public string Address { get; set; }
         public List<int> Roles { get; set; }
         public string RoleNames { get; set; }
         public string Remark { get; set; }
