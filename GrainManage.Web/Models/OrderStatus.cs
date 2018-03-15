@@ -11,7 +11,7 @@ namespace GrainManage.Web.Models
         public const int WaittingForReceive = 1;
         public const int Received = 2;
         public const int Success = 3;
-        public const int Failed = 4;
+        public const int Canceled = 4;
         public const int Refused = 5;
     }
 }

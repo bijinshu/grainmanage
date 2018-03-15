@@ -91,6 +91,16 @@
         "url": "/Order/Edit"
       },
       {
+        "id": "order.detail",
+        "text": "详细",
+        "url": "/Order/Detail"
+      },
+      {
+        "id": "order.approve",
+        "text": "审核",
+        "url": "/Order/ChangeStatus"
+      },
+      {
         "id": "order.delete",
         "text": "删除",
         "url": "/Order/Delete"

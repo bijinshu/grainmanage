@@ -22,18 +22,16 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var roleRepo = GetRepo<Role>();
-            int total = 0;
             Expression<Func<Role, bool>> myFilter = ExpressionBuilder.Where<Role>(f => f.Level < Level);
             if (!string.IsNullOrEmpty(input.Name))
             {
                 myFilter = myFilter.And(f => f.Name.Contains(input.Name));
             }
-            var list = roleRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter).ToList();
-            result.total = total;
-            var dtoList = MapTo<List<RoleDto>>(list);
-            result.data = dtoList;
-            if (dtoList.Any())
+            var list = roleRepo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter).ToList();
+            if (list.Any())
             {
+                result.total = total;
+                result.data = MapTo<List<RoleDto>>(list);
                 SetResponse(s => s.Success, input, result);
             }
             else

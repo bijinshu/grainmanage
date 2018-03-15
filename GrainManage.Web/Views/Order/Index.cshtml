@@ -1,1 +1,233 @@
-﻿
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+@{
+    ViewBag.Title = "订单管理";
+}
+<div class="container" id="orderInfo">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control" v-model="search.Mobile" placeholder="请输入手机号码" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control" v-model="search.Address" placeholder="请输入地址" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm hidden-md">开始时间：</label>
+                        <input type="date" class="form-control" id="StartTime" placeholder="请选择开始时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm hidden-md">终止时间：</label>
+                        <input type="date" class="form-control" id="EndTime" placeholder="请选择终止时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.Status" class="form-control">
+                            <option value="null">请选择状态</option>
+                            <option value="1">待接单</option>
+                            <option value="2">已接单</option>
+                            <option value="3">交易成功</option>
+                            <option value="4">已取消</option>
+                            <option value="5">已拒绝</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">
+                        订单列表
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>客户姓名</th>
+                            <th>客户号码</th>
+                            <th>客户地址</th>
+                            <th>出售产品</th>
+                            <th>预估金额</th>
+                            <th>成交金额</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list" :key="item.Id">
+                            <td>{{item.Creator}}</td>
+                            <td>{{item.Mobile}}</td>
+                            <td>{{item.Address}}</td>
+                            <td><span v-for="(item2,index) in item.Details">{{item2|productName(index,item.Details.length)}}</span></td>
+                            <td>{{item.TotalMoney}}</td>
+                            <td>{{item.ActualMoney}}</td>
+                            <td style="color:blue">{{item.Status|getStatus}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>
+                                @if (UrlVar.Has(Model.Level, UrlVar.Order_Detail, Model.Urls))
+                                {
+                                    <a v-if="item.Status>0" style="cursor:pointer" v-on:click="showOrderDetail(item)">详细</a>
+                                }
+                                @if (UrlVar.Has(Model.Level, UrlVar.Order_Edit, Model.Urls))
+                                {
+                                    <a v-if="item.CanModify&&item.Status==2" style="cursor:pointer" v-on:click="showTradeDetail(item)">开始交易</a>
+                                }
+                                @if (UrlVar.Has(Model.Level, UrlVar.Order_ChangeStatus, Model.Urls))
+                                {
+                                    <a v-if="item.CanModify&&item.Status==1" style="cursor:pointer" v-on:click="changeStatus(item,2)">接受</a>
+                                    <a v-if="item.CanModify&&item.Status==1" style="cursor:pointer" v-on:click="changeStatus(item,5)">拒绝</a>
+                                    <a v-if="item.CanModify&&item.Status==2" style="cursor:pointer" v-on:click="changeStatus(item,4)">取消</a>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    <div v-cloak>
+        @if (UrlVar.Has(Model.Level, UrlVar.Order_Detail, Model.Urls))
+        {
+            @Html.Partial("_OrderDetail")
+        }
+        @if (UrlVar.Has(Model.Level, UrlVar.Order_Edit, Model.Urls))
+        {
+            @Html.Partial("_TradeDetail")
+        }
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#orderInfo",
+            data: {
+                msg: '',
+                total: 0,
+                list: [],
+                search: { Mobile: '', Address: '', Status: null, StartTime: null, EndTime: null, PageIndex: 0, PageSize: 10 },
+                currentItem: {},
+                IsDisabled: false,
+                isFirstTime: true,
+                AlertTitle: '',
+                PanelTitle: ''
+            },
+            methods: {
+                getData: function () {
+                    this.search.StartTime = $("#StartTime").val();
+                    this.search.EndTime = $("#EndTime").val();
+                    $.post('@UrlVar.Order_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1 && !this.isFirstTime) {
+                            this.showAlert(result.msg);
+                        }
+                        this.isFirstTime = false;
+                    }.bind(this));
+                },
+                showTradeDetail: function (item) {
+                    this.currentItem = item;
+                    for (var i = 0; i < this.currentItem.Details.length; i++) {
+                        item.Details[i].ActualPrice = item.Details[i].Price;
+                        item.Details[i].ActualWeight = '';
+                        item.Details[i].ActualMoney = '';
+                    }
+                    this.showPanel("#saveOrderModal");
+                },
+                showOrderDetail: function (item) {
+                    this.currentItem = item;
+                    this.showPanel("#orderInfoModal");
+                },
+                save: function () {
+                    this.IsDisabled = true;
+                    $.post('@UrlVar.Order_Edit', this.currentItem).always(function (result, status) {
+                          this.IsDisabled = false;
+                          if (result.code == 1) {
+                             this.getData();
+                              this.hidePanel("#saveOrderModal");
+                          }
+                          else {
+                            this.showAlert(result.msg);
+                          }
+                         }.bind(this));
+                },
+                changeStatus: function (item, status) {
+                    $.post('@UrlVar.Order_ChangeStatus', { id: item.Id, status: status }).always(function (result, status) {
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                getActualMoney(detail) {
+                    if (detail && detail.ActualWeight && detail.ActualPrice) {
+                        var result = (detail.ActualWeight * detail.ActualPrice).toFixed(2);
+                        return parseInt(result) == result ? parseInt(result) : result;
+                    }
+                    return 0;
+                },
+                setActualMoney(detail) {
+                    if (detail && detail.ActualWeight && detail.ActualPrice) {
+                        var result = (detail.ActualWeight * detail.ActualPrice).toFixed(2);
+                        detail.ActualMoney= parseInt(result) == result ? parseInt(result) : result;
+                    } else {
+                        detail.ActualMoney = 0;
+                    }
+                }
+            },
+            computed: {
+                isProductNameValid: function () {
+                    return (/^.{1,20}$/g).test(this.frm.Name);
+                },
+                isPriceValid: function () {
+                    return (/^\d+(.\d{1,4})?$/g).test(this.frm.Price) && this.frm.Price > 0;
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
+                }
+            },
+            filters: {
+                productName: function (value, index, length) {
+                    if (index == length - 1) {
+                        return value.ProductName + '(' + value.Weight + ')'
+                    }
+                    else {
+                        return value.ProductName + '(' + value.Weight + ')、'
+                    }
+                },
+                getStatus: function (value) {
+                    switch (value) {
+                        case 1:
+                            return '待接单';
+                        case 2:
+                            return '已接单';
+                        case 3:
+                            return '交易成功';
+                        case 4:
+                            return '已取消';
+                        case 5:
+                            return '已拒绝';
+                        default:
+                            return '未定义';
+                    }
+                }
+            },
+            created: function () {
+                this.getData();
+            }
+        })
+    })
+</script>

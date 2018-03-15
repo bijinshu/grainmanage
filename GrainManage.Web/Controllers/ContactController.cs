@@ -45,11 +45,7 @@ namespace GrainManage.Web.Controllers
             int total = 0;
             var repo = GetRepo<Contact>();
             var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
-            if (!list.Any())
-            {
-                SetResponse(s => s.NoData, input, result);
-            }
-            else
+            if (list.Any())
             {
                 result.total = total;
                 var tradeRepo = GetRepo<Trade>();
@@ -70,6 +66,10 @@ namespace GrainManage.Web.Controllers
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.NoData, input, result);
             }
             return JsonNet(result);
         }
@@ -94,18 +94,17 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Address.Contains(input.Address));
             }
-            int total = 0;
             var repo = GetRepo<Contact>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
-            if (!list.Any())
-            {
-                SetResponse(s => s.NoData, input, result);
-            }
-            else
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
+            if (list.Any())
             {
                 result.total = total;
                 result.data = list.Select(s => new { s.Id, s.ContactName, s.Mobile, s.Address });
                 SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.NoData, input, result);
             }
             return JsonNet(result);
         }

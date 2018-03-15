@@ -14,6 +14,10 @@ namespace GrainManage.Web.Models.Order
         public decimal Price { get; set; }
         public decimal Weight { get; set; }
         public decimal TotalMoney { get; set; }
+        public decimal ActualPrice { get; set; }
+        public decimal ActualWeight { get; set; }
+        public decimal ActualMoney { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

@@ -44,13 +44,12 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Status == input.Status);
             }
-            int total = 0;
             var now = DateTime.Now;
-            var list = productRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
-            result.total = total;
-            var dtoList = MapTo<List<ProductDto>>(list);
-            if (dtoList.Any())
+            var list = productRepo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
+            if (list.Any())
             {
+                result.total = total;
+                var dtoList = MapTo<List<ProductDto>>(list);
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
                 var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");

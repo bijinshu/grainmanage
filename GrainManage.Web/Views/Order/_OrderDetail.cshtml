@@ -1,0 +1,80 @@
+﻿<modal-dialog id="orderInfoModal">
+    <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{currentItem.CompName}}-订单详情</h4>
+    <div slot="body" class="form-horizontal" role="form" style="margin-top:10px;">
+        <div class="form-group">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">客户号码</label>
+            <div class="col-md-8">
+                <input v-bind:value="currentItem.Mobile" disabled type="text" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">客户地址</label>
+            <div class="col-md-8">
+                <input v-bind:value="currentItem.Address" disabled type="text" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">金额</label>
+            <div class="col-md-8">
+                <input v-bind:value="'预估：'+currentItem.TotalMoney+'    实际：'+currentItem.ActualMoney" disabled type="text" class="form-control">
+            </div>
+        </div>
+        <div class="form-group" title="出售产品列表">
+            <div class="col-md-11">
+                <form v-for="(detail,index) in currentItem.Details" style="margin-bottom:2px;">
+                    <div class="form-group" v-if="currentItem.Details&&currentItem.length>0">
+                        <div class="col-lg-push-4 col-md-7" style="color:red;font-weight:bold;text-align:center;"> 第 {{index+1}} 个产品 </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">产品名称</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.ProductName" disabled type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">下单价格</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.Price" disabled type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">预估重量(斤)</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.Weight" disabled type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">成交价格</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.ActualPrice" disabled type="number" step="0.01" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">实际重量(斤)</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.ActualWeight" disabled type="number" step="20" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">成交金额</label>
+                        <div class="col-md-8">
+                            <input v-bind:value="detail.ActualMoney" disabled type="number" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="form-group" v-if="currentItem.Remark">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">客户备注信息</label>
+            <div class="col-md-8">
+                <textarea v-bind:value="currentItem.Remark" disabled class="form-control" rows="4" id="Remark"></textarea>
+            </div>
+        </div>
+        <div class="form-group" style="margin:-20px;">
+            <div class="col-md-8 col-md-offset-3">
+                <button class="btn btn-info pull-right" data-dismiss="modal"> 关闭</button>
+            </div>
+        </div>
+    </div>
+    <div slot="footer" style="display:none"></div>
+</modal-dialog>

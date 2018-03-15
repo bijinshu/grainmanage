@@ -126,20 +126,24 @@
                         detail.ProductName = existedItem ? existedItem.Name : '';
                     },
                     save: function () {
-                        this.IsDisabled = true;
-                        var data = { CompId: this.frm.CompId, CompName: this.frm.CompName, Mobile: this.frm.Mobile, Address: this.frm.Address, Remark: this.frm.Remark, Details: [] };
-                        for (var i = 0; i < this.frm.Details.length; i++) {
-                            var item = this.frm.Details[i];
-                            data.Details.push({ ProductId: item.ProductId, ProductName: item.ProductName, Price: item.Price, Weight: item.Weight });
+                        if (this.isPhoneValid && this.isRemarkValid) {
+                             this.IsDisabled = true;
+                             var data = { CompId: this.frm.CompId, CompName: this.frm.CompName, Mobile: this.frm.Mobile, Address: this.frm.Address, Remark: this.frm.Remark, Details: [] };
+                             for (var i = 0; i < this.frm.Details.length; i++) {
+                                 var item = this.frm.Details[i];
+                                 data.Details.push({ ProductId: item.ProductId, ProductName: item.ProductName, Price: item.Price, Weight: item.Weight });
+                             }
+                             $.post('@UrlVar.Order_New', data).done(function (result, status) {
+                                 this.IsDisabled = false;
+                                 if (result.code==1) {
+                                     this.hidePanel("#newOrderModal");
+                                 } else {
+                                     this.showAlert(result.msg);
+                                 }
+                              }.bind(this));
+                        } else {
+                            this.showAlert("电话号码或备注信息格式不正确");
                         }
-                        $.post('@UrlVar.Order_New', data).done(function (result, status) {
-                            this.IsDisabled = false;
-                            if (result.code==1) {
-                                this.hidePanel("#newOrderModal");
-                            } else {
-                                this.showAlert(result.msg);
-                            }
-                         }.bind(this));
                     },
                     addNewDetailForm: function () {
                         var newDetail = this.newDetailForm();

@@ -113,8 +113,24 @@ namespace GrainManage.Web
         [Message("存在未填写重量的产品")]
         public readonly int NoWeight = 1003;
         [Message("禁止店铺管理员和员工给自己店铺刷单")]
-        public readonly int NoValidOrderUser = 1004;
+        public readonly int NoOrderCompSelf = 1004;
         [Message("今日已发送过该类订单")]
         public readonly int OrderSended = 1005;
+        [Message("不能处理他人店铺的订单")]
+        public readonly int NotSelfOrder = 1006;
+        [Message("该订单不存在")]
+        public readonly int OrderNotExisted = 1007;
+        [Message("该订单已处理结束")]
+        public readonly int OrderFinished = 1008;
+        [Message("实际重量不正确")]
+        public readonly int ActualWeightNotValid = 1009;
+        [Message("实际价格不正确")]
+        public readonly int ActualPriceNotValid = 1010;
+        [Message("实际成交金额不正确")]
+        public readonly int ActualMoneyNotValid = 1011;
+        [Message("存在非法的订单明细")]
+        public readonly int DetailIdNotValid = 1012;
+        [Message("该订单无明细信息")]
+        public readonly int NoOrderDetail = 1013;
     }
 }

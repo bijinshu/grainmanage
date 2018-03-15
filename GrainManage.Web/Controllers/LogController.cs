@@ -20,7 +20,6 @@ namespace GrainManage.Web.Controllers
                 return View(CurrentUser);
             }
             var result = new BaseOutput();
-            int total = 0;
             var filter = ExpressionBuilder.Where<ExceptionLog>(f => true);
             if (!string.IsNullOrEmpty(input.Path))
             {
@@ -36,7 +35,7 @@ namespace GrainManage.Web.Controllers
                 filter = filter.And(f => f.CreatedAt < input.EndTime.Value);
             }
             var repo = GetRepo<ExceptionLog>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, filter);
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, filter);
             result.total = total;
             if (list.Any())
             {
@@ -56,7 +55,6 @@ namespace GrainManage.Web.Controllers
                 return View(CurrentUser);
             }
             var result = new BaseOutput();
-            int total = 0;
             var filter = ExpressionBuilder.Where<ActionLog>(f => f.Level <= Level);
             if (!string.IsNullOrEmpty(input.Name))
             {
@@ -76,10 +74,10 @@ namespace GrainManage.Web.Controllers
                 filter = filter.And(f => f.StartTime < input.EndTime.Value);
             }
             var repo = GetRepo<ActionLog>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, filter);
-            result.total = total;
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, filter);
             if (list.Any())
             {
+                result.total = total;
                 result.data = list;
                 SetResponse(s => s.Success, result);
             }
@@ -96,7 +94,6 @@ namespace GrainManage.Web.Controllers
                 return View(CurrentUser);
             }
             var result = new BaseOutput();
-            int total = 0;
             var filter = ExpressionBuilder.Where<JobLog>(f => true);
             if (!string.IsNullOrEmpty(input.Name))
             {
@@ -112,10 +109,10 @@ namespace GrainManage.Web.Controllers
                 filter = filter.And(f => f.StartTime < input.EndTime.Value);
             }
             var repo = GetRepo<JobLog>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, filter);
-            result.total = total;
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, filter);
             if (list.Any())
             {
+                result.total = total;
                 result.data = list;
                 SetResponse(s => s.Success, result);
             }
@@ -132,7 +129,6 @@ namespace GrainManage.Web.Controllers
                 return View(CurrentUser);
             }
             var result = new BaseOutput();
-            int total = 0;
             var filter = ExpressionBuilder.Where<LoginLog>(f => f.Level <= Level);
             if (!string.IsNullOrEmpty(input.Name))
             {
@@ -148,10 +144,10 @@ namespace GrainManage.Web.Controllers
                 filter = filter.And(f => f.CreatedAt < input.EndTime.Value);
             }
             var repo = GetRepo<LoginLog>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, filter);
-            result.total = total;
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, filter);
             if (list.Any())
             {
+                result.total = total;
                 result.data = list;
                 SetResponse(s => s.Success, result);
             }

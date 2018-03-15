@@ -41,14 +41,9 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
             }
-            int total = 0;
             var repo = GetRepo<Trade>();
-            var list = repo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
-            if (!list.Any())
-            {
-                SetResponse(s => s.NoData, input, result);
-            }
-            else
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false);
+            if (list.Any())
             {
                 result.total = total;
                 var dtoList = MapTo<List<TradeDto>>(list);
@@ -69,6 +64,10 @@ namespace GrainManage.Web.Controllers
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.NoData, input, result);
             }
             return JsonNet(result, true);
         }

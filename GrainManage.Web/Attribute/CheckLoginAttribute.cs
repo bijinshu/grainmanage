@@ -1,4 +1,5 @@
 ﻿using DataBase.GrainManage.Models;
+using DataBase.GrainManage.Models.Log;
 using GrainManage.Common;
 using GrainManage.Core;
 using GrainManage.Web.Common;
@@ -11,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Web;
 
 namespace GrainManage.Web
 {
@@ -126,8 +129,27 @@ namespace GrainManage.Web
                     cacheClient.Set(CacheKey.GetUserKey(cookieUserInfo.UserId, cookieUserInfo.Agent), userInfo, expireAt);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                var logger = NLog.LogManager.GetLogger(HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8));
+                try
+                {
+                    logger.Error(ExceptionUtil.GetStackMessage(e));
+                    var model = new ExceptionLog
+                    {
+                        Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8),
+                        Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request),
+                        Message = ExceptionUtil.GetInnerestMessage(e),
+                        StackTrace = e.StackTrace,
+                        ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request),
+                        CreatedAt = DateTime.Now
+                    };
+                    LogService.AddExceptionLog(model);
+                }
+                catch (Exception ee)
+                {
+                    logger.Fatal(ExceptionUtil.GetStackMessage(ee));
+                }
             }
             return userInfo;
         }

@@ -273,13 +273,12 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Status == input.Status);
             }
-            int total = 0;
             var now = DateTime.Now;
-            var list = userRepo.GetPaged(out total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
-            result.total = total;
-            var dtoList = MapTo<List<UserDto>>(list);
-            if (dtoList.Any())
+            var list = userRepo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
+            if (list.Any())
             {
+                result.total = total;
+                var dtoList = MapTo<List<UserDto>>(list);
                 var roleRepo = GetRepo<Role>();
                 var roleIdList = dtoList.SelectMany(s => s.Roles).Distinct().ToList();
                 var roleList = roleRepo.GetFiltered(f => roleIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
