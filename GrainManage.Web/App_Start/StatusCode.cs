@@ -74,8 +74,12 @@ namespace GrainManage.Web
         public readonly int UserNotExist = 518;
 
         //Contact
-        [Message("该联系人已存在")]
+        [Message("该客户已存在")]
         public readonly int ContactExisted = 201;
+        [Message("客户名称不能为空")]
+        public readonly int ContactNameEmpty = 202;
+        [Message("联系电话不能为空")]
+        public readonly int ContactMobileEmpty = 203;
 
         //Company
         [Message("店铺名称不能为空")]
@@ -92,12 +96,14 @@ namespace GrainManage.Web
         public readonly int NotPerfectShopInfo = 702;
 
         //Product
-        [Message("改产品不存在")]
+        [Message("该产品不存在")]
         public readonly int ProductNotExisted = 801;
         [Message("产品名称不能为空")]
         public readonly int ProductNameEmpty = 802;
         [Message("产品已存在")]
         public readonly int ProductNameExisted = 803;
+        [Message("无修改他人店铺产品信息权限")]
+        public readonly int ModifyOtherCompProduct = 804;
 
         //Price
         [Message("产品价格已存在")]

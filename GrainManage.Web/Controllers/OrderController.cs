@@ -276,6 +276,10 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var repo = GetRepo<Order>();
             Expression<Func<Order, bool>> myFilter = ExpressionBuilder.Where<Order>(f => f.CreatedBy == UserId);
+            if (!string.IsNullOrEmpty(input.CompName))
+            {
+                myFilter = myFilter.And(f => f.CompName.Contains(input.CompName));
+            }
             if (input.StartTime.HasValue)
             {
                 myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);

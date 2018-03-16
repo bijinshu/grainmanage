@@ -10,8 +10,8 @@
                 <div class="modal-body">\
                   <slot name="body"><p class="text-info text-center">{{msg}}</p></slot>\
                 </div>\
-                <div class="modal-footer">\
-                    <slot name="footer"><button type="button" class="btn btn-info" data-dismiss="modal">关闭</button></slot>\
+                <div class="modal-footer" style="padding:0;">\
+                    <slot name="footer"><button type="button" style="margin:2px;" class="btn btn-info" data-dismiss="modal">关闭</button></slot>\
                 </div>\
             </div>\
         </div>\

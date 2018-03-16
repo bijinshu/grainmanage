@@ -73,15 +73,15 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        /// <summary>
+        /// 选择联系人
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public ActionResult GetList(InputSearch input)
         {
-            var currentUser = CurrentUser;
-            if (IsGetRequest)
-            {
-                return View(currentUser);
-            }
             var result = new BaseOutput();
-            Expression<Func<Contact, bool>> myFilter = f => f.CompId == currentUser.CompId;
+            Expression<Func<Contact, bool>> myFilter = f => f.CompId == CookieUser.CompId;
             if (!string.IsNullOrEmpty(input.Name))
             {
                 myFilter = myFilter.And(f => f.ContactName.Contains(input.Name));
@@ -113,20 +113,35 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             var currentUser = CurrentUser;
-            input.CreatedBy = currentUser.UserId;
-            input.CompId = currentUser.CompId;
-            SetEmptyIfNull(input);
-            var model = MapTo<Contact>(input);
             var repo = GetRepo<Contact>();
-            model = repo.Add(model);
-            result.data = model.Id;
-            if (model.Id > 0)
+            if (string.IsNullOrEmpty(input.ContactName))
             {
-                SetResponse(s => s.Success, input, result);
+                SetResponse(s => s.ContactNameEmpty, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.Mobile))
+            {
+                SetResponse(s => s.ContactMobileEmpty, input, result);
+            }
+            else if (repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.CompId == currentUser.CompId).Any())
+            {
+                SetResponse(s => s.ContactExisted, input, result);
             }
             else
             {
-                SetResponse(s => s.InsertFailed, input, result);
+                input.CreatedBy = currentUser.UserId;
+                input.CompId = currentUser.CompId;
+                SetEmptyIfNull(input);
+                var model = MapTo<Contact>(input);
+                model = repo.Add(model);
+                result.data = model.Id;
+                if (model.Id > 0)
+                {
+                    SetResponse(s => s.Success, input, result);
+                }
+                else
+                {
+                    SetResponse(s => s.InsertFailed, input, result);
+                }
             }
             return JsonNet(result);
         }
@@ -137,7 +152,20 @@ namespace GrainManage.Web.Controllers
             var currentUser = CurrentUser;
             SetEmptyIfNull(input);
             var repo = GetRepo<Contact>();
-            if (!repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CompId == currentUser.CompId).Any())
+
+            if (string.IsNullOrEmpty(input.ContactName))
+            {
+                SetResponse(s => s.ContactNameEmpty, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.Mobile))
+            {
+                SetResponse(s => s.ContactMobileEmpty, input, result);
+            }
+            else if (repo.GetFiltered(f => f.ContactName == input.ContactName && f.Mobile == input.Mobile && f.Id != input.Id && f.CompId == currentUser.CompId).Any())
+            {
+                SetResponse(s => s.ContactExisted, input, result);
+            }
+            else
             {
                 var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
                 model.ContactName = input.ContactName;
@@ -151,10 +179,6 @@ namespace GrainManage.Web.Controllers
                 repo.UnitOfWork.SaveChanges();
                 SetResponse(s => s.Success, input, result);
             }
-            else
-            {
-                SetResponse(s => s.ContactExisted, input, result);
-            }
             return JsonNet(result);
         }
 
@@ -167,11 +191,11 @@ namespace GrainManage.Web.Controllers
             if (model != null && (model.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop)))
             {
                 repo.Delete(model);
-                SetResponse(s => s.Success, null, result);
+                SetResponse(s => s.Success, result);
             }
             else
             {
-                SetResponse(s => s.DeleteFailed, null, result);
+                SetResponse(s => s.DeleteFailed, result);
             }
             return JsonNet(result);
         }

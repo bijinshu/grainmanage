@@ -8,14 +8,21 @@
         <div class="col-md-12">
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
+                    @if (Model.Level >= GlobalVar.AdminLevel)
+                    {
+                        <div class="form-group" style="margin-right:6px;">
+                            <label class="control-label hidden-xs hidden-sm">店铺名称：</label>
+                            <input type="text" class="form-control" v-model="search.CompName" placeholder="请输入店铺名称" />
+                        </div>
+                    }
                     <div class="form-group" style="margin-right:6px;">
                         <label class="control-label hidden-xs hidden-sm">产品名称：</label>
                         <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入产品名称" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <select v-model="search.Source" class="form-control">
-                            <option value="null">请选择来源/归属</option>
-                            <option value="0">店铺产品</option>
+                            <option value="null">请选择归属</option>
+                            <option value="0">私有产品</option>
                             <option value="1">系统产品</option>
                         </select>
                     </div>
@@ -45,9 +52,13 @@
                     </caption>
                     <thead>
                         <tr>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <th>店铺名称</th>
+                            }
                             <th>产品名称</th>
                             <th>产品价格</th>
-                            <th>来源/归属</th>
+                            <th>归属</th>
                             <th>备注</th>
                             <th>状态</th>
                             <th>创建时间</th>
@@ -57,9 +68,13 @@
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <td>{{item.CompName}}</td>
+                            }
                             <td>{{item.Name}}</td>
                             <td>{{item.Price}}</td>
-                            <td>{{item.Source==1?'系统':'店铺'}}</td>
+                            <td>{{item.Source==1?'系统':'私有'}}</td>
                             <td>{{item.Remark}}</td>
                             <td>{{item.Status?'启用':'禁用'}}</td>
                             <td>{{item.CreatedAt|formatTime}}</td>
@@ -75,7 +90,8 @@
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Product_Copy, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-if="item.Source>0" v-on:click="copy(item)">复制</a>
+                                    <a style="cursor:pointer;color:green;" v-if="item.Source>0&&!item.HasPrivateProduct" v-on:click="copy(item)" title="复制价格到本地">复制</a>
+                                    <a style="cursor:pointer;color:red;" v-if="item.Source>0&&item.HasPrivateProduct" v-on:click="copy(item)" title="覆盖本地价格">覆盖</a>
                                 }
                             </td>
                         </tr>
@@ -106,7 +122,7 @@
                 msg: '',
                 total: 0,
                 list: [],
-                search: { ProductName: '', Source: 0, Status: null, PageIndex: 0, PageSize: 10 },
+                search: { CompName:'', ProductName: '', Source: 0, Status: null, PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
                     Name: '',

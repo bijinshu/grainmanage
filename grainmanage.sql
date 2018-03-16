@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-15 18:42:38
+Date: 2018-03-16 16:16:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,7 +35,7 @@ CREATE TABLE `bm_company` (
 -- Records of bm_company
 -- ----------------------------
 INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'c7aaa3434441933a0965123b37d0407f.jpg', '2018-03-06 15:05:35', '2018-03-06 18:22:20');
-INSERT INTO `bm_company` VALUES ('6', '2', '泗阳粮食收购总代理', '泗阳农场90号', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
+INSERT INTO `bm_company` VALUES ('6', '2', '泗阳粮食收购总代理', '泗阳农场90号胜利大街方式来对接风雷是塑料袋看风景看到过和', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
 
 -- ----------------------------
 -- Table structure for `bm_contact`
@@ -110,13 +110,15 @@ CREATE TABLE `bm_order` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_order
 -- ----------------------------
 INSERT INTO `bm_order` VALUES ('1', '15801992799', '八集', '6', '泗阳粮食收购总代理', '832.00', '832.00', '', '3', '1', '2018-03-14 13:46:37', '2018-03-15 18:24:59');
 INSERT INTO `bm_order` VALUES ('2', '15801992799', '八集', '6', '泗阳粮食收购总代理', '729.00', '729.00', '', '3', '1', '2018-03-14 15:39:08', '2018-03-15 17:37:58');
+INSERT INTO `bm_order` VALUES ('3', '15801992799', '历史地看', '1', '八集粮食收购', '489.00', '0.00', '快点来', '5', '2', '2018-03-16 10:38:37', '2018-03-16 16:06:01');
+INSERT INTO `bm_order` VALUES ('5', '15801992799', '胜多负少', '1', '八集粮食收购', '936.00', '0.00', '松岛枫', '2', '2', '2018-03-16 10:51:22', '2018-03-16 16:05:58');
 
 -- ----------------------------
 -- Table structure for `bm_order_detail`
@@ -136,13 +138,15 @@ CREATE TABLE `bm_order_detail` (
   `CreatedBy` int(10) unsigned NOT NULL COMMENT '创建者',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_order_detail
 -- ----------------------------
 INSERT INTO `bm_order_detail` VALUES ('1', '1', '9', '小麦', '1.0400', '500.00', '520.00', '1.0400', '800.00', '832.00', '1', '2018-03-14 13:46:37');
 INSERT INTO `bm_order_detail` VALUES ('2', '2', '23', '玉米', '1.2050', '600.00', '723.00', '1.2050', '600.00', '729.00', '1', '2018-03-14 15:39:08');
+INSERT INTO `bm_order_detail` VALUES ('3', '3', '25', '花生', '2.4450', '200.00', '489.00', '0.0000', '0.00', '0.00', '2', '2018-03-16 10:38:37');
+INSERT INTO `bm_order_detail` VALUES ('7', '5', '9', '小麦', '1.0400', '900.00', '936.00', '0.0000', '0.00', '0.00', '2', '2018-03-16 10:51:22');
 
 -- ----------------------------
 -- Table structure for `bm_product`
@@ -150,8 +154,9 @@ INSERT INTO `bm_order_detail` VALUES ('2', '2', '23', '玉米', '1.2050', '600.0
 DROP TABLE IF EXISTS `bm_product`;
 CREATE TABLE `bm_product` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `CompId` int(11) NOT NULL COMMENT '店铺Id',
   `Name` varchar(20) NOT NULL COMMENT '产品名称',
+  `CompId` int(11) NOT NULL COMMENT '店铺Id',
+  `CompName` varchar(60) NOT NULL DEFAULT '' COMMENT '店铺名称',
   `Price` decimal(20,4) NOT NULL COMMENT '价格',
   `Remark` varchar(600) NOT NULL DEFAULT '' COMMENT '备注',
   `Status` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：离线 1：在线',
@@ -167,21 +172,21 @@ CREATE TABLE `bm_product` (
 -- ----------------------------
 -- Records of bm_product
 -- ----------------------------
-INSERT INTO `bm_product` VALUES ('1', '0', '小麦', '1.0400', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('2', '0', '黄豆', '1.3000', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('3', '0', '大稻', '1.2600', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('4', '0', '燕麦', '1.3000', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('5', '0', '玉米', '1.2050', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('6', '0', '花生', '2.4450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('7', '0', '菜籽', '2.2450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
-INSERT INTO `bm_product` VALUES ('8', '0', '小稻', '1.2250', '', '1', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
-INSERT INTO `bm_product` VALUES ('9', '1', '小麦', '1.0400', '', '1', '0', '2018-03-07 13:07:13', '1', '2018-03-07 14:36:24', '1');
-INSERT INTO `bm_product` VALUES ('21', '1', '大稻', '1.2600', '', '1', '0', '2018-03-07 14:47:51', '1', '2018-03-07 14:48:24', '1');
-INSERT INTO `bm_product` VALUES ('22', '1', '小稻', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', '2018-03-13 19:32:26', '1');
-INSERT INTO `bm_product` VALUES ('23', '6', '玉米', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', null, null);
-INSERT INTO `bm_product` VALUES ('24', '1', '菜籽', '2.2450', '', '1', '0', '2018-03-13 19:32:29', '1', '2018-03-13 19:32:31', '1');
-INSERT INTO `bm_product` VALUES ('25', '1', '花生', '2.4450', '', '1', '0', '2018-03-13 19:32:33', '1', '2018-03-13 19:32:36', '1');
-INSERT INTO `bm_product` VALUES ('26', '1', '玉米', '1.2050', '', '1', '0', '2018-03-13 19:32:38', '1', null, null);
+INSERT INTO `bm_product` VALUES ('1', '小麦', '0', '', '1.0400', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('2', '黄豆', '0', '', '1.3000', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('3', '大稻', '0', '', '1.2600', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('4', '燕麦', '0', '', '1.3000', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('5', '玉米', '0', '', '1.2050', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('6', '花生', '0', '', '2.4450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('7', '菜籽', '0', '', '2.2450', '', '1', '1', '2017-08-30 00:00:00', '1', null, null);
+INSERT INTO `bm_product` VALUES ('8', '小稻', '0', '', '1.2250', '', '1', '1', '2018-02-13 15:17:04', '1', '2018-03-01 17:27:25', '1');
+INSERT INTO `bm_product` VALUES ('9', '小麦', '1', '八集粮食收购', '1.0400', '', '1', '0', '2018-03-07 13:07:13', '1', '2018-03-16 15:26:32', '1');
+INSERT INTO `bm_product` VALUES ('21', '大稻', '1', '八集粮食收购', '1.2600', '', '1', '0', '2018-03-07 14:47:51', '1', '2018-03-16 15:26:28', '1');
+INSERT INTO `bm_product` VALUES ('22', '小稻', '1', '八集粮食收购', '1.2250', '', '1', '0', '2018-03-07 14:48:01', '1', '2018-03-16 15:26:25', '1');
+INSERT INTO `bm_product` VALUES ('23', '玉米', '6', '泗阳粮食收购总代理', '1.2050', '', '1', '0', '2018-03-07 14:48:47', '1', '2018-03-16 15:29:14', '2');
+INSERT INTO `bm_product` VALUES ('24', '菜籽', '1', '八集粮食收购', '2.2450', '', '1', '0', '2018-03-13 19:32:29', '1', '2018-03-16 15:26:02', '1');
+INSERT INTO `bm_product` VALUES ('25', '花生', '1', '八集粮食收购', '2.4450', '', '1', '0', '2018-03-13 19:32:33', '1', '2018-03-16 15:25:54', '1');
+INSERT INTO `bm_product` VALUES ('26', '玉米', '1', '八集粮食收购', '1.2050', '', '1', '0', '2018-03-13 19:32:38', '1', '2018-03-16 15:25:50', '1');
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -205,7 +210,7 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
@@ -243,7 +248,8 @@ INSERT INTO `bm_trade` VALUES ('54', '1', '6', '鲍菲菲', '22', '小稻', '2.6
 INSERT INTO `bm_trade` VALUES ('55', '1', '13', '文一毫', '23', '玉米', '1.2050', '367.00', '442.24', '0', '', '', '', '1', '2018-03-07 15:08:45', null);
 INSERT INTO `bm_trade` VALUES ('56', '1', '15', '毛强国', '9', '小麦', '1.0400', '600.00', '624.00', '0', '', '', '', '1', '2018-03-07 15:09:06', null);
 INSERT INTO `bm_trade` VALUES ('57', '1', '1', '张海川', '9', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-08 10:10:36', '2018-03-08 11:58:02');
-INSERT INTO `bm_trade` VALUES ('60', '1', '0', '毕建昌', '9', '小麦', '1.5000', '900.00', '939.00', '0', '', '', '', '1', '2018-03-08 12:01:48', '2018-03-08 17:43:56');
+INSERT INTO `bm_trade` VALUES ('60', '1', '0', '李建国', '9', '小麦', '1.5000', '900.00', '939.00', '0', '', '', '', '1', '2018-03-08 12:01:48', '2018-03-16 13:31:16');
+INSERT INTO `bm_trade` VALUES ('61', '1', '27', '萧见浪', '9', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-16 13:30:09', '2018-03-16 13:30:16');
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -263,7 +269,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -320,7 +326,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -439,16 +445,17 @@ CREATE TABLE `rm_user` (
   PRIMARY KEY (`Id`),
   KEY `uq_user_name` (`UserName`),
   KEY `index_mobile` (`Mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '八集', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-15 18:24:04');
-INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-15 18:17:56');
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '八集', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-16 15:28:58');
+INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-16 15:30:34');
 INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
 INSERT INTO `rm_user` VALUES ('15', 'test', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
-INSERT INTO `rm_user` VALUES ('16', 'sdfd', '1', '3dc9b89542b978ec91ea47c0b1b4ce21b54eb791', '0', '0', '收到了分', '15689245789', '', '', '', '', '5', '', '2018-03-14 11:41:02', '1', null);
+INSERT INTO `rm_user` VALUES ('16', 'sdfd', '1', '3dc9b89542b978ec91ea47c0b1b4ce21b54eb791', '0', '1', '收到了分', '15689245789', '', '', '66666', '', '5', '', '2018-03-14 11:41:02', '1', '2018-03-16 15:48:44');
+INSERT INTO `rm_user` VALUES ('17', 'sdf', '1', '736e82c9df9620cea4d9f91e6307648aedd9def3', '0', '0', '都是坑', '15856324587', '', '', '', '', '5', '', '2018-03-16 15:48:36', '1', null);
 
 -- ----------------------------
 -- Table structure for `rm_white_ip`

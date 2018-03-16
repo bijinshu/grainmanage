@@ -72,7 +72,7 @@
   },
   {
     "id": "order",
-    "text": "我的订单",
+    "text": "订单管理",
     "asTop": true,
     "children": [
       {
@@ -134,7 +134,7 @@
       },
       {
         "id": "product.copy",
-        "text": "复制",
+        "text": "复制/覆盖",
         "url": "/Product/Copy"
       }
     ]

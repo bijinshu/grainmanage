@@ -19,10 +19,10 @@
         @if (Model.Level >= GlobalVar.AdminLevel)
         {
             <div class="form-group">
-                <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">来源/归属</label>
+                <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">归属</label>
                 <div class="col-md-8">
                     <label class="checkbox-inline">
-                        <input v-model="frm.Source" type="radio" value="0"><span>店铺</span>
+                        <input v-model="frm.Source" type="radio" value="0"><span>私有</span>
                     </label>
                     <label class="checkbox-inline">
                         <input v-model="frm.Source" type="radio" value="1"><span>系统</span>

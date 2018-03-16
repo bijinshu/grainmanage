@@ -8,6 +8,7 @@ namespace DataBase.GrainManage.Models
     {
         public int Id { get; set; }
         public int CompId { get; set; }
+        public string CompName { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Remark { get; set; }

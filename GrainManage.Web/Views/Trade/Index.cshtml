@@ -104,9 +104,6 @@
 <script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
 <script>
     $(function () {
-        var startDate = new Date();
-        startDate.setDate(startDate.getDate()-1);
-        $("#StartTime").val(startDate.format("yyyy-MM-dd"));
         new Vue({
             el: "#tradeInfo",
             data: {
@@ -289,6 +286,5 @@
                 });
             }
         })
-        $("#StartTime").val(startDate.format("yyyy-MM-dd"));
     })
 </script>

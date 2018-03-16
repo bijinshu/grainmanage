@@ -36,6 +36,10 @@ namespace GrainManage.Web.Controllers
                     myFilter = myFilter.And(f => f.CompId == currentUser.CompId || f.Source > 0);
                 }
             }
+            if (!string.IsNullOrEmpty(input.CompName))
+            {
+                myFilter = myFilter.And(f => f.CompName.Contains(input.CompName));
+            }
             if (!string.IsNullOrEmpty(input.ProductName))
             {
                 myFilter = myFilter.And(f => f.Name.Contains(input.ProductName));
@@ -49,6 +53,13 @@ namespace GrainManage.Web.Controllers
             if (list.Any())
             {
                 result.total = total;
+                var currentSysProductNameList = list.Where(f => f.Source > 0).Select(s => s.Name).ToList();//得到本次的所有系统产品
+                List<string> existPrivateProductNameList = null;
+                if (currentSysProductNameList.Any())
+                {
+                    //得到与系统产品同名的私有产品
+                    existPrivateProductNameList = productRepo.GetFiltered(f => currentSysProductNameList.Contains(f.Name) && f.Source == 0 && f.CompId == currentUser.CompId).Select(s => s.Name).ToList();
+                }
                 var dtoList = MapTo<List<ProductDto>>(list);
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
@@ -62,6 +73,14 @@ namespace GrainManage.Web.Controllers
                     if (usertDic.ContainsKey(item.CreatedBy))
                     {
                         item.Creator = usertDic[item.CreatedBy];
+                    }
+                    if (item.Source > 0 && existPrivateProductNameList != null && existPrivateProductNameList.Any(a => a == item.Name))
+                    {
+                        item.HasPrivateProduct = true;
+                    }
+                    if (currentUser.Level < GlobalVar.AdminLevel)
+                    {
+                        item.CompName = string.Empty;
                     }
                 }
                 result.data = dtoList;
@@ -94,9 +113,11 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
-                var now = DateTime.Now;
+                var compRepo = GetRepo<Company>();
+                var comp = compRepo.GetFiltered(f => f.Id == currentUser.CompId).FirstOrDefault();
+                input.CompId = currentUser.CompId;
+                input.CompName = comp == null ? string.Empty : comp.Name;
                 var model = MapTo<Product>(input);
-                model.CompId = currentUser.CompId;
                 model.CreatedBy = currentUser.UserId;
                 model.Source = input.Source;
                 model = repo.Add(model);
@@ -123,13 +144,20 @@ namespace GrainManage.Web.Controllers
             {
                 input.Source = 0;
             }
-            if (repo.GetFiltered(f => f.Name == input.Name && f.CompId == currentUser.CompId && f.Source == input.Source && f.Id != input.Id).Any())
+            if (currentUser.Level < GlobalVar.AdminLevel && input.CompId != currentUser.CompId)
+            {
+                SetResponse(s => s.ModifyOtherCompProduct, input, result);
+            }
+            else if (repo.GetFiltered(f => f.Name == input.Name && f.CompId == input.CompId && f.Source == input.Source && f.Id != input.Id).Any())
             {
                 SetResponse(s => s.ProductNameExisted, input, result);
             }
             else
             {
+                var compRepo = GetRepo<Company>();
                 var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
+                var comp = compRepo.GetFiltered(f => f.Id == model.CompId).FirstOrDefault();
+                model.CompName = comp == null ? string.Empty : comp.Name;
                 model.Name = input.Name;
                 model.Status = input.Status;
                 model.Remark = input.Remark;
@@ -171,12 +199,15 @@ namespace GrainManage.Web.Controllers
             input.Source = 0;
             SetEmptyIfNull(input);
             var repo = GetRepo<Product>();
+            var compRepo = GetRepo<Company>();
             var currentUser = CurrentUser;
+            var comp = compRepo.GetFiltered(f => f.Id == currentUser.CompId).FirstOrDefault();
+            input.CompId = currentUser.CompId;
+            input.CompName = comp == null ? string.Empty : comp.Name;
             var existedModel = repo.GetFiltered(f => f.Name == input.Name && f.CompId == currentUser.CompId && f.Source == input.Source, true).FirstOrDefault();
             if (existedModel == null)
             {
                 var model = MapTo<Product>(input);
-                model.CompId = currentUser.CompId;
                 model.CreatedBy = currentUser.UserId;
                 model.Source = input.Source;
                 model = repo.Add(model);
@@ -192,6 +223,7 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
+                existedModel.CompName = input.CompName;
                 existedModel.Price = input.Price;
                 existedModel.ModifiedAt = DateTime.Now;
                 existedModel.ModifiedBy = currentUser.UserId;
