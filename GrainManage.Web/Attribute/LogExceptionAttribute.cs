@@ -36,7 +36,9 @@ namespace GrainManage.Web
             }
             catch (Exception e)
             {
-                logger.Fatal(ExceptionUtil.GetStackMessage(e));
+                var stackMsg = ExceptionUtil.GetStackMessage(e);
+                logger.Fatal(stackMsg);
+                filterContext.Result = new JsonResult(new BaseOutput { msg = stackMsg });
             }
         }
     }

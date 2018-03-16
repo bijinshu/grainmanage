@@ -221,6 +221,37 @@
             "url": "/User/Delete"
           }
         ]
+      },
+      {
+        "id": "system.address",
+        "text": "监控地址管理",
+        "url": "/Address/Index",
+        "children": [
+          {
+            "id": "system.address.view",
+            "text": "查看"
+          },
+          {
+            "id": "system.address.add",
+            "text": "刷新数据库地址库",
+            "url": "/Address/RefreshDb"
+          },
+          {
+            "id": "system.address.add",
+            "text": "刷新缓存地址库",
+            "url": "/Address/RefreshCache"
+          },
+          {
+            "id": "system.address.edit",
+            "text": "编辑",
+            "url": "/Address/Edit"
+          },
+          {
+            "id": "system.address.delete",
+            "text": "删除",
+            "url": "/Address/Delete"
+          }
+        ]
       }
     ]
   },

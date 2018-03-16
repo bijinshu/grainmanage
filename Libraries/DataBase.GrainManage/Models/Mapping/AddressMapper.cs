@@ -11,7 +11,9 @@ namespace DataBase.GrainManage.Models.Mapping
         public void Configure(EntityTypeBuilder<Address> builder)
         {
             builder.ToTable("rm_address");
-            builder.HasKey(m => m.Url);
+            builder.HasKey(m => m.Path);
+            builder.Property(p => p.Path).IsRequired();
+            builder.Property(p => p.Remark).IsRequired();
         }
     }
 }

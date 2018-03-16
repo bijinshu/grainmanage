@@ -6,7 +6,7 @@ namespace DataBase.GrainManage.Models
 {
     public class Address
     {
-        public string Url { get; set; }
+        public string Path { get; set; }
         /// <summary>
         /// 0:不监控 1:监控 
         /// </summary>
@@ -19,6 +19,7 @@ namespace DataBase.GrainManage.Models
         /// 0:一般地址 1:公共地址
         /// </summary>
         public int TypeId { get; set; }
+        public string Remark { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
     }

@@ -1,0 +1,146 @@
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+<div class="container" id="addressInfo">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control" v-model="search.Path" placeholder="请输入接口路径" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control" v-model="search.Remark" placeholder="请输入接口说明" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">开始时间：</label>
+                        <input type="date" class="form-control" id="StartTime" placeholder="请选择开始时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">终止时间：</label>
+                        <input type="date" class="form-control" id="EndTime" placeholder="请选择终止时间" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.Address_RefreshDb, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-bind:disabled="IsDisabled" v-on:click="refreshDb"><span class="glyphicon glyphicon-refresh"></span> 刷新数据库地址库</button>
+                        }
+                        @if (UrlVar.Has(Model.Level, UrlVar.Address_RefreshCache, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-bind:disabled="IsDisabled" v-on:click="refreshCache"><span class="glyphicon glyphicon-refresh"></span> 刷新缓存地址库</button>
+                        }
+                        @if (!UrlVar.Has(Model.Level, UrlVar.Address_RefreshDb, Model.Urls) && !UrlVar.Has(Model.Level, UrlVar.Address_RefreshCache, Model.Urls))
+                        {
+                            <span>接口列表</span>
+                        }
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>接口路径</th>
+                            <th>是否监控</th>
+                            <th>是否有效</th>
+                            <th>地址类型</th>
+                            <th>接口描述</th>
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list" :key="item.Id">
+                            <td>{{item.Path}}</td>
+                            <td><input type="checkbox" v-model="item.IsWatching" /></td>
+                            <td><input type="checkbox" disabled v-model="item.IsValid" /></td>
+                            <td>
+                                <span style="color:green" v-if="item.TypeId==1">免验证</span>
+                                <span style="color:red" v-else>受保护</span>
+                            </td>
+                            <td><textarea v-bind:rows="item.Remark?3:1" style="width:100%;border:0;margin:0;padding:2px;" v-model="item.Remark"></textarea></td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.ModifiedAt|formatTime}}</td>
+                            <td><button class="btn btn-danger btn-sm" v-bind:disabled="IsDisabled" v-on:click="save(item)">保存</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    <div v-cloak>
+        <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#addressInfo",
+            data: {
+                msg: '',
+                total: 0,
+                list: [],
+                search: { Remark: '', Path: '', StartTime: null, EndTime: null, PageIndex: 0, PageSize: 10 },
+                isFirstTime: true,
+                IsDisabled: false
+            },
+            methods: {
+                getData: function () {
+                    this.search.StartTime = $("#StartTime").val();
+                    this.search.EndTime = $("#EndTime").val();
+                    $.post('@UrlVar.Address_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1 && !this.isFirstTime) {
+                            this.showAlert(result.msg);
+                        }
+                        this.isFirstTime = false;
+                    }.bind(this));
+                },
+                save: function (item) {
+                    this.IsDisabled = true;
+                    $.post('@UrlVar.Address_Edit', item).always(function (result, status) {
+                        this.IsDisabled = false;
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                },
+                refreshDb: function () {
+                    this.IsDisabled = true;
+                    $.post('@UrlVar.Address_RefreshDb').always(function (result, status) {
+                        this.IsDisabled = false;
+                        this.getData();
+                        this.showAlert(result.msg);
+                    }.bind(this));
+                },
+                refreshCache: function () {
+                    this.IsDisabled = true;
+                    $.post('@UrlVar.Address_RefreshCache').always(function (result, status) {
+                        this.IsDisabled = false;
+                        this.getData();
+                        this.showAlert(result.msg);
+                    }.bind(this));
+                }
+            },
+            created: function () {
+                this.getData();
+            }
+        })
+    })
+</script>

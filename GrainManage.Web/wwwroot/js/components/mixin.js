@@ -30,7 +30,7 @@
         },
         filters: {
             formatTime: function (value) {
-                return value.replace('T', ' ');
+                return value ? value.replace('T', ' ') : '';
             }
         }
     })

@@ -73,7 +73,7 @@ namespace GrainManage.Web
             {
                 inputPara = HttpUtility.UrlDecode(request.QueryString.Value?.TrimStart('?'), Encoding.UTF8);
             }
-            else if (request.Method == "POST")
+            else if (request.Method == "POST" && request.ContentLength > 0)
             {
                 inputPara = GetJson(GetFormData(request.Form));
             }

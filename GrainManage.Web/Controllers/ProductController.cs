@@ -48,7 +48,6 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Status == input.Status);
             }
-            var now = DateTime.Now;
             var list = productRepo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
             if (list.Any())
             {
@@ -155,16 +154,23 @@ namespace GrainManage.Web.Controllers
             else
             {
                 var compRepo = GetRepo<Company>();
-                var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
-                var comp = compRepo.GetFiltered(f => f.Id == model.CompId).FirstOrDefault();
-                model.CompName = comp == null ? string.Empty : comp.Name;
-                model.Name = input.Name;
-                model.Status = input.Status;
-                model.Remark = input.Remark;
-                model.ModifiedAt = DateTime.Now;
-                model.ModifiedBy = currentUser.UserId;
-                repo.UnitOfWork.SaveChanges();
-                SetResponse(s => s.Success, input, result);
+                var model = repo.GetFiltered(f => f.Id == input.Id, true).FirstOrDefault();
+                if (model != null)
+                {
+                    var comp = compRepo.GetFiltered(f => f.Id == model.CompId).FirstOrDefault();
+                    model.CompName = comp == null ? string.Empty : comp.Name;
+                    model.Name = input.Name;
+                    model.Status = input.Status;
+                    model.Remark = input.Remark;
+                    model.ModifiedAt = DateTime.Now;
+                    model.ModifiedBy = currentUser.UserId;
+                    repo.UnitOfWork.SaveChanges();
+                    SetResponse(s => s.Success, input, result);
+                }
+                else
+                {
+                    SetResponse(s => s.ProductNotExisted, input, result);
+                }
             }
             return JsonNet(result);
         }

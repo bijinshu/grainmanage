@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-16 16:16:28
+Date: 2018-03-16 20:42:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -326,7 +326,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -337,21 +337,26 @@ CREATE TABLE `log_login` (
 -- ----------------------------
 DROP TABLE IF EXISTS `rm_address`;
 CREATE TABLE `rm_address` (
-  `Url` varchar(255) NOT NULL DEFAULT '' COMMENT '地址',
+  `Path` varchar(255) NOT NULL DEFAULT '' COMMENT '接口路径',
   `IsWatching` tinyint(6) NOT NULL COMMENT '0:不监控 1:监控 ',
   `IsValid` tinyint(6) NOT NULL COMMENT '0:无效地址 1:有效地址',
-  `TypeId` smallint(6) NOT NULL COMMENT '0:一般地址 1:公共地址（免权限验证）',
+  `TypeId` smallint(6) NOT NULL COMMENT '0:受保护 1:免权限验证',
   `Remark` varchar(200) NOT NULL DEFAULT '' COMMENT '说明',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`Url`)
+  PRIMARY KEY (`Path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地址监控配置表';
 
 -- ----------------------------
 -- Records of rm_address
 -- ----------------------------
-INSERT INTO `rm_address` VALUES ('/Company/DeleteFile', '0', '1', '1', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Company/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Address/Edit', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Address/Index', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Address/Refresh', '0', '0', '0', '', '2018-03-16 20:20:12', '2018-03-16 20:35:35');
+INSERT INTO `rm_address` VALUES ('/Address/RefreshCache', '0', '1', '0', '', '2018-03-16 20:35:35', null);
+INSERT INTO `rm_address` VALUES ('/Address/RefreshDb', '0', '1', '0', '', '2018-03-16 20:35:35', null);
+INSERT INTO `rm_address` VALUES ('/Company/DeleteFile', '1', '1', '1', '框架', '2018-03-09 17:37:16', '2018-03-16 19:49:42');
+INSERT INTO `rm_address` VALUES ('/Company/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', '2018-03-16 19:34:58');
 INSERT INTO `rm_address` VALUES ('/Company/GetList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Company/New', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Contact/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
@@ -370,6 +375,12 @@ INSERT INTO `rm_address` VALUES ('/Log/DeleteException', '0', '1', '0', '', '201
 INSERT INTO `rm_address` VALUES ('/Log/ExceptionList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Log/JobList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Log/LoginList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Order/ChangeStatus', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/Detail', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/Edit', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/GetPersonalOrder', '0', '1', '1', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/Index', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/New', '0', '1', '1', '创建新订单', '2018-03-16 20:20:12', '2018-03-16 20:24:05');
 INSERT INTO `rm_address` VALUES ('/Product/Copy', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
@@ -396,6 +407,7 @@ INSERT INTO `rm_address` VALUES ('/User/Register', '1', '1', '0', '', '2018-02-1
 INSERT INTO `rm_address` VALUES ('/User/ResetPwd', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/SignIn', '0', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/SignOut', '1', '1', '1', '', '2018-02-11 16:43:27', null);
+INSERT INTO `rm_address` VALUES ('/User/SimpleInfo', '0', '1', '1', '', '2018-03-16 20:20:12', null);
 
 -- ----------------------------
 -- Table structure for `rm_role`

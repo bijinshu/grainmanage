@@ -32,16 +32,17 @@ namespace GrainManage.Web.Controllers
                 if (!string.IsNullOrEmpty(url))
                 {
                     urlList.Add(url);
-                    var model = list.FirstOrDefault(a => string.Equals(a.Url, url, StringComparison.CurrentCultureIgnoreCase));
+                    var model = list.FirstOrDefault(a => string.Equals(a.Path, url, StringComparison.CurrentCultureIgnoreCase));
                     if (model == null)
                     {
                         added++;
                         urlRepo.Add(new Address
                         {
-                            Url = url,
+                            Path = url,
                             IsWatching = false,//不监控
                             IsValid = true,//有效地址
                             TypeId = typeId,
+                            Remark = string.Empty,
                             CreatedAt = DateTime.Now
                         });
                     }
@@ -54,7 +55,7 @@ namespace GrainManage.Web.Controllers
                     }
                 }
             }
-            var invalidList = list.Where(f => !urlList.Any(a => string.Equals(a, f.Url, StringComparison.CurrentCultureIgnoreCase)));
+            var invalidList = list.Where(f => !urlList.Any(a => string.Equals(a, f.Path, StringComparison.CurrentCultureIgnoreCase)));
             foreach (var item in invalidList)
             {
                 if (item.IsValid)

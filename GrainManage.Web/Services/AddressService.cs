@@ -15,7 +15,7 @@ namespace GrainManage.Web.Services
         public static List<string> GetUrl()
         {
             var db = new GrainManageDB();
-            var sql = "select Url from rm_address where IsWatching=1 and IsValid=1";
+            var sql = "select Path from rm_address where IsWatching=1 and IsValid=1";
             return db.Select<string>(sql);
         }
     }

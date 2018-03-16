@@ -93,6 +93,12 @@ namespace GrainManage.Web
         public static string Order_ChangeStatus { get { return GetUrl("/Order/ChangeStatus"); } }
         [Common]
         public static string Order_GetPersonalOrder { get { return GetUrl("/Order/GetPersonalOrder"); } }
+
+        //Address
+        public static string Address_Index { get { return GetUrl("/Address/Index"); } }
+        public static string Address_Edit { get { return GetUrl("/Address/Edit"); } }
+        public static string Address_RefreshDb { get { return GetUrl("/Address/RefreshDb"); } }
+        public static string Address_RefreshCache { get { return GetUrl("/Address/RefreshCache"); } }
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {
