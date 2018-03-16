@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <input v-model="frm.Name" type="text" class="form-control" id="RoleName" placeholder="请输入角色名称">
             </div>
-            <span v-if="!isRoleNameValid" class="col-md-push-3 col-md-8" style="color:red">角色名称只能由2-20个字符组成</span>
+            <div v-if="!isRoleNameValid" class="col-md-push-3 col-md-8" style="color:red">角色名称只能由2-20个字符组成</div>
         </div>
         <div class="form-group">
             <label for="RoleName" class="col-md-3 control-label hidden-xs hidden-sm">权限</label>
@@ -19,14 +19,14 @@
             <div class="col-md-8">
                 <input v-model.number="frm.Level" type="number" class="form-control" id="Level" placeholder="请输入级别">
             </div>
-            <span v-if="!isLevelValid" class="col-md-push-3 col-md-8" style="color:red">级别不能超过{{Level-1}}</span>
+            <div v-if="!isLevelValid" class="col-md-push-3 col-md-8" style="color:red">级别不能超过{{Level-1}}</div>
         </div>
         <div class="form-group">
             <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">备注</label>
             <div class="col-md-8">
                 <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入备注"></textarea>
             </div>
-            <span v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">备注不能超过600个字符</span>
+            <div v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">备注不能超过600个字符</div>
         </div>
     </form>
     <div slot="footer" class="form-group">

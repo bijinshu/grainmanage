@@ -52,7 +52,6 @@ namespace GrainManage.Web.Controllers
             {
                 myFilter = myFilter.And(f => f.Status == input.Status);
             }
-            var now = DateTime.Now;
             var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
             if (list.Any())
             {
@@ -110,7 +109,7 @@ namespace GrainManage.Web.Controllers
                 var orderedProductList = input.Details.Select(s => s.ProductName).Intersect(todayOrderProductNameList);
                 if (orderedProductList.Any())
                 {
-                    SetResponse(s => s.OrderSended, result, $"已经请求过收购 {string.Join(",", orderedProductList)} 了,不允许重复请求");
+                    SetResponse(s => s.OrderSended, result, $"已经请求过收购【{string.Join(",", orderedProductList)}】了,可登陆系统查看订单状态");
                 }
                 else
                 {
@@ -118,7 +117,21 @@ namespace GrainManage.Web.Controllers
                     var model = MapTo<Order>(input);
                     model.CreatedBy = UserId;
                     model.Status = OrderStatus.WaittingForReceive;
-                    var detailModelList = MapTo<List<OrderDetail>>(input.Details);
+                    var newList = new List<OrderDetailDto>();
+                    foreach (var item in input.Details)//合并重复项
+                    {
+                        var firstItem = newList.FirstOrDefault(a => a.ProductId == item.ProductId);
+                        if (firstItem == null)
+                        {
+                            newList.Add(item);
+                        }
+                        else
+                        {
+                            firstItem.Weight += item.Weight;
+                            firstItem.TotalMoney += item.TotalMoney;
+                        }
+                    }
+                    var detailModelList = MapTo<List<OrderDetail>>(newList);
                     using (var trans = repo.UnitOfWork.BeginTransaction())
                     {
                         try
@@ -251,6 +264,51 @@ namespace GrainManage.Web.Controllers
                 model.ModifiedAt = DateTime.Now;
                 repo.UnitOfWork.SaveChanges();
                 SetResponse(s => s.Success, result);
+            }
+            return JsonNet(result);
+        }
+        public ActionResult GetPersonalOrder(InputSearch input)
+        {
+            if (IsGetRequest)
+            {
+                return View();
+            }
+            var result = new BaseOutput();
+            var repo = GetRepo<Order>();
+            Expression<Func<Order, bool>> myFilter = ExpressionBuilder.Where<Order>(f => f.CreatedBy == UserId);
+            if (input.StartTime.HasValue)
+            {
+                myFilter = myFilter.And(f => f.CreatedAt >= input.StartTime);
+            }
+            if (input.EndTime.HasValue)
+            {
+                myFilter = myFilter.And(f => f.CreatedAt <= input.EndTime);
+            }
+            var list = repo.GetPaged(out int total, input.PageIndex, input.PageSize, myFilter, o => o.Id, false).ToList();
+            if (list.Any())
+            {
+                result.total = total;
+                var dtoList = MapTo<List<OrderDto>>(list);
+                var detailRepo = GetRepo<OrderDetail>();
+                var idList = list.Select(s => s.Id).ToList();
+                var detailList = detailRepo.GetFiltered(f => idList.Contains(f.OrderId)).Select(s => new { s.ProductName, s.OrderId, s.Weight, s.ActualWeight }).ToList();
+                foreach (var item in dtoList)
+                {
+                    item.CanModify = item.CompId == CookieUser.CompId;
+                    var details = detailList.Where(f => f.OrderId == item.Id).Select(s => new OrderDetailDto
+                    {
+                        ProductName = s.ProductName,
+                        Weight = s.Weight,
+                        ActualWeight = s.ActualWeight
+                    });
+                    item.Details = details.ToList();
+                }
+                result.data = dtoList;
+                SetResponse(s => s.Success, input, result);
+            }
+            else
+            {
+                SetResponse(s => s.NoData, input, result);
             }
             return JsonNet(result);
         }

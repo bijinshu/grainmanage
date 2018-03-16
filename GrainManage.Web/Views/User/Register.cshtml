@@ -69,35 +69,35 @@
                                     <div class="col-md-8">
                                         <input v-model="frm.Mobile" type="text" class="form-control" id="Mobile" placeholder="请输入手机号码">
                                     </div>
-                                    <span v-if="!isPhoneValid" class="col-md-2" style="color:red">手机号码格式不正确</span>
+                                    <div v-if="!isPhoneValid" class="col-md-2" style="color:red">手机号码格式不正确</div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isRealNameValid}">
                                     <label for="RealName" class="col-md-2 control-label hidden-xs hidden-sm">真实姓名</label>
                                     <div class="col-md-8">
                                         <input v-model="frm.RealName" type="text" class="form-control" id="RealName" placeholder="请输入真实姓名">
                                     </div>
-                                    <span v-if="!isRealNameValid" class="col-md-2" style="color:red">真实姓名只能由2-4个汉字组成</span>
+                                    <div v-if="!isRealNameValid" class="col-md-2" style="color:red">真实姓名只能由2-4个汉字组成</div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
                                     <label for="Weixin" class="col-md-2 control-label hidden-xs hidden-sm">微信号</label>
                                     <div class="col-md-8">
                                         <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
                                     </div>
-                                    <span v-if="!isWeixinValid" class="col-md-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</span>
+                                    <div v-if="!isWeixinValid" class="col-md-2" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
                                     <label for="QQ" class="col-md-2 control-label hidden-xs hidden-sm">QQ</label>
                                     <div class="col-md-8">
                                         <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
                                     </div>
-                                    <span v-if="!isQQValid" class="col-md-2" style="color:red">QQ格式不正确</span>
+                                    <div v-if="!isQQValid" class="col-md-2" style="color:red">QQ格式不正确</div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
                                     <label for="Email" class="col-md-2 control-label hidden-xs hidden-sm">邮箱地址</label>
                                     <div class="col-md-8">
                                         <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
                                     </div>
-                                    <span v-if="!isEmailValid" class="col-md-2" style="color:red">邮箱格式不正确</span>
+                                    <div v-if="!isEmailValid" class="col-md-2" style="color:red">邮箱格式不正确</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label hidden-xs hidden-sm">性别</label>
@@ -115,14 +115,14 @@
                                     <div class="col-md-8">
                                         <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入地址">
                                     </div>
-                                    <span v-if="!isAddressValid" class="col-md-2" style="color:red">住址不能超过60个字符不正确</span>
+                                    <div v-if="!isAddressValid" class="col-md-2" style="color:red">住址不能超过60个字符不正确</div>
                                 </div>
                                 <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
                                     <label for="Remark" class="col-md-2 control-label hidden-xs hidden-sm">其他信息</label>
                                     <div class="col-md-8">
                                         <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入其他信息"></textarea>
                                     </div>
-                                    <span v-if="!isRemarkValid" class="col-md-2" style="color:red">附加信息不能超过200个字符</span>
+                                    <div v-if="!isRemarkValid" class="col-md-2" style="color:red">附加信息不能超过200个字符</div>
                                 </div>
                             </div>
                         </div>

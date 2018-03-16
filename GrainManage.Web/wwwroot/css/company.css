@@ -10,24 +10,32 @@
     text-align: center;
     font-weight: bold;
     font-family: YouYuan;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.3);
 }
 
 .company-logo {
-    width: 50%;
-    height: 100px;
+    width: 100%;
     display: inline-block;
+    object-fit: cover;
 }
 
 .company-main {
-    width: 50%;
-    float: right;
     padding-left: 8px;
     overflow-y: auto;
+    height: 80px;
+    box-sizing: border-box;
 }
 
+    .company-main div:first-child {
+        font-weight: bold;
+        color: red;
+        font-style: italic;
+    }
+
 .company-address {
-    clear: both;
+    overflow-y: hidden;
+    height: 40px;
+    box-sizing: border-box;
 }
 
     .company-address span:first-child {

@@ -9,14 +9,14 @@
             <div class="col-md-8">
                 <input v-model="frmComp.Name" type="text" class="form-control" id="CompanyName" name="Name" placeholder="请输入店铺名称">
             </div>
-            <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺名称只能由1-60个汉字或英文组成</span>
+            <div v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺名称只能由1-60个汉字或英文组成</div>
         </div>
         <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
             <label for="Company_Address" class="col-md-3 control-label hidden-xs hidden-sm">店铺地址</label>
             <div class="col-md-8">
                 <input v-model="frmComp.Address" type="text" class="form-control" id="Company_Address" name="Address" placeholder="请输入店铺地址">
             </div>
-            <span v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺地址不能超过200个字符</span>
+            <div v-if="!isCompanyNameValid" class="col-md-push-3 col-md-8" style="color:red">店铺地址不能超过200个字符</div>
         </div>
         <div class="form-group">
             <label for="CompImg" class="col-md-3 control-label hidden-xs hidden-sm">Logo</label>

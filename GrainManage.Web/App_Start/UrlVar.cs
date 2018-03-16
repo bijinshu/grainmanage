@@ -91,6 +91,8 @@ namespace GrainManage.Web
         public static string Order_Edit { get { return GetUrl("/Order/Edit"); } }
         public static string Order_Detail { get { return GetUrl("/Order/Detail"); } }
         public static string Order_ChangeStatus { get { return GetUrl("/Order/ChangeStatus"); } }
+        [Common]
+        public static string Order_GetPersonalOrder { get { return GetUrl("/Order/GetPersonalOrder"); } }
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {

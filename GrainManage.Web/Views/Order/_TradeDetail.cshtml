@@ -48,7 +48,7 @@
                         <div class="col-md-8">
                             <input v-model="detail.ActualWeight" type="number" step="20" class="form-control" id="ActualWeight" placeholder="实际重量(斤)">
                         </div>
-                        <span v-if="!detail.ActualWeight||detail.ActualWeight<0" class="col-md-push-4 col-md-8" style="color:red;">重量最多两位小数</span>
+                        <div v-if="!detail.ActualWeight||detail.ActualWeight<0" class="col-md-push-4 col-md-8" style="color:red;">重量最多两位小数</div>
                     </div>
                     <div class="form-group" title="实际成交金额(元)">
                         <label for="ActualMoney" class="col-md-4 control-label hidden-xs hidden-sm">成交金额</label>

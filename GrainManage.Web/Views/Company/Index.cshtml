@@ -30,22 +30,18 @@
             </div>
         </div>
         <div class="row" v-cloak>
-            <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="">
-                <div style="margin-top:2px;">
-                    <div class="company-title">
-                        {{item.CompanyName}}
-                    </div>
-                    <img v-bind:src="item.ImgName|imgUrl" class="img-circle company-logo" />
-                    <div class="company-main">
-                        <div style="font-weight:bold;color:red;font-style:italic;">经营范围：</div>
-                        <div>
-                            <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
-                        </div>
-                    </div>
-                    <div class="company-address">
-                        <span>联系地址：</span>
-                        <span>{{item.Address}}</span>
-                    </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="margin-bottom:10px;">
+                <div class="company-title">
+                    {{item.CompanyName}}
+                </div>
+                <img v-bind:src="item.ImgName|imgUrl" class="img-circle company-logo" />
+                <div class="company-main">
+                    <div>经营范围：</div>
+                    <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
+                </div>
+                <div class="company-address">
+                    <span>联系地址：</span>
+                    <span>{{item.Address}}</span>
                 </div>
                 <div style="margin-top:2px;">
                     <button class="btn btn-info btn-block" v-on:click="showOrder(item)">请求收购</button>
