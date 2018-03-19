@@ -20,7 +20,12 @@ namespace GrainManage.Web
 
         public static IWebHost BuildWebHost(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).UseUrls("http://*:5000")
+            var url = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+            if (string.IsNullOrEmpty(url))
+            {
+                url = "http://*:5000";
+            }
+            return WebHost.CreateDefaultBuilder(args).UseUrls(url)
                   .UseStartup<Startup>()
                   .Build();
         }

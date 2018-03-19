@@ -51,7 +51,7 @@
             <div v-if="!isEmailValid" class="col-md-push-3 col-md-8" style="color:red">邮箱格式不正确</div>
         </div>
         <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
-            <label for="Address" class="col-md-2 control-label hidden-xs hidden-sm">住址</label>
+            <label for="Address" class="col-md-3 control-label hidden-xs hidden-sm">住址</label>
             <div class="col-md-8">
                 <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入地址">
             </div>
@@ -72,7 +72,7 @@
             <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">角色</label>
             <div class="col-md-8">
                 <label class="checkbox-inline" v-for="role in roleList">
-                    <input v-model="frm.Roles" type="checkbox" v-bind:value="role.value"><span>{{role.text}}</span>
+                    <input v-model="frm.Roles" style="position:static;margin-left:0;" type="checkbox" v-bind:value="role.value"><span>{{role.text}}</span>
                 </label>
             </div>
         </div>

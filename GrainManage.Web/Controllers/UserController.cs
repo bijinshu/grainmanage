@@ -37,8 +37,8 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
+                var logModel = new LoginLog { UserName = input.UserName, LoginIP = HttpUtil.GetRequestHostAddress(Request) };
                 var repo = GetRepo<User>();
-                var level = 0;
                 var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
                 {
@@ -52,7 +52,6 @@ namespace GrainManage.Web.Controllers
                         else
                         {
                             account.ModifiedAt = DateTime.Now;
-                            result.data = new { token = RandomGenerator.Next(20), url = string.IsNullOrEmpty(returnUrl) ? UrlVar.Home_Index : returnUrl };
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                             var userInfo = new UserInfo
                             {
@@ -60,7 +59,7 @@ namespace GrainManage.Web.Controllers
                                 CompId = account.CompId,
                                 UserName = input.UserName,
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
-                                Token = result.data.token,
+                                Token = RandomGenerator.Next(20),
                                 ExpiredAt = expireAt.ToString("yyyy-MM-dd HH:mm:ss"),
                                 LoginIP = HttpUtil.GetRequestHostAddress(Request)
                             };
@@ -70,7 +69,7 @@ namespace GrainManage.Web.Controllers
                             var agent = string.IsNullOrEmpty(returnUrl) ? 0 : 1;
                             Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId, agent), userInfo, expireAt);
                             UserUtil.WriteToCookie(Response.Cookies, userInfo, agent);
-                            level = userInfo.Level;
+                            logModel.Level = userInfo.Level;
                             SetResponse(s => s.Success, input, result);
                         }
                     }
@@ -83,7 +82,8 @@ namespace GrainManage.Web.Controllers
                 {
                     SetResponse(s => s.NameNotExist, input, result);
                 }
-                LogService.AddLoginLog(new LoginLog { UserName = input.UserName, LoginIP = HttpUtil.GetRequestHostAddress(Request), Status = result.msg, Level = level });
+                logModel.Status = result.msg;
+                LogService.AddLoginLog(logModel);
             }
             return JsonNet(result);
         }

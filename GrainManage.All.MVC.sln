@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrainManage.Message", "Libr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrainManage.Encrypt", "Libraries\GrainManage.Encrypt\GrainManage.Encrypt.csproj", "{A9307ABB-C9FE-4BE9-986B-1150870B275E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrainManage.Dal", "Libraries\GrainManage.Dal\GrainManage.Dal.csproj", "{097D823F-5190-40E4-9D4F-0B5059970932}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrainManage.Dal", "Libraries\GrainManage.Dal\GrainManage.Dal.csproj", "{097D823F-5190-40E4-9D4F-0B5059970932}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

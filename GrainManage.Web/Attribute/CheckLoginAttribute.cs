@@ -79,11 +79,7 @@ namespace GrainManage.Web
                 }
                 if (filterContext.HttpContext.Request.Method == "GET")
                 {
-                    filterContext.Result = new ContentResult()
-                    {
-                        Content = string.Format("<script>window.location='{0}';</script>", UrlVar.User_SignIn),
-                        ContentType = "text/html; charset=utf-8"
-                    };
+                    filterContext.Result = new RedirectResult(UrlVar.User_SignIn, false);
                 }
                 else
                 {

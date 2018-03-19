@@ -71,15 +71,15 @@
                             var returnUrl = '';
                             var arrays = window.location.href.split('?');
                             if (arrays.length > 1 && arrays[1]) {
-                                returnUrl = '?' + arrays[1];
+                                returnUrl =  arrays[1];
                             }
-                            $.post('@UrlVar.User_SignIn' + returnUrl, { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
-                                this.IsDisabled = false;
+                            $.post('@UrlVar.User_SignIn'+'?' + returnUrl, { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
                                 if (result.code == 1) {
                                     this.changeRemember();
-                                    window.location.href = result.data.url;
+                                    window.location.href = returnUrl ? returnUrl.split('=')[1] : '@UrlVar.Home_Index';
                                 }
                                 else {
+                                    this.IsDisabled = false;
                                     this.msg = result.msg;
                                     $("#myModal").modal({ backdrop: 'static' });
                                 }
