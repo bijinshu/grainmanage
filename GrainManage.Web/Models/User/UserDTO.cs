@@ -7,6 +7,7 @@ namespace GrainManage.Web.Models.User
     {
         public int Id { get; set; }
         public int CompId { get; set; }
+        public string CompName { get; set; }
         public string UserName { get; set; }
         public string Pwd { get; set; }
         public int Gender { get; set; }

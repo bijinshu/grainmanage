@@ -51,6 +51,9 @@ namespace GrainManage.Web.Controllers
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
                 var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
+                var compRepo = GetRepo<Company>();
+                var compIdList = list.Select(s => s.CompId).Distinct().ToList();
+                var compList = compRepo.GetFiltered(f => compIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
                 foreach (var item in dtoList)
                 {
                     if (item.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop))
@@ -60,6 +63,11 @@ namespace GrainManage.Web.Controllers
                     if (usertDic.ContainsKey(item.CreatedBy))
                     {
                         item.Creator = usertDic[item.CreatedBy];
+                    }
+                    var comp = compList.FirstOrDefault(f => f.Id == item.CompId);
+                    if (comp != null)
+                    {
+                        item.CompName = comp.Name;
                     }
                 }
                 result.data = dtoList;

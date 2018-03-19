@@ -51,6 +51,9 @@ namespace GrainManage.Web.Controllers
                 var tradeRepo = GetRepo<Trade>();
                 var contactIdList = list.Select(s => s.Id).ToList();
                 var existedTradeList = tradeRepo.GetFiltered(f => f.CompId == currentUser.CompId && contactIdList.Contains(f.ContactId)).GroupBy(s => s.ContactId).Select(s => new { ContactId = s.Key, Count = s.Count() }).ToList();
+                var compRepo = GetRepo<Company>();
+                var compIdList = list.Select(s => s.CompId).Distinct().ToList();
+                var compList = compRepo.GetFiltered(f => compIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
                 var dtoList = MapTo<List<ContactDto>>(list);
                 foreach (var item in dtoList)
                 {
@@ -62,6 +65,11 @@ namespace GrainManage.Web.Controllers
                     if (trade != null)
                     {
                         item.TradeCount = trade.Count;
+                    }
+                    var comp = compList.FirstOrDefault(f => f.Id == item.CompId);
+                    if (comp != null)
+                    {
+                        item.CompName = comp.Name;
                     }
                 }
                 result.data = dtoList;
@@ -114,7 +122,11 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var currentUser = CurrentUser;
             var repo = GetRepo<Contact>();
-            if (string.IsNullOrEmpty(input.ContactName))
+            if (currentUser.CompId < 0)
+            {
+                SetResponse(s => s.CompanyNotFullFill, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.ContactName))
             {
                 SetResponse(s => s.ContactNameEmpty, input, result);
             }
@@ -152,8 +164,11 @@ namespace GrainManage.Web.Controllers
             var currentUser = CurrentUser;
             SetEmptyIfNull(input);
             var repo = GetRepo<Contact>();
-
-            if (string.IsNullOrEmpty(input.ContactName))
+            if (currentUser.CompId < 0)
+            {
+                SetResponse(s => s.CompanyNotFullFill, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.ContactName))
             {
                 SetResponse(s => s.ContactNameEmpty, input, result);
             }

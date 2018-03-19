@@ -282,11 +282,19 @@ namespace GrainManage.Web.Controllers
                 var roleRepo = GetRepo<Role>();
                 var roleIdList = dtoList.SelectMany(s => s.Roles).Distinct().ToList();
                 var roleList = roleRepo.GetFiltered(f => roleIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
+                var compRepo = GetRepo<Company>();
+                var compIdList = list.Select(s => s.CompId).Distinct().ToList();
+                var compList = compRepo.GetFiltered(f => compIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
                 foreach (var item in dtoList)
                 {
                     item.Pwd = null;
                     var roleNames = string.Join(",", roleList.Where(f => item.Roles.Contains(f.Id)).Select(s => s.Name));
                     item.RoleNames = roleNames;
+                    var comp = compList.FirstOrDefault(f => f.Id == item.CompId);
+                    if (comp != null)
+                    {
+                        item.CompName = comp.Name;
+                    }
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);

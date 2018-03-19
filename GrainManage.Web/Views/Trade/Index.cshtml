@@ -43,11 +43,16 @@
                     <caption style="color:red;font-weight:bolder;">
                         @if (UrlVar.Has(Model.Level, UrlVar.Trade_New, Model.Urls))
                         {
-                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新交易</button>
+                            <button type="button" v-if="productList&&productList.length>0" class="btn btn-success btn-sm" v-on:click="showAdd" v-cloak><span class="glyphicon glyphicon-plus"></span> 添加新交易</button>
                         }
                     </caption>
                     <thead>
                         <tr>
+                            <th>操作</th>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <th>店铺名称</th>
+                            }
                             <th>客户姓名</th>
                             <th>产品名称</th>
                             <th>产品价格</th>
@@ -57,21 +62,10 @@
                             <th>交易类型</th>
                             <th>交易时间</th>
                             <th>创建人</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
-                            <td v-if="item.ContactId>0">{{item.ContactName}}</td>
-                            <td style="color:red;" title="该用户不存在" v-else>{{item.ContactName}}</td>
-                            <td>{{item.ProductName}}</td>
-                            <td>{{item.Price}}</td>
-                            <td>{{item.Weight}}</td>
-                            <td>{{(item.Price*item.Weight).toFixed(2)}}</td>
-                            <td>{{item.ActualMoney}}</td>
-                            <td>{{item.TradeType==1?'出售':'收购'}}</td>
-                            <td>{{item.CreatedAt|formatTime}}</td>
-                            <td>{{item.Creator}}</td>
                             <td>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_Edit, Model.Urls))
                                 {
@@ -83,6 +77,21 @@
                                     <a style="cursor:pointer;" v-if="item.CanModify" v-on:click.stop="showDelete(item)">删除</a>
                                 }
                             </td>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <td>{{item.CompName}}</td>
+                            }
+                            <td v-if="item.ContactId>0">{{item.ContactName}}</td>
+                            <td style="color:red;" title="该用户不存在" v-else>{{item.ContactName}}</td>
+                            <td>{{item.ProductName}}</td>
+                            <td>{{item.Price}}</td>
+                            <td>{{item.Weight}}</td>
+                            <td>{{(item.Price*item.Weight).toFixed(2)}}</td>
+                            <td>{{item.ActualMoney}}</td>
+                            <td>{{item.TradeType==1?'出售':'收购'}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.Creator}}</td>
+
                         </tr>
                     </tbody>
                 </table>

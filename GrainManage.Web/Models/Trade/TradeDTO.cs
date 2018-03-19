@@ -6,6 +6,7 @@ namespace GrainManage.Web.Models.Trade
     {
         public int Id { get; set; }
         public int CompId { get; set; }
+        public string CompName { get; set; }
         public int ContactId { get; set; }
         public string ContactName { get; set; }
         public int ProductId { get; set; }

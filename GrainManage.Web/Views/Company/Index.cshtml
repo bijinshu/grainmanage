@@ -34,7 +34,7 @@
                 <div class="company-title">
                     {{item.CompanyName}}
                 </div>
-                <img v-bind:src="item.ImgName|imgUrl" class="img-circle company-logo" />
+                <img v-bind:src="item.ImgName|imgUrl" class="img-rounded company-logo" />
                 <div class="company-main">
                     <div>经营范围：</div>
                     <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>

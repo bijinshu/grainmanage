@@ -38,23 +38,21 @@
                     </caption>
                     <thead>
                         <tr>
+                            <th>操作</th>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <th>店铺名称</th>
+                            }
                             <th>客户姓名</th>
                             <th>手机号码</th>
                             <th>地址</th>
                             <th class="hidden-xs hidden-sm">微信</th>
                             <th class="hidden-xs hidden-sm">QQ</th>
                             <th class="hidden-xs hidden-sm">邮箱</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
-                            <td>{{item.ContactName}}</td>
-                            <td>{{item.Mobile}}</td>
-                            <td>{{item.Address}}</td>
-                            <td class="hidden-xs hidden-sm">{{item.Weixin}}</td>
-                            <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
-                            <td class="hidden-xs hidden-sm">{{item.Email}}</td>
                             <td>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Contact_Edit, Model.Urls))
                                 {
@@ -72,8 +70,18 @@
                                 {
                                     <a style="cursor:pointer;" v-if="item.TradeCount" v-on:click.stop="showHistory(item)">历史&nbsp;<span class="badge" style="background-color:green">{{item.TradeCount}}</span></a>
                                 }
-
                             </td>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <td>{{item.CompName}}</td>
+                            }
+                            <td>{{item.ContactName}}</td>
+                            <td>{{item.Mobile}}</td>
+                            <td>{{item.Address}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.Weixin}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.QQ}}</td>
+                            <td class="hidden-xs hidden-sm">{{item.Email}}</td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -103,7 +111,7 @@
                 total: 0,
                 list: [],
                 productList: [],
-                tradeList:[],
+                tradeList: [],
                 search: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frm: {
                     Id: 0,
@@ -117,14 +125,14 @@
                 },
                 frmTrade: {
                     ContactId: 0,
-                    ContactName:'',
+                    ContactName: '',
                     ProductId: 1,
-                    ProductName:'',
-                    Price:0,
+                    ProductName: '',
+                    Price: 0,
                     Weight: 0,
                     TradeType: 0,
-                    ActualMoney:0,
-                    Remark:''
+                    ActualMoney: 0,
+                    Remark: ''
                 },
                 currentItem: {},
                 IsDisabled: false,
@@ -191,10 +199,10 @@
                     this.frm.QQ = item.QQ;
                     this.frm.Email = item.Email;
                     this.frm.Remark = item.Remark;
-                    this.showPanel('编辑客户',"#saveContactModal");
+                    this.showPanel('编辑客户', "#saveContactModal");
                 },
                 save: function (event) {
-                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid ) {
+                    if (this.isContactNameValid && this.isEmailValid && this.isPhoneValid && this.isQQValid && this.isWeixinValid) {
                         this.IsDisabled = true;
                         var url = this.frm.Id > 0 ? '@UrlVar.Contact_Edit' : '@UrlVar.Contact_New';
                         $.post(url, this.frm).always(function (result, status) {
@@ -214,7 +222,7 @@
                 },
                 showDelete: function (item) {
                     this.currentItem = item;
-                    this.msg = "您确定要删除 [" +  item.ContactName + "]吗?";
+                    this.msg = "您确定要删除 [" + item.ContactName + "]吗?";
                     this.showPanel("#deleteDialog");
                 },
                 deleteItem: function () {
@@ -241,15 +249,15 @@
                     this.IsDisabled = true;
                     if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
                         $.post('@UrlVar.Trade_New', this.frmTrade).always(function (result, status) {
-                          this.IsDisabled = false;
-                          if (result.code == 1) {
-                              this.hidePanel("#saveTradeModal");
-                              this.getData();
-                          }
-                          else {
-                            this.showAlert(result.msg);
-                          }
-                         }.bind(this));
+                            this.IsDisabled = false;
+                            if (result.code == 1) {
+                                this.hidePanel("#saveTradeModal");
+                                this.getData();
+                            }
+                            else {
+                                this.showAlert(result.msg);
+                            }
+                        }.bind(this));
                     } else {
                         this.showAlert('价格、重量、金额必须大于0');
                     }
@@ -374,13 +382,14 @@
                     return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
                 },
                 isActualMoneyValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney > 0;
+                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney) && this.frmTrade.ActualMoney > 0;
                 },
                 isWeightValid: function () {
                     return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
                 },
                 TotalMoney: function () {
-                    return ((this.frmTrade.Price ? this.frmTrade.Price:0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0)).toFixed(2);
+                    var money = (this.frmTrade.Price ? this.frmTrade.Price : 0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0);
+                    return money == parseInt(money) ? parseInt(money) : money.toFixed(2);
                 }
             },
             created: function () {

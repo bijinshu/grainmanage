@@ -25,7 +25,8 @@ namespace GrainManage.Web
             {
                 url = "http://*:5000";
             }
-            return WebHost.CreateDefaultBuilder(args).UseUrls(url)
+            return WebHost.CreateDefaultBuilder(args).
+                   UseUrls(url)
                   .UseStartup<Startup>()
                   .Build();
         }

@@ -32,17 +32,14 @@
                     </caption>
                     <thead>
                         <tr>
+                            <th>操作</th>
                             <th>角色名称</th>
                             <th>角色级别</th>
                             <th>角色描述</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
-                            <td>{{item.Name}}</td>
-                            <td>{{item.Level}}</td>
-                            <td>{{item.Remark}}</td>
                             <td v-if="item.Level < Level">
                                 @if (UrlVar.Has(Model.Level, UrlVar.Role_Edit, Model.Urls))
                                 {
@@ -53,6 +50,9 @@
                                     <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
                                 }
                             </td>
+                            <td>{{item.Name}}</td>
+                            <td>{{item.Level}}</td>
+                            <td>{{item.Remark}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -52,6 +52,7 @@
                     </caption>
                     <thead>
                         <tr>
+                            <th>操作</th>
                             @if (Model.Level >= GlobalVar.AdminLevel)
                             {
                                 <th>店铺名称</th>
@@ -63,22 +64,10 @@
                             <th>状态</th>
                             <th>创建时间</th>
                             <th>创建人</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
                         <tr v-for="item in list" :key="item.Id">
-                            @if (Model.Level >= GlobalVar.AdminLevel)
-                            {
-                                <td>{{item.CompName}}</td>
-                            }
-                            <td>{{item.Name}}</td>
-                            <td>{{item.Price}}</td>
-                            <td>{{item.Source==1?'系统':'私有'}}</td>
-                            <td>{{item.Remark}}</td>
-                            <td>{{item.Status?'启用':'禁用'}}</td>
-                            <td>{{item.CreatedAt|formatTime}}</td>
-                            <td>{{item.Creator}}</td>
                             <td>
                                 @if (UrlVar.Has(Model.Level, UrlVar.Product_Edit, Model.Urls))
                                 {
@@ -94,6 +83,18 @@
                                     <a style="cursor:pointer;color:red;" v-if="item.Source>0&&item.HasPrivateProduct" v-on:click="copy(item)" title="覆盖本地价格">覆盖</a>
                                 }
                             </td>
+                            @if (Model.Level >= GlobalVar.AdminLevel)
+                            {
+                                <td>{{item.CompName}}</td>
+                            }
+                            <td>{{item.Name}}</td>
+                            <td>{{item.Price}}</td>
+                            <td>{{item.Source==1?'系统':'私有'}}</td>
+                            <td>{{item.Remark}}</td>
+                            <td>{{item.Status?'启用':'禁用'}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.Creator}}</td>
+
                         </tr>
                     </tbody>
                 </table>

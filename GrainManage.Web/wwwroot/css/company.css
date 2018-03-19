@@ -19,6 +19,8 @@ label.checkbox-inline, label.radio-inline {
     width: 100%;
     display: inline-block;
     object-fit: cover;
+    height:170px;
+    box-sizing:border-box;
 }
 
 .company-main {

@@ -48,11 +48,19 @@ namespace GrainManage.Web.Controllers
                 var roleRepo = GetRepo<Role>();
                 var roleIdList = dtoList.SelectMany(s => s.Roles).Distinct().ToList();
                 var roleList = roleRepo.GetFiltered(f => roleIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
+                var compRepo = GetRepo<Company>();
+                var compIdList = list.Select(s => s.CompId).Distinct().ToList();
+                var compList = compRepo.GetFiltered(f => compIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
                 foreach (var item in dtoList)
                 {
                     item.Pwd = null;
                     var roleNames = string.Join(",", roleList.Where(f => item.Roles.Contains(f.Id)).Select(s => s.Name));
                     item.RoleNames = roleNames;
+                    var comp = compList.FirstOrDefault(f => f.Id == item.CompId);
+                    if (comp != null)
+                    {
+                        item.CompName = comp.Name;
+                    }
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
@@ -67,8 +75,13 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             SetEmptyIfNull(input);
+            var currentUser = CurrentUser;
             var repo = GetRepo<User>();
-            if (string.IsNullOrEmpty(input.UserName))
+            if (currentUser.CompId < 0)
+            {
+                SetResponse(s => s.CompanyNotFullFill, input, result);
+            }
+            else if (string.IsNullOrEmpty(input.UserName))
             {
                 SetResponse(s => s.NameEmpty, input, result);
             }
@@ -82,7 +95,6 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
-                var currentUser = CurrentUser;
                 if (currentUser.CompId > 0)
                 {
                     var now = DateTime.Now;
@@ -118,7 +130,12 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             SetEmptyIfNull(input);
             var repo = GetRepo<User>();
-            if (repo.GetFiltered(f => f.UserName == input.UserName && f.Id != input.Id).Any())
+            var currentUser = CurrentUser;
+            if (currentUser.CompId < 0)
+            {
+                SetResponse(s => s.CompanyNotFullFill, input, result);
+            }
+            else if (repo.GetFiltered(f => f.UserName == input.UserName && f.Id != input.Id).Any())
             {
                 SetResponse(s => s.NameExist, input, result);
             }

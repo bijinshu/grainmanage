@@ -80,6 +80,8 @@ namespace GrainManage.Web
         public readonly int ContactNameEmpty = 202;
         [Message("联系电话不能为空")]
         public readonly int ContactMobileEmpty = 203;
+        [Message("请前往首页完善店铺信息")]
+        public readonly int CompanyNotFullFill = 204;
 
         //Company
         [Message("店铺名称不能为空")]
