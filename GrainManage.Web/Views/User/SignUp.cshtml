@@ -164,7 +164,7 @@
                         if (this.isUserNameValid && this.isPwdValid && this.isEmailValid && this.isPhoneValid && this.isRealNameValid && this.isQQValid && this.isWeixinValid) {
                             this.IsDisabled = true;
                             this.frm.Pwd = new sha1().encrypt(this.Pwd);
-                            $.post('@UrlVar.User_Register', this.frm).always(function (result, status) {
+                            $.post('@UrlVar.User_SignUp', this.frm).always(function (result, status) {
                                 this.IsDisabled = false;
                                 if (result.code == 1) {
                                     var base = new base64();

@@ -36,9 +36,9 @@
                     <input v-model="RememberMe" type="checkbox">
                     <span>记住选择</span>
                 </label>
-                <a href="@UrlVar.User_Register" style="float:right">注册</a>
+                <a href="@UrlVar.User_SignUp" style="float:right">注册</a>
                 <span style="float:right;">&nbsp;&nbsp;</span>
-                <a href="@UrlVar.User_ResetPwd" style="float:right">忘记密码</a>
+                <a href="@UrlVar.User_ForgetPwd" style="float:right">忘记密码</a>
             </div>
             <button v-on:click.stop.prevent="loginOn" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">登录</button>
         </form>

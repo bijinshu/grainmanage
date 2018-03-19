@@ -17,3 +17,6 @@
 /GrainManage.Web/GrainManage.Web.csproj.user
 /GrainManage.Web/url_all.txt
 /GrainManage.Web/url.txt
+/GrainManage.Web/Properties/PublishProfiles
+/GrainManage.Web/appsettings.Production.json
+/GrainManage.Web/appsettings.Test.json

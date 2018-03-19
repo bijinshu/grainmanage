@@ -34,8 +34,8 @@ namespace GrainManage.Web
         public static string User_Edit { get { return GetUrl("/User/Edit"); } }
         public static string User_Delete { get { return GetUrl("/User/Delete"); } }
         public static string User_SignIn { get { return GetUrl("/User/SignIn"); } }
-        public static string User_Register { get { return GetUrl("/User/Register"); } }
-        public static string User_ResetPwd { get { return GetUrl("/User/ResetPwd"); } }
+        public static string User_SignUp { get { return GetUrl("/User/SignUp"); } }
+        public static string User_ForgetPwd { get { return GetUrl("/User/ForgetPwd"); } }
         [Common]
         public static string User_SignOut { get { return GetUrl("/User/SignOut"); } }
         [Common]

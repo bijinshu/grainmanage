@@ -89,7 +89,7 @@ namespace GrainManage.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Register(InputRegister input)
+        public ActionResult SignUp(InputRegister input)
         {
             if (IsGetRequest)
             {
@@ -140,7 +140,7 @@ namespace GrainManage.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPwd(InputResetPassword input)
+        public ActionResult ForgetPwd(InputResetPassword input)
         {
             if (IsGetRequest)
             {
