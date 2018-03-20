@@ -99,6 +99,13 @@ namespace GrainManage.Web
         public static string Address_Edit { get { return GetUrl("/Address/Edit"); } }
         public static string Address_RefreshDb { get { return GetUrl("/Address/RefreshDb"); } }
         public static string Address_RefreshCache { get { return GetUrl("/Address/RefreshCache"); } }
+
+        //WhiteIp
+        public static string WhiteIp_Index { get { return GetUrl("/WhiteIp/Index"); } }
+        public static string WhiteIp_New { get { return GetUrl("/WhiteIp/New"); } }
+        public static string WhiteIp_Edit { get { return GetUrl("/WhiteIp/Edit"); } }
+        public static string WhiteIp_Delete { get { return GetUrl("/WhiteIp/Delete"); } }
+
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)
         {

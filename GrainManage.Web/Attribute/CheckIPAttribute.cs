@@ -16,7 +16,7 @@ namespace GrainManage.Web
         {
             var ip = HttpUtil.GetRequestHostAddress(context.HttpContext.Request);
             var ipRepo = context.HttpContext.RequestServices.GetService(typeof(IRepository<WhiteIP>)) as IRepository<WhiteIP>;
-            if (ipRepo.GetFiltered(f => f.IP == ip).Any())
+            if (ipRepo.GetFiltered(f => f.IP == ip && f.Status == 1).Any())
             {
                 return;
             }

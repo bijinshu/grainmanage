@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-20 16:10:03
+Date: 2018-03-20 18:02:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -482,11 +482,14 @@ DROP TABLE IF EXISTS `rm_white_ip`;
 CREATE TABLE `rm_white_ip` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `IP` varchar(16) NOT NULL DEFAULT '' COMMENT 'IP',
+  `Status` smallint(6) NOT NULL COMMENT '0：禁用 1：启用',
+  `Remark` varchar(255) NOT NULL DEFAULT '' COMMENT '说明',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
+  `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='ip白名单';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='ip白名单';
 
 -- ----------------------------
 -- Records of rm_white_ip
 -- ----------------------------
-INSERT INTO `rm_white_ip` VALUES ('1', '10.10.133.108', '2018-02-11 16:42:31');
+INSERT INTO `rm_white_ip` VALUES ('1', '10.10.133.108', '1', '本机', '2018-02-11 16:42:31', '2018-03-20 17:17:17');

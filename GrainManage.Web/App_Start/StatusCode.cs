@@ -140,5 +140,11 @@ namespace GrainManage.Web
         public readonly int DetailIdNotValid = 1012;
         [Message("该订单无明细信息")]
         public readonly int NoOrderDetail = 1013;
+
+        //WhiteIP
+        [Message("IP格式不正确")]
+        public readonly int IpNotValid = 1101;
+        [Message("该IP已存在")]
+        public readonly int IpExisted = 1102;
     }
 }

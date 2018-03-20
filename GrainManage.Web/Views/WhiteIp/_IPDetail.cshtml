@@ -1,0 +1,36 @@
+﻿<modal-dialog id="ipModal" v-bind:title="PanelTitle">
+    <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
+    <form slot="body" class="form-horizontal" role="form" style="margin-bottom:-20px;">
+        <div class="form-group">
+            <label for="IP" class="col-md-3 control-label hidden-xs hidden-sm">IP</label>
+            <div class="col-md-8">
+                <input v-model="frm.IP" type="text" class="form-control" id="IP" placeholder="请输入IP">
+            </div>
+            <div v-if="!isIPValid" class="col-md-push-3 col-md-8" style="color:red">IP格式不正确</div>
+        </div>
+        <div class="form-group">
+            <label for="Code" class="col-md-3 control-label hidden-xs hidden-sm">状态</label>
+            <div class="col-md-8">
+                <label class="checkbox-inline">
+                    <input v-model="frm.Status" type="radio" value="1"><span>允许</span>
+                </label>
+                <label class="checkbox-inline">
+                    <input v-model="frm.Status" type="radio" value="0"><span>禁用</span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">备注</label>
+            <div class="col-md-8">
+                <textarea v-model="frm.Remark" class="form-control" rows="4" id="Remark" placeholder="请输入备注"></textarea>
+            </div>
+            <div v-if="!isRemarkValid" class="col-md-push-3 col-md-8" style="color:red">备注不能超过600个字符</div>
+        </div>
+    </form>
+    <div slot="footer" class="form-group">
+        <div class="col-md-8 col-md-offset-3">
+            <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
+            <button class="btn btn-primary pull-right" v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled">保存</button>
+        </div>
+    </div>
+</modal-dialog>

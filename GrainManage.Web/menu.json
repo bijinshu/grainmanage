@@ -232,12 +232,12 @@
             "text": "查看"
           },
           {
-            "id": "system.address.add",
+            "id": "system.address.refreshdb",
             "text": "刷新数据库地址库",
             "url": "/Address/RefreshDb"
           },
           {
-            "id": "system.address.add",
+            "id": "system.address.refreshcache",
             "text": "刷新缓存地址库",
             "url": "/Address/RefreshCache"
           },
@@ -250,6 +250,32 @@
             "id": "system.address.delete",
             "text": "删除",
             "url": "/Address/Delete"
+          }
+        ]
+      },
+      {
+        "id": "system.ip",
+        "text": "IP白名单管理",
+        "url": "/WhiteIp/Index",
+        "children": [
+          {
+            "id": "system.ip.view",
+            "text": "查看"
+          },
+          {
+            "id": "system.ip.add",
+            "text": "添加",
+            "url": "/WhiteIp/New"
+          },
+          {
+            "id": "system.ip.edit",
+            "text": "编辑",
+            "url": "/WhiteIp/Edit"
+          },
+          {
+            "id": "system.ip.delete",
+            "text": "删除",
+            "url": "/WhiteIp/Delete"
           }
         ]
       }

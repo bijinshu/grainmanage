@@ -1,0 +1,191 @@
+﻿@using GrainManage.Web
+@model GrainManage.Web.Models.UserInfo
+<div class="container" id="ipInfo">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="tab-pane fade in active">
+                <div class="form-inline" role="form">
+                    <div class="form-group" style="margin-right:6px;">
+                        <input type="text" class="form-control" v-model="search.Ip" placeholder="请输入IP" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">开始时间：</label>
+                        <input type="date" class="form-control" id="StartTime" placeholder="请选择开始时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <label class="control-label hidden-xs hidden-sm">终止时间：</label>
+                        <input type="date" class="form-control" id="EndTime" placeholder="请选择终止时间" />
+                    </div>
+                    <div class="form-group" style="margin-right:6px;">
+                        <select v-model="search.Status" class="form-control">
+                            <option value="null">请选择状态</option>
+                            <option value="0">禁用</option>
+                            <option value="1">启用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-info btn-block" v-on:click="getData(search.PageIndex=0)">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <caption style="color:red;font-weight:bolder;">
+                        @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_New, Model.Urls))
+                        {
+                            <button type="button" class="btn btn-success btn-sm" v-bind:disabled="IsDisabled" v-on:click="showAdd"><span class="glyphicon glyphicon-refresh"></span> 添加</button>
+                        }
+                        @if (!UrlVar.Has(Model.Level, UrlVar.WhiteIp_New, Model.Urls))
+                        {
+                            <span>IP列表</span>
+                        }
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>IP</th>
+                            <th>状态</th>
+                            <th>说明</th>
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                        </tr>
+                    </thead>
+                    <tbody v-cloak>
+                        <tr v-for="item in list" :key="item.Id">
+                            <td>
+                                @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_Edit, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="showEdit(item)">编辑</a>
+                                }
+                                @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_Delete, Model.Urls))
+                                {
+                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
+                                }
+                            </td>
+                            <td>{{item.IP}}</td>
+                            <td>
+                                <span style="color:green" v-if="item.Status==1">允许</span>
+                                <span style="color:red" v-else>禁止</span>
+                            </td>
+                            <td>{{item.Remark}}</td>
+                            <td>{{item.CreatedAt|formatTime}}</td>
+                            <td>{{item.ModifiedAt|formatTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize"></pager>
+        </div>
+    </div>
+    <div v-cloak>
+        @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_New, Model.Urls))
+        {
+            @Html.Partial("_IPDetail")
+        }
+        @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_Delete, Model.Urls))
+        {
+            @Html.Partial("_DeleteModal", "删除IP")
+        }
+        <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#ipInfo",
+            data: {
+                msg: '',
+                total: 0,
+                list: [],
+                search: { IP: '', Status: null, StartTime: null, EndTime: null, PageIndex: 0, PageSize: 10 },
+                frm: {Id:0, IP: '', Status: 1, Remark: '' },
+                currentItem: {},
+                PanelTitle:'',
+                isFirstTime: true,
+                IsDisabled: false
+            },
+            methods: {
+                getData: function () {
+                    this.search.StartTime = $("#StartTime").val();
+                    this.search.EndTime = $("#EndTime").val();
+                    $.post('@UrlVar.WhiteIp_Index', this.search).always(function (result, status) {
+                        this.list = result.data;
+                        this.total = result.total;
+                        if (result.code != 1 && !this.isFirstTime) {
+                            this.showAlert(result.msg);
+                        }
+                        this.isFirstTime = false;
+                    }.bind(this));
+                },
+                save: function (item) {
+                    if (this.isIPValid && this.isRemarkValid ) {
+                        this.IsDisabled = true;
+                        var url = this.frm.Id > 0 ? '@UrlVar.WhiteIp_Edit' : '@UrlVar.WhiteIp_New';
+                        $.post(url, this.frm).always(function (result, status) {
+                            this.IsDisabled = false;
+                            if (result.code == 1) {
+                                this.hidePanel("#ipModal");
+                                this.getData();
+                            }
+                            else {
+                                this.showAlert(result.msg);
+                            }
+                        }.bind(this));
+                    }
+                    else {
+                        this.showAlert( '有信息格式不正确,请重新确认');
+                    }
+                },
+                showAdd: function () {
+                    this.frm.Id = 0;
+                    this.frm.IP = '';
+                    this.frm.Status = 1;
+                    this.frm.Remark = '';
+                    this.showPanel("添加新IP","#ipModal");
+                },
+                showEdit: function (item) {
+                    this.frm.Id = item.Id;
+                    this.frm.IP = item.IP;
+                    this.frm.Status = item.Status;
+                    this.frm.Remark = item.Remark;
+                    this.showPanel("修改IP","#ipModal");
+                },
+                showDelete: function (item) {
+                    this.currentItem = item;
+                    this.msg = "您确定要删除 " +  "[" + item.IP + "]吗?";
+                    this.showPanel("#deleteDialog");
+                },
+                deleteItem: function () {
+                    $.post('@UrlVar.WhiteIp_Delete', { id: this.currentItem.Id }).always(function (result, status) {
+                        this.hidePanel("#deleteDialog");
+                        if (result.code == 1) {
+                            this.getData();
+                        }
+                        else {
+                            this.showAlert(result.msg);
+                        }
+                    }.bind(this));
+                }
+            },
+            computed: {
+                isIPValid: function () {
+                    return (/^(localhost)|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/g).test(this.frm.IP);
+                },
+                isRemarkValid: function () {
+                    return (/^.{0,200}$/g).test(this.frm.Remark);
+                }
+            },
+            created: function () {
+                this.getData();
+            }
+        })
+    })
+</script>
