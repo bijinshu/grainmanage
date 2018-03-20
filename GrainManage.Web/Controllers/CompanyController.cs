@@ -7,6 +7,7 @@ using DataBase.GrainManage.Models;
 using GrainManage.Common;
 using GrainManage.Core;
 using GrainManage.Encrypt;
+using GrainManage.Web.Common;
 using GrainManage.Web.Models.Company;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -78,6 +79,7 @@ namespace GrainManage.Web.Controllers
                 if (imgFile != null && imgFile.Length > 0)
                 {
                     comp.ImgName = MD5Encrypt.Encrypt(imgFile.OpenReadStream()) + Path.GetExtension(imgFile.FileName);
+                    comp.Logo = comp.Logo;
                     var filePath = GetImagePath(comp.ImgName);
                     if (!System.IO.File.Exists(filePath))
                     {
@@ -85,6 +87,11 @@ namespace GrainManage.Web.Controllers
                         {
                             imgFile.CopyTo(stream);
                         }
+                    }
+                    var logoPath = GetLogoPath(comp.Logo);
+                    if (!System.IO.File.Exists(logoPath))
+                    {
+                        ImageUtil.BuildCompLogo(filePath, logoPath);
                     }
                 }
                 using (var trans = repo.UnitOfWork.BeginTransaction())
@@ -134,6 +141,7 @@ namespace GrainManage.Web.Controllers
                     if (imgFile != null && imgFile.Length > 0)
                     {
                         model.ImgName = MD5Encrypt.Encrypt(imgFile.OpenReadStream()) + Path.GetExtension(imgFile.FileName);
+                        model.Logo = model.ImgName;
                         var filePath = GetImagePath(model.ImgName);
                         if (!System.IO.File.Exists(filePath))
                         {
@@ -142,13 +150,14 @@ namespace GrainManage.Web.Controllers
                                 imgFile.CopyTo(stream);
                             }
                         }
+                        var logoPath = GetLogoPath(model.Logo);
+                        if (!System.IO.File.Exists(logoPath))
+                        {
+                            ImageUtil.BuildCompLogo(filePath, logoPath);
+                        }
                     }
                     model.ModifiedAt = DateTime.Now;
                     repo.UnitOfWork.SaveChanges();
-                    if (model.ImgName != oldFileName && !repo.GetFiltered(f => f.ImgName == oldFileName).Any())
-                    {
-                        DeleteFile(oldFileName);
-                    }
                     SetResponse(s => s.Success, input, result);
                 }
                 else
@@ -168,10 +177,6 @@ namespace GrainManage.Web.Controllers
                 if (IsSuperAdmin)
                 {
                     repo.Delete(model);
-                    if (!string.IsNullOrEmpty(model.ImgName) && !repo.GetFiltered(f => f.ImgName == model.ImgName).Any())
-                    {
-                        DeleteFile(model.ImgName);
-                    }
                     SetResponse(s => s.Success, result);
                 }
                 else
@@ -196,11 +201,8 @@ namespace GrainManage.Web.Controllers
                 {
                     var oldImgName = model.ImgName;
                     model.ImgName = string.Empty;
+                    model.Logo = string.Empty;
                     repo.UnitOfWork.SaveChanges();
-                    if (!string.IsNullOrEmpty(oldImgName) && !repo.GetFiltered(f => f.ImgName == oldImgName).Any())
-                    {
-                        DeleteFile(oldImgName);
-                    }
                     SetResponse(s => s.Success, result);
                 }
                 else
@@ -218,23 +220,9 @@ namespace GrainManage.Web.Controllers
         {
             return Path.Combine(AppConfig.GetValue("ImagePath"), "company", fileName);
         }
-        private void DeleteFile(string imgName)
+        private static string GetLogoPath(string fileName)
         {
-            if (!string.IsNullOrEmpty(imgName))
-            {
-                var filePath = GetImagePath(imgName);
-                if (!string.IsNullOrEmpty(imgName) && System.IO.File.Exists(filePath))
-                {
-                    try
-                    {
-                        System.IO.File.Delete(filePath);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
+            return Path.Combine(AppConfig.GetValue("ImagePath"), "company", "logo", fileName);
         }
     }
 }

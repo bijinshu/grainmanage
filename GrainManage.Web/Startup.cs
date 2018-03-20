@@ -34,6 +34,8 @@ namespace GrainManage.Web
             services.AddScoped<ICache, RedisCache>();
 
             MapperConfig.Initialize();
+
+            LogScheler.Start();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

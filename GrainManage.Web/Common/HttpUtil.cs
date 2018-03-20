@@ -23,32 +23,36 @@ namespace GrainManage.Web
         public static bool IsIPv4(string ip)
         {
             //利用正则表达式判断字符串是否符合IPv4格式  
-            return Regex.IsMatch(ip, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
+            return Regex.IsMatch(ip, "^(localhost)|[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         }
         public static string GetRequestHostAddress(HttpRequest request)
         {
-            string result = request.Headers.Where(f => string.Equals(f.Key, "X-Forwarded-For", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
+            string result = GetHeader(request, "X-Forwarded-For");
             if (!string.IsNullOrEmpty(result))
             {
                 result = result.Split(',')[0];
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = request.Headers.Where(f => string.Equals(f.Key, "X-Real-IP", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
+                result = GetHeader(request, "X-Real-IP");
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = request.Headers.Where(f => string.Equals(f.Key, "Remote_Addr", StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
+                result = GetHeader(request, "Remote_Addr");
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = request.Host.Value;
+                result = request.Host.Host;
             }
             if (string.IsNullOrEmpty(result) || !IsIPv4(result))
             {
                 result = GetLocalIP().Where(f => IsIPv4(f)).FirstOrDefault();
             }
             return result;
+        }
+        public static string GetHeader(HttpRequest request, string name)
+        {
+            return request.Headers.Where(f => string.Equals(f.Key, name, StringComparison.CurrentCultureIgnoreCase)).Select(s => s.Value).FirstOrDefault();
         }
 
         /// <summary>

@@ -213,7 +213,7 @@ namespace GrainManage.Web.Controllers
                 }
                 else
                 {
-                    var detailModelList = detailRepo.GetFiltered(f => f.Id == input.Id, true).ToList();
+                    var detailModelList = detailRepo.GetFiltered(f => f.OrderId == input.Id, true).ToList();
                     if (!detailModelList.Any())
                     {
                         SetResponse(s => s.NoOrderDetail, result);

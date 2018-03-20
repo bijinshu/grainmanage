@@ -1,10 +1,12 @@
 ﻿using DataBase.GrainManage.Models.Log;
 using GrainManage.Web.Cache;
 using GrainManage.Web.Common;
+using GrainManage.Web.Jobs;
 using GrainManage.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -33,8 +35,9 @@ namespace GrainManage.Web
                 model.Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request);
                 model.Level = currentUser.Level;
                 model.StartTime = DateTime.Now;
-                model.Id = LogService.AddActionLog(model);
-                headers.Add(name, string.Format("{0},{1}", model.Id.ToString(), model.StartTime.ToString("yyyy-MM-dd HH:mm:ss")));
+                var guid = Guid.NewGuid().ToString("N");
+                LogCache.Add(guid, model);
+                headers.Add(name, guid);
             }
         }
 
@@ -44,7 +47,7 @@ namespace GrainManage.Web
             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
             if (UrlCache.IsUrlExisted(url))
             {
-                var logAction = filterContext.HttpContext.Request.Headers[name].First().Split(',');
+                var guid = filterContext.HttpContext.Request.Headers[name].First();
                 var now = DateTime.Now;
                 var msg = string.Empty;
                 JsonResult result = null;
@@ -56,8 +59,7 @@ namespace GrainManage.Web
                         msg = baseOutput.msg;
                     }
                 }
-                var model = new { Id = int.Parse(logAction[0]), EndTime = now, TimeSpan = now - DateTime.Parse(logAction[1]), Status = msg ?? string.Empty };
-                LogService.UpdateActionLog(model);
+                LogCache.Set(guid, msg);
             }
         }
     }

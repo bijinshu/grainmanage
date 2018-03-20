@@ -128,6 +128,7 @@ namespace GrainManage.Web.Controllers
                     model.CreatedAt = DateTime.Now;
                     model.CreatedBy = -1;//系统注册
                     model.ModifiedAt = DateTime.Now;
+                    model.Status = Status.Enabled;
                     repo.Add(model);
                     SetResponse(s => s.Success, input, result);
                 }

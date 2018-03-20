@@ -28,10 +28,14 @@ namespace GrainManage.Web
                     CreatedAt = DateTime.Now
                 };
                 LogService.AddExceptionLog(model);
+                filterContext.ExceptionHandled = true;
                 if (filterContext.HttpContext.Request.Method == "POST")
                 {
-                    filterContext.ExceptionHandled = true;
                     filterContext.Result = new JsonResult(new BaseOutput { msg = errorMsg });
+                }
+                else
+                {
+                    filterContext.Result = new ContentResult() { Content = errorMsg };
                 }
             }
             catch (Exception e)

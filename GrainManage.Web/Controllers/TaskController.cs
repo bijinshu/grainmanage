@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
-using DataBase.GrainManage.Models;
+﻿using DataBase.GrainManage.Models;
 using GrainManage.Common;
-using GrainManage.Core;
 using GrainManage.Web.Cache;
+using GrainManage.Web.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace GrainManage.Web.Controllers
 {
@@ -74,5 +73,84 @@ namespace GrainManage.Web.Controllers
             UrlCache.RefreshUrlList(true);
             return Content($"更新Url缓存成功");
         }
+
+        [AllowAnonymous, CheckIP]
+        public IActionResult DeleteCompLogo()
+        {
+            var result = new BaseOutput();
+            var dir = Path.Combine(AppConfig.GetValue("ImagePath"), "company");
+            var success = 0;
+            var failed = 0;
+            var total = 0;
+            //删除img文件
+            var imgFiles = Directory.GetFiles(dir);
+            total = imgFiles.Length;
+            var repo = GetRepo<Company>();
+            foreach (var filePath in imgFiles)
+            {
+                var fileName = Path.GetFileName(filePath);
+                if (!repo.GetFiltered(f => f.ImgName == fileName).Any())
+                {
+                    try
+                    {
+                        System.IO.File.Delete(filePath);
+                        success++;
+                    }
+                    catch (Exception)
+                    {
+                        failed++;
+                    }
+                }
+            }
+            //删除logo文件
+            dir = Path.Combine(dir, "logo");
+            var logoFiles = Directory.GetFiles(dir);
+            total += logoFiles.Length;
+            foreach (var filePath in logoFiles)
+            {
+                var fileName = Path.GetFileName(filePath);
+                if (!repo.GetFiltered(f => f.Logo == fileName).Any())
+                {
+                    try
+                    {
+                        System.IO.File.Delete(filePath);
+                        success++;
+                    }
+                    catch (Exception)
+                    {
+                        failed++;
+                    }
+                }
+            }
+            SetResponse(s => s.Success, result, $"共发现{total}个文件，其中有效文件{total - success - failed}个，成功删除{success}个，删除失败{failed}个");
+            return JsonNet(result);
+        }
+
+        [AllowAnonymous, CheckIP]
+        public IActionResult BuildCompLogo()
+        {
+            var result = new BaseOutput();
+            var dir = Path.Combine(AppConfig.GetValue("ImagePath"), "company");
+            var success = 0;
+            var ignored = 0;
+            var total = 0;
+            var repo = GetRepo<Company>();
+            var compList = repo.GetFiltered(f => f.ImgName != "" && f.Logo == "", true).ToList();
+            total = compList.Count;
+            foreach (var comp in compList)
+            {
+                var imgPath = Path.Combine(dir, comp.ImgName);
+                var logoPath = Path.Combine(dir, "logo", comp.ImgName);
+                if (System.IO.File.Exists(imgPath) && !System.IO.File.Exists(logoPath))
+                {
+                    ImageUtil.BuildCompLogo(imgPath, logoPath);
+                }
+                comp.Logo = comp.ImgName;
+            }
+            repo.UnitOfWork.SaveChanges();
+            SetResponse(s => s.Success, result, $"共发现{total}条记录需要生成缩略图，成功生成{success}个，无需生成{ignored}个");
+            return JsonNet(result);
+        }
+
     }
 }

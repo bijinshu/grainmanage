@@ -21,20 +21,27 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var productRepo = GetRepo<Product>();
             Expression<Func<Product, bool>> myFilter = ExpressionBuilder.Where<Product>(f => true);
-            if (input.Source.HasValue)
-            {
-                myFilter = myFilter.And(f => f.Source == input.Source);
-            }
             if (currentUser.Level < GlobalVar.AdminLevel)
             {
                 if (input.Source.HasValue)
                 {
-                    myFilter = myFilter.And(f => f.CompId == currentUser.CompId);
+                    if (input.Source > 0)
+                    {
+                        myFilter = myFilter.And(f => f.Source > 0);
+                    }
+                    else
+                    {
+                        myFilter = myFilter.And(f => f.CompId == currentUser.CompId && f.Source == input.Source);
+                    }
                 }
                 else
                 {
                     myFilter = myFilter.And(f => f.CompId == currentUser.CompId || f.Source > 0);
                 }
+            }
+            else if (input.Source.HasValue)
+            {
+                myFilter = myFilter.And(f => f.Source == input.Source);
             }
             if (!string.IsNullOrEmpty(input.CompName))
             {
