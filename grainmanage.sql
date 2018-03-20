@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50709
 File Encoding         : 65001
 
-Date: 2018-03-16 20:42:04
+Date: 2018-03-20 16:10:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,17 +25,19 @@ CREATE TABLE `bm_company` (
   `Name` varchar(60) NOT NULL DEFAULT '' COMMENT '公司名称',
   `Address` varchar(200) NOT NULL DEFAULT '' COMMENT '公司地址',
   `ImgName` varchar(60) NOT NULL DEFAULT '' COMMENT '图片名称',
+  `Logo` varchar(60) NOT NULL DEFAULT '' COMMENT '缩略图',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `uq_userid` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `uq_userid` (`UserId`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_company
 -- ----------------------------
-INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'c7aaa3434441933a0965123b37d0407f.jpg', '2018-03-06 15:05:35', '2018-03-06 18:22:20');
-INSERT INTO `bm_company` VALUES ('6', '2', '泗阳粮食收购总代理', '泗阳农场90号胜利大街方式来对接风雷是塑料袋看风景看到过和', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
+INSERT INTO `bm_company` VALUES ('1', '1', '八集粮食收购', '八集街', 'c7aaa3434441933a0965123b37d0407f.jpg', 'c7aaa3434441933a0965123b37d0407f.jpg', '2018-03-06 15:05:35', '2018-03-18 13:47:12');
+INSERT INTO `bm_company` VALUES ('6', '2', '泗阳粮食收购总代理', '泗阳农场90号胜利大街方式来对接风雷是塑料袋看风景看到过和', 'a081c5bccc318b3c1e41891274563af5.jpg', 'a081c5bccc318b3c1e41891274563af5.jpg', '2018-03-06 16:23:10', null);
+INSERT INTO `bm_company` VALUES ('8', '15', '木豆', '盐城', 'fb77f99935b8c1cf47c68b5843943a1f.jpg', 'fb77f99935b8c1cf47c68b5843943a1f.jpg', '2018-03-19 17:04:08', null);
 
 -- ----------------------------
 -- Table structure for `bm_contact`
@@ -57,7 +59,7 @@ CREATE TABLE `bm_contact` (
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `ContactName` (`ContactName`,`Mobile`,`CompId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_contact
@@ -90,7 +92,9 @@ INSERT INTO `bm_contact` VALUES ('25', '1', '赵海', '15801992799', '', '914023
 INSERT INTO `bm_contact` VALUES ('26', '1', '江涛', '15801992799', '', '914023961', 'bijinshu@163.com', '合兴', '', '', '1', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('27', '1', '萧见浪', '15801992799', '', '914023961', 'bijinshu@163.com', '合兴', '', '', '1', '2016-01-05 18:44:49', null);
 INSERT INTO `bm_contact` VALUES ('28', '1', '殷了', '15801992799', '', '914023961', 'bijinshu@163.com', '合兴', '', '', '1', '2016-01-05 18:44:49', null);
-INSERT INTO `bm_contact` VALUES ('29', '1', '薛子琼', '15801992799', '', '914023961', 'bijinshu@163.com', '桥西', '', '', '1', '2016-01-05 18:44:49', null);
+INSERT INTO `bm_contact` VALUES ('29', '1', '薛子琼', '15801992799', 'sdfsds', '914023961', 'bijinshu@163.com', '桥西', '', '', '1', '2016-01-05 18:44:49', '2018-03-20 15:17:04');
+INSERT INTO `bm_contact` VALUES ('30', '1', '姚青', '15689547841', '', '', '', '江苏省南京市雨花台区花神大道', '', '', '2', '2018-03-18 11:20:05', null);
+INSERT INTO `bm_contact` VALUES ('31', '-1', '收到了', '17589654857', '', '', '', '', '', '', '15', '2018-03-19 15:23:11', null);
 
 -- ----------------------------
 -- Table structure for `bm_order`
@@ -167,7 +171,7 @@ CREATE TABLE `bm_product` (
   `ModifiedBy` int(11) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uq_name` (`Name`,`CompId`,`Source`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_product
@@ -187,6 +191,8 @@ INSERT INTO `bm_product` VALUES ('23', '玉米', '6', '泗阳粮食收购总代�
 INSERT INTO `bm_product` VALUES ('24', '菜籽', '1', '八集粮食收购', '2.2450', '', '1', '0', '2018-03-13 19:32:29', '1', '2018-03-16 15:26:02', '1');
 INSERT INTO `bm_product` VALUES ('25', '花生', '1', '八集粮食收购', '2.4450', '', '1', '0', '2018-03-13 19:32:33', '1', '2018-03-16 15:25:54', '1');
 INSERT INTO `bm_product` VALUES ('26', '玉米', '1', '八集粮食收购', '1.2050', '', '1', '0', '2018-03-13 19:32:38', '1', '2018-03-16 15:25:50', '1');
+INSERT INTO `bm_product` VALUES ('27', '燕麦', '8', '木豆', '1.3000', '', '1', '0', '2018-03-19 17:09:44', '15', null, null);
+INSERT INTO `bm_product` VALUES ('28', '花生', '8', '木豆', '2.4450', '', '1', '0', '2018-03-19 17:09:51', '15', null, null);
 
 -- ----------------------------
 -- Table structure for `bm_trade`
@@ -210,7 +216,7 @@ CREATE TABLE `bm_trade` (
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bm_trade
@@ -250,6 +256,8 @@ INSERT INTO `bm_trade` VALUES ('56', '1', '15', '毛强国', '9', '小麦', '1.0
 INSERT INTO `bm_trade` VALUES ('57', '1', '1', '张海川', '9', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-08 10:10:36', '2018-03-08 11:58:02');
 INSERT INTO `bm_trade` VALUES ('60', '1', '0', '李建国', '9', '小麦', '1.5000', '900.00', '939.00', '0', '', '', '', '1', '2018-03-08 12:01:48', '2018-03-16 13:31:16');
 INSERT INTO `bm_trade` VALUES ('61', '1', '27', '萧见浪', '9', '小麦', '1.0400', '900.00', '936.00', '0', '', '', '', '1', '2018-03-16 13:30:09', '2018-03-16 13:30:16');
+INSERT INTO `bm_trade` VALUES ('62', '1', '27', '萧见浪', '9', '小麦', '1.2000', '807.00', '968.40', '0', '', '', '滚滚滚', '3', '2018-03-18 07:16:42', null);
+INSERT INTO `bm_trade` VALUES ('63', '1', '0', '', '21', '大稻', '1.2600', '850.00', '1071.00', '0', '', '', '', '3', '2018-03-18 07:18:02', null);
 
 -- ----------------------------
 -- Table structure for `log_action`
@@ -269,7 +277,7 @@ CREATE TABLE `log_action` (
   `EndTime` datetime DEFAULT NULL COMMENT '调用结束时间',
   `TimeSpan` time DEFAULT NULL COMMENT '耗时',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='访问日志';
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COMMENT='访问日志';
 
 -- ----------------------------
 -- Records of log_action
@@ -288,7 +296,7 @@ CREATE TABLE `log_exception` (
   `ClientIP` varchar(64) NOT NULL DEFAULT '' COMMENT '客户端调用IP',
   `CreatedAt` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log_exception
@@ -326,7 +334,7 @@ CREATE TABLE `log_login` (
   `TypeId` smallint(6) NOT NULL DEFAULT '0' COMMENT '0：后台登录 1：微信端登录',
   `CreatedAt` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8 COMMENT='后台登录日志';
 
 -- ----------------------------
 -- Records of log_login
@@ -350,15 +358,15 @@ CREATE TABLE `rm_address` (
 -- ----------------------------
 -- Records of rm_address
 -- ----------------------------
-INSERT INTO `rm_address` VALUES ('/Address/Edit', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Address/Edit', '1', '1', '0', '', '2018-03-16 20:20:12', '2018-03-19 15:36:47');
 INSERT INTO `rm_address` VALUES ('/Address/Index', '0', '1', '0', '', '2018-03-16 20:20:12', null);
-INSERT INTO `rm_address` VALUES ('/Address/Refresh', '0', '0', '0', '', '2018-03-16 20:20:12', '2018-03-16 20:35:35');
-INSERT INTO `rm_address` VALUES ('/Address/RefreshCache', '0', '1', '0', '', '2018-03-16 20:35:35', null);
-INSERT INTO `rm_address` VALUES ('/Address/RefreshDb', '0', '1', '0', '', '2018-03-16 20:35:35', null);
+INSERT INTO `rm_address` VALUES ('/Address/Refresh', '1', '0', '0', '', '2018-03-16 20:20:12', '2018-03-19 15:36:54');
+INSERT INTO `rm_address` VALUES ('/Address/RefreshCache', '1', '1', '0', '', '2018-03-16 20:35:35', '2018-03-19 15:36:35');
+INSERT INTO `rm_address` VALUES ('/Address/RefreshDb', '1', '1', '0', '', '2018-03-16 20:35:35', '2018-03-19 15:36:32');
 INSERT INTO `rm_address` VALUES ('/Company/DeleteFile', '1', '1', '1', '框架', '2018-03-09 17:37:16', '2018-03-16 19:49:42');
-INSERT INTO `rm_address` VALUES ('/Company/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', '2018-03-16 19:34:58');
+INSERT INTO `rm_address` VALUES ('/Company/Edit', '1', '1', '0', '', '2018-03-09 17:37:16', '2018-03-19 15:37:24');
 INSERT INTO `rm_address` VALUES ('/Company/GetList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Company/New', '0', '1', '1', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Company/New', '1', '1', '1', '', '2018-03-09 17:37:16', '2018-03-19 15:37:13');
 INSERT INTO `rm_address` VALUES ('/Contact/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Contact/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Contact/GetList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
@@ -367,7 +375,7 @@ INSERT INTO `rm_address` VALUES ('/Contact/New', '1', '1', '0', '', '2018-02-11 
 INSERT INTO `rm_address` VALUES ('/Employee/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Employee/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Employee/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Employee/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Employee/New', '1', '1', '0', '', '2018-03-09 17:37:16', '2018-03-19 15:37:28');
 INSERT INTO `rm_address` VALUES ('/Home/Index', '0', '1', '1', '', '2018-02-11 16:43:23', null);
 INSERT INTO `rm_address` VALUES ('/Home/MenuTree', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Log/ActionList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
@@ -375,28 +383,28 @@ INSERT INTO `rm_address` VALUES ('/Log/DeleteException', '0', '1', '0', '', '201
 INSERT INTO `rm_address` VALUES ('/Log/ExceptionList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Log/JobList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Log/LoginList', '0', '1', '0', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Order/ChangeStatus', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/ChangeStatus', '1', '1', '0', '', '2018-03-16 20:20:12', '2018-03-19 15:37:02');
 INSERT INTO `rm_address` VALUES ('/Order/Detail', '0', '1', '0', '', '2018-03-16 20:20:12', null);
-INSERT INTO `rm_address` VALUES ('/Order/Edit', '0', '1', '0', '', '2018-03-16 20:20:12', null);
+INSERT INTO `rm_address` VALUES ('/Order/Edit', '1', '1', '0', '', '2018-03-16 20:20:12', '2018-03-19 15:36:40');
 INSERT INTO `rm_address` VALUES ('/Order/GetPersonalOrder', '0', '1', '1', '', '2018-03-16 20:20:12', null);
 INSERT INTO `rm_address` VALUES ('/Order/Index', '0', '1', '0', '', '2018-03-16 20:20:12', null);
-INSERT INTO `rm_address` VALUES ('/Order/New', '0', '1', '1', '创建新订单', '2018-03-16 20:20:12', '2018-03-16 20:24:05');
+INSERT INTO `rm_address` VALUES ('/Order/New', '1', '1', '1', '创建新订单', '2018-03-16 20:20:12', '2018-03-19 15:36:38');
 INSERT INTO `rm_address` VALUES ('/Product/Copy', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Product/List', '0', '1', '1', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Product/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Product/New', '1', '1', '0', '', '2018-03-09 17:37:16', '2018-03-19 15:37:20');
 INSERT INTO `rm_address` VALUES ('/Role/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Role/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Role/GetRoleList', '0', '1', '1', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Role/Index', '0', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Role/New', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/Trade/Delete', '0', '1', '0', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Trade/Edit', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/Edit', '1', '1', '0', '', '2018-03-09 17:37:16', '2018-03-19 15:37:08');
 INSERT INTO `rm_address` VALUES ('/Trade/GetByContactId', '0', '1', '0', '', '2018-03-09 17:37:16', null);
 INSERT INTO `rm_address` VALUES ('/Trade/Index', '0', '1', '0', '', '2018-03-09 17:37:16', null);
-INSERT INTO `rm_address` VALUES ('/Trade/New', '0', '1', '0', '', '2018-03-09 17:37:16', null);
+INSERT INTO `rm_address` VALUES ('/Trade/New', '1', '1', '0', '', '2018-03-09 17:37:16', '2018-03-19 15:37:06');
 INSERT INTO `rm_address` VALUES ('/User/ChangePwd', '1', '1', '1', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/Delete', '1', '1', '0', '', '2018-02-11 16:43:27', null);
 INSERT INTO `rm_address` VALUES ('/User/Edit', '1', '1', '0', '', '2018-02-11 16:43:27', null);
@@ -429,8 +437,8 @@ CREATE TABLE `rm_role` (
 INSERT INTO `rm_role` VALUES ('1', '超级管理员', '', '100', '开发者专用用户', '2016-03-05 18:09:24');
 INSERT INTO `rm_role` VALUES ('2', '普通用户', '', '80', '普通注册用户或关注公众号的用户', '2016-03-05 18:09:47');
 INSERT INTO `rm_role` VALUES ('3', '店铺管理员', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,employee,employee.add,employee.delete,employee.edit,employee.view,home,home.edit,order,order.add,order.approve,order.delete,order.detail,order.edit,order.view,product,product.add,product.copy,product.delete,product.edit,product.view,trade,trade.add,trade.delete,trade.edit,trade.view', '80', '管理店铺下的员工', '2017-07-19 18:27:34');
-INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,employee,employee.add,employee.delete,employee.edit,employee.view,home,home.edit,log,log.action,log.action.view,log.exception,log.exception.delete,log.exception.view,log.job,log.job.view,log.login,log.login.view,order,order.add,order.delete,order.edit,order.view,product,product.add,product.delete,product.edit,product.view,system,system.role,system.role.add,system.role.delete,system.role.edit,system.role.view,system.user,system.user.add,system.user.delete,system.user.edit,system.user.view,trade,trade.add,trade.delete,trade.edit,trade.view', '90', '管理系统用户', '2017-08-29 15:07:11');
-INSERT INTO `rm_role` VALUES ('5', '店铺员工', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,order,order.add,order.approve,order.delete,order.detail,order.edit,order.view,product,product.add,product.copy,product.delete,product.edit,product.view,trade,trade.add,trade.delete,trade.edit,trade.view', '30', '店铺的员工，协助店铺管理员工作', '2018-02-26 11:31:05');
+INSERT INTO `rm_role` VALUES ('4', '系统管理员', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,employee,employee.add,employee.delete,employee.edit,employee.view,home,home.edit,log,log.action,log.action.view,log.exception,log.exception.delete,log.exception.view,log.job,log.job.view,log.login,log.login.view,order,order.add,order.approve,order.delete,order.detail,order.edit,order.view,product,product.add,product.delete,product.edit,product.view,system,system.address,system.address.add,system.address.delete,system.address.edit,system.address.view,system.role,system.role.add,system.role.delete,system.role.edit,system.role.view,system.user,system.user.add,system.user.delete,system.user.edit,system.user.view,trade,trade.add,trade.delete,trade.edit,trade.view', '90', '管理系统用户', '2017-08-29 15:07:11');
+INSERT INTO `rm_role` VALUES ('5', '店铺员工', 'contact,contact.add,contact.delete,contact.edit,contact.trade,contact.view,order,order.approve,order.detail,order.view,product,product.add,product.copy,product.delete,product.edit,product.view,trade,trade.add,trade.delete,trade.edit,trade.view', '30', '店铺的员工，协助店铺管理员工作', '2018-02-26 11:31:05');
 
 -- ----------------------------
 -- Table structure for `rm_user`
@@ -455,19 +463,17 @@ CREATE TABLE `rm_user` (
   `CreatedBy` int(11) NOT NULL COMMENT '创建者： -1:系统注册 >0 表内其它用户',
   `ModifiedAt` datetime DEFAULT NULL COMMENT '上次活动时间',
   PRIMARY KEY (`Id`),
-  KEY `uq_user_name` (`UserName`),
-  KEY `index_mobile` (`Mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  KEY `uq_user_name` (`UserName`) USING BTREE,
+  KEY `index_mobile` (`Mobile`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of rm_user
 -- ----------------------------
-INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '八集', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-16 15:28:58');
-INSERT INTO `rm_user` VALUES ('2', 'testadmin', '6', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '管理员', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '', '3', '555', '2016-01-05 18:44:49', '1', '2018-03-16 15:30:34');
-INSERT INTO `rm_user` VALUES ('3', 'testroot', '0', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '管理员', '15801992799', 'bijinshu@163.com', '96584258', '', '', '2', 'testroot', '2016-01-05 18:44:49', '1', '2018-02-11 10:33:42');
-INSERT INTO `rm_user` VALUES ('15', 'test', '1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '松岛枫', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '', '5', '', '2018-03-02 10:12:34', '1', '2018-03-02 10:15:00');
-INSERT INTO `rm_user` VALUES ('16', 'sdfd', '1', '3dc9b89542b978ec91ea47c0b1b4ce21b54eb791', '0', '1', '收到了分', '15689245789', '', '', '66666', '', '5', '', '2018-03-14 11:41:02', '1', '2018-03-16 15:48:44');
-INSERT INTO `rm_user` VALUES ('17', 'sdf', '1', '736e82c9df9620cea4d9f91e6307648aedd9def3', '0', '0', '都是坑', '15856324587', '', '', '', '', '5', '', '2018-03-16 15:48:36', '1', null);
+INSERT INTO `rm_user` VALUES ('1', 'bijinshu', '1', 'a29f84d58cbbeae202d94673880d55d8ada19257', '0', '1', '毕金书', '15801992799', '914023961@qq.com', '914023961', 'bijinshu', '八集', '1', 'bijinshu', '2016-01-05 18:44:49', '0', '2018-03-19 15:37:38');
+INSERT INTO `rm_user` VALUES ('2', 'bjc', '-1', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕建昌', '15801992799', 'bijinshu@163.com', '12863589', 'bijinshu', '', '4', '555', '2016-01-05 18:44:49', '1', '2018-03-19 15:07:55');
+INSERT INTO `rm_user` VALUES ('3', 'bj', '-1', '9adcb29710e807607b683f62e555c22dc5659713', '1', '1', '毕娟', '15801992799', 'bijinshu@163.com', '96584258', '', '', '3', 'testroot', '2016-01-05 18:44:49', '1', '2018-03-19 15:08:05');
+INSERT INTO `rm_user` VALUES ('15', 'bmx', '8', '9adcb29710e807607b683f62e555c22dc5659713', '0', '1', '毕明星', '15657476162', 'sdfd@xon.com', '95481563', 'bijinshusdlf', '', '3', '', '2018-03-02 10:12:34', '1', '2018-03-19 18:09:22');
 
 -- ----------------------------
 -- Table structure for `rm_white_ip`
