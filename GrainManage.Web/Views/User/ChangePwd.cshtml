@@ -1,0 +1,57 @@
+﻿@using GrainManage.Web
+@model UserInfo
+<div id="changePwd" class="container" style="margin-top:20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <form style="max-width:400px; padding: 15px; margin: auto auto;" role="form">
+                <div style="text-align:center;color:brown;font-size:20px;font-weight:bold;">修改密码</div>
+                <input id="OldPwd" v-model="OldPwd" type="password" class="form-control input-lg" placeholder="原始密码" style="margin-top:20px;"
+                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
+                <input id="NewPwd" v-model="NewPwd" type="password" class="form-control input-lg" placeholder="新密码" style="margin-top:20px;margin-bottom:20px;"
+                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
+                <button v-on:click.stop.prevent="changePwd" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">保存</button>
+            </form>
+        </div>
+    </div>
+    <div v-cloak>
+        <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script src="~/js/Crypto/sha1.js"></script>
+<script>
+    $(function () {
+        new Vue({
+            el: '#changePwd',
+            data: {
+                msg: '',
+                OldPwd: '',
+                NewPwd: '',
+                IsDisabled: false
+            },
+            methods: {
+                changePwd: function (event) {
+                    if (!this.isPwdValid(this.OldPwd)) {
+                        $("#OldPwd").popover('show');
+                    }
+                    else if (!this.isPwdValid(this.NewPwd)) {
+                        $("#NewPwd").popover('show');
+                    }
+                    else if (this.OldPwd == this.NewPwd) {
+                        this.showAlert('两次输入的密码不允许相同');
+                    }
+                    else {
+                        this.IsDisabled = true;
+                        var sha = new sha1();
+                        $.post('@UrlVar.User_ChangePwd', { OldPwd: sha.encrypt(this.OldPwd), NewPwd: sha.encrypt(this.NewPwd) }).always(function (result, status) {
+                            this.IsDisabled = false;
+                            this.showAlert(result.msg);
+                        }.bind(this));
+                    }
+                },
+                isPwdValid: function (pwd) {
+                    return (/^.{2,20}$/g).test(pwd);
+                }
+            }
+        })
+    })
+</script>

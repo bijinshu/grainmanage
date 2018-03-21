@@ -54,7 +54,7 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">店铺信息</a>
                         </h4>
                     </div>
-                    <div id="collapse2" class="panel-collapse collapse">
+                    <div id="collapse2" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
@@ -88,30 +88,6 @@
             </div>
         </div>
     }
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-danger">
-                <div class="panel-heading ">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">修改密码</a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="tab-pane fade in active">
-                            <form style="max-width:400px; padding: 15px; margin: auto auto;" role="form">
-                                <input id="OldPwd" v-model="OldPwd" type="password" class="form-control input-lg" placeholder="原始密码" style="margin-top:20px;"
-                                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
-                                <input id="NewPwd" v-model="NewPwd" type="password" class="form-control input-lg" placeholder="新密码" style="margin-top:20px;margin-bottom:20px;"
-                                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
-                                <button v-on:click.stop.prevent="changePwd" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">保存</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div v-cloak>
         @if (Model.CompId != 0)
         {
@@ -120,7 +96,6 @@
         <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
-<script src="~/js/Crypto/sha1.js"></script>
 <script>
     $(function () {
         new Vue({
@@ -144,8 +119,6 @@
                     Email: '',
                     RoleNames: ''
                 },
-                OldPwd: '',
-                NewPwd: '',
                 IsDisabled: false,
             },
             methods: {
@@ -171,28 +144,6 @@
                             }
                         }
                     }.bind(this));
-                },
-                changePwd: function (event) {
-                    if (!this.isPwdValid(this.OldPwd)) {
-                        $("#OldPwd").popover('show');
-                    }
-                    else if (!this.isPwdValid(this.NewPwd)) {
-                        $("#NewPwd").popover('show');
-                    }
-                    else if (this.OldPwd == this.NewPwd) {
-                        this.showAlert('两次输入的密码不允许相同');
-                    }
-                    else {
-                        this.IsDisabled = true;
-                        var sha = new sha1();
-                        $.post('@UrlVar.User_ChangePwd', { OldPwd: sha.encrypt(this.OldPwd), NewPwd: sha.encrypt(this.NewPwd) }).always(function (result, status) {
-                            this.IsDisabled = false;
-                            this.showAlert(result.msg);
-                        }.bind(this));
-                    }
-                },
-                isPwdValid: function (pwd) {
-                    return (/^.{2,20}$/g).test(pwd);
                 },
                 showComp: function () {
                     this.showPanel("#saveCompanyModal");
@@ -235,7 +186,7 @@
                     if (value) {
                         return '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/"  + value;
                     }
-                    return "javascript:void()";
+                    return "#";
                 }
             },
             computed: {

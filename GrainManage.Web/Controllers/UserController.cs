@@ -218,6 +218,10 @@ namespace GrainManage.Web.Controllers
 
         public ActionResult ChangePwd(InputChangePassword input)
         {
+            if (IsGetRequest)
+            {
+                return View(CurrentUser);
+            }
             var result = new BaseOutput();
             if (string.IsNullOrEmpty(input.OldPwd) || string.IsNullOrEmpty(input.NewPwd))
             {
