@@ -20,11 +20,11 @@ namespace GrainManage.Web
             IScheduler scheduler = await factory.GetScheduler();
             // 创建作业
             var job = JobBuilder.Create<LogJob>()
-                .WithIdentity("日志记录", "logs")
+                .WithIdentity("action_log", "logs")
                 .Build();
             // 创建触发器，每2s执行一次
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("每2秒执行一次", "logs")
+                .WithIdentity("action_trigger", "logs")
                 .StartNow()
                 .WithSimpleSchedule(x => x.WithIntervalInSeconds(2).RepeatForever())
                 .Build();
