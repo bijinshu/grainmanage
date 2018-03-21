@@ -24,13 +24,21 @@ namespace GrainManage.Web.Controllers
             var result = new BaseOutput();
             var productRepo = GetRepo<Address>();
             Expression<Func<Address, bool>> myFilter = ExpressionBuilder.Where<Address>(f => true);
+            if (!string.IsNullOrEmpty(input.Path))
+            {
+                myFilter = myFilter.And(f => f.Path.Contains(input.Path));
+            }
             if (!string.IsNullOrEmpty(input.Remark))
             {
                 myFilter = myFilter.And(f => f.Remark.Contains(input.Remark));
             }
-            if (!string.IsNullOrEmpty(input.Path))
+            if (input.IsWatching.HasValue)
             {
-                myFilter = myFilter.And(f => f.Path.Contains(input.Path));
+                myFilter = myFilter.And(f => f.IsWatching == input.IsWatching);
+            }
+            if (input.IsValid.HasValue)
+            {
+                myFilter = myFilter.And(f => f.IsValid == input.IsValid);
             }
             if (input.StartTime.HasValue)
             {

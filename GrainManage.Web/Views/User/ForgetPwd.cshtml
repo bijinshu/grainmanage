@@ -17,34 +17,31 @@
 <body>
     <div class="container" id="app">
         <div class="row" style="margin-top:20px;">
-            <div class="col-md-offset-2 col-md-8">
+            <div class="col-md-offset-2 col-md-10">
                 <ol class="breadcrumb" style="font-size:20px;">
-                    <li><a href="~/">@GlobalResx.SysName</a></li>
-                    <li><a href="#" class="active">重设密码</a></li>
+                    <li><a href="@UrlVar.User_SignIn">返回登录页</a></li>
+                    <li><a href="#" class="active">重置密码</a></li>
                 </ol>
             </div>
         </div>
         <form class="form-horizontal" role="form" style=" padding: 15px; margin: auto auto;">
             <div class="form-group" v-bind:class="{'has-error':!isUserNameValid}">
                 <label for="UserName" class="col-md-2 control-label">用户名</label>
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <input v-model="frm.UserName" type="text" class="form-control" id="UserName" placeholder="请输入用户名">
                 </div>
-                <div v-if="!isUserNameValid" class="col-md-2" style="color:red">用户名只能为手机号码或由2-20个英文字母、下划线及数字组成</div>
+                <div v-if="!isUserNameValid" class="col-md-push-2 col-md-10" style="color:red">用户名只能为手机号码或由2-20个英文字母、下划线及数字组成</div>
             </div>
             <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
                 <label for="Email" class="col-md-2 control-label">邮箱地址</label>
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
                 </div>
-                <div v-if="!isEmailValid" class="col-md-2" style="color:red">邮箱格式不正确</div>
+                <div v-if="!isEmailValid" class="col-md-push-2 col-md-10" style="color:red">邮箱格式不正确</div>
             </div>
             <div class="row">
-                <div class="col-md-offset-2 col-md-4">
-                    <button v-on:click.stop.prevent="resetPwd" v-bind:disabled="IsDisabled" class="btn btn-primary ">保存</button>
-                </div>
-                <div class="col-md-4">
-                    <a href="@UrlVar.User_SignIn">返回登录页</a>
+                <div class="col-md-push-2 col-md-10">
+                    <button v-on:click.stop.prevent="resetPwd" v-bind:disabled="IsDisabled" class="btn btn-primary btn-block">保存</button>
                 </div>
             </div>
         </form>

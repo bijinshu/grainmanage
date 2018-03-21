@@ -13,16 +13,12 @@ namespace GrainManage.Web
         //public IContainer ApplicationContainer { get; private set; }
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            AppConfig.Handler = (key) => { return configuration[key]; };
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AppConfig.Handler = (key) => { return Configuration[key]; };
-
             services.AddMvc(options =>
             {
                 options.Filters.Add(new CheckLoginAttribute());

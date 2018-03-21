@@ -387,6 +387,28 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        public ActionResult UpdateSelf(UserDto input)
+        {
+            if (IsGetRequest)
+            {
+                return View(CurrentUser);
+            }
+            var result = new BaseOutput();
+            SetEmptyIfNull(input);
+            var repo = GetRepo<User>();
+            var model = repo.GetFiltered(f => f.Id == UserId, true).First();
+            model.RealName = input.RealName;
+            model.Mobile = input.Mobile;
+            model.QQ = input.QQ;
+            model.Email = input.Email;
+            model.Weixin = input.Weixin;
+            model.Gender = input.Gender;
+            model.Address = input.Address;
+            model.ModifiedAt = DateTime.Now;
+            repo.UnitOfWork.SaveChanges();
+            SetResponse(s => s.Success, input, result);
+            return JsonNet(result);
+        }
         public ActionResult Info()
         {
             var result = new BaseOutput();
@@ -422,6 +444,15 @@ namespace GrainManage.Web.Controllers
             var userRepo = GetRepo<User>();
             var user = userRepo.GetFiltered(f => f.Id == UserId).First();
             result.data = new { user.Mobile, user.Address };
+            SetResponse(s => s.Success, result);
+            return JsonNet(result, true);
+        }
+        public ActionResult SelfInfo()
+        {
+            var result = new BaseOutput();
+            var userRepo = GetRepo<User>();
+            var user = userRepo.GetFiltered(f => f.Id == UserId).First();
+            result.data = new { user.RealName, user.QQ, user.Weixin, user.Mobile, user.Gender, user.Address, user.Email };
             SetResponse(s => s.Success, result);
             return JsonNet(result, true);
         }

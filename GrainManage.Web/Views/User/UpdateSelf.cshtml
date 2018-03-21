@@ -1,0 +1,135 @@
+﻿<div id="app" class="container">
+    <form class="form-horizontal" role="form" v-cloak>
+        <div class="form-group" v-bind:class="{'has-error':!isRealNameValid}">
+            <label for="RealName" class="col-md-2 control-label hidden-xs hidden-sm">真实姓名</label>
+            <div class="col-md-10">
+                <input v-model="frm.RealName" type="text" class="form-control" id="RealName" placeholder="请输入真实姓名">
+            </div>
+            <div v-if="!isRealNameValid" class="col-md-push-2 col-md-10" style="color:red">真实姓名只能由2-4个汉字组成</div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isPhoneValid}">
+            <label for="Mobile" class="col-md-2 control-label hidden-xs hidden-sm">手机号码</label>
+            <div class="col-md-10">
+                <input v-model="frm.Mobile" type="text" class="form-control" id="Mobile" placeholder="请输入手机号码">
+            </div>
+            <div v-if="!isPhoneValid" class="col-md-push-2 col-md-10" style="color:red">手机号码格式不正确</div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isWeixinValid}">
+            <label for="Weixin" class="col-md-2 control-label hidden-xs hidden-sm">微信号</label>
+            <div class="col-md-10">
+                <input v-model="frm.Weixin" type="text" class="form-control" id="Weixin" placeholder="请输入微信号">
+            </div>
+            <div v-if="!isWeixinValid" class="col-md-push-2 col-md-10" style="color:red">微信号只能由5-20个英文字母、下划线及数字组成</div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isQQValid}">
+            <label for="QQ" class="col-md-2 control-label hidden-xs hidden-sm">QQ</label>
+            <div class="col-md-10">
+                <input v-model="frm.QQ" type="text" class="form-control" id="QQ" placeholder="请输入QQ">
+            </div>
+            <div v-if="!isQQValid" class="col-md-push-2 col-md-10" style="color:red">QQ格式不正确</div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isEmailValid}">
+            <label for="Email" class="col-md-2 control-label hidden-xs hidden-sm">邮箱地址</label>
+            <div class="col-md-10">
+                <input v-model="frm.Email" type="text" class="form-control" id="Email" placeholder="请输入邮箱地址">
+            </div>
+            <div v-if="!isEmailValid" class="col-md-push-2 col-md-10" style="color:red">邮箱格式不正确</div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label hidden-xs hidden-sm">性别</label>
+            <div class="col-md-10">
+                <label class="checkbox-inline">
+                    <input v-model="frm.Gender" type="radio" value="0"><span>男</span>
+                </label>
+                <label class="checkbox-inline">
+                    <input v-model="frm.Gender" type="radio" value="1"> <span>女</span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-bind:class="{'has-error':!isAddressValid}">
+            <label for="Address" class="col-md-2 control-label hidden-xs hidden-sm">住址</label>
+            <div class="col-md-10">
+                <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入地址">
+            </div>
+            <div v-if="!isAddressValid" class="col-md-push-2 col-md-10" style="color:red">住址不能超过60个字符不正确</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled" class="btn btn-primary btn-block">保存</button>
+            </div>
+        </div>
+    </form>
+    <div v-cloak>
+        <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
+        $(function () {
+            new Vue({
+                el: '#app',
+                data: {
+                    frm: {
+                        RealName: '',
+                        Gender: 0,
+                        Mobile: '',
+                        Email: '',
+                        QQ: '',
+                        Weixin: '',
+                        Address:'',
+                        Remark: ''
+                    },
+                    IsDisabled: false,
+                    msg: ''
+                },
+                methods: {
+                    getSelfInfo: function (event) {
+                        $.post('@UrlVar.User_SelfInfo').always(function (result, status) {
+                            if (result.code == 1) {
+                                this.frm.RealName = result.data.RealName;
+                                this.frm.Gender = result.data.Gender;
+                                this.frm.Mobile = result.data.Mobile;
+                                this.frm.QQ = result.data.QQ;
+                                this.frm.Weixin = result.data.Weixin;
+                                this.frm.Email = result.data.Email;
+                            }
+                        }.bind(this));
+                    },
+                    save: function (event) {
+                        if (this.isEmailValid && this.isPhoneValid && this.isRealNameValid && this.isQQValid && this.isWeixinValid && this.isAddressValid) {
+                            this.IsDisabled = true;
+                            $.post('@UrlVar.User_UpdateSelf', this.frm).always(function (result, status) {
+                                this.IsDisabled = false;
+                                this.showAlert(result.msg);
+                            }.bind(this));
+                        }
+                        else {
+                            this.showAlert('有信息格式不正确,请重新确认');
+                        }
+                    }
+                },
+                computed: {
+                    isEmailValid: function () {
+                        return !this.frm.Email || (/^\w+([-+.]\w+)*@@\w+([-.]\w+)*\.\w+([-.]\w+)*$/g).test(this.frm.Email);
+                    },
+                    isPhoneValid: function () {
+                        return !this.frm.Mobile || (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
+                    },
+                    isRealNameValid: function () {
+                        return !this.frm.RealName || (/^[\u4E00-\u9FA5\uF900-\uFA2D]{2,4}$/g).test(this.frm.RealName);
+                    },
+                    isQQValid: function () {
+                        return !this.frm.QQ || (/^\d{4,12}$/g).test(this.frm.QQ);
+                    },
+                    isWeixinValid: function () {
+                        return !this.frm.Weixin || (/^[a-zA-Z\d_]{5,20}$/g).test(this.frm.Weixin);
+                    },
+                    isAddressValid: function () {
+                        return !this.frm.Address || (/^.{0,60}$/g).test(this.frm.Address);
+                    }
+                },
+                created: function () {
+                    this.getSelfInfo();
+                }
+            })
+        })
+</script>

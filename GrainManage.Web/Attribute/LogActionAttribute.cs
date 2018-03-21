@@ -19,22 +19,24 @@ namespace GrainManage.Web
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var cookies = filterContext.HttpContext.Request.Cookies;
             var values = filterContext.RouteData.Values;
             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
             if (UrlCache.IsUrlExisted(url))
             {
                 var headers = filterContext.HttpContext.Request.Headers;
-                var currentUser = UserUtil.GetFromCookie(cookies);
                 ActionLog model = new ActionLog();
                 model.Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8);
                 model.ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request);
-                model.UserId = currentUser.UserId;
-                model.UserName = currentUser.UserName;
                 model.Method = filterContext.HttpContext.Request.Method;
                 model.Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request);
-                model.Level = currentUser.Level;
                 model.StartTime = DateTime.Now;
+                var currentUser = UserUtil.GetFromCookie(filterContext.HttpContext.Request.Cookies);
+                if (currentUser != null)
+                {
+                    model.UserId = currentUser.UserId;
+                    model.UserName = currentUser.UserName;
+                    model.Level = currentUser.Level;
+                }
                 var guid = Guid.NewGuid().ToString("N");
                 LogCache.Add(guid, model);
                 headers.Add(name, guid);
