@@ -69,7 +69,7 @@ namespace GrainManage.Web.Controllers
                 var dtoList = MapTo<List<ProductDto>>(list);
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
-                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
+                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]".Replace("[]", string.Empty));
                 foreach (var item in dtoList)
                 {
                     if (currentUser.UserId == item.CreatedBy || currentUser.Level >= GlobalVar.AdminLevel || currentUser.Roles.Contains(GlobalVar.Role_Shop))

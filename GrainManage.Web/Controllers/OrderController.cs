@@ -59,7 +59,7 @@ namespace GrainManage.Web.Controllers
                 var dtoList = MapTo<List<OrderDto>>(list);
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
-                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]");
+                var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]".Replace("[]", string.Empty));
                 var detailRepo = GetRepo<OrderDetail>();
                 var idList = list.Select(s => s.Id).ToList();
                 var detailList = detailRepo.GetFiltered(f => idList.Contains(f.OrderId)).ToList();
@@ -70,7 +70,7 @@ namespace GrainManage.Web.Controllers
                     {
                         item.Creator = usertDic[item.CreatedBy];
                     }
-                    item.Details = MapTo<List<OrderDetailDto>>(detailList.Where(f => f.OrderId == item.Id)).ToList();
+                    item.Details = MapTo<List<OrderDetailDto>>(detailList.Where(f => f.OrderId == item.Id));
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
