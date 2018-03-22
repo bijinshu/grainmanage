@@ -16,7 +16,7 @@
         <div class="form-group" title="出售产品列表">
             <div class="col-md-11">
                 <form v-for="(detail,index) in currentItem.Details" style="margin-bottom:2px;">
-                    <div class="form-group" v-if="currentItem.Details&&currentItem.length>0">
+                    <div class="form-group" v-if="currentItem.Details&&currentItem.Details.length>1">
                         <div class="col-lg-push-4 col-md-7" style="color:red;font-weight:bold;text-align:center;"> 第 {{index+1}} 个产品 </div>
                     </div>
                     <div class="form-group">

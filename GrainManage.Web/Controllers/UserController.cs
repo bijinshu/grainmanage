@@ -199,7 +199,7 @@ namespace GrainManage.Web.Controllers
             return JsonNet(result);
         }
 
-        public ActionResult SignOut()
+        public ActionResult SignOut(string returnUrl)
         {
             CookieUtil.Delete(Response.Cookies, GlobalVar.CookieName);
             var repo = GetRepo<User>();
@@ -209,7 +209,7 @@ namespace GrainManage.Web.Controllers
             Resolve<ICache>().Remove(CacheKey.GetUserKey(UserId, CookieUser.Agent));
             if (IsGetRequest)
             {
-                return RedirectToAction("SignIn");
+                return Redirect(string.IsNullOrEmpty(returnUrl) ? UrlVar.User_SignIn : $"{UrlVar.User_SignIn}?returnUrl={returnUrl}");
             }
             var result = new BaseOutput();
             SetResponse(s => s.Success, null, result);

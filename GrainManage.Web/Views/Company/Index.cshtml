@@ -1,64 +1,48 @@
 ﻿@using GrainManage.Web
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_WeixinLayout.cshtml";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@GlobalResx.SysName</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
-    <link href="~/css/company.css" rel="stylesheet" />
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/vue.js"></script>
-    <script src="~/js/components/mixin.js"></script>
-    <script src="~/js/components/modal-dialog.js"></script>
-    <script src="~/js/components/pager.js"></script>
-</head>
-<body>
-    <div id="app" class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="input-group">
-                    <input v-model="search.Name" type="text" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-success" type="button" v-on:click="getData(search.PageIndex=0)">搜索</button>
-                    </span>
-                </div>
+<div id="app" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <input v-model="search.Name" type="text" class="form-control">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" v-on:click="getData(search.PageIndex=0)">搜索</button>
+                </span>
             </div>
-        </div>
-        <div class="row" v-cloak>
-            <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="margin-bottom:10px;">
-                <div class="company-title">
-                    {{item.CompanyName}}
-                </div>
-                <img v-bind:src="item.ImgName|imgUrl" class="img-rounded company-logo" />
-                <div class="company-main">
-                    <div>经营范围：</div>
-                    <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
-                </div>
-                <div class="company-address">
-                    <span>联系地址：</span>
-                    <span>{{item.Address}}</span>
-                </div>
-                <div style="margin-top:2px;">
-                    <button class="btn btn-info btn-block" v-on:click="showOrder(item)">我要卖粮</button>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize" other-class="pagination-sm"></pager>
-            </div>
-        </div>
-        <div v-cloak>
-            @Html.Partial("_Order")
-            <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
         </div>
     </div>
-    <script>
+    <div class="row" v-cloak>
+        <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="margin-bottom:10px;">
+            <div class="company-title">
+                {{item.CompanyName}}
+            </div>
+            <img v-bind:src="item.ImgName|imgUrl" class="img-rounded company-logo" />
+            <div class="company-main">
+                <div>经营范围：</div>
+                <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
+            </div>
+            <div class="company-address">
+                <span>联系地址：</span>
+                <span>{{item.Address}}</span>
+            </div>
+            <div style="margin-top:2px;">
+                <button class="btn btn-info btn-block" v-on:click="showOrder(item)">我要卖粮</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize" other-class="pagination-sm"></pager>
+        </div>
+    </div>
+    <div v-cloak>
+        @Html.Partial("_Order")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
         $(function () {
             new Vue({
                 el: '#app',
@@ -68,7 +52,6 @@
                     search: { Name: '', PageIndex: 0, PageSize: 20 },
                     list: [],
                     productList: [],
-                    userInfo: {},
                     frm: { CompId: 0, CompName: '', Mobile: '', Address: '', Remark: '', Details: [] },
                     isFirstTime: true,
                     IsDisabled: false,
@@ -76,7 +59,7 @@
                 },
                 methods: {
                     getData: function () {
-                      $.post('@UrlVar.Company_GetList', this.search).always(function (result, status) {
+                      $.post('@UrlVar.Company_Index', this.search).always(function (result, status) {
                           this.list = result.data;
                           this.total = result.total;
                           if (result.code != 1 && !this.isFirstTime) {
@@ -85,29 +68,20 @@
                           this.isFirstTime = false;
                       }.bind(this));
                     },
-                    getSimpleInfo: function () {
-                        $.post('@UrlVar.User_SimpleInfo').done(function (result, status) {
-                            if (result.code==1) {
-                                this.userInfo = result.data;
-                            } else {
-                                this.userInfo = null;
-                            }
-                      }.bind(this));
-                    },
                     showOrder: function (item) {
-                        if (this.userInfo) {
+                        if ($globalUserInfo) {
                             this.productList = item.Products;
                             this.frm.CompId = item.Id;
                             this.frm.CompName = item.CompanyName;
-                            this.frm.Mobile = this.userInfo.Mobile;
-                            this.frm.Address = this.userInfo.Address;
+                            this.frm.Mobile = $globalUserInfo.Mobile;
+                            this.frm.Address = $globalUserInfo.Address;
                             this.frm.Remark = '';
                             this.frm.Details = [];
                             this.addNewDetailForm();
                             this.showPanel("#newOrderModal");
                         }
                         else {
-                            window.location.href = '@UrlVar.User_SignIn' + '?returnUrl=' + encodeURI(window.location.href);
+                            window.location.href = '@UrlVar.User_SignIn' + '?returnUrl=' + encodeURI(window.location.pathname);
                         }
                     },
                     setPrice: function (detail) {
@@ -191,10 +165,7 @@
                 },
                 created: function () {
                     this.getData();
-                    this.getSimpleInfo();
                 }
             })
         })
-    </script>
-</body>
-</html>
+</script>

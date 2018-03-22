@@ -79,7 +79,9 @@ namespace GrainManage.Web
                 }
                 if (filterContext.HttpContext.Request.Method == "GET")
                 {
-                    filterContext.Result = new RedirectResult(UrlVar.User_SignIn, false);
+                    var returnUrl = filterContext.HttpContext.Request.Path.Value;
+                    var redirectUrl = string.IsNullOrEmpty(returnUrl) || returnUrl == "/" ? UrlVar.User_SignIn : $"{UrlVar.User_SignIn}?returnUrl={returnUrl}";
+                    filterContext.Result = new RedirectResult(redirectUrl, false);
                 }
                 else
                 {

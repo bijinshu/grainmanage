@@ -15,10 +15,10 @@ namespace GrainManage.Web
         public static string Home_MenuTree { get { return GetUrl("/Home/MenuTree"); } }
         //Company
         [Common]
+        public static string Company_Index{ get { return GetUrl("/Company/Index"); } }
+        [Common]
         public static string Company_New { get { return GetUrl("/Company/New"); } }
         public static string Company_Edit { get { return GetUrl("/Company/Edit"); } }
-        [Common]
-        public static string Company_GetList { get { return GetUrl("/Company/GetList"); } }
         [Common]
         public static string Company_DeleteFile { get { return GetUrl("/Company/DeleteFile"); } }
         //Role

@@ -18,13 +18,12 @@ namespace GrainManage.Web.Controllers
     public class CompanyController : BaseController
     {
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(InputSearch input)
         {
-            return View();
-        }
-        [AllowAnonymous]
-        public ActionResult GetList(InputSearch input)
-        {
+            if (IsGetRequest)
+            {
+                return View();
+            }
             var result = new BaseOutput();
             var repo = GetRepo<Company>();
             var myFilter = ExpressionBuilder.Where<Company>(f => true);
