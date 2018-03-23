@@ -97,9 +97,13 @@ namespace GrainManage.Web.Controllers
             }
             var result = new BaseOutput();
             var repo = GetRepo<User>();
-            if (!(IsUserNameMatch(input.UserName) || IsPhoneMatch(input.Mobile)))
+            if (!IsUserNameMatch(input.UserName))
             {
                 SetResponse(s => s.NameNotValid, input, result);
+            }
+            else if (!IsPhoneMatch(input.Mobile))
+            {
+                SetResponse(s => s.MobileNotValid, input, result);
             }
             else if (string.IsNullOrEmpty(input.Pwd))
             {
@@ -108,6 +112,10 @@ namespace GrainManage.Web.Controllers
             else if (repo.GetFiltered(f => f.UserName == input.UserName).Any())
             {
                 SetResponse(s => s.NameExist, input, result);
+            }
+            else if (repo.GetFiltered(f => f.Mobile == input.Mobile).Any())
+            {
+                SetResponse(s => s.MobileExist, input, result);
             }
             else
             {
@@ -467,11 +475,11 @@ namespace GrainManage.Web.Controllers
         }
         private bool IsUserNameMatch(string userName)
         {
-            return !string.IsNullOrEmpty(userName) && Regex.IsMatch(userName, @"^[a-zA-Z0-9-_]{2,20}$");
+            return Regex.IsMatch(userName, @"^[a-zA-Z]\w{1,20}$");
         }
         private bool IsPhoneMatch(string phone)
         {
-            return !string.IsNullOrEmpty(phone) && Regex.IsMatch(phone, @"^1[34578]\d{9}$");
+            return Regex.IsMatch(phone, @"^1[34578]\d{9}$");
         }
     }
 }

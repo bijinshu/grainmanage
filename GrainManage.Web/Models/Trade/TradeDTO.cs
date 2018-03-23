@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GrainManage.Web.Models.Trade
 {
@@ -9,10 +10,6 @@ namespace GrainManage.Web.Models.Trade
         public string CompName { get; set; }
         public int ContactId { get; set; }
         public string ContactName { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public decimal Price { get; set; }
-        public decimal Weight { get; set; }
         public decimal ActualMoney { get; set; }
         public int TradeType { get; set; }
         public string Remark { get; set; }
@@ -20,5 +17,6 @@ namespace GrainManage.Web.Models.Trade
         public string Creator { get; set; }
         public bool CanModify { get; set; }
         public DateTime CreatedAt { get; set; }
+        public List<TradeDetailDto> Details { get; set; }
     }
 }

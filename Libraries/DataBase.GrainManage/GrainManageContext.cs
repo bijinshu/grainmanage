@@ -31,6 +31,7 @@ namespace DataBase.GrainManage
             modelBuilder.ApplyConfiguration(new CompanyMapper());
             modelBuilder.ApplyConfiguration(new OrderMapper());
             modelBuilder.ApplyConfiguration(new OrderDetailMapper());
+            modelBuilder.ApplyConfiguration(new TradeDetailMapper());
         }
     }
 }

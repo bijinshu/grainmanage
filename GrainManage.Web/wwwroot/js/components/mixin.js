@@ -26,6 +26,13 @@
             },
             isNumber: function (obj) {
                 return typeof obj === 'number' && obj % 1 === 0
+            },
+            toFixed: function (value) {
+                if (!isNaN(parseFloat(value)) && isFinite(value)) {
+                    var result = parseFloat(value).toFixed(2);
+                    return parseFloat(result);
+                }
+                return '';
             }
         },
         filters: {

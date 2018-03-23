@@ -107,6 +107,7 @@
                                  this.IsDisabled = false;
                                  if (result.code==1) {
                                      this.hidePanel("#newOrderModal");
+                                     window.location.href = '@UrlVar.Order_GetPersonalOrder';
                                  } else {
                                      this.showAlert(result.msg);
                                  }
@@ -116,7 +117,9 @@
                         }
                     },
                     addNewDetailForm: function () {
-                        var newDetail = this.newDetailForm();
+                        var productId = this.productList[0].Id;
+                        var newDetail = { ProductId: productId, ProductName: '', Price: 0, Weight: '', TotalMoney: 0, ProductList: [] };
+                        newDetail.ProductList = this.productList.concat();
                         this.frm.Details.push(newDetail);
                         this.setPrice(newDetail);
                     },
@@ -131,12 +134,6 @@
                             return parseInt(result) == result ? parseInt(result) : result;
                         }
                         return 0;
-                    },
-                    newDetailForm: function () {
-                        var productId = this.productList[0].Id;
-                        var obj = { ProductId: productId, ProductName: '', Price: 0, Weight: '', TotalMoney: 0, ProductList: [] };
-                        obj.ProductList = this.productList.concat();
-                        return obj;
                     }
                 },
                 computed: {

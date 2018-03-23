@@ -7,6 +7,10 @@ using System.Linq.Expressions;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using GrainManage.Core;
+using DataBase.GrainManage.Models.Log;
+using System.Text;
+using GrainManage.Web.Common;
+using GrainManage.Web.Services;
 
 namespace GrainManage.Web.Controllers
 {
@@ -27,7 +31,9 @@ namespace GrainManage.Web.Controllers
             }
             if (!string.IsNullOrEmpty(input.ProductName))
             {
-                myFilter = myFilter.And(f => f.ProductName.Contains(input.ProductName));
+                var detailRepo = GetRepo<TradeDetail>();
+                var query = detailRepo.GetFiltered(f => f.ProductName.Contains(input.ProductName)).Select(s => s.TradeId);
+                myFilter = myFilter.And(f => query.Contains(f.Id));
             }
             if (!string.IsNullOrEmpty(input.ContactName))
             {
@@ -46,14 +52,17 @@ namespace GrainManage.Web.Controllers
             if (list.Any())
             {
                 result.total = total;
-                var dtoList = MapTo<List<TradeDto>>(list);
                 var contactRepo = GetRepo<Contact>();
                 var userRepo = GetRepo<User>();
-                var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
+                var userIdList = list.Select(s => s.CreatedBy).Distinct().ToList();
                 var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]".Replace("[]", string.Empty));
                 var compRepo = GetRepo<Company>();
                 var compIdList = list.Select(s => s.CompId).Distinct().ToList();
                 var compList = compRepo.GetFiltered(f => compIdList.Contains(f.Id)).Select(s => new { s.Id, s.Name }).ToList();
+                var detailRepo = GetRepo<TradeDetail>();
+                var idList = list.Select(s => s.Id).ToList();
+                var detailList = detailRepo.GetFiltered(f => idList.Contains(f.TradeId)).ToList();
+                var dtoList = MapTo<List<TradeDto>>(list);
                 foreach (var item in dtoList)
                 {
                     if (item.CreatedBy == currentUser.UserId || currentUser.Roles.Contains(GlobalVar.Role_Shop))
@@ -69,6 +78,7 @@ namespace GrainManage.Web.Controllers
                     {
                         item.CompName = comp.Name;
                     }
+                    item.Details = MapTo<List<TradeDetailDto>>(detailList.Where(f => f.TradeId == item.Id).ToList());
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, input, result);
@@ -113,16 +123,41 @@ namespace GrainManage.Web.Controllers
                 input.ContactId = 0;
             }
             var repo = GetRepo<Trade>();
-            var model = repo.Add(MapTo<Trade>(input));
+            var detailRepo = GetRepo<TradeDetail>();
+            var model = MapTo<Trade>(input);
+            var detailModelList = MapTo<List<TradeDetail>>(input.Details);
+            using (var trans = repo.UnitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    repo.Add(model);
+                    foreach (var item in detailModelList)
+                    {
+                        item.TradeId = model.Id;
+                        item.CreatedBy = currentUser.UserId;
+                        item.Remark = item.Remark ?? string.Empty;
+                        item.CreatedAt = DateTime.Now;
+                    }
+                    detailRepo.Add(detailModelList);
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    var exception = new ExceptionLog
+                    {
+                        Path = HttpUtility.UrlDecode(Request.Path.Value, Encoding.UTF8),
+                        Para = HttpUtil.GetInputPara(Request),
+                        Message = ExceptionUtil.GetInnerestMessage(e),
+                        StackTrace = e.StackTrace,
+                        ClientIP = HttpUtil.GetRequestHostAddress(Request),
+                        CreatedAt = DateTime.Now
+                    };
+                    LogService.AddExceptionLog(exception);
+                }
+            }
             result.data = model.Id;
-            if (model.Id > 0)
-            {
-                SetResponse(s => s.Success, input, result);
-            }
-            else
-            {
-                SetResponse(s => s.InsertFailed, input, result);
-            }
+            SetResponse(s => s.Success, input, result);
             return JsonNet(result);
         }
 
@@ -130,9 +165,9 @@ namespace GrainManage.Web.Controllers
         {
             var result = new BaseOutput();
             SetEmptyIfNull(input);
+            var currentUser = CurrentUser;
             if (!string.IsNullOrEmpty(input.ContactName))
             {
-                var currentUser = CurrentUser;
                 input.ContactName = input.ContactName.Trim();
                 var contactRepo = GetRepo<Contact>();
                 var contactList = contactRepo.GetFiltered(f => f.CompId == currentUser.CompId && f.ContactName == input.ContactName).ToList();
@@ -157,13 +192,41 @@ namespace GrainManage.Web.Controllers
                 input.ContactId = 0;
             }
             var repo = GetRepo<Trade>();
+            var detailRepo = GetRepo<TradeDetail>();
+            var detailModelList = detailRepo.GetFiltered(f => f.TradeId == input.Id, true).ToList();
+            var validDetailList = new List<TradeDetail>();
+            repo.UnitOfWork.LazyCommitEnabled = true;
+            foreach (var detail in input.Details)
+            {
+                if (detail.Id > 0)
+                {
+                    var detailModel = detailModelList.FirstOrDefault(f => f.Id == detail.Id);
+                    if (detailModel != null)
+                    {
+                        detailModel.ProductId = detail.ProductId;
+                        detailModel.ProductName = detail.ProductName;
+                        detailModel.RoughWeight = detail.RoughWeight;
+                        detailModel.Tare = detail.Tare;
+                        detailModel.Price = detail.Price;
+                        detailModel.ActualMoney = detail.ActualMoney;
+                        detailModel.Remark = detail.Remark ?? string.Empty;
+                        detailModel.ModifiedAt = DateTime.Now;
+                    }
+                }
+                else
+                {
+                    var detailModel = MapTo<TradeDetail>(detail);
+                    detailModel.TradeId = input.Id;
+                    detailModel.CreatedAt = DateTime.Now;
+                    detailModel.CreatedBy = currentUser.UserId;
+                    detailRepo.Add(detailModel);
+                }
+            }
+            var deletedDetailModelList = detailModelList.Where(f => !input.Details.Any(a => a.Id == f.Id)).ToList();
+            detailRepo.Delete(deletedDetailModelList);
             var model = repo.Get(input.Id);
-            model.ProductId = input.ProductId;
-            model.ProductName = input.ProductName;
             model.ContactId = input.ContactId;
             model.ContactName = input.ContactName;
-            model.Price = input.Price;
-            model.Weight = input.Weight;
             model.ActualMoney = input.ActualMoney;
             model.TradeType = input.TradeType;
             model.Remark = input.Remark;

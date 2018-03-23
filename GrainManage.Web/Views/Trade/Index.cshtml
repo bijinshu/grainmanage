@@ -54,10 +54,7 @@
                                 <th>店铺名称</th>
                             }
                             <th>客户姓名</th>
-                            <th>产品名称</th>
-                            <th>产品价格</th>
-                            <th>产品重量</th>
-                            <th>计算金额</th>
+                            <th>交易详情</th>
                             <th>成交金额</th>
                             <th>交易类型</th>
                             <th>交易时间</th>
@@ -81,17 +78,35 @@
                             {
                                 <td>{{item.CompName}}</td>
                             }
-                            <td v-if="item.ContactId>0">{{item.ContactName}}</td>
-                            <td style="color:red;" title="该用户不存在" v-else>{{item.ContactName}}</td>
-                            <td>{{item.ProductName}}</td>
-                            <td>{{item.Price}}</td>
-                            <td>{{item.Weight}}</td>
-                            <td>{{(item.Price*item.Weight).toFixed(2)}}</td>
-                            <td>{{item.ActualMoney}}</td>
+                            <td><span v-if="item.ContactId>0">{{item.ContactName}}</span><span v-else style="color:red;" title="该用户不存在">{{item.ContactName}}</span></td>
+                            <td>
+                                <table class="table table-bordered table-striped" style="margin:0">
+                                    <thead>
+                                        <tr>
+                                            <th>产品名称</th>
+                                            <th>毛重</th>
+                                            <th>皮重</th>
+                                            <th>产品价格</th>
+                                            <th>净重</th>
+                                            <th>成交金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item2,index) in item.Details">
+                                            <td>{{item2.ProductName}}</td>
+                                            <td>{{toFixed(item2.RoughWeight)}}</td>
+                                            <td>{{toFixed(item2.Tare)}}</td>
+                                            <td>{{toFixed(item2.Price)}}</td>
+                                            <td>{{toFixed(item2.RoughWeight-item2.Tare)}}</td>
+                                            <td>{{toFixed(item2.ActualMoney)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>{{toFixed(item.ActualMoney)}}</td>
                             <td>{{item.TradeType==1?'出售':'收购'}}</td>
                             <td>{{item.CreatedAt|formatTime}}</td>
                             <td>{{item.Creator}}</td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -128,18 +143,14 @@
                     Id:0,
                     ContactId: 0,
                     ContactName:'',
-                    ProductId: 1,
-                    ProductName:'',
-                    Price:0,
-                    Weight: 0,
                     TradeType: 0,
-                    ActualMoney:0,
+                    ActualMoney: 0,
+                    Details:[],
                     Remark:''
                 },
                 IsDisabled: false,
                 AlertTitle: '',
                 PanelTitle: '',
-                AllowRefreshActualMoney: false,
                 currentItem: {},
                 currentContact: {},
                 isFirstTime:true
@@ -168,67 +179,73 @@
                         this.productList = result;
                     }.bind(this));
                 },
-                setPrice: function () {
+                save: function () {
+                    this.IsDisabled = true;
+                    var url = this.frmTrade.Id > 0 ? '@UrlVar.Trade_Edit' : '@UrlVar.Trade_New';
+                    $.post(url, this.frmTrade).always(function (result, status) {
+                         this.IsDisabled = false;
+                         if (result.code == 1) {
+                            this.getData();
+                            this.hidePanel("#saveTradeModal");
+                         }
+                         else {
+                           this.showAlert(result.msg);
+                         }
+                     }.bind(this));
+                },
+                setPrice: function (detail) {
                     var existedItem = null;
                     for (var i = 0; i < this.productList.length; i++) {
-                        if (this.productList[i].Id == this.frmTrade.ProductId) {
+                        if (this.productList[i].Id == detail.ProductId) {
                             existedItem = this.productList[i];
                             break;
                         }
                     }
-                    this.frmTrade.Price = existedItem ? existedItem.Price : '';
-                    this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
+                    detail.Price = existedItem ? existedItem.Price : '';
+                    detail.ProductName = existedItem ? existedItem.Name : '';
                 },
                 setMoney: function () {
-                    if (this.AllowRefreshActualMoney) {
-                        this.frmTrade.ActualMoney = this.TotalMoney;
+                    var money = 0;
+                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
+                        var detail = this.frmTrade.Details[i];
+                        money += detail.Price * (detail.RoughWeight - detail.Tare);
                     }
+                    this.frmTrade.ActualMoney = this.toFixed(money);
                 },
-                save: function () {
-                    this.IsDisabled = true;
-                    if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
-                        var url = this.frmTrade.Id > 0 ? '@UrlVar.Trade_Edit' : '@UrlVar.Trade_New';
-                        $.post(url, this.frmTrade).always(function (result, status) {
-                          this.IsDisabled = false;
-                          if (result.code == 1) {
-                             this.getData();
-                             this.hidePanel("#saveTradeModal");
-                          }
-                          else {
-                            this.showAlert(result.msg);
-                          }
-                         }.bind(this));
+                setDetailMoney: function (detail, action) {
+                    var price = parseFloat(detail.Price);
+                    var roughWeight = parseFloat(detail.RoughWeight);
+                    var tare = parseFloat(detail.Tare);
+                    if (price > 0 && roughWeight >= 0 && tare >= 0 && roughWeight > tare) {
+                        detail.ActualMoney = this.toFixed(price * (roughWeight - tare))
                     } else {
-                        this.showAlert('请检查各项参数是否正确');
-                        this.IsDisabled = false;
+                        detail.ActualMoney = '';
                     }
                 },
                 showAdd: function () {
-                    this.AllowRefreshActualMoney = true;
                     this.frmTrade.Id = 0;
-                    this.frmTrade.ProductId = this.productList[0].Id;
                     this.frmTrade.TradeType = 0;
                     this.frmTrade.ContactId = 0;
                     this.frmTrade.ContactName ='';
-                    this.frmTrade.Weight = '';
                     this.frmTrade.ActualMoney = '';
-                    this.frmTrade.Remark ='';
-                    this.frmTrade.Price = '';
-                    this.setPrice();
+                    this.frmTrade.Remark = '';
+                    this.frmTrade.Details = [];
+                    this.addNewDetailForm();
                     this.showPanel("新增交易","#saveTradeModal");
                 },
                 showEdit: function (item) {
-                    this.AllowRefreshActualMoney = false;
-                    this.frmTrade.ProductId = item.ProductId;
-                    this.frmTrade.TradeType = item.TradeType;
                     this.frmTrade.Id = item.Id;
+                    this.frmTrade.TradeType = item.TradeType;
                     this.frmTrade.ContactId = item.ContactId;
                     this.frmTrade.ContactName = item.ContactName;
-                    this.frmTrade.ProductName = item.ProductName;
-                    this.frmTrade.Weight = item.Weight;
                     this.frmTrade.ActualMoney = item.ActualMoney;
                     this.frmTrade.Remark = item.Remark;
-                    this.frmTrade.Price = item.Price;
+                    this.frmTrade.Details = item.Details.concat();
+                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
+                        var detail = this.frmTrade.Details[i];
+                        detail.ProductList = this.productList.concat();
+                        this.setPrice(detail);
+                    }
                     this.showPanel("编辑交易","#saveTradeModal");
                 },
                 showDelete: function (item) {
@@ -247,9 +264,27 @@
                         }
                     }.bind(this));
                 },
+                addNewDetailForm: function () {
+                    var productId = this.productList[0].Id;
+                    var newDetail = { ProductId: productId, ProductName: '', Price: 0, RoughWeight: '',Tare:'', ActualMoney: 0, ProductList: [],Remark:'' };
+                    newDetail.ProductList = this.productList.concat();
+                    this.frmTrade.Details.push(newDetail);
+                    this.setPrice(newDetail);
+                },
+                delDetailForm: function (index) {
+                    if (this.frmTrade.Details.length > 1) {
+                        this.frmTrade.Details.splice(index, 1);
+                    }
+                },
                 showContact: function () {
                     this.getContactList();
                     this.showPanel("#chooseContactModal");
+                },
+                isRoughWeightValid: function (detail) {
+                    return detail.RoughWeight!='' && parseFloat(detail.RoughWeight) > 0;
+                },
+                isTareValid: function (detail) {
+                    return detail.Tare != '' && parseFloat(detail.Tare) >= 0 && parseFloat(detail.RoughWeight) > parseFloat(detail.Tare);
                 }
             },
             computed: {
@@ -258,34 +293,11 @@
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frmTrade.Remark);
-                },
-                isPriceValid: function () {
-                    return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
-                },
-                isActualMoneyValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney)&& this.frmTrade.ActualMoney > 0;
-                },
-                isWeightValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
-                },
-                TotalMoney: function () {
-                    return ((this.frmTrade.Price ? this.frmTrade.Price : 0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0)).toFixed(2);
                 }
             },
             created: function () {
                 this.getData();
                 this.getProductList();
-                this.$watch('frmTrade.Price', function (newVal, oldVal) {
-                      this.setMoney();
-                });
-                this.$watch('frmTrade.Weight', function (newVal, oldVal) {
-                      this.setMoney();
-                });
-                this.$watch('frmTrade.ActualMoney', function (newVal, oldVal) {
-                    if (!this.AllowRefreshActualMoney) {
-                        this.AllowRefreshActualMoney = true;
-                    }
-                });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
                 });

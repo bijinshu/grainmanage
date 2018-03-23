@@ -30,7 +30,7 @@
             <input id="UserName" v-model="UserName" type="text" class="form-control input-lg" placeholder="用户名" style="margin-top:20px;" autofocus
                    data-toggle="popover" data-placement="bottom" data-content="用户名不能为空,且只能为手机号码或由2-20个英文字母、下划线及数字组成">
             <input id="Pwd" v-model="Pwd" type="password" class="form-control input-lg" placeholder="密码" style="margin-top:20px;"
-                   data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
+                   data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由6-20个字符组成">
             <div class="checkbox">
                 <label>
                     <input v-model="RememberMe" type="checkbox">
@@ -102,10 +102,10 @@
                 },
                 computed: {
                     isUserNameValid: function () {
-                        return ((/^\w{2,20}$/g).test(this.UserName) && !(/^\d+$/g).test(this.UserName)) || (/^1[34578]\d{9}$/g).test(this.UserName);
+                        return (/^[a-zA-Z]\w{1,20}$/g).test(this.UserName)  || (/^1[34578]\d{9}$/g).test(this.UserName);
                     },
                     isPwdValid: function () {
-                        return (/^.{2,20}$/g).test(this.Pwd);
+                        return (/^.{6,20}$/g).test(this.Pwd);
                     }
                 },
                 created: function () {

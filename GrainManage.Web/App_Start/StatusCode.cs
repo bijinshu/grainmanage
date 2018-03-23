@@ -42,8 +42,10 @@ namespace GrainManage.Web
         //User
         [Message("用户名不能为空")]
         public readonly int NameEmpty = 502;
-        [Message("用户名只能为手机号码或由2-20个英文字母、下划线及数字组成")]
+        [Message("用户名只能由2-20个英文字母、下划线及数字组成,且只能以字母开头")]
         public readonly int NameNotValid = 502;
+        [Message("手机号码格式不正确")]
+        public readonly int MobileNotValid = 502;
         [Message("密码不能为空!")]
         public readonly int PwdEmpty = 503;
         [Message("无效密码")]
@@ -58,8 +60,10 @@ namespace GrainManage.Web
         public readonly int UserForbidden = 507;
         [Message("登录失败,该账户尚未激活.")]
         public readonly int UserNotActivated = 508;
-        [Message("该用户名已存在.")]
+        [Message("该用户名已存在,请换一个再试.")]
         public readonly int NameExist = 510;
+        [Message("该手机号码已存在,请换一个再试.")]
+        public readonly int MobileExist = 510;
         [Message("对不起,您没有权限进行此操作,请先登录.")]
         public readonly int NotLogin = 511;
         [Message("IP地址发生变化,请重新登录.")]

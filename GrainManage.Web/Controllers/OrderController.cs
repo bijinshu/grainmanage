@@ -149,6 +149,7 @@ namespace GrainManage.Web.Controllers
                         }
                         catch (Exception e)
                         {
+                            trans.Rollback();
                             var exception = new ExceptionLog
                             {
                                 Path = HttpUtility.UrlDecode(Request.Path.Value, Encoding.UTF8),
@@ -159,7 +160,6 @@ namespace GrainManage.Web.Controllers
                                 CreatedAt = DateTime.Now
                             };
                             LogService.AddExceptionLog(exception);
-                            trans.Rollback();
                         }
                     }
                     result.data = model.Id;

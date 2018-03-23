@@ -1,6 +1,6 @@
 ﻿<modal-dialog v-bind:title="PanelTitle" id="saveTradeModal">
     <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
-    <form slot="body" class="form-horizontal" role="form" style="margin-top:10px;">
+    <div slot="body" class="form-horizontal" role="form" style="margin-top:10px;">
         <div class="form-group">
             <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">联系人名称</label>
             <div class="col-md-6">
@@ -21,40 +21,62 @@
                 </label>
             </div>
         </div>
+        <div class="form-group" title="交易列表">
+            <div class="col-md-12">
+                <form v-for="(detail,index) in frmTrade.Details" style="border:solid 1px;margin-bottom:2px;">
+                    <div class="form-group">
+                        <div class="col-md-9">
+                        </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-danger btn-sm btn-block" v-if="frmTrade.Details.length>1" v-on:click.stop.prevent="delDetailForm(index)">删除</a>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:-20px;">
+                        <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
+                        <div class="col-md-8">
+                            <label class="checkbox-inline" v-for="item in detail.ProductList" v-on:click.stop="setPrice(detail)">
+                                <input v-bind:value="item.Id" v-model="detail.ProductId" type="radio"><span>{{item.Name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" title="产品价格">
+                        <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.Price" disabled type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RoughWeight" class="col-md-3 control-label hidden-xs hidden-sm">毛重</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.RoughWeight" type="number" step="20" class="form-control" id="Weight" placeholder="请输入毛重(斤)">
+                        </div>
+                        <div v-if="!isRoughWeightValid(detail)" class="col-md-push-3 col-md-8" style="color:red;">毛重必须为大于0的数字(最多两位小数)</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Tare" class="col-md-3 control-label hidden-xs hidden-sm">皮重</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.Tare" type="number" step="20" class="form-control" id="Tare" placeholder="请输入皮重(斤)">
+                        </div>
+                        <div v-if="!isTareValid(detail)" class="col-md-push-3 col-md-8" style="color:red;">皮重必须为大于0的数字(最多两位小数),且不能大于毛重</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ActualMoney" class="col-md-3 control-label hidden-xs hidden-sm">金额</label>
+                        <div class="col-md-8">
+                            <input v-model="detail.ActualMoney" type="number" class="form-control" id="ActualMoney" placeholder="金额">
+                        </div>
+                    </div>
+                </form>
+                <button class="btn btn-warning btn-block" style="margin-top:2px;" v-on:click="addNewDetailForm">继续添加</button>
+            </div>
+        </div>
         <div class="form-group">
-            <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
-            <div class="col-md-8">
-                <label class="checkbox-inline" v-for="item in productList" v-on:click.stop="setPrice">
-                    <input v-bind:value="item.Id" v-model="frmTrade.ProductId" type="radio"><span>{{item.Name}}</span>
-                </label>
+            <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">总金额</label>
+            <div class="col-md-7">
+                <input v-model="frmTrade.ActualMoney" type="number" class="form-control" id="TotalMoney" placeholder="总金额">
             </div>
-        </div>
-        <div class="form-group" v-bind:class="{'has-error':!isPriceValid}">
-            <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
-            <div class="col-md-8">
-                <input v-model="frmTrade.Price" type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
+            <div class="col-md-2">
+                <a class="btn btn-danger btn-block" v-on:click="setMoney">计算</a>
             </div>
-            <div v-if="!isPriceValid" class="col-md-push-3 col-md-8" style="color:red">价格必须为大于0的数字(最多四位小数)</div>
-        </div>
-        <div class="form-group" v-bind:class="{'has-error':!isWeightValid}">
-            <label for="Weight" class="col-md-3 control-label hidden-xs hidden-sm">重量</label>
-            <div class="col-md-8">
-                <input v-model="frmTrade.Weight" type="number" class="form-control" id="Weight" placeholder="请输入重量(斤)">
-            </div>
-            <div v-if="!isWeightValid" class="col-md-push-3 col-md-8" style="color:red">重量必须为大于0的数字(最多两位小数)</div>
-        </div>
-        <div class="form-group">
-            <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">计算金额</label>
-            <div class="col-md-8">
-                <input v-bind:value="TotalMoney" type="number" disabled class="form-control" id="TotalMoney" placeholder="计算金额">
-            </div>
-        </div>
-        <div class="form-group" v-bind:class="{'has-error':!isActualMoneyValid}">
-            <label for="ActualMoney" class="col-md-3 control-label hidden-xs hidden-sm">成交金额</label>
-            <div class="col-md-8">
-                <input v-model="frmTrade.ActualMoney" type="number" class="form-control" id="ActualMoney" placeholder="实际金额">
-            </div>
-            <div v-if="!isActualMoneyValid" class="col-md-push-3 col-md-8" style="color:red">实际金额必须为大于0的数字(最多两位小数)</div>
         </div>
         <div class="form-group" v-bind:class="{'has-error':!isRemarkValid}">
             <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>
@@ -69,6 +91,6 @@
                 <button class="btn btn-primary pull-right" v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled">保存</button>
             </div>
         </div>
-    </form>
+    </div>
     <div slot="footer" style="display:none"></div>
 </modal-dialog>

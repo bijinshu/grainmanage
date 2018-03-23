@@ -6,9 +6,9 @@
             <form style="max-width:400px; padding: 15px; margin: auto auto;" role="form">
                 <div style="text-align:center;color:brown;font-size:20px;font-weight:bold;">修改密码</div>
                 <input id="OldPwd" v-model="OldPwd" type="password" class="form-control input-lg" placeholder="原始密码" style="margin-top:20px;"
-                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
+                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由6-20个字符组成">
                 <input id="NewPwd" v-model="NewPwd" type="password" class="form-control input-lg" placeholder="新密码" style="margin-top:20px;margin-bottom:20px;"
-                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由2-20个字符组成">
+                       data-toggle="popover" data-placement="top" data-content="密码不能为空,且只能由6-20个字符组成">
                 <button v-on:click.stop.prevent="changePwd" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">保存</button>
             </form>
         </div>
@@ -49,7 +49,7 @@
                     }
                 },
                 isPwdValid: function (pwd) {
-                    return (/^.{2,20}$/g).test(pwd);
+                    return (/^.{6,20}$/g).test(pwd);
                 }
             }
         })

@@ -45,7 +45,11 @@ namespace GrainManage.Web.Jobs
                     var finishedKeyList = new List<string>();
                     foreach (var item in finishedDic)
                     {
-                        if (LogService.AddActionLog(item.Value) > 0)
+                        try
+                        {
+                            LogService.AddActionLog(item.Value);
+                        }
+                        finally
                         {
                             finishedKeyList.Add(item.Key);
                         }
