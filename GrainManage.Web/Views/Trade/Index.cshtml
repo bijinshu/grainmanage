@@ -55,7 +55,7 @@
                             }
                             <th>客户姓名</th>
                             <th>交易详情</th>
-                            <th>成交金额</th>
+                            <th>总金额</th>
                             <th>交易类型</th>
                             <th>交易时间</th>
                             <th>创建人</th>
@@ -120,8 +120,8 @@
     </div>
     <div v-cloak>
         @Html.Partial("_TradeDetail")
-        @Html.Partial("_DeleteModal", "删除交易")
         @Html.Partial("_ContactList")
+        @Html.Partial("_DeleteModal", "删除交易")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -195,32 +195,14 @@
                 },
                 setPrice: function (detail) {
                     var existedItem = null;
-                    for (var i = 0; i < this.productList.length; i++) {
-                        if (this.productList[i].Id == detail.ProductId) {
-                            existedItem = this.productList[i];
+                    for (var i = 0; i < detail.ProductList.length; i++) {
+                        if (detail.ProductList[i].Id == detail.ProductId) {
+                            existedItem = detail.ProductList[i];
                             break;
                         }
                     }
                     detail.Price = existedItem ? existedItem.Price : '';
                     detail.ProductName = existedItem ? existedItem.Name : '';
-                },
-                setMoney: function () {
-                    var money = 0;
-                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
-                        var detail = this.frmTrade.Details[i];
-                        money += detail.Price * (detail.RoughWeight - detail.Tare);
-                    }
-                    this.frmTrade.ActualMoney = this.toFixed(money);
-                },
-                setDetailMoney: function (detail, action) {
-                    var price = parseFloat(detail.Price);
-                    var roughWeight = parseFloat(detail.RoughWeight);
-                    var tare = parseFloat(detail.Tare);
-                    if (price > 0 && roughWeight >= 0 && tare >= 0 && roughWeight > tare) {
-                        detail.ActualMoney = this.toFixed(price * (roughWeight - tare))
-                    } else {
-                        detail.ActualMoney = '';
-                    }
                 },
                 showAdd: function () {
                     this.frmTrade.Id = 0;
@@ -268,23 +250,46 @@
                     var productId = this.productList[0].Id;
                     var newDetail = { ProductId: productId, ProductName: '', Price: 0, RoughWeight: '',Tare:'', ActualMoney: 0, ProductList: [],Remark:'' };
                     newDetail.ProductList = this.productList.concat();
+                    this.frmTrade.ActualMoney = '';
                     this.frmTrade.Details.push(newDetail);
                     this.setPrice(newDetail);
                 },
                 delDetailForm: function (index) {
                     if (this.frmTrade.Details.length > 1) {
                         this.frmTrade.Details.splice(index, 1);
+                        this.setMoney();
                     }
                 },
                 showContact: function () {
                     this.getContactList();
                     this.showPanel("#chooseContactModal");
                 },
-                isRoughWeightValid: function (detail) {
-                    return detail.RoughWeight!='' && parseFloat(detail.RoughWeight) > 0;
+                setMoney: function () {
+                    var money = 0;
+                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
+                        var detail = this.frmTrade.Details[i];
+                        money += parseFloat(detail.ActualMoney);
+                    }
+                    this.frmTrade.ActualMoney = this.toFixed(money);
                 },
-                isTareValid: function (detail) {
-                    return detail.Tare != '' && parseFloat(detail.Tare) >= 0 && parseFloat(detail.RoughWeight) > parseFloat(detail.Tare);
+                setDetailMoney: function (event, detail) {
+                    if (event==null||( event && event.target.id != 'ActualMoney')) {
+                        var price = parseFloat(detail.Price);
+                        var roughWeight = parseFloat(detail.RoughWeight);
+                        var tare = parseFloat(detail.Tare);
+                        if (price > 0 && roughWeight >= 0 && tare >= 0 && roughWeight > tare) {
+                            detail.ActualMoney = this.toFixed(price * (roughWeight - tare))
+                        } else {
+                            detail.ActualMoney = '';
+                        }
+                        this.setMoney();
+                    } else if (event) {
+                        detail.ActualMoney = event.target.value;
+                        this.setMoney();
+                    }
+                },
+                isActualMoneyValid: function (actualMoney) {
+                    return actualMoney != '' && parseFloat(actualMoney) > 0;
                 }
             },
             computed: {
@@ -293,6 +298,25 @@
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frmTrade.Remark);
+                },
+                isTotalMoneyValid: function () {
+                    var isValid = this.frmTrade.ActualMoney != '' && parseFloat(this.frmTrade.ActualMoney) > 0 && this.frmTrade.Details && this.frmTrade.Details.length>0;
+                    if (isValid) {
+                        for (var i = 0; i < this.frmTrade.Details; i++) {
+                            var current = this.frmTrade.Details[i];
+                            if (current.Price==''||
+                                current.Price < 0 ||
+                                current.RoughWeight==''||
+                                current.RoughWeight < 0 ||
+                                current.Tare==''||
+                                current.Tare < 0 ||
+                                current.Tare > current.RoughWeight) {
+                                isValid = false;
+                                break;
+                            }
+                        }
+                    }
+                    return isValid;
                 }
             },
             created: function () {
@@ -307,5 +331,8 @@
                 });
             }
         })
+        $('#chooseContactModal').on('hidden.bs.modal', function () {
+            document.getElementsByTagName('body')[0].className = 'modal-open';
+        });  
     })
 </script>

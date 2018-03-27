@@ -216,6 +216,7 @@ namespace GrainManage.Web.Controllers
                 else
                 {
                     var detailModel = MapTo<TradeDetail>(detail);
+                    SetEmptyIfNull(detailModel);
                     detailModel.TradeId = input.Id;
                     detailModel.CreatedAt = DateTime.Now;
                     detailModel.CreatedBy = currentUser.UserId;
@@ -231,7 +232,7 @@ namespace GrainManage.Web.Controllers
             model.TradeType = input.TradeType;
             model.Remark = input.Remark;
             model.ModifiedAt = DateTime.Now;
-            repo.UnitOfWork.SaveChanges();
+            repo.UnitOfWork.SaveChanges(true);
             SetResponse(s => s.Success, input, result);
             return JsonNet(result);
         }
