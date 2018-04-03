@@ -62,10 +62,6 @@
                                 {
                                     <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
                                 }
-                                @if (UrlVar.Has(Model.Level, UrlVar.Trade_New, Model.Urls))
-                                {
-                                    <a style="cursor:pointer;" v-on:click.stop="showTrade(item)">交易</a>
-                                }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_GetByContactId, Model.Urls))
                                 {
                                     <a style="cursor:pointer;" v-if="item.TradeCount" v-on:click.stop="showHistory(item)">历史&nbsp;<span class="badge" style="background-color:green">{{item.TradeCount}}</span></a>
@@ -95,7 +91,6 @@
     </div>
     <div v-cloak>
         @Html.Partial("_ContactDetail")
-        @Html.Partial("_TradeDetail")
         @Html.Partial("_History")
         @Html.Partial("_DeleteModal", "删除客户")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
@@ -110,7 +105,6 @@
                 msg: '',
                 total: 0,
                 list: [],
-                productList: [],
                 tradeList: [],
                 search: { Name: '', Mobile: '', Address: '', PageIndex: 0, PageSize: 10 },
                 frm: {
@@ -121,17 +115,6 @@
                     Weixin: '',
                     QQ: '',
                     Email: '',
-                    Remark: ''
-                },
-                frmTrade: {
-                    ContactId: 0,
-                    ContactName: '',
-                    ProductId: 1,
-                    ProductName: '',
-                    Price: 0,
-                    Weight: 0,
-                    TradeType: 0,
-                    ActualMoney: 0,
                     Remark: ''
                 },
                 currentItem: {},
@@ -153,31 +136,12 @@
                         this.isFirstTime = false;
                     }.bind(this));
                 },
-                getProductList: function () {
-                    $.post('@UrlVar.Product_List').done(function (result, status) {
-                        this.productList = result;
-                    }.bind(this));
-                },
                 showHistory: function (item) {
                     this.tradeList = [];
                     $.post('@UrlVar.Trade_GetByContactId', { contactId: item.Id }).done(function (result, status) {
                         this.tradeList = result.data;
                     }.bind(this));
                     this.showPanel("#historyModal");
-                },
-                setPrice: function () {
-                    var existedItem = null;
-                    for (var i = 0; i < this.productList.length; i++) {
-                        if (this.productList[i].Id == this.frmTrade.ProductId) {
-                            existedItem = this.productList[i];
-                            break;
-                        }
-                    }
-                    this.frmTrade.Price = existedItem ? existedItem.Price : '';
-                    this.frmTrade.ProductName = existedItem ? existedItem.Name : '';
-                },
-                setMoney: function () {
-                    this.frmTrade.ActualMoney = this.TotalMoney;
                 },
                 showAdd: function () {
                     this.frm.Id = 0;
@@ -235,32 +199,6 @@
                             this.showAlert(result.msg);
                         }
                     }.bind(this));
-                },
-                showTrade: function (item) {
-                    this.frmTrade.ContactId = item.Id;
-                    this.frmTrade.ContactName = item.ContactName;
-                    this.frmTrade.ProductId = this.productList[0].Id;
-                    this.frmTrade.Weight = '';
-                    this.frmTrade.Remark = '';
-                    this.setPrice();
-                    this.showPanel("#saveTradeModal");
-                },
-                saveTrade: function () {
-                    this.IsDisabled = true;
-                    if (this.isActualMoneyValid && this.isWeightValid && this.isPriceValid) {
-                        $.post('@UrlVar.Trade_New', this.frmTrade).always(function (result, status) {
-                            this.IsDisabled = false;
-                            if (result.code == 1) {
-                                this.hidePanel("#saveTradeModal");
-                                this.getData();
-                            }
-                            else {
-                                this.showAlert(result.msg);
-                            }
-                        }.bind(this));
-                    } else {
-                        this.showAlert('价格、重量、金额必须大于0');
-                    }
                 },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;
@@ -377,30 +315,10 @@
                 },
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frm.Remark);
-                },
-                isPriceValid: function () {
-                    return (/^\d+(.\d{1,4})?$/g).test(this.frmTrade.Price) && this.frmTrade.Price > 0;
-                },
-                isActualMoneyValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.ActualMoney) && this.frmTrade.ActualMoney > 0;
-                },
-                isWeightValid: function () {
-                    return (/^\d+(.\d{1,2})?$/g).test(this.frmTrade.Weight) && this.frmTrade.Weight > 0;
-                },
-                TotalMoney: function () {
-                    var money = (this.frmTrade.Price ? this.frmTrade.Price : 0) * (this.frmTrade.Weight ? this.frmTrade.Weight : 0);
-                    return money == parseInt(money) ? parseInt(money) : money.toFixed(2);
                 }
             },
             created: function () {
                 this.getData();
-                this.getProductList();
-                this.$watch('frmTrade.Price', function (newVal, oldVal) {
-                    this.setMoney();
-                });
-                this.$watch('frmTrade.Weight', function (newVal, oldVal) {
-                    this.setMoney();
-                });
                 this.$watch('AddressType', function (newVal, oldVal) {
                     this.getLocation();
                 });

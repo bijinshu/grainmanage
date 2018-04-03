@@ -15,8 +15,6 @@ namespace GrainManage.Web
         public static string Home_MenuTree { get { return GetUrl("/Home/MenuTree"); } }
         //Company
         [Common]
-        public static string Company_Index{ get { return GetUrl("/Company/Index"); } }
-        [Common]
         public static string Company_New { get { return GetUrl("/Company/New"); } }
         public static string Company_Edit { get { return GetUrl("/Company/Edit"); } }
         [Common]
@@ -96,7 +94,7 @@ namespace GrainManage.Web
         public static string Order_Detail { get { return GetUrl("/Order/Detail"); } }
         public static string Order_ChangeStatus { get { return GetUrl("/Order/ChangeStatus"); } }
         [Common]
-        public static string Order_GetPersonalOrder { get { return GetUrl("/Order/GetPersonalOrder"); } }
+        public static string Order_GetMyOrderList { get { return GetUrl("/Order/GetMyOrderList"); } }
 
         //Address
         public static string Address_Index { get { return GetUrl("/Address/Index"); } }
@@ -109,6 +107,10 @@ namespace GrainManage.Web
         public static string WhiteIp_New { get { return GetUrl("/WhiteIp/New"); } }
         public static string WhiteIp_Edit { get { return GetUrl("/WhiteIp/Edit"); } }
         public static string WhiteIp_Delete { get { return GetUrl("/WhiteIp/Delete"); } }
+
+        //Weixin
+        [Common]
+        public static string Weixin_Index { get { return GetUrl("/Weixin/Index"); } }
 
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)

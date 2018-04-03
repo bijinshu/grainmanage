@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_WeixinLayout.cshtml";
 }
+<link href="~/css/cross-table.css" rel="stylesheet" />
 <div id="app" class="container">
     <div class="row" style="margin-top:20px;">
         <div class="col-md-12">
@@ -31,14 +32,19 @@
                     <caption style="color:red;font-weight:bolder;"></caption>
                     <thead>
                         <tr>
-                            <th>店铺名称</th>
-                            <th>下单号码</th>
-                            <th>下单地址</th>
-                            <th>产品列表</th>
-                            <th>预估总金额</th>
-                            <th>成交总金额</th>
-                            <th>状态</th>
-                            <th>创建时间</th>
+                            <th rowspan="2">店铺名称</th>
+                            <th rowspan="2">下单号码</th>
+                            <th rowspan="2">下单地址</th>
+                            <th colspan="3">产品列表</th>
+                            <th rowspan="2">预估总金额</th>
+                            <th rowspan="2">成交总金额</th>
+                            <th rowspan="2">状态</th>
+                            <th rowspan="2">创建时间</th>
+                        </tr>
+                        <tr>
+                            <th>产品名称</th>
+                            <th>预估重量</th>
+                            <th>实际重量</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
@@ -46,17 +52,10 @@
                             <td>{{item.CompName}}</td>
                             <td>{{item.Mobile}}</td>
                             <td>{{item.Address}}</td>
-                            <td>
-                                <table class="table table-bordered table-striped" style="margin:0">
-                                    <thead>
-                                        <tr>
-                                            <th>产品名称</th>
-                                            <th>预估重量</th>
-                                            <th>实际重量</th>
-                                        </tr>
-                                    </thead>
+                            <td colspan="3">
+                                <table class="table" style="margin:0">
                                     <tbody>
-                                        <tr v-for="(item2,index) in item.Details">
+                                        <tr v-for="(item2,index) in item.Details" class="no-top-border">
                                             <td>{{item2.ProductName}}</td>
                                             <td>{{item2.Weight}}</td>
                                             <td>{{item2.ActualWeight?item2.ActualWeight:0}}</td>
@@ -97,7 +96,7 @@
                 },
                 methods: {
                     getData: function () {
-                      $.post('@UrlVar.Order_GetPersonalOrder', this.search).always(function (result, status) {
+                      $.post('@UrlVar.Order_GetMyOrderList', this.search).always(function (result, status) {
                           this.list = result.data;
                           this.total = result.total;
                           if (result.code != 1 && !this.isFirstTime) {

@@ -1,0 +1,14 @@
+﻿.container table thead th {
+    border-bottom-width: 0;
+}
+
+.container table tr.no-top-border td {
+    border-top-width: 0;
+}
+
+.container table thead th {
+    vertical-align: middle;
+}
+.container table tbody td {
+    vertical-align: middle;
+}

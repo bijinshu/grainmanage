@@ -38,7 +38,7 @@
         </div>
     </div>
     <div v-cloak>
-        @Html.Partial("_Order")
+        @Html.Partial("_NewOrder")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -59,7 +59,7 @@
                 },
                 methods: {
                     getData: function () {
-                      $.post('@UrlVar.Company_Index', this.search).always(function (result, status) {
+                      $.post('@UrlVar.Weixin_Index', this.search).always(function (result, status) {
                           this.list = result.data;
                           this.total = result.total;
                           if (result.code != 1 && !this.isFirstTime) {
@@ -107,7 +107,7 @@
                                  this.IsDisabled = false;
                                  if (result.code==1) {
                                      this.hidePanel("#newOrderModal");
-                                     window.location.href = '@UrlVar.Order_GetPersonalOrder';
+                                     window.location.href = '@UrlVar.Order_GetMyOrderList';
                                  } else {
                                      this.showAlert(result.msg);
                                  }

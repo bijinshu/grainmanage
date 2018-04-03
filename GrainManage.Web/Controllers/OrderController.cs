@@ -267,7 +267,7 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
-        public ActionResult GetPersonalOrder(InputSearch input)
+        public ActionResult GetMyOrderList(InputSearch input)
         {
             if (IsGetRequest)
             {

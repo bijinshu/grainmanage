@@ -78,7 +78,7 @@
                                 <span style="color:green" v-if="item.TypeId==1">免验证</span>
                                 <span style="color:red" v-else>受保护</span>
                             </td>
-                            <td><textarea v-bind:rows="item.Remark?3:1" style="width:100%;border:0;margin:0;padding:2px;" v-model="item.Remark"></textarea></td>
+                            <td><textarea style="width:100%;border:0;margin:0;padding:2px;" v-model="item.Remark" onscroll="this.rows++"></textarea></td>
                             <td>{{item.CreatedAt|formatTime}}</td>
                             <td>{{item.ModifiedAt|formatTime}}</td>
                         </tr>
