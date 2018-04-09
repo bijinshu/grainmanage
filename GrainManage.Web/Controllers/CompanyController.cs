@@ -27,9 +27,9 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
-                SetEmptyIfNull(input);
                 var userRepo = GetRepo<User>();
                 var comp = MapTo<Company>(input);
+                SetEmptyIfNull(comp);
                 comp.CreatedAt = DateTime.Now;
                 comp.UserId = UserId;
                 if (imgFile != null && imgFile.Length > 0)

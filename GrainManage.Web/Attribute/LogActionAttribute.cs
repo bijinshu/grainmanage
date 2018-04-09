@@ -37,6 +37,10 @@ namespace GrainManage.Web
                     model.UserName = currentUser.UserName;
                     model.Level = currentUser.Level;
                 }
+                else
+                {
+                    model.UserName = string.Empty;
+                }
                 var guid = Guid.NewGuid().ToString("N");
                 LogCache.Add(guid, model);
                 headers.Add(name, guid);
