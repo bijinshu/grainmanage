@@ -9,6 +9,7 @@ namespace GrainManage.Web
     {
         public const string CacheMinute = "CacheMinute";
         public const string CookieName = "GrainManage";
+        public const string HeadLogName = "log-action";
 
         public const string Content = "c";
         public const string Sign = "s";

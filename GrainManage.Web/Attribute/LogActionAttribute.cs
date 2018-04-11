@@ -15,8 +15,6 @@ namespace GrainManage.Web
 {
     public class LogActionAttribute : ActionFilterAttribute
     {
-        private const string name = "log-action";
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var values = filterContext.RouteData.Values;
@@ -43,7 +41,7 @@ namespace GrainManage.Web
                 }
                 var guid = Guid.NewGuid().ToString("N");
                 LogCache.Add(guid, model);
-                headers.Add(name, guid);
+                headers.Add(GlobalVar.HeadLogName, guid);
             }
         }
 
@@ -53,7 +51,7 @@ namespace GrainManage.Web
             var url = string.Format("/{0}/{1}", values["controller"] as string, values["action"] as string);
             if (UrlCache.IsUrlExisted(url))
             {
-                var guid = filterContext.HttpContext.Request.Headers[name].First();
+                var guid = filterContext.HttpContext.Request.Headers[GlobalVar.HeadLogName].First();
                 var now = DateTime.Now;
                 var msg = string.Empty;
                 JsonResult result = null;
