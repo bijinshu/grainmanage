@@ -22,11 +22,11 @@
             </div>
         </div>
         <div class="form-group" title="交易列表">
-            <div class="col-md-12" style="box-sizing:border-box;max-height:326px;overflow-y:auto;" id="formDetail">
+            <div class="col-md-12" id="formDetail">
                 <form v-for="(detail,index) in frmTrade.Details" style="border:solid 1px;margin-bottom:2px;">
                     <div class="form-group">
                         <div class="col-md-9" style="text-align:center;">
-                            <span v-if="frmTrade.Details.length>1" style="color:blue;padding:10px;display:inline-block;height:30px;">第{{index+1}}个粮食</span>
+                            <span v-if="frmTrade.Details.length>1" style="color:blue;padding:10px;display:inline-block;height:30px;">第{{index+1}}个</span>
                         </div>
                         <div class="col-md-3">
                             <a class="btn btn-danger btn-sm btn-block" v-if="frmTrade.Details.length>1" v-on:click.stop.prevent="delDetailForm(index)">删除</a>

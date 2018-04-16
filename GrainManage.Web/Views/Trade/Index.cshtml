@@ -15,12 +15,12 @@
                         <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入粮食名称" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">开始时间：</label>
-                        <input type="date" class="form-control" id="StartTime" placeholder="请选择开始时间" />
+                        <label class="control-label visible-xs col-xs-6">开始时间：</label>
+                        <input type="date" class="form-control" style="width:auto" id="StartTime" placeholder="请选择开始时间"/>
                     </div>
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">终止时间：</label>
-                        <input type="date" class="form-control" id="EndTime" placeholder="请选择终止时间" />
+                        <label class="control-label visible-xs col-xs-6">终止时间：</label>
+                        <input type="date" class="form-control" style="width:auto" id="EndTime" placeholder="请选择终止时间" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <select v-model="search.TradeType" class="form-control">
@@ -265,10 +265,12 @@
                     this.frmTrade.PaidMoney = '';
                     this.frmTrade.Details.push(newDetail);
                     this.setPrice(newDetail);
-                    setTimeout(function () {
-                      var div = document.getElementById("formDetail");
-                      div.scrollTop = div.scrollHeight;
-                    },100);
+                    if (window.screen.width>768) {
+                        setTimeout(function () {
+                            var div = document.getElementById("formDetail");
+                            div.scrollTop = div.scrollHeight;
+                        }, 100);
+                    }
                 },
                 delDetailForm: function (index) {
                     if (this.frmTrade.Details.length > 1) {
@@ -367,5 +369,9 @@
         $('#chooseContactModal').on('hidden.bs.modal', function () {
             document.getElementsByTagName('body')[0].className = 'modal-open';
         });
+        if (window.screen.width > 768) {
+            var div = document.getElementById("formDetail");
+            div.style = 'box-sizing:border-box;max-height:326px;overflow-y:auto;';
+        }
     })
 </script>
