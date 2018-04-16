@@ -13,14 +13,14 @@
                 <input v-bind:value="currentItem.Address" disabled type="text" class="form-control">
             </div>
         </div>
-        <div class="form-group" title="出售产品列表">
+        <div class="form-group" title="出售粮食列表">
             <div class="col-md-11">
                 <form v-for="(detail,index) in currentItem.Details" style="margin-bottom:2px;">
                     <div class="form-group" v-if="currentItem.Details&&currentItem.Details.length>1">
-                        <div class="col-lg-push-4 col-md-7" style="color:red;font-weight:bold;text-align:center;"> 第 {{index+1}} 个产品 </div>
+                        <div class="col-lg-push-4 col-md-7" style="color:red;font-weight:bold;text-align:center;"> 第 {{index+1}} 个 </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label hidden-xs hidden-sm">产品名称</label>
+                        <label class="col-md-4 control-label hidden-xs hidden-sm">粮食名称</label>
                         <div class="col-md-8">
                             <input v-bind:value="detail.ProductName" disabled type="text" class="form-control">
                         </div>

@@ -59,11 +59,11 @@ namespace GrainManage.Web.Controllers
             if (list.Any())
             {
                 result.total = total;
-                var currentSysProductNameList = list.Where(f => f.Source > 0).Select(s => s.Name).ToList();//得到本次的所有系统产品
+                var currentSysProductNameList = list.Where(f => f.Source > 0).Select(s => s.Name).ToList();//得到本次的所有系统粮食
                 List<string> existPrivateProductNameList = null;
                 if (currentSysProductNameList.Any())
                 {
-                    //得到与系统产品同名的私有产品
+                    //得到与系统粮食同名的私有粮食
                     existPrivateProductNameList = productRepo.GetFiltered(f => currentSysProductNameList.Contains(f.Name) && f.Source == 0 && f.CompId == currentUser.CompId).Select(s => s.Name).ToList();
                 }
                 var dtoList = MapTo<List<ProductDto>>(list);
@@ -167,6 +167,7 @@ namespace GrainManage.Web.Controllers
                     var comp = compRepo.GetFiltered(f => f.Id == model.CompId).FirstOrDefault();
                     model.CompName = comp == null ? string.Empty : comp.Name;
                     model.Name = input.Name;
+                    model.Price = input.Price;
                     model.Status = input.Status;
                     model.Remark = input.Remark;
                     model.ModifiedAt = DateTime.Now;

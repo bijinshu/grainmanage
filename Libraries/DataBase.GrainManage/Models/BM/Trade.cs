@@ -12,7 +12,7 @@ namespace DataBase.GrainManage.Models
         public int CompId { get; set; }
         public int ContactId { get; set; }
         public string ContactName { get; set; }
-        public decimal  ActualMoney { get; set; }
+        public decimal  PaidMoney { get; set; }
         public int TradeType { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }

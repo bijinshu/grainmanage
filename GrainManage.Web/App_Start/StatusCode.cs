@@ -102,27 +102,27 @@ namespace GrainManage.Web
         public readonly int NotPerfectShopInfo = 702;
 
         //Product
-        [Message("该产品不存在")]
+        [Message("该粮食不存在")]
         public readonly int ProductNotExisted = 801;
-        [Message("产品名称不能为空")]
+        [Message("粮食名称不能为空")]
         public readonly int ProductNameEmpty = 802;
-        [Message("产品已存在")]
+        [Message("粮食已存在")]
         public readonly int ProductNameExisted = 803;
-        [Message("无修改他人店铺产品信息权限")]
+        [Message("无修改他人店铺粮食信息权限")]
         public readonly int ModifyOtherCompProduct = 804;
 
         //Price
-        [Message("产品价格已存在")]
+        [Message("粮食价格已存在")]
         public readonly int PriceExisted = 902;
-        [Message("请先选择产品")]
+        [Message("请先选择粮食")]
         public readonly int ProductNotSelected = 903;
 
         //Order
         [Message("未选择店铺")]
         public readonly int NoCompany = 1001;
-        [Message("未选择产品")]
+        [Message("未选择粮食")]
         public readonly int NoProduct = 1002;
-        [Message("存在未填写重量的产品")]
+        [Message("存在未填写重量的粮食")]
         public readonly int NoWeight = 1003;
         [Message("禁止店铺管理员和员工给自己店铺刷单")]
         public readonly int NoOrderCompSelf = 1004;

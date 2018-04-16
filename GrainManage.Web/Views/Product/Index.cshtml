@@ -1,7 +1,7 @@
 ﻿@using GrainManage.Web
 @model GrainManage.Web.Models.UserInfo
 @{
-    ViewBag.Title = "产品管理";
+    ViewBag.Title = "价格管理";
 }
 <div class="container" id="productInfo">
     <div class="row">
@@ -16,14 +16,14 @@
                         </div>
                     }
                     <div class="form-group" style="margin-right:6px;">
-                        <label class="control-label hidden-xs hidden-sm">产品名称：</label>
-                        <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入产品名称" />
+                        <label class="control-label hidden-xs hidden-sm">粮食名称：</label>
+                        <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入粮食名称" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <select v-model="search.Source" class="form-control">
                             <option value="null">请选择归属</option>
-                            <option value="0">私有产品</option>
-                            <option value="1">系统产品</option>
+                            <option value="0">私有粮食</option>
+                            <option value="1">系统粮食</option>
                         </select>
                     </div>
                     <div class="form-group" style="margin-right:6px;">
@@ -47,7 +47,7 @@
                     <caption style="color:red;font-weight:bolder;">
                         @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls))
                         {
-                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新产品</button>
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新粮食</button>
                         }
                     </caption>
                     <thead>
@@ -57,8 +57,8 @@
                             {
                                 <th>店铺名称</th>
                             }
-                            <th>产品名称</th>
-                            <th>产品价格</th>
+                            <th>粮食名称</th>
+                            <th>粮食价格</th>
                             <th>归属</th>
                             <th>备注</th>
                             <th>状态</th>
@@ -111,7 +111,7 @@
         {
             @Html.Partial("_ProductDetail")
         }
-        @Html.Partial("_DeleteModal", "删除产品")
+        @Html.Partial("_DeleteModal", "删除粮食")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>
@@ -127,7 +127,8 @@
                 frm: {
                     Id: 0,
                     Name: '',
-                    Price:0,
+                    Price: 0,
+                    CompId:0,
                     Source: 0,
                     Status: 1,
                     Remark:''
@@ -156,16 +157,17 @@
                     this.frm.Source = 0;
                     this.frm.Status = 1;
                     this.frm.Remark = '';
-                    this.showPanel('添加产品', "#saveProductModal");
+                    this.showPanel('添加粮食', "#saveProductModal");
                 },
                 showEdit: function (item) {
                     this.frm.Id = item.Id;
                     this.frm.Name = item.Name;
                     this.frm.Price = item.Price,
+                    this.frm.CompId = item.CompId;
                     this.frm.Source = item.Source;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
-                    this.showPanel('编辑产品', "#saveProductModal");
+                    this.showPanel('编辑粮食', "#saveProductModal");
                 },
                 save: function (event) {
                     var url = this.frm.Id > 0 ? '@UrlVar.Product_Edit' : '@UrlVar.Product_New';

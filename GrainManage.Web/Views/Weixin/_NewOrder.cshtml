@@ -20,8 +20,8 @@
                 <input v-model="frm.Address" type="text" class="form-control" id="Address" placeholder="请输入我的地址">
             </div>
         </div>
-        <div class="form-group" title="准备出售的产品">
-            <label class="col-md-3 control-label hidden-xs hidden-sm">产品清单</label>
+        <div class="form-group" title="准备出售的粮食">
+            <label class="col-md-3 control-label hidden-xs hidden-sm">粮食清单</label>
             <div class="col-md-8">
                 <form v-for="(detail,index) in frm.Details" style="border:solid 1px;margin-bottom:2px;">
                     <div class="form-group">
@@ -30,15 +30,15 @@
                             <a class="btn btn-danger btn-sm btn-block" v-if="frm.Details.length>1" v-on:click.stop.prevent="delDetailForm(index)">删除</a>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-top:-20px;" title="选择待出售产品">
-                        <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
+                    <div class="form-group" style="margin-top:-20px;" title="选择待出售粮食">
+                        <label class="col-md-3 control-label hidden-xs hidden-sm">粮食名称</label>
                         <div class="col-md-8">
                             <label class="checkbox-inline" v-for="item in detail.ProductList" v-on:click.stop="setPrice(detail)">
                                 <input v-bind:value="item.Id" v-model="detail.ProductId" type="radio"><span>{{item.Name}}</span>
                             </label>
                         </div>
                     </div>
-                    <div class="form-group" title="产品价格">
+                    <div class="form-group" title="粮食价格">
                         <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
                         <div class="col-md-8">
                             <input v-model="detail.Price" disabled type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">

@@ -228,7 +228,7 @@ namespace GrainManage.Web.Controllers
             var model = repo.Get(input.Id);
             model.ContactId = input.ContactId;
             model.ContactName = input.ContactName;
-            model.ActualMoney = input.ActualMoney;
+            model.PaidMoney = input.PaidMoney;
             model.TradeType = input.TradeType;
             model.Remark = input.Remark;
             model.ModifiedAt = DateTime.Now;
@@ -249,6 +249,9 @@ namespace GrainManage.Web.Controllers
             else
             {
                 var dtoList = MapTo<List<TradeDto>>(list);
+                var tradeIdList = list.Select(s => s.Id).ToList();
+                var tradeDetailRepo = GetRepo<TradeDetail>();
+                var tradeDetailList = tradeDetailRepo.GetFiltered(f => tradeIdList.Contains(f.TradeId)).ToList();
                 var userRepo = GetRepo<User>();
                 var userIdList = dtoList.Select(s => s.CreatedBy).Distinct().ToList();
                 var usertDic = userRepo.GetFiltered(f => userIdList.Contains(f.Id)).Select(s => new { s.Id, s.RealName, s.UserName }).ToList().ToDictionary(k => k.Id, v => $"{v.UserName}[{v.RealName}]".Replace("[]", string.Empty));
@@ -258,6 +261,15 @@ namespace GrainManage.Web.Controllers
                     {
                         item.Creator = usertDic[item.CreatedBy];
                     }
+                    item.Details = tradeDetailList.Where(f => f.TradeId == item.Id).GroupBy(g => new { g.ProductId, g.ProductName, g.Price }).Select(s => new TradeDetailDto
+                    {
+                        ProductId = s.Key.ProductId,
+                        ProductName = s.Key.ProductName,
+                        Price = s.Key.Price,
+                        ActualMoney = s.Sum(ss => ss.ActualMoney),
+                        RoughWeight = s.Sum(ss => ss.RoughWeight),
+                        Tare = s.Sum(ss => ss.Tare)
+                    }).ToList();
                 }
                 result.data = dtoList;
                 SetResponse(s => s.Success, null, result);

@@ -10,7 +10,7 @@ namespace GrainManage.Web.Models.Trade
         public string CompName { get; set; }
         public int ContactId { get; set; }
         public string ContactName { get; set; }
-        public decimal ActualMoney { get; set; }
+        public decimal PaidMoney { get; set; }
         public int TradeType { get; set; }
         public string Remark { get; set; }
         public int CreatedBy { get; set; }

@@ -200,6 +200,26 @@
                         }
                     }.bind(this));
                 },
+                getTotalMoney: function (detailList) {
+                    var total = 0;
+                    if (detailList && detailList.length > 0) {
+                        for (var i = 0; i < detailList.length; i++) {
+                            var detail = detailList[i];
+                            total += (detail.RoughWeight - detail.Tare) * detail.Price;
+                        }
+                    }
+                    return total;
+                },
+                getTotalActualMoney: function (detailList) {
+                    var totalActual = 0;
+                    if (detailList && detailList.length > 0) {
+                        for (var i = 0; i < detailList.length; i++) {
+                            var detail = detailList[i];
+                            totalActual += detail.ActualMoney;
+                        }
+                    }
+                    return totalActual;
+                },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;
                     var self = this;

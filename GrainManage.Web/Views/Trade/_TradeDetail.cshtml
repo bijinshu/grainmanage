@@ -26,14 +26,14 @@
                 <form v-for="(detail,index) in frmTrade.Details" style="border:solid 1px;margin-bottom:2px;">
                     <div class="form-group">
                         <div class="col-md-9" style="text-align:center;">
-                            <span v-if="frmTrade.Details.length>1" style="color:blue;padding:10px;display:inline-block;height:30px;">第{{index+1}}个产品</span>
+                            <span v-if="frmTrade.Details.length>1" style="color:blue;padding:10px;display:inline-block;height:30px;">第{{index+1}}个粮食</span>
                         </div>
                         <div class="col-md-3">
                             <a class="btn btn-danger btn-sm btn-block" v-if="frmTrade.Details.length>1" v-on:click.stop.prevent="delDetailForm(index)">删除</a>
                         </div>
                     </div>
                     <div class="form-group" style="margin-top:-20px;">
-                        <label class="col-md-3 control-label hidden-xs hidden-sm">产品名称</label>
+                        <label class="col-md-3 control-label hidden-xs hidden-sm">粮食名称</label>
                         <div class="col-md-8">
                             <label class="checkbox-inline" v-for="item in detail.ProductList" v-on:click.stop="setPrice(detail);setDetailMoney(null,detail);">
                                 <input v-bind:value="item.Id" v-model="detail.ProductId" type="radio"><span>{{item.Name}}</span>
@@ -74,9 +74,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">总金额</label>
+            <label for="PaidMoney" class="col-md-3 control-label hidden-xs hidden-sm">已付金额</label>
             <div class="col-md-8">
-                <input v-model="frmTrade.ActualMoney" v-on:dblclick="setMoney" type="number" class="form-control" id="TotalMoney" placeholder="总金额">
+                <input v-model="frmTrade.PaidMoney" v-on:dblclick="setMoney" type="number" class="form-control" id="PaidMoney" placeholder="已付金额">
             </div>
         </div>
         <div class="form-group">

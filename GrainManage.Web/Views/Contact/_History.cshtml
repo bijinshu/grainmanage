@@ -4,11 +4,10 @@
         <table class="table table-bordered table-hover modal-lg">
             <thead>
                 <tr>
-                    <th>产品名称</th>
-                    <th>产品价格</th>
-                    <th>产品重量</th>
-                    <th>计算金额</th>
-                    <th>成交金额</th>
+                    <th>交易详情</th>
+                    <th>应付金额</th>
+                    <th>已付金额</th>
+                    <th>偏差</th>
                     <th>交易类型</th>
                     <th>交易时间</th>
                     <th>创建人</th>
@@ -16,11 +15,40 @@
             </thead>
             <tbody v-cloak>
                 <tr v-for="item in tradeList" :key="item.Id">
-                    <td>{{item.ProductName}}</td>
-                    <td>{{item.Price}}</td>
-                    <td>{{item.Weight}}</td>
-                    <td>{{(item.Price*item.Weight).toFixed(2)}}</td>
-                    <td>{{item.ActualMoney}}</td>
+                    <td>
+                        <table class="table table-bordered table-striped" style="margin:0">
+                            <thead>
+                                <tr>
+                                    <th>类别</th>
+                                    <th>毛重</th>
+                                    <th>皮重</th>
+                                    <th>价格</th>
+                                    <th>净重</th>
+                                    <th>理论金额</th>
+                                    <th>成交金额</th>
+                                    <th>偏差</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item2,index) in item.Details">
+                                    <td>{{item2.ProductName}}</td>
+                                    <td>{{toFixed(item2.RoughWeight)}}</td>
+                                    <td>{{toFixed(item2.Tare)}}</td>
+                                    <td>{{toFixed(item2.Price)}}</td>
+                                    <td>{{toFixed(item2.RoughWeight-item2.Tare)}}</td>
+                                    <td>{{toFixed((item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
+                                    <td>{{toFixed(item2.ActualMoney)}}</td>
+                                    <td>{{toFixed(item2.ActualMoney-(item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">理论总金额：{{toFixed(getTotalMoney(item.Details))}}，成交总金额：{{toFixed(getTotalActualMoney(item.Details))}}，总偏差：{{toFixed(getTotalActualMoney(item.Details) - getTotalMoney(item.Details))}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>{{toFixed(getTotalActualMoney(item.Details))}}</td>
+                    <td>{{toFixed(item.PaidMoney)}}</td>
+                    <td>{{toFixed(item.PaidMoney-getTotalActualMoney(item.Details))}}</td>
                     <td>{{item.TradeType==1?'出售':'收购'}}</td>
                     <td>{{item.CreatedAt|formatTime}}</td>
                     <td>{{item.Creator}}</td>

@@ -109,7 +109,7 @@
   },
   {
     "id": "product",
-    "text": "产品管理",
+    "text": "价格管理",
     "asTop": true,
     "children": [
       {
