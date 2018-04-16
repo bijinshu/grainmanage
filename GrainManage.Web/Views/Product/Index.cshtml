@@ -47,7 +47,7 @@
                     <caption style="color:red;font-weight:bolder;">
                         @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls))
                         {
-                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新粮食</button>
+                            <button type="button" class="btn btn-success btn-sm" v-on:click="showAdd"><span class="glyphicon glyphicon-plus"></span> 添加新价格</button>
                         }
                     </caption>
                     <thead>
@@ -157,7 +157,7 @@
                     this.frm.Source = 0;
                     this.frm.Status = 1;
                     this.frm.Remark = '';
-                    this.showPanel('添加粮食', "#saveProductModal");
+                    this.showPanel('添加新价格', "#saveProductModal");
                 },
                 showEdit: function (item) {
                     this.frm.Id = item.Id;
@@ -167,7 +167,7 @@
                     this.frm.Source = item.Source;
                     this.frm.Status = item.Status;
                     this.frm.Remark = item.Remark;
-                    this.showPanel('编辑粮食', "#saveProductModal");
+                    this.showPanel('编辑粮食价格', "#saveProductModal");
                 },
                 save: function (event) {
                     var url = this.frm.Id > 0 ? '@UrlVar.Product_Edit' : '@UrlVar.Product_New';

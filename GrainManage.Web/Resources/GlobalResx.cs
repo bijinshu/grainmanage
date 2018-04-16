@@ -7,6 +7,6 @@ namespace GrainManage.Web
 {
     public class GlobalResx
     {
-        public const string SysName = "粮食管理系统";
+        public const string SysName = "粮食帮";
     }
 }

@@ -1,6 +1,6 @@
 ﻿@using GrainManage.Web
 @{
-    ViewBag.Title = "交易管理";
+    ViewBag.Title = "我的生意";
 }
 <script src="~/js/common-tool.js"></script>
 <div class="container" id="tradeInfo">
@@ -265,6 +265,10 @@
                     this.frmTrade.PaidMoney = '';
                     this.frmTrade.Details.push(newDetail);
                     this.setPrice(newDetail);
+                    setTimeout(function () {
+                      var div = document.getElementById("formDetail");
+                      div.scrollTop = div.scrollHeight;
+                    },100);
                 },
                 delDetailForm: function (index) {
                     if (this.frmTrade.Details.length > 1) {

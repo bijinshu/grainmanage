@@ -45,7 +45,7 @@
   },
   {
     "id": "trade",
-    "text": "交易管理",
+    "text": "我的生意",
     "asTop": true,
     "children": [
       {
@@ -72,7 +72,7 @@
   },
   {
     "id": "order",
-    "text": "订单管理",
+    "text": "我的订单",
     "asTop": true,
     "children": [
       {
