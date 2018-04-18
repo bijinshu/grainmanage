@@ -208,7 +208,6 @@ namespace GrainManage.Web.Controllers
                         detailModel.RoughWeight = detail.RoughWeight;
                         detailModel.Tare = detail.Tare;
                         detailModel.Price = detail.Price;
-                        detailModel.ActualMoney = detail.ActualMoney;
                         detailModel.Remark = detail.Remark ?? string.Empty;
                         detailModel.ModifiedAt = DateTime.Now;
                     }
@@ -266,7 +265,6 @@ namespace GrainManage.Web.Controllers
                         ProductId = s.Key.ProductId,
                         ProductName = s.Key.ProductName,
                         Price = s.Key.Price,
-                        ActualMoney = s.Sum(ss => ss.ActualMoney),
                         RoughWeight = s.Sum(ss => ss.RoughWeight),
                         Tare = s.Sum(ss => ss.Tare)
                     }).ToList();

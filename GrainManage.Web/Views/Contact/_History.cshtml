@@ -4,17 +4,29 @@
         <table class="table table-bordered table-hover modal-lg">
             <thead>
                 <tr>
-                    <th>交易详情</th>
-                    <th>应付金额</th>
+                    <th>总金额</th>
                     <th>已付金额</th>
-                    <th>偏差</th>
-                    <th>交易类型</th>
+                    <th>交易详情</th>
                     <th>交易时间</th>
-                    <th>创建人</th>
                 </tr>
             </thead>
             <tbody v-cloak>
                 <tr v-for="item in tradeList" :key="item.Id">
+                    <td>
+                        <span>{{toFixed(getTotalMoney(item.Details))}}</span>
+                        <br /><br />
+                        <span style="color:blue;">[{{item.TradeType==1?'出售':'收购'}}]</span>
+                    </td>
+                    <td>
+                        <span>{{toFixed(item.PaidMoney)}}</span>
+                        <br /><br />
+                        <span v-if="(item.PaidMoney!=getTotalMoney(item.Details))" style="color:green;">
+                            [{{getStatus(item.PaidMoney-getTotalMoney(item.Details))}}]
+                        </span>
+                        <span style="color:red;" v-else>
+                            [{{getStatus(item.PaidMoney-getTotalMoney(item.Details))}}]
+                        </span>
+                    </td>
                     <td>
                         <table class="table table-bordered table-striped" style="margin:0">
                             <thead>
@@ -24,9 +36,7 @@
                                     <th>皮重</th>
                                     <th>价格</th>
                                     <th>净重</th>
-                                    <th>理论金额</th>
-                                    <th>成交金额</th>
-                                    <th>偏差</th>
+                                    <th>金额</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,21 +47,15 @@
                                     <td>{{toFixed(item2.Price)}}</td>
                                     <td>{{toFixed(item2.RoughWeight-item2.Tare)}}</td>
                                     <td>{{toFixed((item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
-                                    <td>{{toFixed(item2.ActualMoney)}}</td>
-                                    <td>{{toFixed(item2.ActualMoney-(item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="8">理论总金额：{{toFixed(getTotalMoney(item.Details))}}，成交总金额：{{toFixed(getTotalActualMoney(item.Details))}}，总偏差：{{toFixed(getTotalActualMoney(item.Details) - getTotalMoney(item.Details))}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </td>
-                    <td>{{toFixed(getTotalActualMoney(item.Details))}}</td>
-                    <td>{{toFixed(item.PaidMoney)}}</td>
-                    <td>{{toFixed(item.PaidMoney-getTotalActualMoney(item.Details))}}</td>
-                    <td>{{item.TradeType==1?'出售':'收购'}}</td>
-                    <td>{{item.CreatedAt|formatTime}}</td>
-                    <td>{{item.Creator}}</td>
+                    <td>
+                        <span>{{item.CreatedAt|formatTime}}</span>
+                        <br /><br />
+                        <span>{{item.Creator}}</span>
+                    </td>
                 </tr>
             </tbody>
         </table>

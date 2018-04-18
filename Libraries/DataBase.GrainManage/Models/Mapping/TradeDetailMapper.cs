@@ -14,7 +14,6 @@ namespace DataBase.GrainManage.Models.Mapping
             builder.Property(m => m.Price);
             builder.Property(m => m.RoughWeight);
             builder.Property(m => m.Tare);
-            builder.Property(m => m.ActualMoney);
             builder.Property(m => m.Remark).IsRequired();
             builder.Property(m => m.CreatedAt);
             builder.Property(m => m.ModifiedAt);

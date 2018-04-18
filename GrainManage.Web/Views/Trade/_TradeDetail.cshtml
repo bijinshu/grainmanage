@@ -2,7 +2,7 @@
     <h4 slot="header" class="modal-title text-center" id="myModalLabel" style="font-weight:bold;">{{PanelTitle}}</h4>
     <div slot="body" class="form-horizontal" role="form" style="margin-top:10px;">
         <div class="form-group">
-            <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">联系人名称</label>
+            <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">客户姓名</label>
             <div class="col-md-6">
                 <input v-model="frmTrade.ContactName" type="text" class="form-control" id="ContactName">
             </div>
@@ -35,37 +35,38 @@
                     <div class="form-group" style="margin-top:-20px;">
                         <label class="col-md-3 control-label hidden-xs hidden-sm">粮食名称</label>
                         <div class="col-md-8">
-                            <label class="checkbox-inline" v-for="item in detail.ProductList" v-on:click.stop="setPrice(detail);setDetailMoney(null,detail);">
-                                <input v-bind:value="item.Id" v-model="detail.ProductId" type="radio"><span>{{item.Name}}</span>
+                            <label class="checkbox-inline" v-for="product in detail.ProductList">
+                                <span v-on:click.stop="setPrice(detail,product.Id);">
+                                    <input v-bind:value="product.Id" v-model="detail.ProductId" type="radio"><span>{{product.Name}}</span>
+                                </span>
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="Price" class="col-md-3 control-label hidden-xs hidden-sm">价格</label>
                         <div class="col-md-8">
-                            <input v-model="detail.Price" v-on:input="setDetailMoney($event,detail)" type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
+                            <input v-model="detail.Price" type="number" step="0.01" class="form-control" id="Price" placeholder="请输入价格(元/斤)">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="RoughWeight" class="col-md-3 control-label hidden-xs hidden-sm">毛重</label>
                         <div class="col-md-8">
-                            <input v-model="detail.RoughWeight" v-on:input="setDetailMoney($event,detail)" type="number" step="20" class="form-control" id="Weight" placeholder="请输入毛重(斤)">
+                            <input v-model="detail.RoughWeight" type="number" step="20" class="form-control" id="Weight" placeholder="请输入毛重(斤)">
                         </div>
                         <div v-if="detail.RoughWeight == ''||parseFloat(detail.RoughWeight)<= 0" class="col-md-push-3 col-md-8" style="color:red;">毛重必须为大于0的数字(最多两位小数)</div>
                     </div>
                     <div class="form-group">
                         <label for="Tare" class="col-md-3 control-label hidden-xs hidden-sm">皮重</label>
                         <div class="col-md-8">
-                            <input v-model="detail.Tare" v-on:input="setDetailMoney($event,detail)" type="number" step="20" class="form-control" id="Tare" placeholder="请输入皮重(斤)">
+                            <input v-model="detail.Tare" type="number" step="20" class="form-control" id="Tare" placeholder="请输入皮重(斤)">
                         </div>
-                        <div v-if="detail.Tare == ''||parseFloat(detail.Tare)< 0||detail.Tare>detail.RoughWeight" class="col-md-push-3 col-md-8" style="color:red;">皮重必须为大于等于0的数字(最多两位小数),且不能大于毛重</div>
+                        <div v-if="detail.Tare.length == 0||parseFloat(detail.Tare)< 0||detail.Tare>detail.RoughWeight" class="col-md-push-3 col-md-8" style="color:red;">皮重必须为大于等于0的数字(最多两位小数),且不能大于毛重</div>
                     </div>
                     <div class="form-group">
                         <label for="ActualMoney" class="col-md-3 control-label hidden-xs hidden-sm">金额</label>
                         <div class="col-md-8">
-                            <input v-bind:value="detail.ActualMoney" v-on:input="setDetailMoney($event,detail)" type="number" class="form-control" id="ActualMoney" placeholder="金额">
+                            <input v-bind:value="toFixed((detail.RoughWeight-detail.Tare)*detail.Price)" type="number" disabled class="form-control" id="ActualMoney" placeholder="金额">
                         </div>
-                        <div v-if="!isActualMoneyValid(detail.ActualMoney)" class="col-md-push-3 col-md-8" style="color:red;">金额必须为大于0的数字(最多两位小数)</div>
                     </div>
                 </form>
             </div>
@@ -74,10 +75,17 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="TotalMoney" class="col-md-3 control-label hidden-xs hidden-sm">总金额</label>
+            <div class="col-md-8">
+                <input v-bind:value="toFixed(totalMoney)" type="number" class="form-control" disabled id="TotalMoney" placeholder="总金额">
+            </div>
+        </div>
+        <div class="form-group">
             <label for="PaidMoney" class="col-md-3 control-label hidden-xs hidden-sm">已付金额</label>
             <div class="col-md-8">
-                <input v-model="frmTrade.PaidMoney" v-on:dblclick="setMoney" type="number" class="form-control" id="PaidMoney" placeholder="已付金额">
+                <input v-model="frmTrade.PaidMoney" v-on:dblclick="frmTrade.PaidMoney=toFixed(totalMoney)" type="number" class="form-control" id="PaidMoney" placeholder="已付金额">
             </div>
+            <div v-if="frmTrade.PaidMoney==''||parseFloat(frmTrade.PaidMoney)<0" class="col-md-push-3 col-md-8" style="color:red">已付金额应为大于等于0的数字</div>
         </div>
         <div class="form-group">
             <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>
@@ -89,7 +97,7 @@
         <div class="form-group">
             <div class="col-md-8 col-md-offset-3">
                 <button class="btn btn-info pull-left" data-dismiss="modal"> 关闭</button>
-                <button v-if="isTotalMoneyValid" class="btn btn-primary pull-right" v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled">保存</button>
+                <button v-if="isPaidMoneyValid" class="btn btn-primary pull-right" v-on:click.stop.prevent="save" v-bind:disabled="IsDisabled">保存</button>
             </div>
         </div>
     </div>

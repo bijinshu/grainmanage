@@ -13,7 +13,6 @@ namespace DataBase.GrainManage.Models
         public decimal Price { get; set; }
         public decimal RoughWeight { get; set; }
         public decimal Tare { get; set; }
-        public decimal ActualMoney { get; set; }
         public string Remark { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }

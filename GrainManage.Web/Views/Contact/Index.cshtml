@@ -210,15 +210,8 @@
                     }
                     return total;
                 },
-                getTotalActualMoney: function (detailList) {
-                    var totalActual = 0;
-                    if (detailList && detailList.length > 0) {
-                        for (var i = 0; i < detailList.length; i++) {
-                            var detail = detailList[i];
-                            totalActual += detail.ActualMoney;
-                        }
-                    }
-                    return totalActual;
+                getStatus: function (money) {
+                        return money >= 0 ? '已付清' : '下欠：' + this.toFixed(money * -1);
                 },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;

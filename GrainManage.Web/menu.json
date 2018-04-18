@@ -45,7 +45,7 @@
   },
   {
     "id": "trade",
-    "text": "我的生意",
+    "text": "购销明细",
     "asTop": true,
     "children": [
       {
@@ -109,7 +109,7 @@
   },
   {
     "id": "product",
-    "text": "价格管理",
+    "text": "价格设置",
     "asTop": true,
     "children": [
       {

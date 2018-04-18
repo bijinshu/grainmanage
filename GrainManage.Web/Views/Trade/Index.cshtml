@@ -1,6 +1,6 @@
 ﻿@using GrainManage.Web
 @{
-    ViewBag.Title = "我的生意";
+    ViewBag.Title = "购销明细";
 }
 <script src="~/js/common-tool.js"></script>
 <div class="container" id="tradeInfo">
@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <label class="control-label visible-xs col-xs-6">开始时间：</label>
-                        <input type="date" class="form-control" style="width:auto" id="StartTime" placeholder="请选择开始时间"/>
+                        <input type="date" class="form-control" style="width:auto" id="StartTime" placeholder="请选择开始时间" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <label class="control-label visible-xs col-xs-6">终止时间：</label>
@@ -54,14 +54,10 @@
                                 <th>店铺名称</th>
                             }
                             <th>客户姓名</th>
+                            <th>总金额</th>
+                            <th>已付款</th>
                             <th>交易详情</th>
-                            <th>应付金额</th>
-                            <th>已付金额</th>
-                            <th>偏差</th>
-                            <th>备注</th>
-                            <th class="hidden-xs">交易类型</th>
                             <th>交易时间</th>
-                            <th class="hidden-xs">创建人</th>
                         </tr>
                     </thead>
                     <tbody v-cloak>
@@ -81,7 +77,25 @@
                             {
                                 <td>{{item.CompName}}</td>
                             }
-                            <td><span v-if="item.ContactId>0">{{item.ContactName}}</span><span v-else style="color:red;" title="该用户不存在">{{item.ContactName}}</span></td>
+                            <td>
+                                <span v-if="item.ContactId>0">{{item.ContactName}}</span>
+                                <span v-else style="color:red;" title="该用户不存在">{{item.ContactName}}</span>
+                                <br /> <br />
+                                <span style="color:blue;">[{{item.TradeType==1?'出售':'收购'}}]</span>
+                                <br /> <br />
+                                <span>{{item.Remark}}</span>
+                            </td>
+                            <td>{{toFixed(getTotalMoney(item.Details))}}</td>
+                            <td>
+                                <span>{{toFixed(item.PaidMoney)}}</span>
+                                <br /><br />
+                                <span v-if="(item.PaidMoney-getTotalMoney(item.Details))>=0" style="color:green;">
+                                    [{{getStatus(item.PaidMoney-getTotalMoney(item.Details))}}]
+                                </span>
+                                <span style="color:red;" v-else>
+                                    [{{getStatus(item.PaidMoney-getTotalMoney(item.Details))}}]
+                                </span>
+                            </td>
                             <td>
                                 <table class="table table-bordered table-striped" style="margin:0">
                                     <thead>
@@ -91,35 +105,26 @@
                                             <th>皮重</th>
                                             <th>价格</th>
                                             <th>净重</th>
-                                            <th>理论金额</th>
-                                            <th>成交金额</th>
-                                            <th>偏差</th>
+                                            <th>金额</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(item2,index) in item.Details">
                                             <td>{{item2.ProductName}}</td>
-                                            <td>{{toFixed(item2.RoughWeight)}}</td>
-                                            <td>{{toFixed(item2.Tare)}}</td>
-                                            <td>{{toFixed(item2.Price)}}</td>
+                                            <td>{{item2.RoughWeight}}</td>
+                                            <td>{{item2.Tare}}</td>
+                                            <td>{{item2.Price}}</td>
                                             <td>{{toFixed(item2.RoughWeight-item2.Tare)}}</td>
                                             <td>{{toFixed((item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
-                                            <td>{{toFixed(item2.ActualMoney)}}</td>
-                                            <td>{{toFixed(item2.ActualMoney-(item2.RoughWeight-item2.Tare)*item2.Price)}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="8">理论总金额：{{toFixed(getTotalMoney(item.Details))}}，成交总金额：{{toFixed(getTotalActualMoney(item.Details))}}，总偏差：{{toFixed(getTotalActualMoney(item.Details) - getTotalMoney(item.Details))}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
-                            <td>{{toFixed(getTotalActualMoney(item.Details))}}</td>
-                            <td>{{toFixed(item.PaidMoney)}}</td>
-                            <td>{{toFixed(item.PaidMoney-getTotalActualMoney(item.Details))}}</td>
-                            <td>{{item.Remark}}</td>
-                            <td class="hidden-xs">{{item.TradeType==1?'出售':'收购'}}</td>
-                            <td>{{item.CreatedAt|formatTime}}</td>
-                            <td class="hidden-xs">{{item.Creator}}</td>
+                            <td>
+                                <span>{{item.CreatedAt|formatTime}}</span>
+                                <br /><br />
+                                <span>{{item.Creator}}</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -205,16 +210,19 @@
                          }
                      }.bind(this));
                 },
-                setPrice: function (detail) {
-                    var existedItem = null;
+                setPrice: function (detail, productId) {
+                    if (!productId) {
+                        return;
+                    }
                     for (var i = 0; i < detail.ProductList.length; i++) {
-                        if (detail.ProductList[i].Id == detail.ProductId) {
-                            existedItem = detail.ProductList[i];
+                        if (detail.ProductList[i].Id == productId) {
+                            var existedItem = detail.ProductList[i];
+                            detail.ProductId = productId;
+                            detail.ProductName = existedItem.Name;
+                            detail.Price = existedItem.Price;
                             break;
                         }
                     }
-                    detail.Price = existedItem ? existedItem.Price : '';
-                    detail.ProductName = existedItem ? existedItem.Name : '';
                 },
                 showAdd: function () {
                     this.frmTrade.Id = 0;
@@ -234,12 +242,22 @@
                     this.frmTrade.ContactName = item.ContactName;
                     this.frmTrade.PaidMoney = item.PaidMoney;
                     this.frmTrade.Remark = item.Remark;
-                    this.frmTrade.Details = item.Details.concat();
-                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
-                        var detail = this.frmTrade.Details[i];
+                    var details= [];
+                    for (var i = 0; i < item.Details.length; i++) {
+                        var model=  item.Details[i];
+                        var detail = {};
+                        detail.Id = model.Id;
+                        detail.TradeId = model.TradeId;
+                        detail.ProductId = model.ProductId;
+                        detail.ProductName = model.ProductName;
+                        detail.Price = model.Price;
+                        detail.RoughWeight = model.RoughWeight;
+                        detail.Tare = model.Tare;
+                        detail.Remark = model.Remark;
                         detail.ProductList = this.productList.concat();
-                        this.setPrice(detail);
+                        details.push(detail);
                     }
+                    this.frmTrade.Details = details;
                     this.showPanel("编辑交易","#saveTradeModal");
                 },
                 showDelete: function (item) {
@@ -260,11 +278,11 @@
                 },
                 addNewDetailForm: function () {
                     var productId = this.productList[0].Id;
-                    var newDetail = { ProductId: productId, ProductName: '', Price: 0, RoughWeight: '', Tare: '', PaidMoney: 0, ProductList: [],Remark:'' };
+                    var newDetail = { ProductId: 0, ProductName: '', Price: 0, RoughWeight: '', Tare: '', PaidMoney: 0, ProductList: [],Remark:'' };
                     newDetail.ProductList = this.productList.concat();
                     this.frmTrade.PaidMoney = '';
                     this.frmTrade.Details.push(newDetail);
-                    this.setPrice(newDetail);
+                    this.setPrice(newDetail, productId);
                     if (window.screen.width>768) {
                         setTimeout(function () {
                             var div = document.getElementById("formDetail");
@@ -275,39 +293,11 @@
                 delDetailForm: function (index) {
                     if (this.frmTrade.Details.length > 1) {
                         this.frmTrade.Details.splice(index, 1);
-                        this.setMoney();
                     }
                 },
                 showContact: function () {
                     this.getContactList();
                     this.showPanel("#chooseContactModal");
-                },
-                setMoney: function () {
-                    var money = 0;
-                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
-                        var detail = this.frmTrade.Details[i];
-                        money += parseFloat(detail.ActualMoney);
-                    }
-                    this.frmTrade.PaidMoney = this.toFixed(money);
-                },
-                setDetailMoney: function (event, detail) {
-                    if (event==null||( event && event.target.id != 'ActualMoney')) {
-                        var price = parseFloat(detail.Price);
-                        var roughWeight = parseFloat(detail.RoughWeight);
-                        var tare = parseFloat(detail.Tare);
-                        if (price > 0 && roughWeight >= 0 && tare >= 0 && roughWeight > tare) {
-                            detail.ActualMoney = this.toFixed(price * (roughWeight - tare))
-                        } else {
-                            detail.ActualMoney = '';
-                        }
-                        this.setMoney();
-                    } else if (event) {
-                        detail.ActualMoney = event.target.value;
-                        this.setMoney();
-                    }
-                },
-                isActualMoneyValid: function (actualMoney) {
-                    return actualMoney != '' && parseFloat(actualMoney) > 0;
                 },
                 getTotalMoney: function (detailList) {
                     var total = 0;
@@ -319,15 +309,8 @@
                     }
                     return total;
                 },
-                getTotalActualMoney: function (detailList) {
-                    var totalActual = 0;
-                    if (detailList && detailList.length > 0) {
-                        for (var i = 0; i < detailList.length; i++) {
-                            var detail = detailList[i];
-                            totalActual += detail.ActualMoney;
-                        }
-                    }
-                    return totalActual;
+                getStatus: function (money) {
+                    return money >= 0 ? '已付清' : '下欠：' + this.toFixed(money * -1);
                 }
             },
             computed: {
@@ -337,7 +320,7 @@
                 isRemarkValid: function () {
                     return (/^.{0,200}$/g).test(this.frmTrade.Remark);
                 },
-                isTotalMoneyValid: function () {
+                isPaidMoneyValid: function () {
                     var isValid = this.frmTrade.PaidMoney != '' && parseFloat(this.frmTrade.PaidMoney) >= 0 && this.frmTrade.Details && this.frmTrade.Details.length>0;
                     if (isValid) {
                         for (var i = 0; i < this.frmTrade.Details; i++) {
@@ -355,6 +338,14 @@
                         }
                     }
                     return isValid;
+                },
+                totalMoney: function () {
+                    var money = 0;
+                    for (var i = 0; i < this.frmTrade.Details.length; i++) {
+                        var detail = this.frmTrade.Details[i];
+                        money += (detail.RoughWeight - detail.Tare) * detail.Price;
+                    }
+                    return money;
                 }
             },
             created: function () {
