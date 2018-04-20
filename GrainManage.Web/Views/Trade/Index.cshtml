@@ -9,7 +9,7 @@
             <div class="tab-pane fade in active">
                 <div class="form-inline" role="form">
                     <div class="form-group" style="margin-right:6px;">
-                        <input type="text" class="form-control" v-model="search.ContactName" placeholder="请输入联系人姓名" />
+                        <input type="text" class="form-control" v-model="search.ContactName" placeholder="请输入客户姓名" />
                     </div>
                     <div class="form-group" style="margin-right:6px;">
                         <input type="text" class="form-control" v-model="search.ProductName" placeholder="请输入粮食名称" />
@@ -198,17 +198,23 @@
                 },
                 save: function () {
                     this.IsDisabled = true;
-                    var url = this.frmTrade.Id > 0 ? '@UrlVar.Trade_Edit' : '@UrlVar.Trade_New';
-                    $.post(url, this.frmTrade).always(function (result, status) {
-                         this.IsDisabled = false;
-                         if (result.code == 1) {
-                            this.getData();
-                            this.hidePanel("#saveTradeModal");
-                         }
-                         else {
-                           this.showAlert(result.msg);
-                         }
-                     }.bind(this));
+                    if (this.isPaidMoneyValid) {
+                        var url = this.frmTrade.Id > 0 ? '@UrlVar.Trade_Edit' : '@UrlVar.Trade_New';
+                        $.post(url, this.frmTrade).always(function (result, status) {
+                          this.IsDisabled = false;
+                          if (result.code == 1) {
+                             this.getData();
+                             this.hidePanel("#saveTradeModal");
+                          }
+                          else {
+                            this.showAlert(result.msg);
+                          }
+                        }.bind(this));
+                    } else {
+                        this.showAlert('有参数不正确，请重新检查');
+                        this.IsDisabled = false;
+                    }
+
                 },
                 setPrice: function (detail, productId) {
                     if (!productId) {
@@ -242,22 +248,7 @@
                     this.frmTrade.ContactName = item.ContactName;
                     this.frmTrade.PaidMoney = item.PaidMoney;
                     this.frmTrade.Remark = item.Remark;
-                    var details= [];
-                    for (var i = 0; i < item.Details.length; i++) {
-                        var model=  item.Details[i];
-                        var detail = {};
-                        detail.Id = model.Id;
-                        detail.TradeId = model.TradeId;
-                        detail.ProductId = model.ProductId;
-                        detail.ProductName = model.ProductName;
-                        detail.Price = model.Price;
-                        detail.RoughWeight = model.RoughWeight;
-                        detail.Tare = model.Tare;
-                        detail.Remark = model.Remark;
-                        detail.ProductList = this.productList.concat();
-                        details.push(detail);
-                    }
-                    this.frmTrade.Details = details;
+                    this.frmTrade.Details = this.copyDetails(item.Details);
                     this.showPanel("编辑交易","#saveTradeModal");
                 },
                 showDelete: function (item) {
@@ -278,10 +269,16 @@
                 },
                 addNewDetailForm: function () {
                     var productId = this.productList[0].Id;
-                    var newDetail = { ProductId: 0, ProductName: '', Price: 0, RoughWeight: '', Tare: '', PaidMoney: 0, ProductList: [],Remark:'' };
-                    newDetail.ProductList = this.productList.concat();
+                    var newDetail = { ProductId: 0, ProductName: '', Price: 0, RoughWeight: '', Tare: '', PaidMoney: 0, ProductList: [], Remark: '' };
+                    newDetail.ProductList = this.copyProducts(this.productList);
                     this.frmTrade.PaidMoney = '';
-                    this.frmTrade.Details.push(newDetail);
+                    if (this.frmTrade.Id > 0) {
+                        var newDetails = this.copyDetails(this.frmTrade.Details);
+                        newDetails.push(newDetail);
+                        this.frmTrade.Details = newDetails;
+                    } else {
+                        this.frmTrade.Details.push(newDetail);
+                    }
                     this.setPrice(newDetail, productId);
                     if (window.screen.width>768) {
                         setTimeout(function () {
@@ -294,6 +291,36 @@
                     if (this.frmTrade.Details.length > 1) {
                         this.frmTrade.Details.splice(index, 1);
                     }
+                },
+                copyDetails: function (details) {
+                    var newDetails = [];
+                    for (var i = 0; i < details.length; i++) {
+                        var model = details[i];
+                        var detail = {};
+                        detail.Id = model.Id;
+                        detail.TradeId = model.TradeId;
+                        detail.ProductId = model.ProductId;
+                        detail.ProductName = model.ProductName;
+                        detail.Price = model.Price;
+                        detail.RoughWeight = model.RoughWeight;
+                        detail.Tare = model.Tare;
+                        detail.Remark = model.Remark;
+                        detail.ProductList = this.copyProducts(this.productList);
+                        newDetails.push(detail);
+                    }
+                    return newDetails;
+                },
+                copyProducts: function (products) {
+                    var newProducts = [];
+                    for (var i = 0; i < products.length; i++) {
+                        var model = products[i];
+                        var product = {};
+                        product.Id = model.Id;
+                        product.Name = model.Name;
+                        product.Price = model.Price;
+                        newProducts.push(product);
+                    }
+                    return newProducts;
                 },
                 showContact: function () {
                     this.getContactList();
@@ -310,7 +337,7 @@
                     return total;
                 },
                 getStatus: function (money) {
-                    return money >= 0 ? '已付清' : '下欠：' + this.toFixed(money * -1);
+                    return money >= 0 || (money<0&& Math.abs(money) < 0.1) ? '已付清' : '下欠：' + this.toFixed(money * -1);
                 }
             },
             computed: {
@@ -323,7 +350,7 @@
                 isPaidMoneyValid: function () {
                     var isValid = this.frmTrade.PaidMoney != '' && parseFloat(this.frmTrade.PaidMoney) >= 0 && this.frmTrade.Details && this.frmTrade.Details.length>0;
                     if (isValid) {
-                        for (var i = 0; i < this.frmTrade.Details; i++) {
+                        for (var i = 0; i < this.frmTrade.Details.length; i++) {
                             var current = this.frmTrade.Details[i];
                             if (current.Price==''||
                                 current.Price < 0 ||
@@ -357,7 +384,7 @@
                 });
             }
         })
-        $('#chooseContactModal').on('hidden.bs.modal', function () {
+        $('#chooseContactModal,#myModal').on('hidden.bs.modal', function () {
             document.getElementsByTagName('body')[0].className = 'modal-open';
         });
         if (window.screen.width > 768) {

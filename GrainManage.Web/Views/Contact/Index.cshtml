@@ -60,7 +60,7 @@
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Contact_Delete, Model.Urls))
                                 {
-                                    <a style="cursor:pointer" v-on:click="showDelete(item)">删除</a>
+                                    <a style="cursor:pointer" v-if="item.CanModify" v-on:click="showDelete(item)">删除</a>
                                 }
                                 @if (UrlVar.Has(Model.Level, UrlVar.Trade_GetByContactId, Model.Urls))
                                 {
@@ -211,7 +211,7 @@
                     return total;
                 },
                 getStatus: function (money) {
-                        return money >= 0 ? '已付清' : '下欠：' + this.toFixed(money * -1);
+                    return money >= 0 || (money < 0 && Math.abs(money) < 0.1) ? '已付清' : '下欠：' + this.toFixed(money * -1);
                 },
                 showPosition: function (latitude, longitude, accuracy) {
                     var latlon = latitude + ',' + longitude;

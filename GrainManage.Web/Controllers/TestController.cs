@@ -33,5 +33,10 @@ namespace GrainManage.Web.Controllers
                 $"Host:{Request.Host.Host}";
             return Content(ip);
         }
+        [AllowAnonymous]
+        public IActionResult CurrentDateTime()
+        {
+            return Content(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
     }
 }

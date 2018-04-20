@@ -24,7 +24,15 @@ namespace GrainManage.Web.Controllers
                 return View(currentUser);
             }
             var result = new BaseOutput();
-            Expression<Func<Trade, bool>> myFilter = f => f.CompId == currentUser.CompId;
+            Expression<Func<Trade, bool>> myFilter = null;
+            if (IsSuperAdmin)
+            {
+                myFilter = f => true;
+            }
+            else
+            {
+                myFilter = f => f.CompId == currentUser.CompId;
+            }
             if (input.TradeType.HasValue)
             {
                 myFilter = myFilter.And(f => f.TradeType == input.TradeType);

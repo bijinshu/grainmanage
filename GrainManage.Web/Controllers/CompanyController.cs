@@ -91,7 +91,6 @@ namespace GrainManage.Web.Controllers
                 var model = repo.GetFiltered(f => f.Id == input.Id, true).First();
                 if (model.UserId == UserId)
                 {
-                    var oldFileName = model.ImgName;
                     model.Name = input.Name;
                     model.Address = input.Address;
                     if (imgFile != null && imgFile.Length > 0)
