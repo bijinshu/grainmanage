@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="ContactName" class="col-md-3 control-label hidden-xs hidden-sm">客户姓名</label>
             <div class="col-md-6">
-                <input v-model="frmTrade.ContactName" type="text" class="form-control" id="ContactName">
+                <input v-model="frmTrade.ContactName" type="text" class="form-control" id="ContactName" placeholder="请选择客户姓名">
             </div>
             <div class="col-md-3">
                 <button v-on:click.stop.prevent="showContact" class="btn btn-info btn-block">选择</button>
@@ -83,10 +83,10 @@
         <div class="form-group">
             <label for="PaidMoney" class="col-md-3 control-label hidden-xs hidden-sm">已付金额</label>
             <div class="col-md-6 col-xs-8">
-                <input v-model="frmTrade.PaidMoney" v-on:dblclick="frmTrade.PaidMoney=toFixed(totalMoney)" type="number" class="form-control" id="PaidMoney" placeholder="已付金额">
+                <input v-model="frmTrade.PaidMoney" type="number" class="form-control" id="PaidMoney" placeholder="已付金额">
             </div>
             <div class="col-md-2 col-xs-4"><a class="btn btn-success btn-block" v-on:click="frmTrade.PaidMoney=toFixed(totalMoney)">计算</a></div>
-            <div v-if="frmTrade.PaidMoney==''||parseFloat(frmTrade.PaidMoney)<0" class="col-md-push-3 col-md-8" style="color:red">已付金额应为大于等于0的数字</div>
+            <div v-if="frmTrade.PaidMoney==''||parseFloat(frmTrade.PaidMoney)<0" class="col-md-push-3 col-md-8 col-xs-12" style="color:red">已付金额应为大于等于0的数字</div>
         </div>
         <div class="form-group">
             <label for="Remark" class="col-md-3 control-label hidden-xs hidden-sm">其他信息</label>

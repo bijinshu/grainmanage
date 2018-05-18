@@ -211,7 +211,7 @@
                           }
                         }.bind(this));
                     } else {
-                        this.showAlert('有参数不正确，请重新检查');
+                        alert('有参数不正确，请重新检查');
                         this.IsDisabled = false;
                     }
 
@@ -384,7 +384,7 @@
                 });
             }
         })
-        $('#chooseContactModal,#myModal').on('hidden.bs.modal', function () {
+        $('#chooseContactModal').on('hidden.bs.modal', function () {
             document.getElementsByTagName('body')[0].className = 'modal-open';
         });
         if (window.screen.width > 768) {
