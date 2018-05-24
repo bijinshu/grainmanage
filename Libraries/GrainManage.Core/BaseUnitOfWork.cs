@@ -1,6 +1,7 @@
 ﻿using GrainManage.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Data;
 
@@ -23,9 +24,17 @@ namespace GrainManage.Core
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(ConnectionString);
+            AddInterception(optionsBuilder);
         }
         protected abstract void AddConfiguations(ModelBuilder modelBuilder);
 
+        [System.Diagnostics.Conditional("DEBUG")]
+        protected static void AddInterception(DbContextOptionsBuilder optionsBuilder)
+        {
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddProvider(new EFLoggerProvider());
+            optionsBuilder.UseLoggerFactory(loggerFactory);
+        }
         #endregion
 
         #region 增删改
