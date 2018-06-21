@@ -25,7 +25,7 @@ namespace GrainManage.Web
             //利用正则表达式判断字符串是否符合IPv4格式  
             return Regex.IsMatch(ip, "^(localhost)|[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
         }
-        public static string GetRequestHostAddress(HttpRequest request)
+        public static string GetClientIP(HttpRequest request)
         {
             string result = GetHeader(request, "X-Forwarded-For");
             if (!string.IsNullOrEmpty(result))
@@ -42,7 +42,7 @@ namespace GrainManage.Web
             }
             if (string.IsNullOrEmpty(result))
             {
-                result = request.Host.Host;
+                result = request.HttpContext.Connection.RemoteIpAddress.ToString();
             }
             if (string.IsNullOrEmpty(result) || !IsIPv4(result))
             {

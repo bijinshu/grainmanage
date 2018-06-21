@@ -14,7 +14,7 @@ namespace GrainManage.Web
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var ip = HttpUtil.GetRequestHostAddress(context.HttpContext.Request);
+            var ip = HttpUtil.GetClientIP(context.HttpContext.Request);
             var ipRepo = context.HttpContext.RequestServices.GetService(typeof(IRepository<WhiteIP>)) as IRepository<WhiteIP>;
             if (ipRepo.GetFiltered(f => f.IP == ip && f.Status == 1).Any())
             {

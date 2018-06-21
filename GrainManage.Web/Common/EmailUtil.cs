@@ -1,68 +1,84 @@
-﻿using System.Net.Mail;
+﻿using GrainManage.Common;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Threading;
+using System.Linq;
 
 namespace GrainManage.Web.Common
 {
     public class EmailUtil
     {
 
-        private string from;//发件人地址
-        private string password;//发件人密码  
-
+        private SmtpClient smtpClient = new SmtpClient();
+        private MailAddress from = null;
         /// <summary>
         /// 使用发件人地址和密码实例化
         /// </summary>
-        public EmailUtil(string from, string password)
+        public EmailUtil(string host, string userName, string password, string displayName = "", int port = 25)
         {
-            this.from = from;
-            this.password = password;
+            from = new MailAddress(userName, displayName, Encoding.UTF8);
+            smtpClient.Host = host;
+            smtpClient.Port = port;
+            smtpClient.Credentials = new NetworkCredential(userName, password);//设置发件人身份的票据  
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
         public SendCompletedEventHandler SendCompleted { get; set; }
 
-        private SmtpClient GetSmtpClient(MailMessage mailMessage)
-        {
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Credentials = new System.Net.NetworkCredential(mailMessage.From.Address, password);//设置发件人身份的票据  
-            smtpClient.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            smtpClient.Host = "smtp." + mailMessage.From.Host;
-            return smtpClient;
-        }
-
-        private MailMessage GetMailMessage(string to, string body, string title)
+        private MailMessage GetMailMessage(IDictionary<string, string> tos, IDictionary<string, string> ccs, string subject, string body)
         {
             MailMessage mailMessage = new MailMessage();
-            mailMessage.To.Add(to);
-            mailMessage.From = new System.Net.Mail.MailAddress(from);
-            mailMessage.Subject = title;
+            foreach (var to in tos)
+            {
+                mailMessage.To.Add(new MailAddress(to.Key, to.Value, Encoding.UTF8));
+            }
+            if (ccs != null && ccs.Any())
+            {
+                foreach (var cc in ccs)
+                {
+                    mailMessage.CC.Add(new MailAddress(cc.Key, cc.Value, Encoding.UTF8));
+                }
+            }
+            mailMessage.From = from;
+            mailMessage.Subject = subject;
             mailMessage.Body = body;
-            mailMessage.IsBodyHtml = true;
             mailMessage.BodyEncoding = System.Text.Encoding.UTF8;
-            mailMessage.Priority = System.Net.Mail.MailPriority.Normal;
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Priority = MailPriority.Normal;
             return mailMessage;
         }
 
         /// <summary>
-        /// 处审核后类的实例  
+        /// 发送邮件
         /// </summary>
-        /// <param name="to"></param>
-        /// <param name="body"></param>
-        /// <param name="title"></param>
-        public void SendMail(string to, string body, string title)
+        /// <param name="to">收件人</param>
+        /// <param name="cc">抄送人</param>
+        /// <param name="subject">主题</param>
+        /// <param name="body">正文</param>
+        public bool SendMail(IDictionary<string, string> to, IDictionary<string, string> cc, string subject, string body)
         {
-            MailMessage mailMessage = GetMailMessage(to, body, title);
-            SmtpClient smtpClient = GetSmtpClient(mailMessage);
-            smtpClient.Send(mailMessage);
-        }
-
-        public void SendAsync(string to, string body, string title)
-        {
-            MailMessage mailMessage = GetMailMessage(to, body, title);
-            SmtpClient smtpClient = GetSmtpClient(mailMessage);
-            if (SendCompleted != null)
+            var random = new Random();
+            var retryCount = AppConfig.GetValue<int>("retryCount");
+            for (int i = 0; i < retryCount; i++)
             {
-                smtpClient.SendCompleted += SendCompleted;//注册异步发送邮件完成时的事件  
+                try
+                {
+                    Thread.Sleep(random.Next(200, 1000));
+                    MailMessage mailMessage = GetMailMessage(to, cc, subject, body);
+                    smtpClient.Send(mailMessage);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    var logger = NLog.LogManager.GetCurrentClassLogger();
+                    logger.Info(e, $"【发送失败】{subject}，进行第{i + 1}次重试");
+                    Thread.Sleep(random.Next(1000, 5000));
+                }
             }
-            smtpClient.SendAsync(mailMessage, mailMessage.Body);
+            return false;
         }
     }
 }

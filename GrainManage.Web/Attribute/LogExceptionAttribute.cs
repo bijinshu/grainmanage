@@ -24,7 +24,7 @@ namespace GrainManage.Web
                     Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request),
                     Message = errorMsg,
                     StackTrace = filterContext.Exception.StackTrace,
-                    ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request),
+                    ClientIP = HttpUtil.GetClientIP(filterContext.HttpContext.Request),
                     CreatedAt = DateTime.Now
                 };
                 LogService.AddExceptionLog(model);

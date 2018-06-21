@@ -156,7 +156,7 @@ namespace GrainManage.Web.Controllers
                                 Para = HttpUtil.GetInputPara(Request),
                                 Message = ExceptionUtil.GetInnerestMessage(e),
                                 StackTrace = e.StackTrace,
-                                ClientIP = HttpUtil.GetRequestHostAddress(Request),
+                                ClientIP = HttpUtil.GetClientIP(Request),
                                 CreatedAt = DateTime.Now
                             };
                             LogService.AddExceptionLog(exception);

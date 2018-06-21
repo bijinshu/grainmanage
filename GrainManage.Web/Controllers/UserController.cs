@@ -37,7 +37,7 @@ namespace GrainManage.Web.Controllers
             }
             else
             {
-                var logModel = new LoginLog { UserName = input.UserName, LoginIP = HttpUtil.GetRequestHostAddress(Request) };
+                var logModel = new LoginLog { UserName = input.UserName, LoginIP = HttpUtil.GetClientIP(Request) };
                 var repo = GetRepo<User>();
                 var account = repo.GetFiltered(f => f.UserName == input.UserName).FirstOrDefault();
                 if (account != null)
@@ -61,7 +61,7 @@ namespace GrainManage.Web.Controllers
                                 Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                                 Token = RandomGenerator.Next(20),
                                 ExpiredAt = expireAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                                LoginIP = HttpUtil.GetRequestHostAddress(Request)
+                                LoginIP = HttpUtil.GetClientIP(Request)
                             };
                             userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
                             userInfo.Auths = CommonService.GetAuths(userInfo.Roles);

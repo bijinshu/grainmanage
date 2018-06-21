@@ -119,7 +119,7 @@ namespace GrainManage.Web
                         Roles = account.Roles.Split(',').Select(s => int.Parse(s)).ToArray(),
                         Token = cookieUserInfo.Token,
                         ExpiredAt = cookieUserInfo.ExpiredAt,
-                        LoginIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request)
+                        LoginIP = HttpUtil.GetClientIP(filterContext.HttpContext.Request)
                     };
                     userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
                     userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
@@ -139,7 +139,7 @@ namespace GrainManage.Web
                         Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request),
                         Message = ExceptionUtil.GetInnerestMessage(e),
                         StackTrace = e.StackTrace,
-                        ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request),
+                        ClientIP = HttpUtil.GetClientIP(filterContext.HttpContext.Request),
                         CreatedAt = DateTime.Now
                     };
                     LogService.AddExceptionLog(model);

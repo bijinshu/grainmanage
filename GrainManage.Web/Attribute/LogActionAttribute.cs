@@ -24,7 +24,7 @@ namespace GrainManage.Web
                 var headers = filterContext.HttpContext.Request.Headers;
                 ActionLog model = new ActionLog();
                 model.Path = HttpUtility.UrlDecode(filterContext.HttpContext.Request.Path.Value, Encoding.UTF8);
-                model.ClientIP = HttpUtil.GetRequestHostAddress(filterContext.HttpContext.Request);
+                model.ClientIP = HttpUtil.GetClientIP(filterContext.HttpContext.Request);
                 model.Method = filterContext.HttpContext.Request.Method;
                 model.Para = HttpUtil.GetInputPara(filterContext.HttpContext.Request);
                 model.StartTime = DateTime.Now;
