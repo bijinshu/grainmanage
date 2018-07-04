@@ -91,7 +91,7 @@
     <div v-cloak>
         @if (Model.CompId != 0)
         {
-            @Html.Partial("_CompanyDetail")
+            @await Html.PartialAsync("_CompanyDetail")
         }
         <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
     </div>

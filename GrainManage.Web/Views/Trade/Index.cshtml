@@ -137,9 +137,9 @@
         </div>
     </div>
     <div v-cloak>
-        @Html.Partial("_TradeDetail")
-        @Html.Partial("_ContactList")
-        @Html.Partial("_DeleteModal", "删除交易")
+        @await Html.PartialAsync("_TradeDetail")
+        @await Html.PartialAsync("_ContactList")
+        @await Html.PartialAsync("_DeleteModal", "删除交易")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>

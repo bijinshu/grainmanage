@@ -88,11 +88,11 @@
     <div v-cloak>
         @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_New, Model.Urls))
         {
-            @Html.Partial("_IPDetail")
+            @await Html.PartialAsync("_IPDetail")
         }
         @if (UrlVar.Has(Model.Level, UrlVar.WhiteIp_Delete, Model.Urls))
         {
-            @Html.Partial("_DeleteModal", "删除IP")
+            @await Html.PartialAsync("_DeleteModal", "删除IP")
         }
         <modal-dialog title="提示" v-bind:msg="msg"></modal-dialog>
     </div>

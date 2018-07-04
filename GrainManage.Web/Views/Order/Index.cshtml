@@ -107,11 +107,11 @@
     <div v-cloak>
         @if (UrlVar.Has(Model.Level, UrlVar.Order_Detail, Model.Urls))
         {
-            @Html.Partial("_OrderDetail")
+            @await Html.PartialAsync("_OrderDetail")
         }
         @if (UrlVar.Has(Model.Level, UrlVar.Order_Edit, Model.Urls))
         {
-            @Html.Partial("_TradeDetail")
+            @await Html.PartialAsync("_TradeDetail")
         }
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>

@@ -26,8 +26,6 @@ namespace GrainManage.Web.Common
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
         }
 
-        public SendCompletedEventHandler SendCompleted { get; set; }
-
         private MailMessage GetMailMessage(IDictionary<string, string> tos, IDictionary<string, string> ccs, string subject, string body)
         {
             MailMessage mailMessage = new MailMessage();
@@ -58,10 +56,9 @@ namespace GrainManage.Web.Common
         /// <param name="cc">抄送人</param>
         /// <param name="subject">主题</param>
         /// <param name="body">正文</param>
-        public bool SendMail(IDictionary<string, string> to, IDictionary<string, string> cc, string subject, string body)
+        public bool SendMail(IDictionary<string, string> to, IDictionary<string, string> cc, string subject, string body, int retryCount = 6)
         {
             var random = new Random();
-            var retryCount = AppConfig.GetValue<int>("retryCount");
             for (int i = 0; i < retryCount; i++)
             {
                 try

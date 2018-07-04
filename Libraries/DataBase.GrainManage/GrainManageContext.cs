@@ -27,6 +27,7 @@ namespace DataBase.GrainManage
             modelBuilder.ApplyConfiguration(new UserMapper());
             modelBuilder.ApplyConfiguration(new WhiteIPMapper());
             modelBuilder.ApplyConfiguration(new AddressMapper());
+            //modelBuilder.Entity<Models.Address>();
             modelBuilder.ApplyConfiguration(new ProductMapper());
             modelBuilder.ApplyConfiguration(new CompanyMapper());
             modelBuilder.ApplyConfiguration(new OrderMapper());

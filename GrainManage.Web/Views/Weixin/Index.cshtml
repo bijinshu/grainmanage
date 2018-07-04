@@ -38,7 +38,7 @@
         </div>
     </div>
     <div v-cloak>
-        @Html.Partial("_NewOrder")
+        @await Html.PartialAsync("_NewOrder")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>

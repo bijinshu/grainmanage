@@ -90,9 +90,9 @@
         </div>
     </div>
     <div v-cloak>
-        @Html.Partial("_ContactDetail")
-        @Html.Partial("_History")
-        @Html.Partial("_DeleteModal", "删除客户")
+        @await Html.PartialAsync("_ContactDetail")
+        @await Html.PartialAsync("_History")
+        @await Html.PartialAsync("_DeleteModal", "删除客户")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>

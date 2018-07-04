@@ -52,7 +52,7 @@ namespace GrainManage.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Weixin}/{action=Index}/{id?}");
             });
 
         }

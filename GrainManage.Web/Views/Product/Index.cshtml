@@ -109,9 +109,9 @@
     <div v-cloak>
         @if (UrlVar.Has(Model.Level, UrlVar.Product_New, Model.Urls) || UrlVar.Has(Model.Level, UrlVar.Product_Edit, Model.Urls))
         {
-            @Html.Partial("_ProductDetail")
+            @await Html.PartialAsync("_ProductDetail")
         }
-        @Html.Partial("_DeleteModal", "删除粮食")
+        @await Html.PartialAsync("_DeleteModal", "删除粮食")
         <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
     </div>
 </div>

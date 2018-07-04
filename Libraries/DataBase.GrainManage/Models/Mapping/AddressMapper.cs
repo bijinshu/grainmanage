@@ -12,7 +12,7 @@ namespace DataBase.GrainManage.Models.Mapping
         {
             builder.ToTable("rm_address");
             builder.HasKey(m => m.Path);
-            builder.Property(p => p.Path).IsRequired();
+            builder.Property(p => p.Path).HasColumnName("Path").ValueGeneratedNever().IsRequired();
             builder.Property(p => p.Remark).IsRequired();
         }
     }
