@@ -111,6 +111,8 @@ namespace GrainManage.Web
         //Weixin
         [Common]
         public static string Weixin_Index { get { return GetUrl("/Weixin/Index"); } }
+        [Common]
+        public static string Weixin_Receive { get { return GetUrl("/Weixin/Receive"); } }
 
         #region 工具方法
         public static bool Has(int currentLevel, string url, IEnumerable<string> urlList)

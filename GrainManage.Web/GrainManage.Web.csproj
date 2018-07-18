@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <UserSecretsId>736d4818-48b0-448d-8ba1-bd371a740be4</UserSecretsId>
     <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
   </PropertyGroup>
@@ -24,6 +24,8 @@
     <PackageReference Include="NLog.Config" Version="4.5.6" />
     <PackageReference Include="NLog.Schema" Version="4.5.6" />
     <PackageReference Include="Quartz" Version="3.0.5" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="15.1.1" />
+    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="6.0.10" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
     <PackageReference Include="StackExchange.Redis.StrongName" Version="1.2.6" />
   </ItemGroup>
@@ -36,6 +38,7 @@
     <None Include="NLog.config" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
+    <None Include="wwwroot\MP_verify_JPDrG8ZoYfixMj1V.txt" />
   </ItemGroup>
 
   <ItemGroup>

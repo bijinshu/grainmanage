@@ -185,7 +185,7 @@ namespace GrainManage.Web.Controllers
                             var newPwd = RandomGenerator.Next(8);
                             account.Pwd = SHAEncrypt.SHA1(newPwd);
                             account.ModifiedAt = DateTime.Now;
-                            var title = "您的密码已经设置更改";
+                            var title = "您的密码已经更改";
                             var body = $"{CurrentUser.UserName},您的新密码为:{newPwd},请注意保存";
                             var password = DESEncrypt.Decrypt(AppConfig.GetValue("MailPwd"));
                             var smtp = new EmailUtil(AppConfig.GetValue("SendEmailServer"), AppConfig.GetValue("MailUserName"), password, AppConfig.GetValue("DisplayName"));

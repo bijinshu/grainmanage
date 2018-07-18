@@ -19,10 +19,10 @@ namespace GrainManage.Web.Controllers
         {
             return Content(UrlVar.GetUrl(u));
         }
-        [AllowAnonymous]
-        public IActionResult Conn()
+        [AllowAnonymous, CheckIP]
+        public IActionResult GetConfig(string name)
         {
-            return Content(AppConfig.GetValue("ImagePath"));
+            return Content(AppConfig.GetValue(name));
         }
         [AllowAnonymous]
         public IActionResult Ip()
