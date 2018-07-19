@@ -1,4 +1,6 @@
-﻿using Senparc.Weixin.Context;
+﻿using GrainManage.Web.Services;
+using Senparc.Weixin.Context;
+using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.MessageHandlers;
@@ -21,14 +23,21 @@ namespace GrainManage.Web.MessageHandlers
         public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = $"您的OpenID是：{requestMessage.FromUserName },发送的文字是：{requestMessage.Content}";
+            var content = SysMapService.GetValue(requestMessage.Content, 1);
+            if (string.IsNullOrEmpty(content))
+            {
+                content = $"未获取到[{requestMessage.Content}]的响应消息,默认返回后台登录地址：{SysMapService.GetValue("default", 1)}";
+            }
+
+            responseMessage.Content = content;
             return responseMessage;
         }
+
 
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = "这条消息来自DefaultResponseMessage。";
+            responseMessage.Content = "亲，暂时只支持响应文本消息哦";
             return responseMessage;
         }
     }

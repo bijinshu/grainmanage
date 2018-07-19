@@ -7,11 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
+using Senparc.CO2NET.Cache;
+//using Senparc.CO2NET.Cache.Redis;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Weixin;
+//using Senparc.Weixin.Cache.Redis;
 using Senparc.Weixin.Entities;
 using Senparc.Weixin.RegisterServices;
-using System.Configuration;
+using System.Collections.Generic;
 
 namespace GrainManage.Web
 {
@@ -65,10 +68,47 @@ namespace GrainManage.Web
                     template: "{controller=Weixin}/{action=Index}/{id?}");
             });
             // 启动 CO2NET 全局注册，必须！
-            IRegisterService register = RegisterService.Start(env, senparcSetting.Value).UseSenparcGlobal(false, null);
+            //配置全局使用Redis缓存（按需，独立）
+            var register = RegisterService.Start(env, senparcSetting.Value).UseSenparcGlobal(false, null);
+            //var register = RegisterService.Start(env, senparcSetting.Value).UseSenparcGlobal(false, () => GetExCacheStrategies(senparcSetting.Value));
+            var redisConfigurationStr = senparcSetting.Value.Cache_Redis_Configuration;
+            var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "Redis配置";
 
+            #region 缓存配置（按需）
+            //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
+            //register.ChangeDefaultCacheNamespace("DefaultCO2NETCache");
+            //if (useRedis)
+            //{
+            //    //设置Redis链接信息，并在全局立即启用Redis缓存。
+            //    register.RegisterCacheRedis(redisConfigurationStr, redisConfiguration => RedisObjectCacheStrategy.Instance);
+            //}
+            #endregion
+
+            #region 微信相关配置
+            //if (useRedis)
+            //{
+            //    app.UseSenparcWeixinCacheRedis();
+            //}
             //开始注册微信信息，必须！
             register.UseSenparcWeixin(senparcWeixinSetting.Value, senparcSetting.Value);
+            #endregion
         }
+
+        /// <summary>
+        /// 获取扩展缓存策略
+        /// </summary>
+        /// <returns></returns>
+        //private IList<IDomainExtensionCacheStrategy> GetExCacheStrategies(SenparcSetting senparcSetting)
+        //{
+        //    var exContainerCacheStrategies = new List<IDomainExtensionCacheStrategy>();
+        //    senparcSetting = senparcSetting ?? new SenparcSetting();
+        //    //判断Redis是否可用
+        //    var redisConfiguration = senparcSetting.Cache_Redis_Configuration;
+        //    if (!string.IsNullOrEmpty(redisConfiguration) && redisConfiguration != "Redis配置")
+        //    {
+        //        exContainerCacheStrategies.Add(RedisContainerCacheStrategy.Instance);
+        //    }
+        //    return exContainerCacheStrategies;
+        //}
     }
 }

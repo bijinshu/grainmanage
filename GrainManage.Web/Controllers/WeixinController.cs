@@ -9,6 +9,7 @@ using GrainManage.Web.MessageHandlers;
 using GrainManage.Web.Models.Weixin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Senparc.CO2NET.HttpUtility;
 using Senparc.Weixin;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.Entities.Request;
@@ -18,10 +19,10 @@ namespace GrainManage.Web.Controllers
 {
     public class WeixinController : BaseController
     {
-        private readonly string Token = Config.SenparcWeixinSetting.Token;
-        private readonly string EncodingAESKey = Config.SenparcWeixinSetting.EncodingAESKey;
-        private readonly string AppId = Config.SenparcWeixinSetting.WeixinAppId;
-        private readonly string AppSecret = Config.SenparcWeixinSetting.WeixinAppSecret;
+        private static readonly string Token = Config.SenparcWeixinSetting.Token;
+        private static readonly string EncodingAESKey = Config.SenparcWeixinSetting.EncodingAESKey;
+        private static readonly string AppId = Config.SenparcWeixinSetting.WeixinAppId;
+        private static readonly string AppSecret = Config.SenparcWeixinSetting.WeixinAppSecret;
         [AllowAnonymous]
         public ActionResult Index(InputSearch input)
         {
@@ -74,7 +75,7 @@ namespace GrainManage.Web.Controllers
                 postModel.Token = Token;
                 postModel.EncodingAESKey = EncodingAESKey;
                 postModel.AppId = AppId;
-                var messageHandler = new CustomMessageHandler(Request.Body, postModel);//处理接收到的消息
+                var messageHandler = new CustomMessageHandler(Request.GetRequestMemoryStream(), postModel);//处理接收到的消息
                 messageHandler.Execute();//执行微信处理过程
                 return new FixWeixinBugWeixinResult(messageHandler);//返回结果
             }
