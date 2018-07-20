@@ -8,11 +8,11 @@ namespace GrainManage.Web.Services
 {
     public class MsgService
     {
-        public static List<string> GetKeywords()
+        public static List<string> GetKeywords(int type)
         {
             var db = new GrainManageDB();
-            var sql = "select `Key` from weixin_msg where `Status`=1";
-            return db.Select<string>(sql);
+            var sql = "select `Key` from weixin_msg where `Status`=1 and `Type`=@type";
+            return db.Select<string>(sql, new { type });
         }
     }
 }

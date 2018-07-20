@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace GrainManage.Web.MessageHandlers
 {
@@ -27,7 +28,7 @@ namespace GrainManage.Web.MessageHandlers
             if (result == null)
             {
                 var responseMessage = CreateResponseMessage<ResponseMessageText>();
-                responseMessage.Content = $"请尝试如下关键字：{Environment.NewLine}{string.Join('、', MsgService.GetKeywords())}";
+                responseMessage.Content = $"请尝试如下关键字：{Environment.NewLine}{string.Join('、', MsgService.GetKeywords(0))}";
                 return responseMessage;
             }
             return result;
@@ -37,7 +38,7 @@ namespace GrainManage.Web.MessageHandlers
             if (string.IsNullOrWhiteSpace(requestMessage.Recognition))
             {
                 var responseMessage = CreateResponseMessage<ResponseMessageText>();
-                responseMessage.Content = $"未能识别语音输入";
+                responseMessage.Content = $"对不起，未能识别出该语音";
                 return responseMessage;
             }
             var filter = Regex.Replace(requestMessage.Recognition, @"\W+", string.Empty) ?? string.Empty;
@@ -50,12 +51,17 @@ namespace GrainManage.Web.MessageHandlers
             }
             return result;
         }
-
+        public override IResponseMessageBase OnLocationRequest(RequestMessageLocation requestMessage)
+        {
+            var responseMessage = CreateResponseMessage<ResponseMessageText>();
+            responseMessage.Content = $"您的地址是：{Environment.NewLine}{requestMessage.Label}{Environment.NewLine}纬度：{requestMessage.Location_X} 经度：{requestMessage.Location_Y}";
+            return responseMessage;
+        }
 
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = "亲，暂时只支持响应文本消息哦";
+            responseMessage.Content = $"亲，暂时不支持响应 {requestMessage.MsgType} 类型哦";
             return responseMessage;
         }
 
@@ -86,7 +92,7 @@ namespace GrainManage.Web.MessageHandlers
                         }
                         catch (Exception e)
                         {
-                            resp.Content = e.Message;
+                            resp.Content = $"执行方法异常：{Environment.NewLine}{e.Message}";
                         }
                         break;
                     default:
