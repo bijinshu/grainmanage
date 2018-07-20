@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GrainManage.Web.MessageHandlers
@@ -22,32 +23,32 @@ namespace GrainManage.Web.MessageHandlers
 
         public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
-            var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            var model = SysMapService.Get(requestMessage.Content);
-            if (model != null && !string.IsNullOrEmpty(model.Value))
+            var result = GetResult(requestMessage, requestMessage.Content);
+            if (result == null)
             {
-                switch (model.Action)
-                {
-                    case "method":
-                        responseMessage.Content = Exec<string>(requestMessage, model.Value);
-                        break;
-                    default:
-                        responseMessage.Content = model.Value;
-                        break;
-                }
+                var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                responseMessage.Content = $"请尝试如下关键字：{Environment.NewLine}{string.Join('、', MsgService.GetKeywords())}";
+                return responseMessage;
             }
-            else
-            {
-                model = SysMapService.Get("default");
-                responseMessage.Content = model?.Value;
-            }
-            return responseMessage;
+            return result;
         }
         public override IResponseMessageBase OnVoiceRequest(RequestMessageVoice requestMessage)
         {
-            var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = $"语音识别结果：{Environment.NewLine}{requestMessage.Recognition}";
-            return responseMessage;
+            if (string.IsNullOrWhiteSpace(requestMessage.Recognition))
+            {
+                var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                responseMessage.Content = $"未能识别语音输入";
+                return responseMessage;
+            }
+            var filter = Regex.Replace(requestMessage.Recognition, @"\W+", string.Empty) ?? string.Empty;
+            var result = GetResult(requestMessage, filter);
+            if (result == null)
+            {
+                var responseMessage = CreateResponseMessage<ResponseMessageText>();
+                responseMessage.Content = $"语音识别结果：{Environment.NewLine}{requestMessage.Recognition}{Environment.NewLine}过滤后结果：{Environment.NewLine}{filter}";
+                return responseMessage;
+            }
+            return result;
         }
 
 
@@ -58,20 +59,43 @@ namespace GrainManage.Web.MessageHandlers
             return responseMessage;
         }
 
-        public static T Exec<T>(RequestMessageText requestMessage, string value)
+        public IResponseMessageBase GetResult(RequestMessageBase requestMessage, string keyword)
         {
-            try
+            var model = SysMapService.Get(keyword);
+            if (model != null && !string.IsNullOrEmpty(model.Value))
             {
-                var classType = value.Substring(0, value.LastIndexOf('.'));
-                var type = Type.GetType(classType);
-                var method = type.GetMethod(value.Substring(value.LastIndexOf('.') + 1));
-                var obj = Activator.CreateInstance(type);
-                return (T)method.Invoke(obj, new object[] { requestMessage });
+                var resp = CreateResponseMessage<ResponseMessageText>();
+                switch (model.Action)
+                {
+                    case "method":
+                        try
+                        {
+                            var classType = model.Value.Substring(0, model.Value.LastIndexOf('.'));
+                            var type = Type.GetType(classType);
+                            var method = type.GetMethod(model.Value.Substring(model.Value.LastIndexOf('.') + 1));
+                            var instance = Activator.CreateInstance(type, new object[] { this });
+                            var result = method.Invoke(instance, new object[] { requestMessage });
+                            if (result is string)
+                            {
+                                resp.Content = result as string;
+                            }
+                            else
+                            {
+                                return result as IResponseMessageBase;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            resp.Content = e.Message;
+                        }
+                        break;
+                    default:
+                        resp.Content = model.Value;
+                        break;
+                }
+                return resp;
             }
-            catch (Exception)
-            {
-            }
-            return default(T);
+            return null;
         }
     }
 }

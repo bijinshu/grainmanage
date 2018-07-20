@@ -1,7 +1,10 @@
 ﻿using GrainManage.Dal;
+using GrainManage.Web.Services;
 using Senparc.Weixin;
+using Senparc.Weixin.Context;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Entities;
+using Senparc.Weixin.MP.MessageHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +14,16 @@ namespace GrainManage.Web.Code
 {
     public class TextMsgResp
     {
-        public string GetSaleShop(RequestMessageText requestMessage)
+        private readonly MessageHandler<MessageContext<IRequestMessageBase, IResponseMessageBase>> handler;
+        public TextMsgResp(MessageHandler<MessageContext<IRequestMessageBase, IResponseMessageBase>> handler)
         {
-            var db = new GrainManageDB();
-            return string.Join('、', db.Select<string>("select Name from bm_company limit 50"));
+            this.handler = handler;
         }
-        public string Whoami(RequestMessageText requestMessage)
+        public string GetSaleShop(RequestMessageBase requestMessage)
+        {
+            return string.Join('、', CompanyService.GetCompanyNames());
+        }
+        public string Whoami(RequestMessageBase requestMessage)
         {
             try
             {
