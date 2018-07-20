@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Senparc.CO2NET.HttpUtility;
 using Senparc.Weixin;
 using Senparc.Weixin.MP;
+using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.MvcExtension;
 
@@ -23,6 +24,14 @@ namespace GrainManage.Web.Controllers
         private static readonly string EncodingAESKey = Config.SenparcWeixinSetting.EncodingAESKey;
         private static readonly string AppId = Config.SenparcWeixinSetting.WeixinAppId;
         private static readonly string AppSecret = Config.SenparcWeixinSetting.WeixinAppSecret;
+        static WeixinController()
+        {
+            if (!AccessTokenContainer.CheckRegistered(AppId))//检查是否已经注册
+            {
+                AccessTokenContainer.Register(AppId, AppSecret);//如果没有注册则进行注册
+            }
+        }
+
         [AllowAnonymous]
         public ActionResult Index(InputSearch input)
         {

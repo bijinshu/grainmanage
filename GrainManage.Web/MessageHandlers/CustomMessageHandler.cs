@@ -23,13 +23,30 @@ namespace GrainManage.Web.MessageHandlers
         public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            var content = SysMapService.GetValue(requestMessage.Content, 1);
-            if (string.IsNullOrEmpty(content))
+            var model = SysMapService.Get(requestMessage.Content);
+            if (model != null && !string.IsNullOrEmpty(model.Value))
             {
-                content = $"未获取到[{requestMessage.Content}]的响应消息,默认返回后台登录地址：{SysMapService.GetValue("default", 1)}";
+                switch (model.Action)
+                {
+                    case "method":
+                        responseMessage.Content = Exec<string>(requestMessage, model.Value);
+                        break;
+                    default:
+                        responseMessage.Content = model.Value;
+                        break;
+                }
             }
-
-            responseMessage.Content = content;
+            else
+            {
+                model = SysMapService.Get("default");
+                responseMessage.Content = model?.Value;
+            }
+            return responseMessage;
+        }
+        public override IResponseMessageBase OnVoiceRequest(RequestMessageVoice requestMessage)
+        {
+            var responseMessage = CreateResponseMessage<ResponseMessageText>();
+            responseMessage.Content = $"语音识别结果：{Environment.NewLine}{requestMessage.Recognition}";
             return responseMessage;
         }
 
@@ -39,6 +56,22 @@ namespace GrainManage.Web.MessageHandlers
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
             responseMessage.Content = "亲，暂时只支持响应文本消息哦";
             return responseMessage;
+        }
+
+        public static T Exec<T>(RequestMessageText requestMessage, string value)
+        {
+            try
+            {
+                var classType = value.Substring(0, value.LastIndexOf('.'));
+                var type = Type.GetType(classType);
+                var method = type.GetMethod(value.Substring(value.LastIndexOf('.') + 1));
+                var obj = Activator.CreateInstance(type);
+                return (T)method.Invoke(obj, new object[] { requestMessage });
+            }
+            catch (Exception)
+            {
+            }
+            return default(T);
         }
     }
 }

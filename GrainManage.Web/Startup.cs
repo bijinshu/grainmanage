@@ -91,6 +91,7 @@ namespace GrainManage.Web
             //}
             //开始注册微信信息，必须！
             register.UseSenparcWeixin(senparcWeixinSetting.Value, senparcSetting.Value);
+
             #endregion
         }
 

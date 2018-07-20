@@ -1,4 +1,5 @@
 ﻿using GrainManage.Dal;
+using GrainManage.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ namespace GrainManage.Web.Services
 {
     public class SysMapService
     {
-        public static string GetValue(string key, int type)
+        public static WeiXinMsg Get(string key)
         {
             var db = new GrainManageDB();
-            var sql = "select Value from sys_map where `Key`=@key and `Type`=@type limit 1";
-            return db.Select<string>(sql, new { key, type }).FirstOrDefault();
+            var sql = "select * from weixin_msg where `Key`=@key and `Status`=1";
+            return db.Select<WeiXinMsg>(sql, new { key }).FirstOrDefault();
         }
     }
 }
