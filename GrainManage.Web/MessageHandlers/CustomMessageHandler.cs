@@ -21,10 +21,9 @@ namespace GrainManage.Web.MessageHandlers
         {
 
         }
-
         public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
-            var result = GetResult(requestMessage, requestMessage.Content);
+            var result = GetResult(requestMessage.Content);
             if (result == null)
             {
                 var responseMessage = CreateResponseMessage<ResponseMessageText>();
@@ -42,7 +41,7 @@ namespace GrainManage.Web.MessageHandlers
                 return responseMessage;
             }
             var filter = Regex.Replace(requestMessage.Recognition, @"\W+", string.Empty) ?? string.Empty;
-            var result = GetResult(requestMessage, filter);
+            var result = GetResult(filter);
             if (result == null)
             {
                 var responseMessage = CreateResponseMessage<ResponseMessageText>();
@@ -58,14 +57,14 @@ namespace GrainManage.Web.MessageHandlers
             return responseMessage;
         }
 
+        #region 获取关键字回复（包含默认回复）或执行指定方法
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
             var responseMessage = CreateResponseMessage<ResponseMessageText>();
             responseMessage.Content = $"亲，暂时不支持响应 {requestMessage.MsgType} 类型哦";
             return responseMessage;
         }
-
-        public IResponseMessageBase GetResult(RequestMessageBase requestMessage, string keyword)
+        public IResponseMessageBase GetResult(string keyword)
         {
             var model = SysMapService.Get(keyword);
             if (model != null && !string.IsNullOrEmpty(model.Value))
@@ -80,7 +79,7 @@ namespace GrainManage.Web.MessageHandlers
                             var type = Type.GetType(classType);
                             var method = type.GetMethod(model.Value.Substring(model.Value.LastIndexOf('.') + 1));
                             var instance = Activator.CreateInstance(type, new object[] { this });
-                            var result = method.Invoke(instance, new object[] { requestMessage });
+                            var result = method.Invoke(instance, null);
                             if (result is string)
                             {
                                 resp.Content = result as string;
@@ -103,5 +102,6 @@ namespace GrainManage.Web.MessageHandlers
             }
             return null;
         }
+        #endregion
     }
 }

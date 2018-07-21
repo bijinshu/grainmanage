@@ -2,6 +2,7 @@
 using GrainManage.Web.Services;
 using Senparc.Weixin;
 using Senparc.Weixin.Context;
+using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.MessageHandlers;
@@ -19,15 +20,15 @@ namespace GrainManage.Web.Code
         {
             this.handler = handler;
         }
-        public string GetSaleShop(RequestMessageBase requestMessage)
+        public string GetSaleShop()
         {
             return string.Join('、', CompanyService.GetCompanyNames());
         }
-        public string Whoami(RequestMessageBase requestMessage)
+        public string Whoami()
         {
             try
             {
-                var result = CommonApi.GetUserInfo(Config.SenparcWeixinSetting.WeixinAppId, requestMessage.FromUserName);
+                var result = UserApi.Info(Config.SenparcWeixinSetting.WeixinAppId, handler.WeixinOpenId);
                 if (result.ErrorCodeValue != 0)
                 {
                     return result.errmsg;
@@ -36,7 +37,7 @@ namespace GrainManage.Web.Code
             }
             catch (Exception e)
             {
-                return $"异常:{e.Message}";
+                return $"{e.Message}";
             }
         }
     }
