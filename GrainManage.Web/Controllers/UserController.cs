@@ -51,7 +51,6 @@ namespace GrainManage.Web.Controllers
                         }
                         else
                         {
-                            account.ModifiedAt = DateTime.Now;
                             var expireAt = DateTime.Now.AddMinutes(AppConfig.GetValue<double>(GlobalVar.CacheMinute));
                             var userInfo = new UserInfo
                             {

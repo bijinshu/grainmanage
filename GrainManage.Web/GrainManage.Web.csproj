@@ -21,8 +21,8 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
-    <PackageReference Include="NLog.Config" Version="4.5.6" />
-    <PackageReference Include="NLog.Schema" Version="4.5.6" />
+    <PackageReference Include="NLog.Config" Version="4.5.7" />
+    <PackageReference Include="NLog.Schema" Version="4.5.7" />
     <PackageReference Include="Quartz" Version="3.0.6" />
     <PackageReference Include="Senparc.Weixin.MP" Version="15.1.1" />
     <PackageReference Include="Senparc.Weixin.MP.MVC" Version="6.0.10" />
@@ -36,6 +36,7 @@
   <ItemGroup>
     <None Include="NLog.config" />
     <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\OAuth2\UserInfoCallback.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
     <None Include="wwwroot\MP_verify_JPDrG8ZoYfixMj1V.txt" />
   </ItemGroup>

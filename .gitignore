@@ -20,3 +20,5 @@
 /GrainManage.Web/Properties/PublishProfiles
 /GrainManage.Web/appsettings.Production.json
 /GrainManage.Web/appsettings.Test.json
+/GrainManage.Web/appsettings.OnlineTest.json
+/GrainManage.Web/App_Data

@@ -41,6 +41,7 @@
                 <a href="@UrlVar.User_ForgetPwd" style="float:right">重置密码</a>
             </div>
             <button v-on:click.stop.prevent="loginOn" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">登录</button>
+            <a v-bind:href="authorizeUrl" class="btn btn-lg btn-success btn-block">微信登录</a>
         </form>
         <modal-dialog title="登录提示" v-bind:msg="msg"></modal-dialog>
     </div>
@@ -56,6 +57,7 @@
                     Pwd: '',
                     RememberMe: localStorage.RememberMe,
                     IsDisabled: false,
+                    authorizeUrl:'',
                     msg: ''
                 },
                 methods: {
@@ -68,11 +70,7 @@
                         }
                         else {
                             this.IsDisabled = true;
-                            var returnUrl = '';
-                            var arrays = window.location.href.split('?');
-                            if (arrays.length > 1 && arrays[1]) {
-                                returnUrl =  arrays[1];
-                            }
+                            var returnUrl = this.getReturnUrl();
                             $.post('@UrlVar.User_SignIn'+'?' + returnUrl, { UserName: this.UserName, Pwd: new sha1().encrypt(this.Pwd) }).always(function (result, status) {
                                 if (result.code == 1) {
                                     this.changeRemember();
@@ -98,6 +96,15 @@
                             localStorage.removeItem("Pwd");
                             localStorage.removeItem("RememberMe");
                         }
+                    },
+                    getReturnUrl: function () {
+
+                        var returnUrl = '';
+                        var arrays = window.location.href.split('?');
+                        if (arrays.length > 1 && arrays[1]) {
+                            returnUrl = arrays[1];
+                        }
+                        return returnUrl;
                     }
                 },
                 computed: {
@@ -112,6 +119,9 @@
                     var base = new base64();
                     this.UserName = localStorage.UserName ? base.decode(localStorage.UserName) : '';
                     this.Pwd = localStorage.Pwd ? base.decode(localStorage.Pwd) : '';
+                    $.post('@UrlVar.OAuth2_Index'+'?'+this.getReturnUrl()).always(function (result, status) {
+                        this.authorizeUrl = result;
+                     }.bind(this));
                 }
             })
             $("html").click(function () { $('[data-toggle="popover"]').popover('hide') });

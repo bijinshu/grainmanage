@@ -13,6 +13,7 @@ namespace DataBase.GrainManage.Models.Log
         public string LoginIP { get; set; }
         public string Status { get; set; }
         public int Level { get; set; }
+        public int TypeId { get; set; }
         public DateTime? CreatedAt { get; set; }
     }
 }

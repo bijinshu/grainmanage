@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.CO2NET.Helpers.GoogleMap;
+using Senparc.CO2NET.Helpers;
 
 namespace GrainManage.Web.MessageHandlers
 {
@@ -19,7 +21,7 @@ namespace GrainManage.Web.MessageHandlers
         public CustomMessageHandler(Stream stream, PostModel postModel)
             : base(stream, postModel)
         {
-
+            
         }
         public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
@@ -52,8 +54,28 @@ namespace GrainManage.Web.MessageHandlers
         }
         public override IResponseMessageBase OnLocationRequest(RequestMessageLocation requestMessage)
         {
-            var responseMessage = CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = $"您的地址是：{Environment.NewLine}{requestMessage.Label}{Environment.NewLine}纬度：{requestMessage.Location_X} 经度：{requestMessage.Location_Y}";
+            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+
+            var markersList = new List<GoogleMapMarkers>();
+            markersList.Add(new GoogleMapMarkers()
+            {
+                X = requestMessage.Location_X,
+                Y = requestMessage.Location_Y,
+                Color = "red",
+                Label = "S",
+                Size = GoogleMapMarkerSize.Default,
+            });
+            var mapSize = "480x600";
+            var mapUrl = GoogleMapHelper.GetGoogleStaticMap(19, markersList, mapSize);
+            responseMessage.Articles.Add(new Article()
+            {
+                Description = string.Format("您刚才发送了地理位置信息。Location_X：{0}，Location_Y：{1}，Scale：{2}，标签：{3}",
+                              requestMessage.Location_X, requestMessage.Location_Y,
+                              requestMessage.Scale, requestMessage.Label),
+                PicUrl = mapUrl,
+                Title = "定位地点周边地图",
+                Url = mapUrl
+            });
             return responseMessage;
         }
 

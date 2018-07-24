@@ -22,6 +22,7 @@ namespace DataBase.GrainManage.Models
         public string Remark { get; set; }
         public string Address { get; set; }
         public string Roles { get; set; }
+        public string OpenId { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

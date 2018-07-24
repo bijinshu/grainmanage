@@ -5,6 +5,7 @@ using GrainManage.Web.Common;
 using GrainManage.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Senparc.Weixin;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,7 +20,14 @@ namespace GrainManage.Web.Controllers
             DefaultValueHandling = DefaultValueHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore
         };
-        private CookieUserInfo _cookieUser = null;
+
+        #region 微信账号配置
+        protected static readonly string Token = Config.SenparcWeixinSetting.Token;
+        protected static readonly string EncodingAESKey = Config.SenparcWeixinSetting.EncodingAESKey;
+        protected static readonly string AppId = Config.SenparcWeixinSetting.WeixinAppId;
+        protected static readonly string AppSecret = Config.SenparcWeixinSetting.WeixinAppSecret;
+        #endregion
+
         public bool IsGetRequest { get { return Request.Method == "GET"; } }
         public bool IsSuperAdmin { get { return Level >= GlobalVar.MaxLevel; } }
         protected ActionResult JsonNet(object data, bool includeNotValid = false)
@@ -68,6 +76,7 @@ namespace GrainManage.Web.Controllers
             return mapper.Map<T>(srcObj);
         }
         protected UserInfo CurrentUser { get { return Resolve<ICache>().Get<UserInfo>(CacheKey.GetUserKey(CookieUser.UserId, CookieUser.Agent)); } }
+        private CookieUserInfo _cookieUser = null;
         protected CookieUserInfo CookieUser
         {
             get

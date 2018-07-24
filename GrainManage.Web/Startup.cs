@@ -7,14 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
-using Senparc.CO2NET.Cache;
 //using Senparc.CO2NET.Cache.Redis;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Weixin;
 //using Senparc.Weixin.Cache.Redis;
 using Senparc.Weixin.Entities;
+using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.RegisterServices;
-using System.Collections.Generic;
 
 namespace GrainManage.Web
 {
@@ -92,6 +91,12 @@ namespace GrainManage.Web
             //开始注册微信信息，必须！
             register.UseSenparcWeixin(senparcWeixinSetting.Value, senparcSetting.Value);
 
+            #endregion
+            #region 微信公众号注册
+            if (!AccessTokenContainer.CheckRegistered(Senparc.Weixin.Config.SenparcWeixinSetting.WeixinAppId))//检查是否已经注册
+            {
+                AccessTokenContainer.Register(Senparc.Weixin.Config.SenparcWeixinSetting.WeixinAppId, Senparc.Weixin.Config.SenparcWeixinSetting.WeixinAppSecret);//如果没有注册则进行注册
+            }
             #endregion
         }
 
