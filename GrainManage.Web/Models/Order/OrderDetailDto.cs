@@ -12,8 +12,8 @@ namespace GrainManage.Web.Models.Order
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal Price { get; set; }
-        public decimal Weight { get; set; }
-        public decimal TotalMoney { get; set; }
+        public decimal PreWeight { get; set; }
+        public decimal PreMoney { get; set; }
         public decimal ActualPrice { get; set; }
         public decimal ActualWeight { get; set; }
         public decimal ActualMoney { get; set; }

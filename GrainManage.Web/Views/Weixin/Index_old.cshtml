@@ -1,0 +1,168 @@
+﻿@using GrainManage.Web
+@{
+    Layout = "~/Views/Shared/_WeixinLayout.cshtml";
+}
+<div id="app" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <input v-model="search.Name" type="text" class="form-control">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" v-on:click="getData(search.PageIndex=0)">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-cloak>
+        <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in list" style="margin-bottom:10px;">
+            <div class="company-title">
+                {{item.CompanyName}}
+            </div>
+            <img v-bind:src="item.ImgName|imgUrl" class="img-rounded company-logo" />
+            <div class="company-main">
+                <div>经营范围：</div>
+                <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
+            </div>
+            <div class="company-address">
+                <span>联系地址：</span>
+                <span>{{item.Address}}</span>
+            </div>
+            <div style="margin-top:2px;">
+                <button class="btn btn-info btn-block" v-on:click="showOrder(item)">我要卖粮</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pager v-on:reload="getData" v-bind:total="total" v-bind:page-index.sync="search.PageIndex" v-bind:page-size.sync="search.PageSize" other-class="pagination-sm"></pager>
+        </div>
+    </div>
+    <div v-cloak>
+        @await Html.PartialAsync("_NewOrder")
+        <modal-dialog v-bind:title="AlertTitle" v-bind:msg="msg"></modal-dialog>
+    </div>
+</div>
+<script>
+        $(function () {
+            new Vue({
+                el: '#app',
+                data: {
+                    total:0,
+                    msg: '',
+                    search: { Name: '', PageIndex: 0, PageSize: 20 },
+                    list: [],
+                    productList: [],
+                    frm: { CompId: 0, CompName: '', Mobile: '', Address: '', Remark: '', Details: [] },
+                    isFirstTime: true,
+                    IsDisabled: false,
+                    AlertTitle: ''
+                },
+                methods: {
+                    getData: function () {
+                      $.post('@UrlVar.Weixin_Index', this.search).always(function (result, status) {
+                          this.list = result.data;
+                          this.total = result.total;
+                          if (result.code != 1 && !this.isFirstTime) {
+                              this.showAlert(result.msg);
+                          }
+                          this.isFirstTime = false;
+                      }.bind(this));
+                    },
+                    showOrder: function (item) {
+                        if ($globalUserInfo) {
+                            this.productList = item.Products;
+                            this.frm.CompId = item.Id;
+                            this.frm.CompName = item.CompanyName;
+                            this.frm.Mobile = $globalUserInfo.Mobile;
+                            this.frm.Address = $globalUserInfo.Address;
+                            this.frm.Remark = '';
+                            this.frm.Details = [];
+                            this.addNewDetailForm();
+                            this.showPanel("#newOrderModal");
+                        }
+                        else {
+                            window.location.href = '@UrlVar.User_SignIn' + '?returnUrl=' + encodeURI(window.location.pathname);
+                        }
+                    },
+                    setPrice: function (detail) {
+                        var existedItem = null;
+                        for (var i = 0; i < this.productList.length; i++) {
+                            if (this.productList[i].Id == detail.ProductId) {
+                                existedItem = this.productList[i];
+                                break;
+                            }
+                        }
+                        detail.Price = existedItem ? existedItem.Price : '';
+                        detail.ProductName = existedItem ? existedItem.Name : '';
+                    },
+                    save: function () {
+                        if (this.isPhoneValid && this.isRemarkValid) {
+                             this.IsDisabled = true;
+                             var data = { CompId: this.frm.CompId, CompName: this.frm.CompName, Mobile: this.frm.Mobile, Address: this.frm.Address, Remark: this.frm.Remark, Details: [] };
+                             for (var i = 0; i < this.frm.Details.length; i++) {
+                                 var item = this.frm.Details[i];
+                                 data.Details.push({ ProductId: item.ProductId, ProductName: item.ProductName, Price: item.Price, Weight: item.Weight });
+                             }
+                             $.post('@UrlVar.Order_New', data).done(function (result, status) {
+                                 this.IsDisabled = false;
+                                 if (result.code==1) {
+                                     this.hidePanel("#newOrderModal");
+                                     window.location.href = '@UrlVar.Order_GetMyOrderList';
+                                 } else {
+                                     this.showAlert(result.msg);
+                                 }
+                              }.bind(this));
+                        } else {
+                            this.showAlert("电话号码或备注信息格式不正确");
+                        }
+                    },
+                    addNewDetailForm: function () {
+                        var productId = this.productList[0].Id;
+                        var newDetail = { ProductId: productId, ProductName: '', Price: 0, Weight: '', TotalMoney: 0, ProductList: [] };
+                        newDetail.ProductList = this.productList.concat();
+                        this.frm.Details.push(newDetail);
+                        this.setPrice(newDetail);
+                    },
+                    delDetailForm: function (index) {
+                        if (this.frm.Details.length>1) {
+                            this.frm.Details.splice(index, 1);
+                        }
+                    },
+                    getMoney: function (detail) {
+                        if (detail && detail.Weight && detail.Price) {
+                            var result = (detail.Weight * detail.Price).toFixed(2);
+                            return parseInt(result) == result ? parseInt(result) : result;
+                        }
+                        return 0;
+                    }
+                },
+                computed: {
+                    isPhoneValid: function () {
+                        return (/^1[34578]\d{9}$/g).test(this.frm.Mobile);
+                    },
+                    isRemarkValid: function () {
+                        return (/^.{0,200}$/g).test(this.frm.Remark);
+                    }
+                },
+                filters: {
+                    imgUrl: function (value) {
+                        if (value) {
+                            return '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/"  + value;
+                        }
+                        return "#";
+                    },
+                    productName: function (value, index, length) {
+                        if (index == length - 1) {
+                            return value.Name + '(' + value.Price + ')'
+                        }
+                        else {
+                            return value.Name + '(' + value.Price + ')、'
+                        }
+                    }
+                },
+                created: function () {
+                    this.getData();
+                }
+            })
+        })
+</script>

@@ -1,0 +1,24 @@
+﻿@using GrainManage.Web
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link href="~/css/demos.css" rel="stylesheet" />
+    @RenderSection("HeaderSection", false)
+</head>
+<body>
+    @RenderBody()
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/swiper.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/city-picker.min.js"></script>
+    @*<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>*@
+    <script src="https://cdn.bootcss.com/vue/2.3.4/vue.min.js"></script>
+    @RenderSection("FooterSection", false)
+</body>
+</html>

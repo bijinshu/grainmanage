@@ -92,7 +92,7 @@ namespace GrainManage.Web.Controllers
             {
                 SetResponse(s => s.NoProduct, result);
             }
-            else if (input.Details.Any(a => a.Weight <= 0))
+            else if (input.Details.Any(a => a.PreWeight <= 0))
             {
                 SetResponse(s => s.NoWeight, result);
             }
@@ -127,8 +127,8 @@ namespace GrainManage.Web.Controllers
                         }
                         else
                         {
-                            firstItem.Weight += item.Weight;
-                            firstItem.TotalMoney += item.TotalMoney;
+                            firstItem.PreWeight += item.PreWeight;
+                            firstItem.PreMoney += item.PreMoney;
                         }
                     }
                     var detailModelList = MapTo<List<OrderDetail>>(newList);
@@ -141,9 +141,9 @@ namespace GrainManage.Web.Controllers
                             {
                                 item.OrderId = model.Id;
                                 item.CreatedBy = UserId;
-                                item.TotalMoney = Math.Round(item.Price * item.Weight, 2);
+                                item.PreMoney = Math.Round(item.Price * item.PreWeight, 2);
                             }
-                            model.TotalMoney = Math.Round(detailModelList.Sum(s => s.TotalMoney), 2);
+                            model.TotalMoney = Math.Round(detailModelList.Sum(s => s.PreMoney), 2);
                             detailRepo.Add(detailModelList);
                             trans.Commit();
                         }
@@ -295,14 +295,14 @@ namespace GrainManage.Web.Controllers
                 var dtoList = MapTo<List<OrderDto>>(list);
                 var detailRepo = GetRepo<OrderDetail>();
                 var idList = list.Select(s => s.Id).ToList();
-                var detailList = detailRepo.GetFiltered(f => idList.Contains(f.OrderId)).Select(s => new { s.ProductName, s.OrderId, s.Weight, s.ActualWeight }).ToList();
+                var detailList = detailRepo.GetFiltered(f => idList.Contains(f.OrderId)).Select(s => new { s.ProductName, s.OrderId, s.PreWeight, s.ActualWeight }).ToList();
                 foreach (var item in dtoList)
                 {
                     item.CanModify = item.CompId == CookieUser.CompId;
                     var details = detailList.Where(f => f.OrderId == item.Id).Select(s => new OrderDetailDto
                     {
                         ProductName = s.ProductName,
-                        Weight = s.Weight,
+                        PreWeight = s.PreWeight,
                         ActualWeight = s.ActualWeight
                     });
                     item.Details = details.ToList();
