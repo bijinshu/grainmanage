@@ -20,7 +20,7 @@ namespace GrainManage.Web.Controllers
     public class UserController : BaseController
     {
         [AllowAnonymous]
-        public ActionResult SignIn(InputSignIn input, string returnUrl)
+        public ActionResult SignIn(InputSignIn input, int agent = 0)
         {
             if (IsGetRequest)
             {
@@ -65,7 +65,6 @@ namespace GrainManage.Web.Controllers
                             userInfo.Level = RoleService.GetMaxLevel(userInfo.Roles);
                             userInfo.Auths = CommonService.GetAuths(userInfo.Roles);
                             userInfo.Urls = CommonService.GetUrls(userInfo.Roles);
-                            var agent = string.IsNullOrEmpty(returnUrl) ? 0 : 1;
                             Resolve<ICache>().Set(CacheKey.GetUserKey(userInfo.UserId, agent), userInfo, expireAt);
                             UserUtil.WriteToCookie(Response.Cookies, userInfo, agent);
                             logModel.Level = userInfo.Level;

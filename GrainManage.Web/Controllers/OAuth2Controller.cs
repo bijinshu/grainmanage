@@ -26,7 +26,7 @@ namespace GrainManage.Web.Controllers
     {
         public ActionResult Index(string returnUrl)
         {
-            var redirectUrl = "http://weixin.bijinshu.cn/oauth2/UserInfoCallback?returnUrl=" + returnUrl.UrlEncode();
+            var redirectUrl = $"http://{Request.Host.Host}/oauth2/UserInfoCallback?returnUrl=" + returnUrl.UrlEncode();
             var authorizeUrl = OAuthApi.GetAuthorizeUrl(AppId, redirectUrl, DateTime.Now.Millisecond.ToString(), OAuthScope.snsapi_userinfo);
             return Content(authorizeUrl);
         }

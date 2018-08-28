@@ -149,6 +149,7 @@ namespace GrainManage.Web.Controllers
                         }
                         catch (Exception e)
                         {
+                            model.Id = 0;
                             trans.Rollback();
                             var exception = new ExceptionLog
                             {

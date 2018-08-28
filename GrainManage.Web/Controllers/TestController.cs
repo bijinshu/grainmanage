@@ -12,7 +12,7 @@ namespace GrainManage.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return Content("success");
         }
         [AllowAnonymous]
         public IActionResult PathCombine(string u)

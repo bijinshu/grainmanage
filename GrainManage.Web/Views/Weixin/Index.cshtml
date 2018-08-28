@@ -4,13 +4,20 @@
 }
 <div id="app" class="weui-tab">
     <div class="weui-tab__bd">
-        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
-            <div class="weui-panel weui-panel_access">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active weui-pull-to-refresh" style="height:100%;overflow:auto;transform:translateY(-50px)">
+            <div class="weui-pull-to-refresh__layer">
+                <div class='weui-pull-to-refresh__arrow'></div>
+                <div class='weui-pull-to-refresh__preloader'></div>
+                <div class="down">下拉刷新</div>
+                <div class="up">释放刷新</div>
+                <div class="refresh">正在刷新</div>
+            </div>
+            <div class="weui-panel weui-panel_access" style="margin-top:0;">
                 <div class="weui-search-bar" id="searchBar">
                     <form class="weui-search-bar__form">
                         <div class="weui-search-bar__box">
                             <i class="weui-icon-search"></i>
-                            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                            <input v-model="search.Name" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
                             <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
                         </div>
                         <label class="weui-search-bar__label" id="searchText">
@@ -39,8 +46,21 @@
                 </div>
             </div>
         </div>
-        <div id="tab2" class="weui-tab__bd-item">
-            <h1>页面二</h1>
+        <div id="tab2" class="weui-tab__bd-item weui-pull-to-refresh">
+            <div class="weui-pull-to-refresh__layer">
+                <div class='weui-pull-to-refresh__arrow'></div>
+                <div class='weui-pull-to-refresh__preloader'></div>
+                <div class="down">下拉刷新</div>
+                <div class="up">释放刷新</div>
+                <div class="refresh">正在刷新</div>
+            </div>
+            <h1 class="doc-head">页面二</h1>
+            <div class="content-padded">
+                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
+                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
+                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
+                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
+            </div>
         </div>
         <div id="tab3" class="weui-tab__bd-item">
             <h1>页面三</h1>
@@ -49,7 +69,6 @@
             <h1>页面四</h1>
         </div>
     </div>
-
     <div class="weui-tabbar">
         <a href="#tab1" class="weui-tabbar__item weui-bar__item--on">
             @*<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>*@
@@ -77,15 +96,20 @@
             <p class="weui-tabbar__label">我</p>
         </a>
     </div>
-
     @await Html.PartialAsync("_ProductList")
 </div>
 @section FooterSection{
     <script>
-        var weixin_index_url = '@UrlVar.Weixin_Index';
-        var order_new_url = '@UrlVar.Order_New';
-        var img_server_logo_path = '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/";
+        var url = {
+            weixin_index: '@UrlVar.Weixin_Index',
+            order_new:'@UrlVar.Order_New',
+            img_base:'@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/",
+            sign_in:'@UrlVar.User_SignIn',
+            test: '@UrlVar.Test_Index',
+            simple_info:'@UrlVar.User_SimpleInfo'
+        }
     </script>
+    <script src="~/js/Crypto/base64.js"></script>
     <script src="~/js/components/mixin.js"></script>
     <script src="~/js/Weixin/Index.js"></script>
 }

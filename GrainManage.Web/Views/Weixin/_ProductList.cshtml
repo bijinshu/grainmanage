@@ -21,24 +21,31 @@
                         </label>
                         <div>
                             <label v-bind:for="'s'+index">预估：</label>
-                            <input type="number" pattern="[0-9]+" style="padding:2px;" v-model="item.PreWeight" placeholder="请输入预估重量" />&nbsp;斤
+                            <input type="number" pattern="[0-9]+" style="padding:2px;font-size:0.9em" v-model="item.PreWeight" placeholder="请输入预估重量" />&nbsp;斤
                         </div>
                     </div>
                 </div>
             </div>
             <div class="weui-cells weui-cells_form">
-
                 <div class="weui-cell ">
                     <div class="weui-cell__hd">
                         <label class="weui-label">手机号</label>
                     </div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" type="tel" placeholder="请输入手机号">
+                        <input v-model="frm.Mobile" class="weui-input" type="tel" placeholder="请输入手机号">
+                    </div>
+                </div>
+                <div class="weui-cell ">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">地址</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input v-model="frm.Address" class="weui-input" type="tel" placeholder="请输入地址">
                     </div>
                 </div>
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <textarea class="weui-textarea" placeholder="其他说明" rows="3"></textarea>
+                        <textarea v-model="frm.Remark" class="weui-textarea" placeholder="其他说明" rows="3"></textarea>
                         <div class="weui-textarea-counter"><span>0</span>/600</div>
                     </div>
                 </div>
