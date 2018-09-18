@@ -1,28 +1,27 @@
-﻿<div id="full" class='weui-popup__container' style="z-index:600;">
+﻿<div id="orderProduct" class='weui-popup__container' style="z-index:600;">
     <div class="weui-popup__overlay"></div>
     <div class="weui-popup__modal">
         <div class="toolbar">
             <div class="toolbar-inner">
                 <a href="javascript:;" class="picker-button close-popup">关闭</a>
-                <h2 class="title" style="color: #3cc51f;font-size:24px;">{{frm.CompName}}</h2>
+                <h2 class="title" style="color: #3cc51f;font-size:24px;">选择待售农产品</h2>
             </div>
         </div>
         <div class="modal-content">
+            <p class="demos-sub-title">{{frm.CompName}}</p>
             <div class="weui-cells weui-cells_checkbox">
-                <div class="weui-cell weui-check__label" v-for="(item,index) in productList">
+                <div class="weui-cell weui-check__label" v-for="(item,index) in currentCompany.Products" :key="item.Id" v-on:click="toogleCheck('s'+index)">
                     <div class="weui-cell__hd">
                         <input type="checkbox" class="weui-check" v-bind:value="item.Id+':'+item.Price+':'+item.PreWeight" v-bind:id="'s'+index">
                         <i class="weui-icon-checked"></i>
                     </div>
                     <div class="weui-cell__bd">
-                        <label v-bind:for="'s'+index" style="display:block">
-                            <span>{{item.Name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span style="color:blueviolet;font-weight:bold;">{{item.Price}}</span>&nbsp;元/斤
+                        <label style="white-space:nowrap">
+                            {{item.Name}}&nbsp;<span style="color:blueviolet;font-weight:bold;">{{item.Price}}</span>&nbsp;元/斤
                         </label>
-                        <div>
-                            <label v-bind:for="'s'+index">预估：</label>
-                            <input type="number" pattern="[0-9]+" style="padding:2px;font-size:0.9em" v-model="item.PreWeight" placeholder="请输入预估重量" />&nbsp;斤
-                        </div>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input type="number" class="weui-input" style="text-align:center;color:blue;" pattern="[0-9]+" v-model="item.PreWeight" placeholder="请输入预估重量(斤)" />
                     </div>
                 </div>
             </div>
@@ -45,7 +44,7 @@
                 </div>
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <textarea v-model="frm.Remark" class="weui-textarea" placeholder="其他说明" rows="3"></textarea>
+                        <textarea v-model="frm.Remark" class="weui-textarea" placeholder="其他说明" rows="2"></textarea>
                         <div class="weui-textarea-counter"><span>0</span>/600</div>
                     </div>
                 </div>

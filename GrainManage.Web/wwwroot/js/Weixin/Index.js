@@ -4,10 +4,11 @@ var vm = new Vue({
     data: {
         search: { Name: '', PageIndex: 0, PageSize: 20 },
         list: [],
-        productList: [],
         frm: { CompId: 0, CompName: '', Mobile: '', Address: '', Remark: '', Details: [] },
         loading: true,
-        logined: false
+        logined: false,
+        currentCompany: {},
+        currentCompanyOrderCount: 0
     },
     watch: {
         'search.Name': function (newVal, oldVal) {
@@ -30,31 +31,33 @@ var vm = new Vue({
                 }
             }.bind(this));
         },
+        initData: function () {
+            $.post(url.simple_info).done(function (result, status) {
+                this.frm.Mobile = result.data.Mobile || '';
+                this.frm.Address = result.data.Address || '';
+            }.bind(this));
+        },
         showAction: function (item) {
-            if (this.logined) {
-                this.frm.CompId = item.Id;
-                this.frm.CompName = item.CompanyName;
-                $.post(url.simple_info).done(function (result, status) {
-                    this.frm.Mobile = result.data.Mobile;
-                    this.frm.Address = result.data.Address;
-                }.bind(this));
-                this.productList = [];
-                for (var i = 0; i < item.Products.length; i++) {
-                    var currentProduct = item.Products[i];
-                    var product = { Id: currentProduct.Id, Name: currentProduct.Name, Price: currentProduct.Price, PreWeight: '' };
-                    this.productList.push(product);
-                }
+            var self = this;
+            if (self.logined) {
+                self.frm.CompId = item.Id;
+                self.frm.CompName = item.CompanyName;
+                self.currentCompany = item;
+                self.currentCompany.OrderCount = 0;
                 $.actions({
                     title: "选择操作",
                     actions: [
                         {
                             text: "我要卖粮", className: "color-primary", onClick: function () {
-                                $("#full").popup();
+                                $("#orderProduct").popup();
                             }
                         },
                         {
                             text: "商家介绍", className: "color-warning", onClick: function () {
-                                //do something
+                                $.post(url.order_count, { compId: item.Id }).done(function (result, status) {
+                                    self.currentCompanyOrderCount = result.data;
+                                });
+                                $("#companyPreview").popup();
                             }
                         }
                     ]
@@ -66,17 +69,17 @@ var vm = new Vue({
         showLogin: function () {
             var base = new base64();
             var self = this;
-            $.login({
+            $.signin({
                 title: '登录',
                 text: '',
                 username: localStorage.UserName ? base.decode(localStorage.UserName) : '',  // 默认用户名
                 password: localStorage.Pwd ? base.decode(localStorage.Pwd) : '',  // 默认密码
                 onOK: function (username, password) {
                     if (!(/^[a-zA-Z]\w{1,20}$/g).test(username) && !(/^1[34578]\d{9}$/g).test(username)) {
-                        $.alert('用户名：只能由2-20个英文字符、数字、下划线或合法的手机号码组成');
+                        $.toptip('用户名：只能由2-20个英文字符、数字、下划线或合法的手机号码组成', 'warning');
                     }
                     else if (!(/^.{6,20}$/g).test(password)) {
-                        $.alert('密码：字符个数只能为6-20个');
+                        $.toptip('密码：字符个数只能为6-20个', 'warning');
                     }
                     else {
                         $.post(url.sign_in + '?agent=1', { UserName: username, Pwd: new sha1().encrypt(password) }).always(function (result, status) {
@@ -84,28 +87,32 @@ var vm = new Vue({
                                 localStorage.UserName = base.encode(username);
                                 localStorage.Pwd = base.encode(password);
                                 self.logined = true;
-                                $.toptip('登录成功', 'success');
+                                self.initData();
+                                $.toast('登录成功');
                             }
                             else {
-                                $.alert(result.msg);
+                                $.toptip(result.msg, 'error');
                             }
                         });
                     }
                 },
-                onCancel: function () {
-                    //点击取消
+                onWeixin: function () {
+                    var currentUrl = window.location.href.split('?')[0];
+                    $.post(url.oauth + '?returnUrl=' + currentUrl).done(function (result, status) {
+                        window.location.href = result;
+                    });
                 }
             });
         },
         sendOrder: function () {
             var detail = [];
-            $("#full .modal-content :checkbox:checked").each(function (index, ele) {
+            $("#orderProduct .modal-content :checkbox:checked").each(function (index, ele) {
                 var str = $(ele).val();
                 var array = str.split(':');
                 var productName = '';
-                for (var index in this.productList) {
-                    if (this.productList[index].Id == array[0]) {
-                        productName = this.productList[index].Name;
+                for (var index in this.currentCompany.Products) {
+                    if (this.currentCompany.Products[index].Id == array[0]) {
+                        productName = this.currentCompany.Products[index].Name;
                         break;
                     }
                 }
@@ -118,6 +125,9 @@ var vm = new Vue({
                     $("#closePopup").trigger("click");
                 }
             }.bind(this));
+        },
+        toogleCheck: function (id) {
+            $('#' + id).attr('checked', !$('#' + id).prop('checked'))
         }
     },
     computed: {
@@ -153,24 +163,13 @@ var vm = new Vue({
                 this.logined = false;
             }
         }.bind(this));
+        this.initData();
     }
 });
-$("#tab1,#tab2").pullToRefresh({
-    onRefresh: function () {
-        $(this.container).pullToRefreshDone();
-        $(this.container).css('transform', 'translateY(-50px)');
-        vm.getData();
-    },
-    onPull: function (percent) {
-        if (percent < 100) {
-            var self = this;
-            setTimeout(function () {
-                $(self.container).pullToRefreshDone();
-                $(self.container).css('transform', 'translateY(-50px)');
-            }, 2000)
-        }
-    }
-});
+$('#tab1,#tab2').pullToRefresh().on('pull-to-refresh', function (done) {
+    $(this).pullToRefreshDone();
+    vm.getData();
+})
 $("#tab1").infinite().on("infinite", function () {
     vm.search.PageIndex++;
     vm.getData(true);

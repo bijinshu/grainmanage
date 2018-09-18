@@ -35,7 +35,6 @@
                 <a href="@UrlVar.User_ForgetPwd" style="float:right">重置密码</a>
             </div>
             <button v-on:click.stop.prevent="loginOn" v-bind:disabled="IsDisabled" class="btn btn-lg btn-primary btn-block">登录</button>
-            <a v-bind:href="authorizeUrl" class="btn btn-lg btn-success btn-block">微信登录</a>
         </form>
         <modal-dialog title="登录提示" v-bind:msg="msg"></modal-dialog>
     </div>
@@ -45,7 +44,6 @@
     <script>
         var url = {
             sign_in: '@UrlVar.User_SignIn',
-            oauth:'@UrlVar.OAuth2_Index',
             home:'@UrlVar.Home_Index'
         };
     </script>

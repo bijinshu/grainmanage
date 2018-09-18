@@ -6,7 +6,6 @@
             Pwd: '',
             RememberMe: localStorage.RememberMe,
             IsDisabled: false,
-            authorizeUrl: '',
             msg: ''
         },
         methods: {
@@ -67,9 +66,6 @@
             var base = new base64();
             this.UserName = localStorage.UserName ? base.decode(localStorage.UserName) : '';
             this.Pwd = localStorage.Pwd ? base.decode(localStorage.Pwd) : '';
-            $.post(url.oauth + '?' + this.getReturnUrl()).always(function (result, status) {
-                this.authorizeUrl = result;
-            }.bind(this));
         }
     })
     $("html").click(function () { $('[data-toggle="popover"]').popover('hide') });

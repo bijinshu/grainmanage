@@ -95,6 +95,8 @@ namespace GrainManage.Web
         public static string Order_ChangeStatus { get { return GetUrl("/Order/ChangeStatus"); } }
         [Common]
         public static string Order_GetMyOrderList { get { return GetUrl("/Order/GetMyOrderList"); } }
+        [Common]
+        public static string Order_GetOrderCount { get { return GetUrl("/Order/GetOrderCount"); } }
 
         //Address
         public static string Address_Index { get { return GetUrl("/Address/Index"); } }

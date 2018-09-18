@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using DataBase.GrainManage.Models;
@@ -81,12 +82,21 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result, true);
         }
+        /// <summary>
+        /// 创建新订单（当天每种产品只能提交给一次）
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public ActionResult New(OrderDto input)
         {
             var result = new BaseOutput();
             if (input.CompId <= 0 || string.IsNullOrEmpty(input.CompName))
             {
                 SetResponse(s => s.NoCompany, result);
+            }
+            else if (string.IsNullOrEmpty(input.Mobile) || !Regex.IsMatch(input.Mobile, @"^1[34578]\d{9}$"))
+            {
+                SetResponse(s => s.MobileNotValid, result);
             }
             else if (input.Details == null || !input.Details.Any() || input.Details.Any(a => a.ProductId <= 0))
             {
@@ -315,6 +325,15 @@ namespace GrainManage.Web.Controllers
             {
                 SetResponse(s => s.NoData, input, result);
             }
+            return JsonNet(result);
+        }
+        public ActionResult GetOrderCount(int compId)
+        {
+            var result = new BaseOutput();
+            var repo = GetRepo<Order>();
+            var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            result.data = repo.GetFiltered(f => f.CompId == compId && f.CreatedAt >= startDate).Count();
+            SetResponse(s => s.Success, result);
             return JsonNet(result);
         }
     }

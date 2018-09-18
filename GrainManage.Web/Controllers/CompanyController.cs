@@ -122,11 +122,11 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
-        public ActionResult Delete(int comId)
+        public ActionResult Delete(int compId)
         {
             var result = new BaseOutput();
             var repo = GetRepo<Company>();
-            var model = repo.GetFiltered(f => f.Id == comId).FirstOrDefault();
+            var model = repo.GetFiltered(f => f.Id == compId).FirstOrDefault();
             if (model != null)
             {
                 if (IsSuperAdmin)

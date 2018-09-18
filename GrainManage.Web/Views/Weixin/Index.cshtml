@@ -4,69 +4,17 @@
 }
 <div id="app" class="weui-tab">
     <div class="weui-tab__bd">
-        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active weui-pull-to-refresh" style="height:100%;overflow:auto;transform:translateY(-50px)">
-            <div class="weui-pull-to-refresh__layer">
-                <div class='weui-pull-to-refresh__arrow'></div>
-                <div class='weui-pull-to-refresh__preloader'></div>
-                <div class="down">下拉刷新</div>
-                <div class="up">释放刷新</div>
-                <div class="refresh">正在刷新</div>
-            </div>
-            <div class="weui-panel weui-panel_access" style="margin-top:0;">
-                <div class="weui-search-bar" id="searchBar">
-                    <form class="weui-search-bar__form">
-                        <div class="weui-search-bar__box">
-                            <i class="weui-icon-search"></i>
-                            <input v-model="search.Name" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
-                            <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
-                        </div>
-                        <label class="weui-search-bar__label" id="searchText">
-                            <i class="weui-icon-search"></i>
-                            <span>搜索</span>
-                        </label>
-                    </form>
-                    <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-                </div>
-                <div class="weui-panel__bd" v-cloak>
-                    <a v-for="item in list" href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                        <div class="weui-media-box__hd">
-                            <img class="weui-media-box__thumb" style="vertical-align:central" v-bind:src="item.ImgName|imgUrl">
-                        </div>
-                        <div class="weui-media-box__bd" v-on:click="showAction(item)">
-                            <h4 class="weui-media-box__title">{{item.CompanyName}}</h4>
-                            <p class="weui-media-box__desc">
-                                <span style="color:darkgreen" v-for="(item2,index) in item.Products">{{item2|productName(index,item.Products.length)}}</span>
-                            </p>
-                        </div>
-                    </a>
-                </div>
-                <div class="weui-loadmore" v-if="loading">
-                    <i class="weui-loading"></i>
-                    <span class="weui-loadmore__tips">正在加载</span>
-                </div>
-            </div>
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active" style="top:0;">
+            @await Html.PartialAsync("_Tab1")
         </div>
-        <div id="tab2" class="weui-tab__bd-item weui-pull-to-refresh">
-            <div class="weui-pull-to-refresh__layer">
-                <div class='weui-pull-to-refresh__arrow'></div>
-                <div class='weui-pull-to-refresh__preloader'></div>
-                <div class="down">下拉刷新</div>
-                <div class="up">释放刷新</div>
-                <div class="refresh">正在刷新</div>
-            </div>
-            <h1 class="doc-head">页面二</h1>
-            <div class="content-padded">
-                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
-                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
-                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
-                <p>A great way to get introduced to AngularJS is to work through this tutorial, which walks you through the construction of an AngularJS web app. The app you will build is a catalog that displays a list of Android devices, lets you filter the list to see only devices that interest you, and then view details for any device.</p>
-            </div>
+        <div id="tab2" class="weui-tab__bd-item">
+            @await Html.PartialAsync("_Tab2")
         </div>
         <div id="tab3" class="weui-tab__bd-item">
-            <h1>页面三</h1>
+            @await Html.PartialAsync("_Tab3")
         </div>
         <div id="tab4" class="weui-tab__bd-item">
-            <h1>页面四</h1>
+            @await Html.PartialAsync("_Tab4")
         </div>
     </div>
     <div class="weui-tabbar">
@@ -75,41 +23,47 @@
             <div class="weui-tabbar__icon">
                 <img src="http://jqweui.com/images/icon_nav_button.png" alt="">
             </div>
-            <p class="weui-tabbar__label">商家</p>
+            <p class="weui-tabbar__label">浏览</p>
         </a>
         <a href="#tab2" class="weui-tabbar__item">
             <div class="weui-tabbar__icon">
                 <img src="http://jqweui.com/images/icon_nav_msg.png" alt="">
             </div>
-            <p class="weui-tabbar__label">待发订单</p>
+            <p class="weui-tabbar__label">我的订单</p>
         </a>
         <a href="#tab3" class="weui-tabbar__item">
             <div class="weui-tabbar__icon">
                 <img src="http://jqweui.com/images/icon_nav_article.png" alt="">
             </div>
-            <p class="weui-tabbar__label">已发订单</p>
+            <p class="weui-tabbar__label">统计</p>
         </a>
         <a href="#tab4" class="weui-tabbar__item">
             <div class="weui-tabbar__icon">
                 <img src="http://jqweui.com/images/icon_nav_cell.png" alt="">
             </div>
-            <p class="weui-tabbar__label">我</p>
+            <p class="weui-tabbar__label">设置</p>
         </a>
     </div>
     @await Html.PartialAsync("_ProductList")
+    @await Html.PartialAsync("_CompanyPreview")
 </div>
+
 @section FooterSection{
     <script>
         var url = {
             weixin_index: '@UrlVar.Weixin_Index',
-            order_new:'@UrlVar.Order_New',
-            img_base:'@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/",
-            sign_in:'@UrlVar.User_SignIn',
+            order_new: '@UrlVar.Order_New',
+            img_base: '@GrainManage.Common.AppConfig.GetValue("ImageServerPath")' + "/company/logo/",
+            sign_in: '@UrlVar.User_SignIn',
             test: '@UrlVar.Test_Index',
-            simple_info:'@UrlVar.User_SimpleInfo'
-        }
+            simple_info: '@UrlVar.User_SimpleInfo',
+            order_count: '@UrlVar.Order_GetOrderCount',
+            oauth:'@UrlVar.OAuth2_Index'
+        };
     </script>
+    <script src="~/js/Weixin/signin.js"></script>
     <script src="~/js/Crypto/base64.js"></script>
+    <script src="~/js/Crypto/sha1.js"></script>
     <script src="~/js/components/mixin.js"></script>
     <script src="~/js/Weixin/Index.js"></script>
 }
