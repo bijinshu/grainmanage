@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -104,12 +103,12 @@ namespace GrainManage.Core
                 sqlBuilder.AppendFormat("DELETE FROM {0} WHERE Id IN ", typeof(T).Name);
                 sqlBuilder.Append(" ( ");
                 var list = ids.ToList();
-                var parameters = new SqlParameter[list.Count];
+                var parameters = new MySql.Data.MySqlClient.MySqlParameter[list.Count];
                 for (int i = 0; i < list.Count; i++)
                 {
                     var paraName = string.Format("@Param{0},", i);
                     sqlBuilder.Append(paraName);
-                    parameters[i] = new SqlParameter(paraName.Trim(','), list[i]);
+                    parameters[i] = new MySql.Data.MySqlClient.MySqlParameter(paraName.Trim(','), list[i]);
                 }
                 sqlBuilder.Remove(sqlBuilder.Length - 1, 1);
                 sqlBuilder.Append(" ) ");
