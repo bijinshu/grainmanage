@@ -107,6 +107,13 @@ namespace GrainManage.Web.Controllers
             return result.code == 1 ? Redirect(returnUrl) : JsonNet(result);
         }
 
+        /// <summary>
+        /// OAuthScope.snsapi_base方式回调
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        /// <param name="returnUrl">用户最初尝试进入的页面</param>
+        /// <returns></returns>
         //public ActionResult BaseCallback(string code, string state, string returnUrl)
         //{
         //    if (string.IsNullOrEmpty(code))
