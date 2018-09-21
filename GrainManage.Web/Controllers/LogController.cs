@@ -13,6 +13,11 @@ namespace GrainManage.Web.Controllers
 {
     public class LogController : BaseController
     {
+        /// <summary>
+        /// 获取异常列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public ActionResult ExceptionList(InputExceptionList input)
         {
             if (IsGetRequest)
@@ -87,6 +92,11 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        /// <summary>
+        /// 获取任务列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public ActionResult JobList(InputJobList input)
         {
             if (IsGetRequest)
@@ -122,6 +132,11 @@ namespace GrainManage.Web.Controllers
             }
             return JsonNet(result);
         }
+        /// <summary>
+        /// 获取登录列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public ActionResult LoginList(InputLoginList input)
         {
             if (IsGetRequest)
