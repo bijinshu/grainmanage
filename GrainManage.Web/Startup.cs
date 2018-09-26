@@ -7,13 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
-//using Senparc.CO2NET.Cache.Redis;
+using Senparc.CO2NET.Cache;
 using Senparc.CO2NET.RegisterServices;
 using Senparc.Weixin;
-//using Senparc.Weixin.Cache.Redis;
 using Senparc.Weixin.Entities;
 using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.RegisterServices;
+using System.Collections.Generic;
 
 namespace GrainManage.Web
 {
@@ -75,12 +75,12 @@ namespace GrainManage.Web
 
             #region 缓存配置（按需）
             //当同一个分布式缓存同时服务于多个网站（应用程序池）时，可以使用命名空间将其隔离（非必须）
-            //register.ChangeDefaultCacheNamespace("DefaultCO2NETCache");
-            //if (useRedis)
-            //{
-            //    //设置Redis链接信息，并在全局立即启用Redis缓存。
-            //    register.RegisterCacheRedis(redisConfigurationStr, redisConfiguration => RedisObjectCacheStrategy.Instance);
-            //}
+            register.ChangeDefaultCacheNamespace("DefaultCO2NETCache");
+            if (useRedis)
+            {
+                //设置Redis链接信息，并在全局立即启用Redis缓存。
+                //Senparc.CO2NET.Cache.Redis.Register.SetConfigurationOption(redisConfigurationStr);
+            }
             #endregion
 
             #region 微信相关配置
