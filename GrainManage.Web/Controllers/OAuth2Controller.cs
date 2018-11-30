@@ -35,6 +35,12 @@ namespace GrainManage.Web.Controllers
             var authorizeUrl = OAuthApi.GetAuthorizeUrl(AppId, redirectUrl, DateTime.Now.Millisecond.ToString(), OAuthScope.snsapi_userinfo);
             return Content(authorizeUrl);
         }
+        public IActionResult GetAuthorizeUrl(int scope = 1, string returnUrl = "")
+        {
+            var redirectUrl = $"https://{Request.Host.Host}/oauth2/BaseCallback?returnUrl=" + returnUrl.UrlEncode();
+            var authorizeUrl = OAuthApi.GetAuthorizeUrl(AppId, redirectUrl, DateTime.Now.Millisecond.ToString(), (OAuthScope)scope);
+            return Redirect(authorizeUrl);
+        }
 
         /// <summary>
         /// OAuthScope.snsapi_userinfo方式回调
@@ -114,39 +120,30 @@ namespace GrainManage.Web.Controllers
         /// <param name="state"></param>
         /// <param name="returnUrl">用户最初尝试进入的页面</param>
         /// <returns></returns>
-        //public ActionResult BaseCallback(string code, string state, string returnUrl)
-        //{
-        //    if (string.IsNullOrEmpty(code))
-        //    {
-        //        return Content("您拒绝了授权！");
-        //    }
+        public ActionResult BaseCallback(string code, string state, string returnUrl)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return Content("您拒绝了授权！");
+            }
 
-        //    //通过，用code换取access_token
-        //    var result = OAuthApi.GetAccessToken(AppId, AppSecret, code);
-        //    if (result.errcode != ReturnCode.请求成功)
-        //    {
-        //        return Content("错误：" + result.errmsg);
-        //    }
-
-        //    //因为这里还不确定用户是否关注本微信，所以只能试探性地获取一下
-        //    OAuthUserInfo userInfo = null;
-        //    try
-        //    {
-        //        //已关注，可以得到详细信息
-        //        userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
-        //        if (!string.IsNullOrEmpty(returnUrl))
-        //        {
-        //            return Redirect(returnUrl);
-        //        }
-        //        ViewData["ByBase"] = true;
-        //        return View("UserInfoCallback", userInfo);
-        //    }
-        //    catch (ErrorJsonResultException)
-        //    {
-        //        //未关注，只能授权，无法得到详细信息
-        //        //这里的 ex.JsonResult 可能为："{\"errcode\":40003,\"errmsg\":\"invalid openid\"}"
-        //        return Content("用户已授权，授权Token：" + result);
-        //    }
-        //}
+            //通过，用code换取access_token
+            var result = OAuthApi.GetAccessToken(AppId, AppSecret, code);
+            if (result.errcode != ReturnCode.请求成功)
+            {
+                return Content("错误：" + result.errmsg);
+            }
+            try
+            {
+                //已关注，可以得到详细信息
+                var userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
+                return View("UserInfoCallback", userInfo);
+            }
+            catch (ErrorJsonResultException)
+            {
+                //未关注，只能授权，无法得到详细信息
+                return Content("用户已授权，授权Token：" + result);
+            }
+        }
     }
 }
