@@ -12,8 +12,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MP_verify_JPDrG8ZoYfixMj1V.txt" />
     <None Remove="url.txt" />
     <None Remove="url_all.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MP_verify_JPDrG8ZoYfixMj1V.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -49,8 +56,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="menu.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="NLog.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\Weixin\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
