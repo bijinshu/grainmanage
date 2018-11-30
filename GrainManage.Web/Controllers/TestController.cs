@@ -38,5 +38,12 @@ namespace GrainManage.Web.Controllers
         {
             return Content(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         }
+
+        [AllowAnonymous]
+        public IActionResult GetSchema()
+        {
+            var redirectUrl = $"{Request.Scheme}://{Request.Host.Host}/oauth2/UserInfoCallback" ;
+            return Content(redirectUrl);
+        }
     }
 }
