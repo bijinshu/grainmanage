@@ -17,15 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.4" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
-    <PackageReference Include="NLog.Config" Version="4.5.10" />
-    <PackageReference Include="NLog.Schema" Version="4.5.10" />
-    <PackageReference Include="Quartz" Version="3.0.6" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.3.4" />
-    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.1.5" />
+    <PackageReference Include="NLog.Config" Version="4.5.11" />
+    <PackageReference Include="NLog.Schema" Version="4.5.11" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.5.1" />
+    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.1.13" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
   </ItemGroup>
   <ItemGroup>
