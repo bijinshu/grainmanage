@@ -50,7 +50,7 @@
 
   <ItemGroup>
     <Content Update="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\Weixin\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
