@@ -31,7 +31,7 @@ namespace GrainManage.Web.Controllers
         /// <returns></returns>
         public ActionResult Index(string returnUrl)
         {
-            var redirectUrl = $"{Request.Scheme}://{Request.Host.Host}/oauth2/UserInfoCallback?returnUrl=" + returnUrl.UrlEncode();
+            var redirectUrl = $"https://{Request.Host.Host}/oauth2/UserInfoCallback?returnUrl=" + returnUrl.UrlEncode();
             var authorizeUrl = OAuthApi.GetAuthorizeUrl(AppId, redirectUrl, DateTime.Now.Millisecond.ToString(), OAuthScope.snsapi_userinfo);
             return Content(authorizeUrl);
         }
