@@ -18,11 +18,11 @@
     },
     "GrainManage.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:34878/"
+      "applicationUrl": "http://localhost:5000/"
     }
   }
 }

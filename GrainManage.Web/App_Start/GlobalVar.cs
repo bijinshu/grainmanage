@@ -22,5 +22,7 @@ namespace GrainManage.Web
         public const int Role_User = 2;
         public const int Role_Shop = 3;
         public const int Role_Employee = 5;
+
+        public const string JwtSecret = "abcd&*@#%^#IOPSDKF";
     }
 }

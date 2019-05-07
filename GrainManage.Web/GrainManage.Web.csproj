@@ -24,15 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="IdentityModel" Version="3.10.10" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
-    <PackageReference Include="NLog.Config" Version="4.5.11" />
+    <PackageReference Include="NLog.Config" Version="4.6.3" />
     <PackageReference Include="Quartz" Version="3.0.7" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.6.13" />
-    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.2.6" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.6.15" />
+    <PackageReference Include="Senparc.Weixin.MP.MVC" Version="7.2.7.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
