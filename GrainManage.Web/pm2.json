@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "GrainManage.Web",
+      "script": "start.sh",
+      "watch": false,
+      "ignore_watch": [],
+      "out_file": "/websites/GrainManage.Web_out.log",
+      "error_file": "/websites/GrainManage.Web_error.log",
+      "max_memory_restart": "1G"
+    }
+  ]
+}
